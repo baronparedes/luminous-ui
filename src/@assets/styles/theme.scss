@@ -1,0 +1,63 @@
+$navbar-dark-toggler-border-color: #ffffff;
+
+$primary: #175795;
+$secondary: #4284C2;
+$success: #278795;
+$info: #A2BBD4;
+$light: #FFFFFF;
+$dark: #03284A;
+
+$theme-colors: ("primary": $primary,
+    "secondary": $secondary,
+    "success": $success,
+    "info": $info,
+    "dark": $dark);
+
+$body-bg: #E9EBEE;
+
+.btn {
+    text-transform: lowercase;
+}
+
+.nav-link {
+    background-color: none;
+    color: $light !important;
+    margin: 0.5em;
+
+    &.active {
+        border-bottom: 3px solid $info;
+    }
+
+    &:hover {
+        background: none;
+        background-image: none;
+        color: $info !important;
+    }
+}
+
+.thead-primary {
+    background-color: $primary;
+    color: $light;
+
+    th {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+}
+
+.form-label {
+    font-weight: bold;
+    text-transform: lowercase;
+}
+
+.modal-header {
+    background-color: $dark;
+    color: $light;
+
+    button.close {
+        color: $light
+    }
+
+}
+
+@import "node_modules/bootstrap/scss/bootstrap";
