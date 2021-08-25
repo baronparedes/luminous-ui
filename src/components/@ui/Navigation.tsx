@@ -9,7 +9,9 @@ const Navigation: React.FC = () => {
   return (
     <Container>
       <Navbar expand="lg" variant="dark" className="p-0">
-        <Navbar.Brand href="#home">luminous</Navbar.Brand>
+        <Navbar.Brand href="#home" className="brand">
+          Luminous
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
