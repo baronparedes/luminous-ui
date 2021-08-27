@@ -1,12 +1,13 @@
 import faker from 'faker';
 
-import {AuthResult, Profile} from '../Api';
+import {AuthProfile, AuthResult, ProfileType} from '../Api';
 
-export function generateFakeProfile(): Profile {
+export function generateFakeProfile(type: ProfileType = 'user'): AuthProfile {
   return {
     name: faker.name.findName(),
     username: faker.random.words(1),
     id: faker.datatype.number(),
+    type,
   };
 }
 

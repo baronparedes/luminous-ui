@@ -1,22 +1,15 @@
-import {Button, Col, Form} from 'react-bootstrap';
+import {Button, Col, Form, InputGroup} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
+import {FaKey, FaUserAlt} from 'react-icons/fa';
 import {useDispatch} from 'react-redux';
 import {Redirect} from 'react-router-dom';
-import styled from 'styled-components';
 
 import routes from '../../@utils/routes';
 import {useAuth} from '../../Api';
 import {useRootState} from '../../store';
 import {profileActions} from '../../store/reducers/profile.reducer';
 import ErrorInfo from '../@ui/ErrorInfo';
-import FieldContainer from '../@ui/FieldContainer';
 import Loading from '../@ui/Loading';
-import RoundedPanel from '../@ui/RoundedPanel';
-
-const LoginContainer = styled(RoundedPanel)`
-  max-width: 500px;
-  margin-top: 3em;
-`;
 
 type FormData = {
   username: string;
@@ -27,7 +20,12 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const {token} = useRootState(state => state.profile);
   const {mutate, loading, error} = useAuth({});
-  const {handleSubmit, control} = useForm<FormData>();
+  const {handleSubmit, control} = useForm<FormData>({
+    defaultValues: {
+      password: '',
+      username: '',
+    },
+  });
   const onSubmit = (formData: FormData) => {
     const bearer = `${formData.username}:${formData.password}`;
     const credentials = Buffer.from(bearer).toString('base64');
@@ -48,47 +46,59 @@ const LoginForm = () => {
     return <Redirect to={routes.DASHBOARD} />;
   }
   return (
-    <LoginContainer className="pt-5 pb-5">
-      <h1 className="brand text-center">Luminous</h1>
+    <>
       <Form onSubmit={handleSubmit(onSubmit)} role="form">
-        <FieldContainer as={Col} label="username" controlId="username">
+        <Col>
           <Controller
             name="username"
             control={control}
-            defaultValue=""
             render={({field}) => (
-              <Form.Control
-                {...field}
-                disabled={loading}
-                required
-                placeholder="username"
-              />
+              <InputGroup className="mb-2">
+                <InputGroup.Text>
+                  <FaUserAlt />
+                </InputGroup.Text>
+                <Form.Control
+                  {...field}
+                  disabled={loading}
+                  required
+                  placeholder="username"
+                />
+              </InputGroup>
             )}
           />
-        </FieldContainer>
-        <FieldContainer as={Col} label="password" controlId="password">
+        </Col>
+        <Col>
           <Controller
             name="password"
             control={control}
-            defaultValue=""
             render={({field}) => (
-              <Form.Control
-                {...field}
-                disabled={loading}
-                required
-                type="password"
-                placeholder="password"
-              />
+              <InputGroup className="mb-2">
+                <InputGroup.Text>
+                  <FaKey />
+                </InputGroup.Text>
+                <Form.Control
+                  {...field}
+                  disabled={loading}
+                  required
+                  type="password"
+                  placeholder="password"
+                />
+              </InputGroup>
             )}
           />
-        </FieldContainer>
+        </Col>
         {error && (
           <Col>
-            <ErrorInfo>{`unable to login ${error.data as string}`}</ErrorInfo>
+            <ErrorInfo>unable to login</ErrorInfo>
           </Col>
         )}
-        <Col className="text-right pb-3">
-          <Button variant="primary" type="submit" disabled={loading}>
+        <Col className="text-center pb-3">
+          <Button
+            variant="primary"
+            type="submit"
+            disabled={loading}
+            className="w-100"
+          >
             {loading && (
               <div className="float-left pr-2">
                 <Loading size={12} />
@@ -98,7 +108,7 @@ const LoginForm = () => {
           </Button>
         </Col>
       </Form>
-    </LoginContainer>
+    </>
   );
 };
 

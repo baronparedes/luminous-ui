@@ -3,18 +3,58 @@
 import React from "react";
 import { Get, GetProps, useGet, UseGetProps, Mutate, MutateProps, useMutate, UseMutateProps } from "restful-react";
 export const SPEC_VERSION = "1.0.0"; 
-export interface Profile {
+export type ProfileType = "stakeholder" | "admin" | "user";
+
+export interface AuthProfile {
   id: number;
   name: string;
   username: string;
-  password?: string;
   scopes?: string;
+  type: ProfileType;
 }
 
 export interface AuthResult {
-  profile: Profile;
+  profile: AuthProfile;
   token: string;
 }
+
+export interface FieldError {
+  value: string | null;
+  field: string | null;
+  type: string | null;
+  message: string;
+}
+
+export interface EntityError {
+  name: string;
+  message: string;
+  stack?: string;
+  status: number;
+  fieldErrors?: FieldError[];
+}
+
+export interface RegisterProfile {
+  name: string;
+  username: string;
+  password: string;
+  email: string;
+}
+
+export type RegisterProps = Omit<MutateProps<AuthResult, EntityError, void, RegisterProfile, void>, "path" | "verb">;
+
+export const Register = (props: RegisterProps) => (
+  <Mutate<AuthResult, EntityError, void, RegisterProfile, void>
+    verb="POST"
+    path={`/api/profile/register`}
+    
+    {...props}
+  />
+);
+
+export type UseRegisterProps = Omit<UseMutateProps<AuthResult, EntityError, void, RegisterProfile, void>, "path" | "verb">;
+
+export const useRegister = (props: UseRegisterProps) => useMutate<AuthResult, EntityError, void, RegisterProfile, void>("POST", `/api/profile/register`, props);
+
 
 export type AuthProps = Omit<MutateProps<AuthResult, unknown, void, void, void>, "path" | "verb">;
 
@@ -32,17 +72,17 @@ export type UseAuthProps = Omit<UseMutateProps<AuthResult, unknown, void, void, 
 export const useAuth = (props: UseAuthProps) => useMutate<AuthResult, unknown, void, void, void>("POST", `/api/profile/auth`, props);
 
 
-export type MeProps = Omit<GetProps<Profile, unknown, void, void>, "path">;
+export type MeProps = Omit<GetProps<AuthProfile, unknown, void, void>, "path">;
 
 export const Me = (props: MeProps) => (
-  <Get<Profile, unknown, void, void>
+  <Get<AuthProfile, unknown, void, void>
     path={`/api/profile/me`}
     
     {...props}
   />
 );
 
-export type UseMeProps = Omit<UseGetProps<Profile, unknown, void, void>, "path">;
+export type UseMeProps = Omit<UseGetProps<AuthProfile, unknown, void, void>, "path">;
 
-export const useMe = (props: UseMeProps) => useGet<Profile, unknown, void, void>(`/api/profile/me`, props);
+export const useMe = (props: UseMeProps) => useGet<AuthProfile, unknown, void, void>(`/api/profile/me`, props);
 

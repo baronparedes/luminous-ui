@@ -1,11 +1,11 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {Profile} from '../../Api';
+import {AuthProfile} from '../../Api';
 import {AppThunk} from '../../store';
 import localStore from '../local';
 
 export type ProfileState = {
-  me?: Profile;
+  me?: AuthProfile;
   token?: string;
 };
 

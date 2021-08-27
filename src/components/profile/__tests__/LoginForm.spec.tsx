@@ -29,10 +29,10 @@ describe('LoginForm', () => {
 
     const target = renderWithProviderAndRouterAndRestful(<LoginForm />, base);
 
-    const usernameInput = target.getByLabelText(
+    const usernameInput = target.getByPlaceholderText(
       /username/i
     ) as HTMLInputElement;
-    const passwordInput = target.getByLabelText(
+    const passwordInput = target.getByPlaceholderText(
       /password/i
     ) as HTMLInputElement;
 
@@ -54,12 +54,12 @@ describe('LoginForm', () => {
   }
 
   async function enterInputThenSubmitForm(name: string, value: string) {
-    const {getByText, getByLabelText, getByRole} = renderWithProvider(
+    const {getByText, getByPlaceholderText, getByRole} = renderWithProvider(
       <LoginForm />
     );
 
     const regex = new RegExp(name, 'i');
-    const input = getByLabelText(regex) as HTMLInputElement;
+    const input = getByPlaceholderText(regex) as HTMLInputElement;
 
     fireEvent.change(input, {target: {value: value}});
     await waitFor(() => expect(input.value).toBe(value));
@@ -78,9 +78,9 @@ describe('LoginForm', () => {
   });
 
   it('should render', async () => {
-    const {getByLabelText} = renderWithProvider(<LoginForm />);
-    expect(getByLabelText(/username/i)).toBeInTheDocument();
-    expect(getByLabelText(/password/i)).toBeInTheDocument();
+    const {getByPlaceholderText} = renderWithProvider(<LoginForm />);
+    expect(getByPlaceholderText(/username/i)).toBeInTheDocument();
+    expect(getByPlaceholderText(/password/i)).toBeInTheDocument();
   });
 
   it('should fail sigin in and show error', async () => {
