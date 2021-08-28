@@ -11,6 +11,7 @@ export interface AuthProfile {
   username: string;
   scopes?: string;
   type: ProfileType;
+  email: string;
 }
 
 export interface AuthResult {
@@ -39,6 +40,21 @@ export interface RegisterProfile {
   password: string;
   email: string;
 }
+
+export type GetAllProfilesProps = Omit<GetProps<AuthProfile[], unknown, void, void>, "path">;
+
+export const GetAllProfiles = (props: GetAllProfilesProps) => (
+  <Get<AuthProfile[], unknown, void, void>
+    path={`/api/profile/getAll`}
+    
+    {...props}
+  />
+);
+
+export type UseGetAllProfilesProps = Omit<UseGetProps<AuthProfile[], unknown, void, void>, "path">;
+
+export const useGetAllProfiles = (props: UseGetAllProfilesProps) => useGet<AuthProfile[], unknown, void, void>(`/api/profile/getAll`, props);
+
 
 export type RegisterProps = Omit<MutateProps<AuthResult, EntityError, void, RegisterProfile, void>, "path" | "verb">;
 

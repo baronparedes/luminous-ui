@@ -43,7 +43,7 @@ const LoginForm = () => {
       .catch(() => {});
   };
   if (token) {
-    return <Redirect to={routes.DASHBOARD} />;
+    return <Redirect to={routes.ROOT} />;
   }
   return (
     <>

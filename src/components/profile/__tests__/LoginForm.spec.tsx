@@ -28,6 +28,7 @@ describe('LoginForm', () => {
       .reply(responseCode, result);
 
     const target = renderWithProviderAndRouterAndRestful(<LoginForm />, base);
+    target.history.push(routes.LOGIN);
 
     const usernameInput = target.getByPlaceholderText(
       /username/i
@@ -87,7 +88,7 @@ describe('LoginForm', () => {
     const {history, getByRole} = await assertSignIn('err', 500);
     await waitFor(() => {
       expect(getByRole('error').textContent).toMatch(/unable to login*/);
-      expect(history.location.pathname).not.toBe(routes.DASHBOARD);
+      expect(history.location.pathname).not.toBe(routes.ROOT);
     });
   });
 
@@ -98,7 +99,7 @@ describe('LoginForm', () => {
         mockedAuthResult.profile
       );
       expect(store.getState().profile.token).toBe(mockedAuthResult.token);
-      expect(history.location.pathname).toBe(routes.DASHBOARD);
+      expect(history.location.pathname).toBe(routes.ROOT);
     });
   });
 

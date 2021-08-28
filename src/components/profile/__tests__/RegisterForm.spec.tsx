@@ -153,7 +153,7 @@ describe('RegisterForm', () => {
         mockedAuthResult.profile
       );
       expect(store.getState().profile.token).toBe(mockedAuthResult.token);
-      expect(history.location.pathname).toBe(routes.DASHBOARD);
+      expect(history.location.pathname).toBe(routes.ROOT);
     });
   });
 
@@ -161,7 +161,7 @@ describe('RegisterForm', () => {
     const {history, getByRole} = await assertRegistration('err', 500);
     await waitFor(() => {
       expect(getByRole('error').textContent).toMatch(/unable to register*/);
-      expect(history.location.pathname).not.toBe(routes.DASHBOARD);
+      expect(history.location.pathname).not.toBe(routes.LOGIN);
     });
   });
 

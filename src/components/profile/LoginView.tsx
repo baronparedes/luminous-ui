@@ -21,7 +21,7 @@ const LoginView = () => {
         {!toggleRegisterForm && <LoginForm />}
         {toggleRegisterForm && <RegisterForm />}
         <Col className="text-center">
-          {!toggleRegisterForm && <span>Don't have an account?</span>}
+          {!toggleRegisterForm && <span>Don't have a profile?</span>}
           <Button
             variant="link"
             className="ml-1"

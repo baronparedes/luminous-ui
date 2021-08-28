@@ -20,10 +20,10 @@ const NavCurrentProfile = () => {
       {profile && profile.me && (
         <Navbar.Text>
           Welcome!
-          <span className="pl-2 pr-2 text-bold text-white">
+          <span className="pl-2 pr-2 font-weight-bold text-white">
             {profile.me.username}
           </span>
-          <Button variant="secondary" onClick={handleOnClick}>
+          <Button variant="secondary" onClick={handleOnClick} size="sm">
             Sign Out
           </Button>
         </Navbar.Text>

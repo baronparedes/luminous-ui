@@ -2,12 +2,15 @@ import faker from 'faker';
 
 import {AuthProfile, AuthResult, ProfileType} from '../Api';
 
-export function generateFakeProfile(type: ProfileType = 'user'): AuthProfile {
+export function generateFakeProfile(type?: ProfileType): AuthProfile {
   return {
     name: faker.name.findName(),
     username: faker.random.words(1),
     id: faker.datatype.number(),
-    type,
+    email: faker.internet.email(),
+    type:
+      type ??
+      faker.random.arrayElement<ProfileType>(['user', 'stakeholder', 'admin']),
   };
 }
 
