@@ -23,7 +23,7 @@ describe('LoginForm', () => {
     const password = faker.random.alphaNumeric(15);
 
     nock(base)
-      .post('/api/profile/auth')
+      .post('/api/auth')
       .matchHeader('authorization', /^Basic /i)
       .reply(responseCode, result);
 

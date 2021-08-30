@@ -1,16 +1,21 @@
+import faker from 'faker';
 import nock from 'nock';
 
-import {waitFor, within} from '@testing-library/react';
+import {fireEvent, waitFor, within} from '@testing-library/react';
 
-import {generateFakeProfile} from '../../../@utils/fake-models';
-import {renderWithRestful} from '../../../@utils/test-renderers';
+import {generateFakeProfile} from '../../../../@utils/fake-models';
+import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
 import ProfilesView from '../ProfilesView';
 
 describe('ProfilesView', () => {
-  it('should render', async () => {
+  it('should render and search profiles', async () => {
     const base = 'http://localhost';
+    const searchCriteria = faker.internet.userName();
     const mockedProfiles = [generateFakeProfile(), generateFakeProfile()];
     nock(base).get('/api/profile/getAll').reply(200, mockedProfiles);
+    nock(base)
+      .get(`/api/profile/getAll?search=${searchCriteria}`)
+      .reply(200, mockedProfiles);
 
     const expectedHeaders = [
       'id',
@@ -18,6 +23,7 @@ describe('ProfilesView', () => {
       'username',
       'email',
       'type',
+      'status',
       'action',
     ];
 
@@ -27,17 +33,25 @@ describe('ProfilesView', () => {
       getByLabelText,
       getByText,
       queryByRole,
-    } = renderWithRestful(<ProfilesView />, base);
+    } = renderWithProviderAndRestful(<ProfilesView />, base);
 
     expect(getByRole('heading').textContent).toMatch(/profiles/i);
     expect(getByPlaceholderText(/search/i)).toBeInTheDocument();
     expect(
       getByLabelText(/search user/i, {selector: 'button'})
     ).toBeInTheDocument();
-    expect(
-      getByLabelText(/create user/i, {selector: 'button'})
-    ).toBeInTheDocument();
+
     expect(getByRole('progressbar')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(queryByRole('progressbar')).not.toBeInTheDocument();
+    });
+
+    fireEvent.change(getByPlaceholderText(/^search/i), {
+      target: {value: searchCriteria},
+    });
+    await waitFor(() => {
+      expect(getByRole('progressbar')).toBeInTheDocument();
+    });
 
     await waitFor(() => {
       expect(queryByRole('progressbar')).not.toBeInTheDocument();

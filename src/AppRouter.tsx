@@ -5,7 +5,7 @@ import routes from './@utils/routes';
 import Header from './components/@ui/Header';
 import NotFound from './components/@ui/NotFound';
 import ProtectedRoute from './components/@ui/ProtectedRoute';
-import ProfilesView from './components/admin/ProfilesView';
+import ProfilesView from './components/admin/manage-profiles/ProfilesView';
 import LoginView from './components/profile/LoginView';
 import {useRootState} from './store';
 

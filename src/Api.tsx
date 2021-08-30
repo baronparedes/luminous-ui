@@ -5,18 +5,21 @@ import { Get, GetProps, useGet, UseGetProps, Mutate, MutateProps, useMutate, Use
 export const SPEC_VERSION = "1.0.0"; 
 export type ProfileType = "stakeholder" | "admin" | "user";
 
+export type ProfileStatus = "active" | "inactive";
+
 export interface AuthProfile {
-  id: number;
-  name: string;
-  username: string;
   scopes?: string;
+  status: ProfileStatus;
   type: ProfileType;
   email: string;
+  username: string;
+  name: string;
+  id: number;
 }
 
 export interface AuthResult {
-  profile: AuthProfile;
   token: string;
+  profile: AuthProfile;
 }
 
 export interface FieldError {
@@ -35,25 +38,60 @@ export interface EntityError {
 }
 
 export interface RegisterProfile {
-  name: string;
-  username: string;
-  password: string;
   email: string;
+  password: string;
+  username: string;
+  name: string;
 }
 
-export type GetAllProfilesProps = Omit<GetProps<AuthProfile[], unknown, void, void>, "path">;
+export interface ApiError {
+  name: string;
+  message: string;
+  stack?: string;
+  status: number;
+}
+
+export interface UpdateProfile {
+  scopes?: string;
+  status: ProfileStatus;
+  type: ProfileType;
+  email: string;
+  name: string;
+}
+
+export type AuthProps = Omit<MutateProps<AuthResult, unknown, void, void, void>, "path" | "verb">;
+
+export const Auth = (props: AuthProps) => (
+  <Mutate<AuthResult, unknown, void, void, void>
+    verb="POST"
+    path={`/api/auth`}
+    
+    {...props}
+  />
+);
+
+export type UseAuthProps = Omit<UseMutateProps<AuthResult, unknown, void, void, void>, "path" | "verb">;
+
+export const useAuth = (props: UseAuthProps) => useMutate<AuthResult, unknown, void, void, void>("POST", `/api/auth`, props);
+
+
+export interface GetAllProfilesQueryParams {
+  search?: string;
+}
+
+export type GetAllProfilesProps = Omit<GetProps<AuthProfile[], unknown, GetAllProfilesQueryParams, void>, "path">;
 
 export const GetAllProfiles = (props: GetAllProfilesProps) => (
-  <Get<AuthProfile[], unknown, void, void>
+  <Get<AuthProfile[], unknown, GetAllProfilesQueryParams, void>
     path={`/api/profile/getAll`}
     
     {...props}
   />
 );
 
-export type UseGetAllProfilesProps = Omit<UseGetProps<AuthProfile[], unknown, void, void>, "path">;
+export type UseGetAllProfilesProps = Omit<UseGetProps<AuthProfile[], unknown, GetAllProfilesQueryParams, void>, "path">;
 
-export const useGetAllProfiles = (props: UseGetAllProfilesProps) => useGet<AuthProfile[], unknown, void, void>(`/api/profile/getAll`, props);
+export const useGetAllProfiles = (props: UseGetAllProfilesProps) => useGet<AuthProfile[], unknown, GetAllProfilesQueryParams, void>(`/api/profile/getAll`, props);
 
 
 export type RegisterProps = Omit<MutateProps<AuthResult, EntityError, void, RegisterProfile, void>, "path" | "verb">;
@@ -72,22 +110,6 @@ export type UseRegisterProps = Omit<UseMutateProps<AuthResult, EntityError, void
 export const useRegister = (props: UseRegisterProps) => useMutate<AuthResult, EntityError, void, RegisterProfile, void>("POST", `/api/profile/register`, props);
 
 
-export type AuthProps = Omit<MutateProps<AuthResult, unknown, void, void, void>, "path" | "verb">;
-
-export const Auth = (props: AuthProps) => (
-  <Mutate<AuthResult, unknown, void, void, void>
-    verb="POST"
-    path={`/api/profile/auth`}
-    
-    {...props}
-  />
-);
-
-export type UseAuthProps = Omit<UseMutateProps<AuthResult, unknown, void, void, void>, "path" | "verb">;
-
-export const useAuth = (props: UseAuthProps) => useMutate<AuthResult, unknown, void, void, void>("POST", `/api/profile/auth`, props);
-
-
 export type MeProps = Omit<GetProps<AuthProfile, unknown, void, void>, "path">;
 
 export const Me = (props: MeProps) => (
@@ -101,4 +123,48 @@ export const Me = (props: MeProps) => (
 export type UseMeProps = Omit<UseGetProps<AuthProfile, unknown, void, void>, "path">;
 
 export const useMe = (props: UseMeProps) => useGet<AuthProfile, unknown, void, void>(`/api/profile/me`, props);
+
+
+export interface UpdateProfileStatusQueryParams {
+  status: ProfileStatus;
+}
+
+export interface UpdateProfileStatusPathParams {
+  id: number
+}
+
+export type UpdateProfileStatusProps = Omit<MutateProps<void, unknown, UpdateProfileStatusQueryParams, void, UpdateProfileStatusPathParams>, "path" | "verb"> & UpdateProfileStatusPathParams;
+
+export const UpdateProfileStatus = ({id, ...props}: UpdateProfileStatusProps) => (
+  <Mutate<void, unknown, UpdateProfileStatusQueryParams, void, UpdateProfileStatusPathParams>
+    verb="PATCH"
+    path={`/api/profile/updateProfileStatus/${id}`}
+    
+    {...props}
+  />
+);
+
+export type UseUpdateProfileStatusProps = Omit<UseMutateProps<void, unknown, UpdateProfileStatusQueryParams, void, UpdateProfileStatusPathParams>, "path" | "verb"> & UpdateProfileStatusPathParams;
+
+export const useUpdateProfileStatus = ({id, ...props}: UseUpdateProfileStatusProps) => useMutate<void, unknown, UpdateProfileStatusQueryParams, void, UpdateProfileStatusPathParams>("PATCH", (paramsInPath: UpdateProfileStatusPathParams) => `/api/profile/updateProfileStatus/${paramsInPath.id}`, {  pathParams: { id }, ...props });
+
+
+export interface UpdateProfilePathParams {
+  id: number
+}
+
+export type UpdateProfileProps = Omit<MutateProps<AuthProfile, EntityError | ApiError, void, UpdateProfile, UpdateProfilePathParams>, "path" | "verb"> & UpdateProfilePathParams;
+
+export const UpdateProfile = ({id, ...props}: UpdateProfileProps) => (
+  <Mutate<AuthProfile, EntityError | ApiError, void, UpdateProfile, UpdateProfilePathParams>
+    verb="PATCH"
+    path={`/api/profile/updateProfile/${id}`}
+    
+    {...props}
+  />
+);
+
+export type UseUpdateProfileProps = Omit<UseMutateProps<AuthProfile, EntityError | ApiError, void, UpdateProfile, UpdateProfilePathParams>, "path" | "verb"> & UpdateProfilePathParams;
+
+export const useUpdateProfile = ({id, ...props}: UseUpdateProfileProps) => useMutate<AuthProfile, EntityError | ApiError, void, UpdateProfile, UpdateProfilePathParams>("PATCH", (paramsInPath: UpdateProfilePathParams) => `/api/profile/updateProfile/${paramsInPath.id}`, {  pathParams: { id }, ...props });
 

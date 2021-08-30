@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import Loading from './Loading';
 
 const TableContentHeader = styled('div')`
-  background-color: #175795;
   color: white;
   padding: 1em;
 `;
@@ -29,7 +28,9 @@ export const Table: React.FC<TableProps> = ({
 }) => {
   return (
     <>
-      <TableContentHeader>{renderHeaderContent}</TableContentHeader>
+      <TableContentHeader className="bg-primary">
+        {renderHeaderContent}
+      </TableContentHeader>
       <TableContent>
         {loading && <Loading />}
         {!loading && (
