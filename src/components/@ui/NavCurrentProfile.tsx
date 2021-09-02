@@ -5,6 +5,7 @@ import {Redirect} from 'react-router-dom';
 import routes from '../../@utils/routes';
 import {useRootState} from '../../store';
 import {profileActions} from '../../store/reducers/profile.reducer';
+import AvatarProfile from '../profile/AvatarProfile';
 
 const NavCurrentProfile = () => {
   const profile = useRootState(state => state.profile);
@@ -18,15 +19,16 @@ const NavCurrentProfile = () => {
   return (
     <>
       {profile && profile.me && (
-        <Navbar.Text>
-          Welcome!
-          <span className="pl-2 pr-2 font-weight-bold text-white">
-            {profile.me.username}
-          </span>
-          <Button variant="secondary" onClick={handleOnClick} size="sm">
-            Sign Out
-          </Button>
-        </Navbar.Text>
+        <>
+          <Navbar.Text className="mr-2">
+            <AvatarProfile profile={profile.me} />
+          </Navbar.Text>
+          <Navbar.Text>
+            <Button variant="secondary" onClick={handleOnClick} size="sm">
+              Sign Out
+            </Button>
+          </Navbar.Text>
+        </>
       )}
     </>
   );

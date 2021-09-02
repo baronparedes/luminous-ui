@@ -56,7 +56,7 @@ const ProfileUpdateButton: React.FC<{
         <FaPencilAlt />
       </Button>
       <ModalContainer
-        header={<h5>Update Profile</h5>}
+        header={<h5>Update Profile of {profile.username}</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >

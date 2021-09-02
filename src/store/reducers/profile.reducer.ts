@@ -9,6 +9,8 @@ export type ProfileState = {
   token?: string;
 };
 
+export type UpdateCurrentProfilePayload = {name: string; email: string};
+
 const PROFILE_KEY = 'LUMINOUS_PROFILE_KEY';
 
 export const getProfileFromLocalStorage = () => {
@@ -35,6 +37,15 @@ export const profileSlice = createSlice({
       state.me = undefined;
       state.token = undefined;
     },
+    updateCurrentProfile: (
+      state,
+      action: PayloadAction<UpdateCurrentProfilePayload>
+    ) => {
+      if (state.me) {
+        state.me.email = action.payload.email;
+        state.me.name = action.payload.name;
+      }
+    },
   },
 });
 
@@ -53,6 +64,7 @@ const signOut = (): AppThunk => dispatch => {
 
 const {actions, reducer} = profileSlice;
 export const profileActions = {
+  ...actions,
   signIn,
   signOut,
 };

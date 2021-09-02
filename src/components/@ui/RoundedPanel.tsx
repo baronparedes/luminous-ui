@@ -4,7 +4,7 @@ import {Container} from 'react-bootstrap';
 import styled from 'styled-components';
 
 const Panel = styled(Container)`
-  background-color: #ffffff;
+  background-color: var(--light);
   padding: 0.5em;
 `;
 

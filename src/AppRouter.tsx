@@ -6,6 +6,7 @@ import Header from './components/@ui/Header';
 import NotFound from './components/@ui/NotFound';
 import ProtectedRoute from './components/@ui/ProtectedRoute';
 import ProfilesView from './components/admin/manage-profiles/ProfilesView';
+import DashboardView from './components/dashboard/DashboardView';
 import LoginView from './components/profile/LoginView';
 import {useRootState} from './store';
 
@@ -21,6 +22,12 @@ const AppRouter: React.FC = () => {
         <Header />
         <div className="m-2">
           <Switch>
+            <ProtectedRoute
+              path={routes.DASHBOARD}
+              exact
+              onlyFor={['admin', 'stakeholder']}
+              component={DashboardView}
+            />
             <ProtectedRoute
               path={routes.ADMIN_PROFILES}
               exact

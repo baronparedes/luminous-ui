@@ -1,6 +1,6 @@
 import nock from 'nock';
 
-import {fireEvent, queryByRole, waitFor, within} from '@testing-library/react';
+import {fireEvent, waitFor, within} from '@testing-library/react';
 
 import {generateFakeProfile} from '../../../../@utils/fake-models';
 import {renderWithRestful} from '../../../../@utils/test-renderers';

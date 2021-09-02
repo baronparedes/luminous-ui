@@ -15,7 +15,7 @@ type Props = {
 const ProtectedRoute = ({component: Component, onlyFor, ...rest}: Props) => {
   const profile = useRootState(state => state.profile);
   const hasAccess = () => {
-    if (!onlyFor && !profile.me) {
+    if (!onlyFor && profile.me) {
       return true;
     }
     if (onlyFor && profile.me) {

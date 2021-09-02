@@ -168,3 +168,28 @@ export type UseUpdateProfileProps = Omit<UseMutateProps<AuthProfile, EntityError
 
 export const useUpdateProfile = ({id, ...props}: UseUpdateProfileProps) => useMutate<AuthProfile, EntityError | ApiError, void, UpdateProfile, UpdateProfilePathParams>("PATCH", (paramsInPath: UpdateProfilePathParams) => `/api/profile/updateProfile/${paramsInPath.id}`, {  pathParams: { id }, ...props });
 
+
+export interface ChangePasswordPathParams {
+  id: number
+}
+
+export interface ChangePasswordRequestBody {
+  newPassword: string;
+  currentPassword: string;
+}
+
+export type ChangePasswordProps = Omit<MutateProps<void, unknown, void, ChangePasswordRequestBody, ChangePasswordPathParams>, "path" | "verb"> & ChangePasswordPathParams;
+
+export const ChangePassword = ({id, ...props}: ChangePasswordProps) => (
+  <Mutate<void, unknown, void, ChangePasswordRequestBody, ChangePasswordPathParams>
+    verb="PATCH"
+    path={`/api/profile/changePassword/${id}`}
+    
+    {...props}
+  />
+);
+
+export type UseChangePasswordProps = Omit<UseMutateProps<void, unknown, void, ChangePasswordRequestBody, ChangePasswordPathParams>, "path" | "verb"> & ChangePasswordPathParams;
+
+export const useChangePassword = ({id, ...props}: UseChangePasswordProps) => useMutate<void, unknown, void, ChangePasswordRequestBody, ChangePasswordPathParams>("PATCH", (paramsInPath: ChangePasswordPathParams) => `/api/profile/changePassword/${paramsInPath.id}`, {  pathParams: { id }, ...props });
+

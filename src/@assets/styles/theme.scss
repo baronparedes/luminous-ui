@@ -12,6 +12,17 @@ $theme-colors: ("primary": $primary,
 
 $body-bg: #E9EBEE;
 
+:root {
+    --avatar-size: 2.5rem;
+    --primary: $primary;
+    --secondary: $secondary;
+    --info: $info;
+    --light: $light;
+    --dark: $dark;
+    --nav-shadow:#283655;
+    --nav-bg:#0d3459;
+}
+
 .btn {
     text-transform: lowercase;
 }
@@ -44,6 +55,12 @@ $body-bg: #E9EBEE;
 
 .form-label {
     text-transform: lowercase;
+}
+
+
+/* Removes white spaces margin from modal header */
+.modal-content {
+    margin: -2px !important;
 }
 
 .modal-header {
