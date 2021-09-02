@@ -1,0 +1,39 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "develop-ui",
+			"group": "build",
+            "dependsOrder": "parallel",
+            "dependsOn": [
+                "dev-server",
+                "jest-watch-ui"
+            ],
+            "problemMatcher": []
+		},
+		{
+			"type": "npm",
+			"script": "start",
+			"problemMatcher": [],
+			"label": "dev-server",
+			"isBackground": true,
+			"presentation": {
+				"reveal": "always",
+				"panel": "new",
+				"clear": false,
+			}
+		},
+		{
+			"type": "npm",
+			"script": "test",
+			"problemMatcher": [],
+			"label": "jest-watch-ui",
+			"isBackground": true,
+			"presentation": {
+				"reveal": "always",
+				"panel": "new",
+				"clear": false,
+			}
+		}
+	]
+}
