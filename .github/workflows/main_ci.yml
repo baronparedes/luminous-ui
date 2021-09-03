@@ -36,7 +36,9 @@ jobs:
       with:
         name: Test Report          
         path: junit.xml            
-        reporter: jest-junit       
+        reporter: jest-junit    
+
+    - run: npm run build
 
     - name: Publish Artifacts
       uses: actions/upload-artifact@v2
