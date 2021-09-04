@@ -100,6 +100,7 @@ describe('UpdateBasicDetailsForm', () => {
     expect(actualProfileInStore).toBeDefined();
     expect(actualProfileInStore?.email).toEqual(email);
     expect(actualProfileInStore?.name).toEqual(name);
+    expect(actualProfileInStore?.mobileNumber).toEqual(mobileNumber);
   });
 
   it('should fail submitting form and show error', async () => {

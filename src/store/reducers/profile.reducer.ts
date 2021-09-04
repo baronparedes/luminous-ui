@@ -48,6 +48,7 @@ export const profileSlice = createSlice({
       if (state.me) {
         state.me.email = action.payload.email;
         state.me.name = action.payload.name;
+        state.me.mobileNumber = action.payload.mobileNumber;
       }
     },
   },
