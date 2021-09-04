@@ -35,6 +35,7 @@ describe('UpdateBasicDetailsForm', () => {
   function renderTargetAndFillUpForm() {
     const name = faker.name.findName();
     const email = faker.internet.email();
+    const mobileNumber = faker.phone.phoneNumber();
 
     const target = renderTarget();
 
@@ -44,16 +45,22 @@ describe('UpdateBasicDetailsForm', () => {
     const emailInput = target.getByPlaceholderText(
       /email/i
     ) as HTMLInputElement;
+    const mobileNumberInput = target.getByPlaceholderText(
+      /mobile number/i
+    ) as HTMLInputElement;
     const submit = target.getByText(/update/i, {selector: 'button'});
 
     fireEvent.change(nameInput, {target: {value: name}});
     fireEvent.change(emailInput, {target: {value: email}});
+    fireEvent.change(mobileNumberInput, {target: {value: mobileNumber}});
 
     return {
       name,
       email,
+      mobileNumber,
       nameInput,
       emailInput,
+      mobileNumberInput,
       submit,
       ...target,
     };
@@ -62,19 +69,23 @@ describe('UpdateBasicDetailsForm', () => {
   afterEach(() => jest.clearAllMocks());
 
   it('should render', () => {
-    const {nameInput, emailInput, submit} = renderTargetAndFillUpForm();
+    const {nameInput, emailInput, mobileNumberInput, submit} =
+      renderTargetAndFillUpForm();
     expect(nameInput).toBeInTheDocument();
     expect(emailInput).toBeInTheDocument();
+    expect(mobileNumberInput).toBeInTheDocument();
     expect(submit).toBeInTheDocument();
   });
 
   it('should submit form without errors', async () => {
-    const {name, email, submit, store} = renderTargetAndFillUpForm();
+    const {name, email, mobileNumber, submit, store} =
+      renderTargetAndFillUpForm();
     const body = {
       type: expectedProfile.type,
       status: expectedProfile.status,
       name,
       email,
+      mobileNumber,
     };
     nock(base)
       .patch(`/api/profile/updateProfile/${expectedProfile.id}`, body)
@@ -92,10 +103,14 @@ describe('UpdateBasicDetailsForm', () => {
   });
 
   it('should fail submitting form and show error', async () => {
-    const {name, email, submit, getByRole} = renderTargetAndFillUpForm();
+    const {name, email, mobileNumber, submit, getByRole} =
+      renderTargetAndFillUpForm();
     const body = {
+      type: expectedProfile.type,
+      status: expectedProfile.status,
       name,
       email,
+      mobileNumber,
     };
     nock(base)
       .patch(`/api/profile/updateProfile/${expectedProfile.id}`, body)

@@ -23,6 +23,7 @@ const ProfileUpdateButton: React.FC<{
   const initialValue: FormData = {
     name: profile.name,
     email: profile.email,
+    mobileNumber: profile.mobileNumber,
     type: profile.type,
     status: profile.status,
   };
@@ -98,6 +99,25 @@ const ProfileUpdateButton: React.FC<{
                       required
                       type="email"
                       placeholder="email"
+                    />
+                  </InputGroup>
+                )}
+              />
+            </Col>
+            <Col>
+              <Controller
+                name="mobileNumber"
+                control={control}
+                render={({field}) => (
+                  <InputGroup className="mb-2">
+                    <Form.Label htmlFor="mobileNumber" column sm={2}>
+                      mobile
+                    </Form.Label>
+                    <Form.Control
+                      {...field}
+                      id="mobileNumber"
+                      disabled={loading}
+                      placeholder="mobile number"
                     />
                   </InputGroup>
                 )}

@@ -9,7 +9,11 @@ export type ProfileState = {
   token?: string;
 };
 
-export type UpdateCurrentProfilePayload = {name: string; email: string};
+export type UpdateCurrentProfilePayload = {
+  name: string;
+  email: string;
+  mobileNumber?: string;
+};
 
 const PROFILE_KEY = 'LUMINOUS_PROFILE_KEY';
 

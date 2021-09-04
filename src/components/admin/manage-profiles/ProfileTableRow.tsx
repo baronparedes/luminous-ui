@@ -39,6 +39,7 @@ const ProfileTableRow: React.FC<{profile: AuthProfile}> = ({profile}) => {
       <td>{profileState.name}</td>
       <td>{profileState.username}</td>
       <td>{profileState.email}</td>
+      <td>{profileState.mobileNumber}</td>
       <td>{profileState.type}</td>
       <td
         className={classNames(

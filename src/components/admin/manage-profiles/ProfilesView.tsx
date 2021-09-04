@@ -31,6 +31,7 @@ const ProfilesView = () => {
             'name',
             'username',
             'email',
+            'mobile number',
             'type',
             'status',
             'action',

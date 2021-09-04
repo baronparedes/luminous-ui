@@ -11,6 +11,7 @@ export interface AuthProfile {
   scopes?: string;
   status: ProfileStatus;
   type: ProfileType;
+  mobileNumber?: string;
   email: string;
   username: string;
   name: string;
@@ -38,6 +39,7 @@ export interface EntityError {
 }
 
 export interface RegisterProfile {
+  mobileNumber?: string;
   email: string;
   password: string;
   username: string;
@@ -55,6 +57,7 @@ export interface UpdateProfile {
   scopes?: string;
   status: ProfileStatus;
   type: ProfileType;
+  mobileNumber?: string;
   email: string;
   name: string;
 }

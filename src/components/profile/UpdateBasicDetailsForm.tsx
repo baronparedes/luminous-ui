@@ -1,6 +1,6 @@
 import {Button, Col, Form, InputGroup} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
-import {FaEnvelope, FaTag} from 'react-icons/fa';
+import {FaEnvelope, FaMobile, FaTag} from 'react-icons/fa';
 import {useDispatch} from 'react-redux';
 
 import {AuthProfile, UpdateProfile, useUpdateProfile} from '../../Api';
@@ -11,6 +11,7 @@ import Loading from '../@ui/Loading';
 type BasicDetailsFormData = {
   name: string;
   email: string;
+  mobileNumber?: string;
 };
 
 const UpdateBasicDetailsForm: React.FC<{
@@ -20,6 +21,7 @@ const UpdateBasicDetailsForm: React.FC<{
   const initialValue: BasicDetailsFormData = {
     name: profile.name,
     email: profile.email,
+    mobileNumber: profile.mobileNumber || '',
   };
   const dispatch = useDispatch();
   const {loading, error, mutate} = useUpdateProfile({id: profile.id});
@@ -32,6 +34,7 @@ const UpdateBasicDetailsForm: React.FC<{
       status: profile.status,
       name: formData.name,
       email: formData.email,
+      mobileNumber: formData.mobileNumber,
     };
     mutate(body)
       .then(data => {
@@ -39,6 +42,7 @@ const UpdateBasicDetailsForm: React.FC<{
           profileActions.updateCurrentProfile({
             email: data.email,
             name: data.name,
+            mobileNumber: data.mobileNumber,
           })
         );
         onUpdate && onUpdate();
@@ -85,6 +89,24 @@ const UpdateBasicDetailsForm: React.FC<{
                 required
                 type="email"
                 placeholder="email"
+              />
+            </InputGroup>
+          )}
+        />
+      </Col>
+      <Col>
+        <Controller
+          name="mobileNumber"
+          control={control}
+          render={({field}) => (
+            <InputGroup className="mb-2">
+              <InputGroup.Text>
+                <FaMobile />
+              </InputGroup.Text>
+              <Form.Control
+                {...field}
+                disabled={loading}
+                placeholder="mobile number"
               />
             </InputGroup>
           )}

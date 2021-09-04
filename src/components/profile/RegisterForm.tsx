@@ -1,6 +1,6 @@
 import {Button, Col, Form, InputGroup} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
-import {FaEnvelope, FaKey, FaTag, FaUserAlt} from 'react-icons/fa';
+import {FaEnvelope, FaKey, FaMobile, FaTag, FaUserAlt} from 'react-icons/fa';
 import {useDispatch} from 'react-redux';
 import {Redirect} from 'react-router-dom';
 import {GetDataError} from 'restful-react';
@@ -18,6 +18,7 @@ const RegisterForm = () => {
   const initialValue: FormData = {
     name: '',
     email: '',
+    mobileNumber: '',
     password: '',
     confirmPassword: '',
     username: '',
@@ -30,6 +31,7 @@ const RegisterForm = () => {
   const onSubmit = (formData: FormData) => {
     const body: RegisterProfile = {
       email: formData.email,
+      mobileNumber: formData.mobileNumber,
       name: formData.name,
       username: formData.username,
       password: formData.password,
@@ -56,7 +58,7 @@ const RegisterForm = () => {
   const onReset = () => {
     reset(initialValue);
   };
-  if (token) {
+  if (!loading && !error && token) {
     return <Redirect to={routes.ROOT} />;
   }
   return (
@@ -96,6 +98,24 @@ const RegisterForm = () => {
                   required
                   type="email"
                   placeholder="email"
+                />
+              </InputGroup>
+            )}
+          />
+        </Col>
+        <Col>
+          <Controller
+            name="mobileNumber"
+            control={control}
+            render={({field}) => (
+              <InputGroup className="mb-2">
+                <InputGroup.Text>
+                  <FaMobile />
+                </InputGroup.Text>
+                <Form.Control
+                  {...field}
+                  disabled={loading}
+                  placeholder="mobile number"
                 />
               </InputGroup>
             )}

@@ -24,6 +24,7 @@ describe('RegisterForm', () => {
     const confirmPassword = password;
     const fullname = faker.name.findName();
     const email = faker.internet.email();
+    const mobileNumber = faker.phone.phoneNumber();
 
     const target = renderWithProviderAndRouterAndRestful(
       <RegisterForm />,
@@ -45,22 +46,28 @@ describe('RegisterForm', () => {
     const confirmPasswordInput = target.getByPlaceholderText(
       /confirm password/i
     ) as HTMLInputElement;
+    const mobileNumberInput = target.getByPlaceholderText(
+      /mobile number/i
+    ) as HTMLInputElement;
 
     fireEvent.change(usernameInput, {target: {value: username}});
     fireEvent.change(passwordInput, {target: {value: password}});
     fireEvent.change(fullnameInput, {target: {value: fullname}});
     fireEvent.change(emailInput, {target: {value: email}});
+    fireEvent.change(mobileNumberInput, {target: {value: mobileNumber}});
     fireEvent.change(confirmPasswordInput, {target: {value: confirmPassword}});
 
     return {
       username,
       password,
       email,
+      mobileNumber,
       fullname,
       confirmPassword,
       usernameInput,
       passwordInput,
       emailInput,
+      mobileNumberInput,
       fullnameInput,
       confirmPasswordInput,
       target,
@@ -77,6 +84,7 @@ describe('RegisterForm', () => {
       username,
       password,
       email,
+      mobileNumber,
       fullname,
       confirmPassword,
       usernameInput,
@@ -84,6 +92,7 @@ describe('RegisterForm', () => {
       emailInput,
       fullnameInput,
       confirmPasswordInput,
+      mobileNumberInput,
       target,
     } = await fillupRegistrion();
 
@@ -92,6 +101,7 @@ describe('RegisterForm', () => {
       expect(passwordInput.value).toBe(password);
       expect(fullnameInput.value).toBe(fullname);
       expect(emailInput.value).toBe(email);
+      expect(mobileNumberInput.value).toBe(mobileNumber);
       expect(confirmPasswordInput.value).toBe(confirmPassword);
     });
 
@@ -121,6 +131,7 @@ describe('RegisterForm', () => {
     expect(getByPlaceholderText(/username/i)).toBeInTheDocument();
     expect(getByPlaceholderText(/^password/i)).toBeInTheDocument();
     expect(getByPlaceholderText(/confirm password/i)).toBeInTheDocument();
+    expect(getByPlaceholderText(/mobile number/i)).toBeInTheDocument();
     expect(getByText(/register/i)).toBeInTheDocument();
     expect(getByText(/clear/i)).toBeInTheDocument();
   });
@@ -132,6 +143,7 @@ describe('RegisterForm', () => {
       emailInput,
       fullnameInput,
       confirmPasswordInput,
+      mobileNumberInput,
       target,
     } = await fillupRegistrion();
 
@@ -143,6 +155,7 @@ describe('RegisterForm', () => {
       expect(fullnameInput.value).toBe('');
       expect(emailInput.value).toBe('');
       expect(confirmPasswordInput.value).toBe('');
+      expect(mobileNumberInput.value).toBe('');
     });
   });
 
