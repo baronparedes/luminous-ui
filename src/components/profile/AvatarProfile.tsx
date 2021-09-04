@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {Container} from 'react-bootstrap';
 import styled from 'styled-components';
 
-import {getInitials} from '../../@utils/string';
+import {getInitials} from '../../@utils/strings';
 import {AuthProfile} from '../../Api';
 import ModalContainer from '../@ui/ModalContainer';
 import ChangePasswordForm from './ChangePasswordForm';
