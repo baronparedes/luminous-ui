@@ -5,6 +5,7 @@ import {FaPencilAlt} from 'react-icons/fa';
 import styled from 'styled-components';
 
 import {AuthProfile, UpdateProfile, useUpdateProfile} from '../../../Api';
+import {PROFILE_TYPE, RECORD_STATUS} from '../../../constants';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import Loading from '../../@ui/Loading';
 import ModalContainer from '../../@ui/ModalContainer';
@@ -133,9 +134,13 @@ const ProfileUpdateButton: React.FC<{
                       type
                     </Form.Label>
                     <Form.Control as="select" {...field} id="type">
-                      <option value="user">user</option>
-                      <option value="stakeholder">stakeholder</option>
-                      <option value="admin">admin</option>
+                      {PROFILE_TYPE.map((s, i) => {
+                        return (
+                          <option key={i} value={s}>
+                            {s}
+                          </option>
+                        );
+                      })}
                     </Form.Control>
                   </InputGroup>
                 )}
@@ -151,8 +156,13 @@ const ProfileUpdateButton: React.FC<{
                       status
                     </Form.Label>
                     <Form.Control as="select" {...field} id="status">
-                      <option value="active">active</option>
-                      <option value="inactive">inactive</option>
+                      {RECORD_STATUS.map((s, i) => {
+                        return (
+                          <option key={i} value={s}>
+                            {s}
+                          </option>
+                        );
+                      })}
                     </Form.Control>
                   </InputGroup>
                 )}

@@ -89,7 +89,7 @@ describe('UpdateBasicDetailsForm', () => {
     };
     nock(base)
       .patch(`/api/profile/updateProfile/${expectedProfile.id}`, body)
-      .reply(200, {...expectedProfile, name, email});
+      .reply(200, {...expectedProfile, name, email, mobileNumber});
 
     fireEvent.click(submit);
     await waitFor(() => {

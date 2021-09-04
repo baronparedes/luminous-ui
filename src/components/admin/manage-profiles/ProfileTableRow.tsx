@@ -3,20 +3,16 @@ import {useState} from 'react';
 import {Button, ButtonGroup} from 'react-bootstrap';
 import {FaCheck, FaTimes} from 'react-icons/fa';
 
-import {AuthProfile, ProfileStatus, useUpdateProfileStatus} from '../../../Api';
+import {AuthProfile, RecordStatus, useUpdateProfileStatus} from '../../../Api';
+import {STATUS_COLORS} from '../../../constants';
 import {useRootState} from '../../../store';
 import ProfileUpdateButton from './ProfileUpdateButton';
-
-const STATUS_COLORS = {
-  active: 'text-success',
-  inactive: 'text-danger',
-};
 
 const ProfileTableRow: React.FC<{profile: AuthProfile}> = ({profile}) => {
   const {me} = useRootState(state => state.profile);
   const [profileState, setProfileState] = useState<AuthProfile>({...profile});
   const {mutate} = useUpdateProfileStatus({id: profile.id});
-  const toggleStatus = (status: ProfileStatus) => {
+  const toggleStatus = (status: RecordStatus) => {
     mutate(undefined, {
       queryParams: {
         status,

@@ -1,6 +1,7 @@
 import React from 'react';
 import {Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import {FaHome, FaUsers} from 'react-icons/fa';
+import {RiCommunityLine} from 'react-icons/ri';
 import {LinkContainer} from 'react-router-bootstrap';
 import {NavLink} from 'react-router-dom';
 
@@ -37,6 +38,14 @@ const Navigation: React.FC = () => {
                   >
                     <FaUsers className="mr-1" />
                     profiles
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    as={NavLink}
+                    to={routes.ADMIN_PROPERTIES}
+                    exact
+                  >
+                    <RiCommunityLine className="mr-1" />
+                    properties
                   </NavDropdown.Item>
                 </NavDropdown>
               </LinkContainer>

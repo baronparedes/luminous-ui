@@ -6,6 +6,7 @@ import Header from './components/@ui/Header';
 import NotFound from './components/@ui/NotFound';
 import ProtectedRoute from './components/@ui/ProtectedRoute';
 import ProfilesView from './components/admin/manage-profiles/ProfilesView';
+import PropertiesView from './components/admin/manage-properties/PropertiesView';
 import DashboardView from './components/dashboard/DashboardView';
 import LoginView from './components/profile/LoginView';
 import {useRootState} from './store';
@@ -33,6 +34,12 @@ const AppRouter: React.FC = () => {
               exact
               onlyFor={['admin']}
               component={ProfilesView}
+            />
+            <ProtectedRoute
+              path={routes.ADMIN_PROPERTIES}
+              exact
+              onlyFor={['admin']}
+              component={PropertiesView}
             />
             <Route component={NotFound} />
           </Switch>

@@ -5,11 +5,11 @@ import { Get, GetProps, useGet, UseGetProps, Mutate, MutateProps, useMutate, Use
 export const SPEC_VERSION = "1.0.0"; 
 export type ProfileType = "stakeholder" | "admin" | "user";
 
-export type ProfileStatus = "active" | "inactive";
+export type RecordStatus = "active" | "inactive";
 
 export interface AuthProfile {
   scopes?: string;
-  status: ProfileStatus;
+  status: RecordStatus;
   type: ProfileType;
   mobileNumber?: string;
   email: string;
@@ -55,11 +55,19 @@ export interface ApiError {
 
 export interface UpdateProfile {
   scopes?: string;
-  status: ProfileStatus;
+  status: RecordStatus;
   type: ProfileType;
   mobileNumber?: string;
   email: string;
   name: string;
+}
+
+export interface PropertyAttr {
+  id?: number;
+  code: string;
+  floorArea: number;
+  address: string;
+  status: RecordStatus;
 }
 
 export type AuthProps = Omit<MutateProps<AuthResult, unknown, void, void, void>, "path" | "verb">;
@@ -129,7 +137,7 @@ export const useMe = (props: UseMeProps) => useGet<AuthProfile, unknown, void, v
 
 
 export interface UpdateProfileStatusQueryParams {
-  status: ProfileStatus;
+  status: RecordStatus;
 }
 
 export interface UpdateProfileStatusPathParams {
@@ -195,4 +203,102 @@ export const ChangePassword = ({id, ...props}: ChangePasswordProps) => (
 export type UseChangePasswordProps = Omit<UseMutateProps<void, unknown, void, ChangePasswordRequestBody, ChangePasswordPathParams>, "path" | "verb"> & ChangePasswordPathParams;
 
 export const useChangePassword = ({id, ...props}: UseChangePasswordProps) => useMutate<void, unknown, void, ChangePasswordRequestBody, ChangePasswordPathParams>("PATCH", (paramsInPath: ChangePasswordPathParams) => `/api/profile/changePassword/${paramsInPath.id}`, {  pathParams: { id }, ...props });
+
+
+export interface GetAllPropertiesQueryParams {
+  search?: string;
+}
+
+export type GetAllPropertiesProps = Omit<GetProps<PropertyAttr[], unknown, GetAllPropertiesQueryParams, void>, "path">;
+
+export const GetAllProperties = (props: GetAllPropertiesProps) => (
+  <Get<PropertyAttr[], unknown, GetAllPropertiesQueryParams, void>
+    path={`/api/property/getAll`}
+    
+    {...props}
+  />
+);
+
+export type UseGetAllPropertiesProps = Omit<UseGetProps<PropertyAttr[], unknown, GetAllPropertiesQueryParams, void>, "path">;
+
+export const useGetAllProperties = (props: UseGetAllPropertiesProps) => useGet<PropertyAttr[], unknown, GetAllPropertiesQueryParams, void>(`/api/property/getAll`, props);
+
+
+export interface GetPropertyPathParams {
+  id: number
+}
+
+export type GetPropertyProps = Omit<GetProps<PropertyAttr, unknown, void, GetPropertyPathParams>, "path"> & GetPropertyPathParams;
+
+export const GetProperty = ({id, ...props}: GetPropertyProps) => (
+  <Get<PropertyAttr, unknown, void, GetPropertyPathParams>
+    path={`/api/property/${id}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetPropertyProps = Omit<UseGetProps<PropertyAttr, unknown, void, GetPropertyPathParams>, "path"> & GetPropertyPathParams;
+
+export const useGetProperty = ({id, ...props}: UseGetPropertyProps) => useGet<PropertyAttr, unknown, void, GetPropertyPathParams>((paramsInPath: GetPropertyPathParams) => `/api/property/${paramsInPath.id}`, {  pathParams: { id }, ...props });
+
+
+export type CreatePropertyProps = Omit<MutateProps<PropertyAttr, EntityError, void, PropertyAttr, void>, "path" | "verb">;
+
+export const CreateProperty = (props: CreatePropertyProps) => (
+  <Mutate<PropertyAttr, EntityError, void, PropertyAttr, void>
+    verb="POST"
+    path={`/api/property/create`}
+    
+    {...props}
+  />
+);
+
+export type UseCreatePropertyProps = Omit<UseMutateProps<PropertyAttr, EntityError, void, PropertyAttr, void>, "path" | "verb">;
+
+export const useCreateProperty = (props: UseCreatePropertyProps) => useMutate<PropertyAttr, EntityError, void, PropertyAttr, void>("POST", `/api/property/create`, props);
+
+
+export interface UpdatePropertyStatusQueryParams {
+  status: RecordStatus;
+}
+
+export interface UpdatePropertyStatusPathParams {
+  id: number
+}
+
+export type UpdatePropertyStatusProps = Omit<MutateProps<void, unknown, UpdatePropertyStatusQueryParams, void, UpdatePropertyStatusPathParams>, "path" | "verb"> & UpdatePropertyStatusPathParams;
+
+export const UpdatePropertyStatus = ({id, ...props}: UpdatePropertyStatusProps) => (
+  <Mutate<void, unknown, UpdatePropertyStatusQueryParams, void, UpdatePropertyStatusPathParams>
+    verb="PATCH"
+    path={`/api/property/updatePropertyStatus/${id}`}
+    
+    {...props}
+  />
+);
+
+export type UseUpdatePropertyStatusProps = Omit<UseMutateProps<void, unknown, UpdatePropertyStatusQueryParams, void, UpdatePropertyStatusPathParams>, "path" | "verb"> & UpdatePropertyStatusPathParams;
+
+export const useUpdatePropertyStatus = ({id, ...props}: UseUpdatePropertyStatusProps) => useMutate<void, unknown, UpdatePropertyStatusQueryParams, void, UpdatePropertyStatusPathParams>("PATCH", (paramsInPath: UpdatePropertyStatusPathParams) => `/api/property/updatePropertyStatus/${paramsInPath.id}`, {  pathParams: { id }, ...props });
+
+
+export interface UpdatePropertyPathParams {
+  id: number
+}
+
+export type UpdatePropertyProps = Omit<MutateProps<PropertyAttr, EntityError | ApiError, void, PropertyAttr, UpdatePropertyPathParams>, "path" | "verb"> & UpdatePropertyPathParams;
+
+export const UpdateProperty = ({id, ...props}: UpdatePropertyProps) => (
+  <Mutate<PropertyAttr, EntityError | ApiError, void, PropertyAttr, UpdatePropertyPathParams>
+    verb="PATCH"
+    path={`/api/property/updateProperty/${id}`}
+    
+    {...props}
+  />
+);
+
+export type UseUpdatePropertyProps = Omit<UseMutateProps<PropertyAttr, EntityError | ApiError, void, PropertyAttr, UpdatePropertyPathParams>, "path" | "verb"> & UpdatePropertyPathParams;
+
+export const useUpdateProperty = ({id, ...props}: UseUpdatePropertyProps) => useMutate<PropertyAttr, EntityError | ApiError, void, PropertyAttr, UpdatePropertyPathParams>("PATCH", (paramsInPath: UpdatePropertyPathParams) => `/api/property/updateProperty/${paramsInPath.id}`, {  pathParams: { id }, ...props });
 
