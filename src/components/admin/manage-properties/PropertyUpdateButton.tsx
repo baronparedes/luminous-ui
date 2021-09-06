@@ -26,6 +26,7 @@ const ProfileUpdateButton: React.FC<{
         aria-label="update"
         variant="primary"
         size="sm"
+        title="update"
         onClick={() => {
           setToggle(true);
         }}

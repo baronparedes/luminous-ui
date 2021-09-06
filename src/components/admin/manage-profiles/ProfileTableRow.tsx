@@ -54,6 +54,7 @@ const ProfileTableRow: React.FC<{profile: AuthProfile}> = ({profile}) => {
           {profileState.status === 'active' && (
             <Button
               aria-label="update status"
+              title="update status"
               variant="danger"
               size="sm"
               onClick={() => toggleStatus('inactive')}
@@ -64,6 +65,7 @@ const ProfileTableRow: React.FC<{profile: AuthProfile}> = ({profile}) => {
           {profileState.status === 'inactive' && (
             <Button
               aria-label="update status"
+              title="update status"
               variant="success"
               size="sm"
               onClick={() => toggleStatus('active')}

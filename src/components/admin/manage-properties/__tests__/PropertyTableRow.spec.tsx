@@ -69,6 +69,9 @@ describe('PropertyTableRow', () => {
       within(container).getByText(mockedProperty.status)
     ).toBeInTheDocument();
     expect(
+      within(container).getByLabelText(/add assignment$/i, {selector: 'button'})
+    ).toBeInTheDocument();
+    expect(
       within(container).getByLabelText(/update$/i, {selector: 'button'})
     ).toBeInTheDocument();
     expect(

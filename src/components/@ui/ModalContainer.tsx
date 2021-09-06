@@ -1,9 +1,11 @@
 import React from 'react';
-import {Modal} from 'react-bootstrap';
+import {Modal, ModalProps as RBModalProps} from 'react-bootstrap';
 
-export type ModalProps = {
+export type ModalProps = Pick<
+  RBModalProps,
+  'dialogClassName' | 'centered' | 'size'
+> & {
   header?: React.ReactNode;
-  modalsize?: 'sm' | 'lg' | 'xl';
 };
 
 type Props = {
@@ -13,7 +15,12 @@ type Props = {
 
 const ModalContainer: React.FC<Props & ModalProps> = props => {
   return (
-    <Modal show={props.toggle} onHide={props.onClose} size={props.modalsize}>
+    <Modal
+      show={props.toggle}
+      onHide={props.onClose}
+      size={props.size}
+      centered={props.centered}
+    >
       <Modal.Header closeButton>
         <Modal.Title>{props.header}</Modal.Title>
       </Modal.Header>

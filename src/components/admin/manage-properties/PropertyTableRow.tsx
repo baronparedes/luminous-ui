@@ -9,6 +9,7 @@ import {
   useUpdatePropertyStatus,
 } from '../../../Api';
 import {STATUS_COLORS} from '../../../constants';
+import PropertyAssignmentButton from './PropertyAssignmentButton';
 import PropertyUpdateButton from './PropertyUpdateButton';
 
 const PropertyTableRow: React.FC<{row: PropertyAttr}> = ({row}) => {
@@ -40,10 +41,15 @@ const PropertyTableRow: React.FC<{row: PropertyAttr}> = ({row}) => {
       </td>
       <td>
         <ButtonGroup>
+          <PropertyAssignmentButton
+            propertyId={Number(rowState.id)}
+            code={rowState.code}
+          />
           <PropertyUpdateButton value={rowState} onUpdate={handleOnUpdate} />
           {rowState.status === 'active' && (
             <Button
               aria-label="update status"
+              title="update status"
               variant="danger"
               size="sm"
               onClick={() => toggleStatus('inactive')}
@@ -54,6 +60,7 @@ const PropertyTableRow: React.FC<{row: PropertyAttr}> = ({row}) => {
           {rowState.status === 'inactive' && (
             <Button
               aria-label="update status"
+              title="update status"
               variant="success"
               size="sm"
               onClick={() => toggleStatus('active')}

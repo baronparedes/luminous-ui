@@ -50,6 +50,7 @@ const ProfileUpdateButton: React.FC<{
         aria-label="update"
         variant="primary"
         size="sm"
+        title="update"
         onClick={() => {
           setToggle(true);
           reset(initialValue);
@@ -170,7 +171,7 @@ const ProfileUpdateButton: React.FC<{
             </Col>
             {error && (
               <Col>
-                <ErrorInfo>unable to register</ErrorInfo>
+                <ErrorInfo>unable to save</ErrorInfo>
               </Col>
             )}
             <Col className="text-right mb-2">

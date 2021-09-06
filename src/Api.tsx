@@ -70,6 +70,25 @@ export interface PropertyAttr {
   status: RecordStatus;
 }
 
+export interface ProfileAttr {
+  id?: number;
+  name: string;
+  username: string;
+  password: string;
+  email: string;
+  mobileNumber?: string;
+  type: ProfileType;
+  status: RecordStatus;
+  scopes?: string;
+}
+
+export interface PropertyAssignmentAttr {
+  profileId: number;
+  propertyId: number;
+  profile?: ProfileAttr;
+  property?: PropertyAttr;
+}
+
 export type AuthProps = Omit<MutateProps<AuthResult, unknown, void, void, void>, "path" | "verb">;
 
 export const Auth = (props: AuthProps) => (
@@ -243,6 +262,25 @@ export type UseGetPropertyProps = Omit<UseGetProps<PropertyAttr, unknown, void, 
 export const useGetProperty = ({id, ...props}: UseGetPropertyProps) => useGet<PropertyAttr, unknown, void, GetPropertyPathParams>((paramsInPath: GetPropertyPathParams) => `/api/property/${paramsInPath.id}`, {  pathParams: { id }, ...props });
 
 
+export interface GetPropertyAssignmentsPathParams {
+  id: number
+}
+
+export type GetPropertyAssignmentsProps = Omit<GetProps<PropertyAssignmentAttr[], unknown, void, GetPropertyAssignmentsPathParams>, "path"> & GetPropertyAssignmentsPathParams;
+
+export const GetPropertyAssignments = ({id, ...props}: GetPropertyAssignmentsProps) => (
+  <Get<PropertyAssignmentAttr[], unknown, void, GetPropertyAssignmentsPathParams>
+    path={`/api/property/getPropertyAssignments/${id}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetPropertyAssignmentsProps = Omit<UseGetProps<PropertyAssignmentAttr[], unknown, void, GetPropertyAssignmentsPathParams>, "path"> & GetPropertyAssignmentsPathParams;
+
+export const useGetPropertyAssignments = ({id, ...props}: UseGetPropertyAssignmentsProps) => useGet<PropertyAssignmentAttr[], unknown, void, GetPropertyAssignmentsPathParams>((paramsInPath: GetPropertyAssignmentsPathParams) => `/api/property/getPropertyAssignments/${paramsInPath.id}`, {  pathParams: { id }, ...props });
+
+
 export type CreatePropertyProps = Omit<MutateProps<PropertyAttr, EntityError, void, PropertyAttr, void>, "path" | "verb">;
 
 export const CreateProperty = (props: CreatePropertyProps) => (
@@ -301,4 +339,24 @@ export const UpdateProperty = ({id, ...props}: UpdatePropertyProps) => (
 export type UseUpdatePropertyProps = Omit<UseMutateProps<PropertyAttr, EntityError | ApiError, void, PropertyAttr, UpdatePropertyPathParams>, "path" | "verb"> & UpdatePropertyPathParams;
 
 export const useUpdateProperty = ({id, ...props}: UseUpdatePropertyProps) => useMutate<PropertyAttr, EntityError | ApiError, void, PropertyAttr, UpdatePropertyPathParams>("PATCH", (paramsInPath: UpdatePropertyPathParams) => `/api/property/updateProperty/${paramsInPath.id}`, {  pathParams: { id }, ...props });
+
+
+export interface UpdatePropertyAssignmentsPathParams {
+  id: number
+}
+
+export type UpdatePropertyAssignmentsProps = Omit<MutateProps<void, unknown, void, number[], UpdatePropertyAssignmentsPathParams>, "path" | "verb"> & UpdatePropertyAssignmentsPathParams;
+
+export const UpdatePropertyAssignments = ({id, ...props}: UpdatePropertyAssignmentsProps) => (
+  <Mutate<void, unknown, void, number[], UpdatePropertyAssignmentsPathParams>
+    verb="PATCH"
+    path={`/api/property/updatePropertyAssignments/${id}`}
+    
+    {...props}
+  />
+);
+
+export type UseUpdatePropertyAssignmentsProps = Omit<UseMutateProps<void, unknown, void, number[], UpdatePropertyAssignmentsPathParams>, "path" | "verb"> & UpdatePropertyAssignmentsPathParams;
+
+export const useUpdatePropertyAssignments = ({id, ...props}: UseUpdatePropertyAssignmentsProps) => useMutate<void, unknown, void, number[], UpdatePropertyAssignmentsPathParams>("PATCH", (paramsInPath: UpdatePropertyAssignmentsPathParams) => `/api/property/updatePropertyAssignments/${paramsInPath.id}`, {  pathParams: { id }, ...props });
 
