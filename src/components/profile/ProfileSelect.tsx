@@ -18,7 +18,7 @@ type Props = {
   onSelectProfiles?: (items: ProfileSelectItem[]) => void;
 };
 
-function toProfileSelectItems(list: AuthProfile[] | null) {
+export function toProfileSelectItems(list: AuthProfile[] | null) {
   if (!list) return [];
   return list.map(item => {
     const result: ProfileSelectItem = {
@@ -75,7 +75,11 @@ const ProfileSelect = ({onSelectProfiles}: Props) => {
           }}
           options={toProfileSelectItems(data)}
         />
-        <Button variant="success" onClick={handleOnSelectProfiles}>
+        <Button
+          aria-label="select profile"
+          variant="success"
+          onClick={handleOnSelectProfiles}
+        >
           <FaPlus />
         </Button>
       </InputGroup>
