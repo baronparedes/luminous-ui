@@ -9,6 +9,7 @@ const AvatarContainer = styled('div')<AvatarProps>`
   text-align: center;
   width: ${props => props.avatarSize};
   cursor: pointer;
+  margin: auto;
 `;
 
 const Initials = styled('span')<AvatarProps>`

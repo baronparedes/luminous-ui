@@ -6,6 +6,7 @@ import localStore from '../local';
 
 export type ProfileState = {
   me?: AuthProfile;
+  assignedProperties?: number[];
   token?: string;
 };
 
@@ -40,6 +41,9 @@ export const profileSlice = createSlice({
     signOut: state => {
       state.me = undefined;
       state.token = undefined;
+    },
+    updateAssignedProperties: (state, action: PayloadAction<number[]>) => {
+      state.assignedProperties = action.payload;
     },
     updateCurrentProfile: (
       state,

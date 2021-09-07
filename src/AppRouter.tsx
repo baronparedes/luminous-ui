@@ -9,6 +9,7 @@ import ProfilesView from './components/admin/manage-profiles/ProfilesView';
 import PropertiesView from './components/admin/manage-properties/PropertiesView';
 import DashboardView from './components/dashboard/DashboardView';
 import LoginView from './components/profile/LoginView';
+import MyProfileView from './components/profile/MyProfileView';
 import {useRootState} from './store';
 
 const AppRouter: React.FC = () => {
@@ -23,6 +24,11 @@ const AppRouter: React.FC = () => {
         <Header />
         <div className="m-2">
           <Switch>
+            <ProtectedRoute
+              path={routes.ROOT}
+              exact
+              component={MyProfileView}
+            />
             <ProtectedRoute
               path={routes.DASHBOARD}
               exact

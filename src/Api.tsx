@@ -281,23 +281,23 @@ export type UseGetPropertyAssignmentsProps = Omit<UseGetProps<PropertyAssignment
 export const useGetPropertyAssignments = ({id, ...props}: UseGetPropertyAssignmentsProps) => useGet<PropertyAssignmentAttr[], unknown, void, GetPropertyAssignmentsPathParams>((paramsInPath: GetPropertyAssignmentsPathParams) => `/api/property/getPropertyAssignments/${paramsInPath.id}`, {  pathParams: { id }, ...props });
 
 
-export interface GetAssignedPropertiesQueryParams {
-  profileId: number;
+export interface GetAssignedPropertiesPathParams {
+  profileId: number
 }
 
-export type GetAssignedPropertiesProps = Omit<GetProps<PropertyAssignmentAttr[], unknown, GetAssignedPropertiesQueryParams, void>, "path">;
+export type GetAssignedPropertiesProps = Omit<GetProps<PropertyAssignmentAttr[], unknown, void, GetAssignedPropertiesPathParams>, "path"> & GetAssignedPropertiesPathParams;
 
-export const GetAssignedProperties = (props: GetAssignedPropertiesProps) => (
-  <Get<PropertyAssignmentAttr[], unknown, GetAssignedPropertiesQueryParams, void>
-    path={`/api/property/getAssignedProperties`}
+export const GetAssignedProperties = ({profileId, ...props}: GetAssignedPropertiesProps) => (
+  <Get<PropertyAssignmentAttr[], unknown, void, GetAssignedPropertiesPathParams>
+    path={`/api/property/getAssignedProperties/${profileId}`}
     
     {...props}
   />
 );
 
-export type UseGetAssignedPropertiesProps = Omit<UseGetProps<PropertyAssignmentAttr[], unknown, GetAssignedPropertiesQueryParams, void>, "path">;
+export type UseGetAssignedPropertiesProps = Omit<UseGetProps<PropertyAssignmentAttr[], unknown, void, GetAssignedPropertiesPathParams>, "path"> & GetAssignedPropertiesPathParams;
 
-export const useGetAssignedProperties = (props: UseGetAssignedPropertiesProps) => useGet<PropertyAssignmentAttr[], unknown, GetAssignedPropertiesQueryParams, void>(`/api/property/getAssignedProperties`, props);
+export const useGetAssignedProperties = ({profileId, ...props}: UseGetAssignedPropertiesProps) => useGet<PropertyAssignmentAttr[], unknown, void, GetAssignedPropertiesPathParams>((paramsInPath: GetAssignedPropertiesPathParams) => `/api/property/getAssignedProperties/${paramsInPath.profileId}`, {  pathParams: { profileId }, ...props });
 
 
 export type CreatePropertyProps = Omit<MutateProps<PropertyAttr, EntityError, void, PropertyAttr, void>, "path" | "verb">;

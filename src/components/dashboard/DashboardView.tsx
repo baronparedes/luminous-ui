@@ -1,5 +1,11 @@
+import {Container} from 'react-bootstrap';
+
 const DashboardView = () => {
-  return <>Dashboard View</>;
+  return (
+    <>
+      <Container>Dashboard View</Container>
+    </>
+  );
 };
 
 export default DashboardView;

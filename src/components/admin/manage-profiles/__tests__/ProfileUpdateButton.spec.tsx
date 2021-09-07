@@ -29,6 +29,7 @@ describe('ProfilesTableRow', () => {
     const emailInput = target.getByLabelText(/email/i);
     const typeInput = target.getByLabelText(/type/i);
     const statusInput = target.getByLabelText(/status/i);
+    const mobileNumberInput = target.getByLabelText(/mobile/i);
     const formContainer = target.getByRole('form');
     const updateFormButton = within(formContainer).getByText(/update/i);
     const resetFormButton = within(formContainer).getByText(/reset/i);
@@ -37,6 +38,7 @@ describe('ProfilesTableRow', () => {
       ...target,
       nameInput,
       emailInput,
+      mobileNumberInput,
       typeInput,
       statusInput,
       formContainer,
@@ -51,6 +53,7 @@ describe('ProfilesTableRow', () => {
     const {
       nameInput,
       emailInput,
+      mobileNumberInput,
       typeInput,
       statusInput,
       formContainer,
@@ -62,6 +65,7 @@ describe('ProfilesTableRow', () => {
     const body = {
       name: updatedMockedProfile.name,
       email: updatedMockedProfile.email,
+      mobileNumber: updatedMockedProfile.mobileNumber,
       type: updatedMockedProfile.type,
       status: updatedMockedProfile.status,
     };
@@ -73,6 +77,9 @@ describe('ProfilesTableRow', () => {
     await waitFor(() => expect(formContainer).toBeInTheDocument());
     fireEvent.change(nameInput, {target: {value: updatedMockedProfile.name}});
     fireEvent.change(emailInput, {target: {value: updatedMockedProfile.email}});
+    fireEvent.change(mobileNumberInput, {
+      target: {value: updatedMockedProfile.mobileNumber},
+    });
     fireEvent.change(typeInput, {target: {value: updatedMockedProfile.type}});
     fireEvent.change(statusInput, {
       target: {value: updatedMockedProfile.status},
@@ -88,6 +95,7 @@ describe('ProfilesTableRow', () => {
     const {
       nameInput,
       emailInput,
+      mobileNumberInput,
       typeInput,
       statusInput,
       formContainer,
@@ -97,6 +105,9 @@ describe('ProfilesTableRow', () => {
     await waitFor(() => expect(formContainer).toBeInTheDocument());
     fireEvent.change(nameInput, {target: {value: updatedMockedProfile.name}});
     fireEvent.change(emailInput, {target: {value: updatedMockedProfile.email}});
+    fireEvent.change(mobileNumberInput, {
+      target: {value: updatedMockedProfile.mobileNumber},
+    });
     fireEvent.change(typeInput, {target: {value: updatedMockedProfile.type}});
     fireEvent.change(statusInput, {
       target: {value: updatedMockedProfile.status},
@@ -115,6 +126,9 @@ describe('ProfilesTableRow', () => {
       expect((statusInput as HTMLSelectElement).value).toBe(
         updatedMockedProfile.status
       );
+      expect((mobileNumberInput as HTMLSelectElement).value).toBe(
+        updatedMockedProfile.mobileNumber
+      );
     });
 
     fireEvent.click(resetFormButton);
@@ -124,6 +138,9 @@ describe('ProfilesTableRow', () => {
       expect((typeInput as HTMLSelectElement).value).toBe(mockedProfile.type);
       expect((statusInput as HTMLSelectElement).value).toBe(
         mockedProfile.status
+      );
+      expect((mobileNumberInput as HTMLSelectElement).value).toBe(
+        mockedProfile.mobileNumber
       );
     });
   });
