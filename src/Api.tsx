@@ -281,6 +281,25 @@ export type UseGetPropertyAssignmentsProps = Omit<UseGetProps<PropertyAssignment
 export const useGetPropertyAssignments = ({id, ...props}: UseGetPropertyAssignmentsProps) => useGet<PropertyAssignmentAttr[], unknown, void, GetPropertyAssignmentsPathParams>((paramsInPath: GetPropertyAssignmentsPathParams) => `/api/property/getPropertyAssignments/${paramsInPath.id}`, {  pathParams: { id }, ...props });
 
 
+export interface GetAssignedPropertiesQueryParams {
+  profileId: number;
+}
+
+export type GetAssignedPropertiesProps = Omit<GetProps<PropertyAssignmentAttr[], unknown, GetAssignedPropertiesQueryParams, void>, "path">;
+
+export const GetAssignedProperties = (props: GetAssignedPropertiesProps) => (
+  <Get<PropertyAssignmentAttr[], unknown, GetAssignedPropertiesQueryParams, void>
+    path={`/api/property/getAssignedProperties`}
+    
+    {...props}
+  />
+);
+
+export type UseGetAssignedPropertiesProps = Omit<UseGetProps<PropertyAssignmentAttr[], unknown, GetAssignedPropertiesQueryParams, void>, "path">;
+
+export const useGetAssignedProperties = (props: UseGetAssignedPropertiesProps) => useGet<PropertyAssignmentAttr[], unknown, GetAssignedPropertiesQueryParams, void>(`/api/property/getAssignedProperties`, props);
+
+
 export type CreatePropertyProps = Omit<MutateProps<PropertyAttr, EntityError, void, PropertyAttr, void>, "path" | "verb">;
 
 export const CreateProperty = (props: CreatePropertyProps) => (
