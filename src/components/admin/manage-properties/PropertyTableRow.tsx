@@ -2,7 +2,9 @@ import classNames from 'classnames';
 import {useState} from 'react';
 import {Button, ButtonGroup} from 'react-bootstrap';
 import {FaCheck, FaTimes} from 'react-icons/fa';
+import {Link} from 'react-router-dom';
 
+import routes from '../../../@utils/routes';
 import {
   PropertyAttr,
   RecordStatus,
@@ -28,7 +30,11 @@ const PropertyTableRow: React.FC<{row: PropertyAttr}> = ({row}) => {
   return (
     <tr>
       <td>{rowState.id}</td>
-      <td>{rowState.code}</td>
+      <td>
+        <Link className="text-underline" to={routes.PROPERTY(rowState.id)}>
+          {rowState.code}
+        </Link>
+      </td>
       <td>{rowState.address}</td>
       <td>{rowState.floorArea}</td>
       <td

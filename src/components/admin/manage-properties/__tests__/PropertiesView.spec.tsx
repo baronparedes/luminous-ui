@@ -4,7 +4,7 @@ import nock from 'nock';
 import {fireEvent, waitFor, within} from '@testing-library/react';
 
 import {generateFakeProperty} from '../../../../@utils/fake-models';
-import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
+import {renderWithProviderAndRouterAndRestful} from '../../../../@utils/test-renderers';
 import PropertiesView from '../PropertiesView';
 
 describe('PropertiesView', () => {
@@ -32,7 +32,7 @@ describe('PropertiesView', () => {
       getByLabelText,
       getByText,
       queryByRole,
-    } = renderWithProviderAndRestful(<PropertiesView />, base);
+    } = renderWithProviderAndRouterAndRestful(<PropertiesView />, base);
 
     expect(getByRole('heading').textContent).toMatch(/properties/i);
     expect(getByPlaceholderText(/search/i)).toBeInTheDocument();
@@ -57,10 +57,8 @@ describe('PropertiesView', () => {
         expect(getByText(expectedHeader, {selector: 'th'})).toBeInTheDocument();
       }
       for (const property of mockedProperties) {
-        const container = getByText(property.code).parentElement as HTMLElement;
-        expect(
-          within(container).getByText(Number(property.id))
-        ).toBeInTheDocument();
+        const container = getByText(Number(property.id))
+          .parentElement as HTMLElement;
         expect(within(container).getByText(property.code)).toBeInTheDocument();
         expect(
           within(container).getByText(property.address)

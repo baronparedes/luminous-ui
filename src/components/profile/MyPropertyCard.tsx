@@ -12,10 +12,7 @@ type Props = {
 const MyPropertyCard = ({property}: Props) => {
   return (
     <>
-      <Link
-        to={routes.PROPERTY(property.id)}
-        style={{textDecorationLine: 'underline'}}
-      >
+      <Link className="text-underline" to={routes.PROPERTY(property.id)}>
         <h4>{property.code}</h4>
       </Link>
       <div>
