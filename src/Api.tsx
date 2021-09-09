@@ -89,6 +89,14 @@ export interface PropertyAssignmentAttr {
   property?: PropertyAttr;
 }
 
+export type Month = "JAN" | "FEB" | "MAR" | "APR" | "MAY" | "JUN" | "JUL" | "AUG" | "SEP" | "OCT" | "NOV" | "DEC";
+
+export interface PostTransactionBody {
+  propertyId: number;
+  month: Month;
+  year: number;
+}
+
 export type AuthProps = Omit<MutateProps<AuthResult, unknown, void, void, void>, "path" | "verb">;
 
 export const Auth = (props: AuthProps) => (
@@ -378,4 +386,20 @@ export const UpdatePropertyAssignments = ({id, ...props}: UpdatePropertyAssignme
 export type UseUpdatePropertyAssignmentsProps = Omit<UseMutateProps<void, unknown, void, number[], UpdatePropertyAssignmentsPathParams>, "path" | "verb"> & UpdatePropertyAssignmentsPathParams;
 
 export const useUpdatePropertyAssignments = ({id, ...props}: UseUpdatePropertyAssignmentsProps) => useMutate<void, unknown, void, number[], UpdatePropertyAssignmentsPathParams>("PATCH", (paramsInPath: UpdatePropertyAssignmentsPathParams) => `/api/property/updatePropertyAssignments/${paramsInPath.id}`, {  pathParams: { id }, ...props });
+
+
+export type PostMonthlyChargesProps = Omit<MutateProps<void, unknown, void, PostTransactionBody, void>, "path" | "verb">;
+
+export const PostMonthlyCharges = (props: PostMonthlyChargesProps) => (
+  <Mutate<void, unknown, void, PostTransactionBody, void>
+    verb="POST"
+    path={`/api/transaction/postMonthlyCharges`}
+    
+    {...props}
+  />
+);
+
+export type UsePostMonthlyChargesProps = Omit<UseMutateProps<void, unknown, void, PostTransactionBody, void>, "path" | "verb">;
+
+export const usePostMonthlyCharges = (props: UsePostMonthlyChargesProps) => useMutate<void, unknown, void, PostTransactionBody, void>("POST", `/api/transaction/postMonthlyCharges`, props);
 

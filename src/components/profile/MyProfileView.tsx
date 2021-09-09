@@ -34,7 +34,7 @@ const MyProfileView = () => {
             {me && <MyProfileCard profile={me} />}
             <RoundedPanel className="mt-2 p-3">
               <div className="text-center">
-                <Badge pill variant="danger" className="mr-1">
+                <Badge pill variant="danger">
                   total balance
                 </Badge>
                 <h5>Php 1,280.50</h5>
