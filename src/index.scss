@@ -23,6 +23,10 @@ code {
   text-decoration-line: underline;
 }
 
+.currency:before {
+	content: "Php ";
+}
+
 @keyframes fa-spin {
   0% {
     transform: rotate(0deg);

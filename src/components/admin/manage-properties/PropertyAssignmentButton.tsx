@@ -11,7 +11,7 @@ import ModalContainer from '../../@ui/ModalContainer';
 import ProfileSelect, {ProfileSelectItem} from '../../profile/ProfileSelect';
 import PropertyAssignmentCard, {
   AssignedProfile,
-} from './PropertyAssignmentCard';
+} from '../../property/PropertyAssignmentCard';
 
 type Props = {
   propertyId: number;
@@ -24,7 +24,7 @@ const PropertyAssignmentButton: React.FC<Props> = ({propertyId, code}) => {
     []
   );
   const {data, loading, refetch} = useGetPropertyAssignments({
-    id: propertyId,
+    propertyId,
     lazy: true,
   });
   const {mutate} = useUpdatePropertyAssignments({id: propertyId});

@@ -10,11 +10,15 @@ const Panel = styled(Container)`
 
 type Props = {
   className?: string;
+  styles?: React.CSSProperties;
 };
 
 const RoundedPanel: React.FC<Props> = props => {
   return (
-    <Panel className={classNames('rounded-lg', props.className)}>
+    <Panel
+      className={classNames('rounded-lg', props.className)}
+      styles={props.styles}
+    >
       {props.children}
     </Panel>
   );

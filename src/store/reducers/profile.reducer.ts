@@ -1,12 +1,12 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {AuthProfile} from '../../Api';
+import {AuthProfile, PropertyAccount} from '../../Api';
 import {AppThunk} from '../../store';
 import localStore from '../local';
 
 export type ProfileState = {
   me?: AuthProfile;
-  assignedProperties?: number[];
+  propertyAccounts?: PropertyAccount[];
   token?: string;
 };
 
@@ -42,8 +42,11 @@ export const profileSlice = createSlice({
       state.me = undefined;
       state.token = undefined;
     },
-    updateAssignedProperties: (state, action: PayloadAction<number[]>) => {
-      state.assignedProperties = action.payload;
+    updatePropertyAccounts: (
+      state,
+      action: PayloadAction<PropertyAccount[]>
+    ) => {
+      state.propertyAccounts = action.payload;
     },
     updateCurrentProfile: (
       state,

@@ -5,6 +5,7 @@ import {
   AuthResult,
   ProfileAttr,
   ProfileType,
+  PropertyAccount,
   PropertyAssignmentAttr,
   PropertyAttr,
   RecordStatus,
@@ -61,5 +62,14 @@ export function generateFakePropertyAssignment(): PropertyAssignmentAttr {
     profileId: faker.datatype.number(),
     propertyId: faker.datatype.number(),
     profile: generateFakeProfileAttr(),
+  };
+}
+
+export function generateFakePropertyAccount(): PropertyAccount {
+  const property = generateFakeProperty();
+  return {
+    propertyId: Number(property.id),
+    property,
+    balance: faker.datatype.number(),
   };
 }

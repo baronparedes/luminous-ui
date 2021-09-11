@@ -89,7 +89,46 @@ export interface PropertyAssignmentAttr {
   property?: PropertyAttr;
 }
 
+export interface CommunityAttr {
+  description: string;
+}
+
+export type ChargeType = "unit" | "percentage" | "amount";
+
+export type PostingType = "monthly" | "manual" | "accrued";
+
+export interface ChargeAttr {
+  communityId: number;
+  community?: CommunityAttr;
+  code: string;
+  rate: number;
+  chargeType: ChargeType;
+  postingType: PostingType;
+  thresholdInMonths?: number;
+}
+
 export type Month = "JAN" | "FEB" | "MAR" | "APR" | "MAY" | "JUN" | "JUL" | "AUG" | "SEP" | "OCT" | "NOV" | "DEC";
+
+export type TransactionType = "charged" | "collected";
+
+export interface TransactionAttr {
+  chargeId: number;
+  charge?: ChargeAttr;
+  propertyId: number;
+  property?: PropertyAttr;
+  amount: number;
+  transactionYear: number;
+  transactionMonth: Month;
+  transactionType: TransactionType;
+  waivedBy?: number;
+}
+
+export interface PropertyAccount {
+  balance: number;
+  propertyId: number;
+  property?: PropertyAttr;
+  transactions?: TransactionAttr[];
+}
 
 export interface PostTransactionBody {
   propertyId: number;
@@ -271,14 +310,14 @@ export const useGetProperty = ({id, ...props}: UseGetPropertyProps) => useGet<Pr
 
 
 export interface GetPropertyAssignmentsPathParams {
-  id: number
+  propertyId: number
 }
 
 export type GetPropertyAssignmentsProps = Omit<GetProps<PropertyAssignmentAttr[], unknown, void, GetPropertyAssignmentsPathParams>, "path"> & GetPropertyAssignmentsPathParams;
 
-export const GetPropertyAssignments = ({id, ...props}: GetPropertyAssignmentsProps) => (
+export const GetPropertyAssignments = ({propertyId, ...props}: GetPropertyAssignmentsProps) => (
   <Get<PropertyAssignmentAttr[], unknown, void, GetPropertyAssignmentsPathParams>
-    path={`/api/property/getPropertyAssignments/${id}`}
+    path={`/api/property/getPropertyAssignments/${propertyId}`}
     
     {...props}
   />
@@ -286,7 +325,7 @@ export const GetPropertyAssignments = ({id, ...props}: GetPropertyAssignmentsPro
 
 export type UseGetPropertyAssignmentsProps = Omit<UseGetProps<PropertyAssignmentAttr[], unknown, void, GetPropertyAssignmentsPathParams>, "path"> & GetPropertyAssignmentsPathParams;
 
-export const useGetPropertyAssignments = ({id, ...props}: UseGetPropertyAssignmentsProps) => useGet<PropertyAssignmentAttr[], unknown, void, GetPropertyAssignmentsPathParams>((paramsInPath: GetPropertyAssignmentsPathParams) => `/api/property/getPropertyAssignments/${paramsInPath.id}`, {  pathParams: { id }, ...props });
+export const useGetPropertyAssignments = ({propertyId, ...props}: UseGetPropertyAssignmentsProps) => useGet<PropertyAssignmentAttr[], unknown, void, GetPropertyAssignmentsPathParams>((paramsInPath: GetPropertyAssignmentsPathParams) => `/api/property/getPropertyAssignments/${paramsInPath.propertyId}`, {  pathParams: { propertyId }, ...props });
 
 
 export interface GetAssignedPropertiesPathParams {
@@ -306,6 +345,44 @@ export const GetAssignedProperties = ({profileId, ...props}: GetAssignedProperti
 export type UseGetAssignedPropertiesProps = Omit<UseGetProps<PropertyAssignmentAttr[], unknown, void, GetAssignedPropertiesPathParams>, "path"> & GetAssignedPropertiesPathParams;
 
 export const useGetAssignedProperties = ({profileId, ...props}: UseGetAssignedPropertiesProps) => useGet<PropertyAssignmentAttr[], unknown, void, GetAssignedPropertiesPathParams>((paramsInPath: GetAssignedPropertiesPathParams) => `/api/property/getAssignedProperties/${paramsInPath.profileId}`, {  pathParams: { profileId }, ...props });
+
+
+export interface GetPropertyAccountsByProfilePathParams {
+  profileId: number
+}
+
+export type GetPropertyAccountsByProfileProps = Omit<GetProps<PropertyAccount[], unknown, void, GetPropertyAccountsByProfilePathParams>, "path"> & GetPropertyAccountsByProfilePathParams;
+
+export const GetPropertyAccountsByProfile = ({profileId, ...props}: GetPropertyAccountsByProfileProps) => (
+  <Get<PropertyAccount[], unknown, void, GetPropertyAccountsByProfilePathParams>
+    path={`/api/property/getPropertyAccountsByProfile/${profileId}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetPropertyAccountsByProfileProps = Omit<UseGetProps<PropertyAccount[], unknown, void, GetPropertyAccountsByProfilePathParams>, "path"> & GetPropertyAccountsByProfilePathParams;
+
+export const useGetPropertyAccountsByProfile = ({profileId, ...props}: UseGetPropertyAccountsByProfileProps) => useGet<PropertyAccount[], unknown, void, GetPropertyAccountsByProfilePathParams>((paramsInPath: GetPropertyAccountsByProfilePathParams) => `/api/property/getPropertyAccountsByProfile/${paramsInPath.profileId}`, {  pathParams: { profileId }, ...props });
+
+
+export interface GetPropertyAccountPathParams {
+  propertyId: number
+}
+
+export type GetPropertyAccountProps = Omit<GetProps<PropertyAccount, unknown, void, GetPropertyAccountPathParams>, "path"> & GetPropertyAccountPathParams;
+
+export const GetPropertyAccount = ({propertyId, ...props}: GetPropertyAccountProps) => (
+  <Get<PropertyAccount, unknown, void, GetPropertyAccountPathParams>
+    path={`/api/property/getPropertyAccount/${propertyId}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetPropertyAccountProps = Omit<UseGetProps<PropertyAccount, unknown, void, GetPropertyAccountPathParams>, "path"> & GetPropertyAccountPathParams;
+
+export const useGetPropertyAccount = ({propertyId, ...props}: UseGetPropertyAccountProps) => useGet<PropertyAccount, unknown, void, GetPropertyAccountPathParams>((paramsInPath: GetPropertyAccountPathParams) => `/api/property/getPropertyAccount/${paramsInPath.propertyId}`, {  pathParams: { propertyId }, ...props });
 
 
 export type CreatePropertyProps = Omit<MutateProps<PropertyAttr, EntityError, void, PropertyAttr, void>, "path" | "verb">;

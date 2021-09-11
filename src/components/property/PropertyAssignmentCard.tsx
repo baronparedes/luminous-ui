@@ -10,7 +10,7 @@ export type AssignedProfile = {
 };
 
 type Props = {
-  onRemove: (profileId: number) => void;
+  onRemove?: (profileId: number) => void;
 };
 
 const PropertyAssignmentCard = ({
@@ -29,18 +29,20 @@ const PropertyAssignmentCard = ({
       >
         <Col>
           <strong>{name}</strong>
-          <Button
-            variant="danger"
-            size="sm"
-            className="float-right"
-            aria-label="remove"
-            title="remove"
-            onClick={() => {
-              onRemove(profileId);
-            }}
-          >
-            <FaTimes />
-          </Button>
+          {onRemove && (
+            <Button
+              variant="danger"
+              size="sm"
+              className="float-right"
+              aria-label="remove"
+              title="remove"
+              onClick={() => {
+                onRemove(profileId);
+              }}
+            >
+              <FaTimes />
+            </Button>
+          )}
         </Col>
         <Col>
           <small>

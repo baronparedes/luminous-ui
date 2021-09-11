@@ -9,7 +9,7 @@ type Props = {
   property: PropertyAttr;
 };
 
-const MyPropertyCard = ({property}: Props) => {
+const PropertyCard = ({property}: Props) => {
   return (
     <>
       <Link className="text-underline" to={routes.PROPERTY(property.id)}>
@@ -27,4 +27,4 @@ const MyPropertyCard = ({property}: Props) => {
   );
 };
 
-export default MyPropertyCard;
+export default PropertyCard;

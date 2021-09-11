@@ -3,13 +3,13 @@ import {fireEvent} from '@testing-library/react';
 import {generateFakeProperty} from '../../../@utils/fake-models';
 import routes from '../../../@utils/routes';
 import {renderWithRouter} from '../../../@utils/test-renderers';
-import MyPropertyCard from '../MyPropertyCard';
+import PropertyCard from '../PropertyCard';
 
-describe('MyPropertyCard', () => {
+describe('PropertyCard', () => {
   it('should render', () => {
     const mockedProperty = generateFakeProperty();
     const {getByText, history} = renderWithRouter(
-      <MyPropertyCard property={mockedProperty} />
+      <PropertyCard property={mockedProperty} />
     );
     expect(getByText(mockedProperty.code)).toBeInTheDocument();
     expect(getByText(mockedProperty.address)).toBeInTheDocument();
