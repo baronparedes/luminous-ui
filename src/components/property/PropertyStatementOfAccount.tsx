@@ -1,19 +1,27 @@
 import {Col, Row} from 'react-bootstrap';
 
+import {sumTransactions} from '../../@utils/helpers';
+import {PropertyAccount} from '../../Api';
 import {Currency} from '../@ui/Currency';
 import {LabeledCurrency} from '../@ui/LabeledCurrency';
 import RoundedPanel from '../@ui/RoundedPanel';
 import {Table} from '../@ui/Table';
 
-const PropertyStatementOfAccount = () => {
+type Props = {
+  propertyAccount: PropertyAccount;
+};
+
+const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
+  const {property, balance, transactions} = propertyAccount;
+  const currentBalance = sumTransactions(transactions);
   return (
     <>
       <RoundedPanel className="mb-3 text-center">
         <Row style={{fontSize: '1.2em'}}>
           <Col>
             <LabeledCurrency
-              label="balance forwarded"
-              currency={1280.5}
+              label="previous balance"
+              currency={balance - currentBalance}
               pill
               noCurrencyColor
               variant="info"
@@ -22,7 +30,7 @@ const PropertyStatementOfAccount = () => {
           <Col>
             <LabeledCurrency
               label="current balance"
-              currency={1280.5}
+              currency={currentBalance}
               pill
               noCurrencyColor
               variant="danger"
@@ -33,57 +41,24 @@ const PropertyStatementOfAccount = () => {
       <RoundedPanel className="p-0 m-auto">
         <Table
           renderHeaderContent={<h5>SOA - SEP 2020</h5>}
-          headers={['id', 'amount', 'description', 'rate', 'area', 'date']}
+          headers={['area', 'charge code', 'rate', 'amount']}
         >
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>
-                <strong>
-                  <Currency noCurrencyColor currency={1280.5} />
-                </strong>
-              </td>
-              <td>CONDO DUES</td>
-              <td>60</td>
-              <td>90.5</td>
-              <td>{new Date().toLocaleDateString()}</td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>
-                <strong>
-                  <Currency noCurrencyColor currency={1280.5} />
-                </strong>
-              </td>
-              <td>CONDO DUES</td>
-              <td>60</td>
-              <td>90.5</td>
-              <td>{new Date().toLocaleDateString()}</td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>
-                <strong>
-                  <Currency noCurrencyColor currency={1280.5} />
-                </strong>
-              </td>
-              <td>CONDO DUES</td>
-              <td>60</td>
-              <td>90.5</td>
-              <td>{new Date().toLocaleDateString()}</td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>
-                <strong>
-                  <Currency noCurrencyColor currency={1280.5} />
-                </strong>
-              </td>
-              <td>CONDO DUES</td>
-              <td>60</td>
-              <td>90.5</td>
-              <td>{new Date().toLocaleDateString()}</td>
-            </tr>
+            {transactions &&
+              transactions.map((t, i) => {
+                return (
+                  <tr key={i}>
+                    <td>{property?.floorArea}</td>
+                    <td>{t.charge?.code}</td>
+                    <td>{t.charge?.rate}</td>
+                    <td>
+                      <strong>
+                        <Currency noCurrencyColor currency={t.amount} />
+                      </strong>
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </Table>
       </RoundedPanel>

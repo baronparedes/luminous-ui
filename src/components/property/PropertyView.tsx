@@ -28,7 +28,12 @@ export const PropertyView = () => {
         </Row>
         <Row>
           <Col md={9} className="mb-2">
-            <PropertyStatementOfAccount />
+            {propertyAccountLoading && <Loading className="mb-2" />}
+            {!propertyAccountLoading && propertyAccountData && (
+              <PropertyStatementOfAccount
+                propertyAccount={propertyAccountData}
+              />
+            )}
           </Col>
           <Col md={3}>
             {assignedPropertyLoading && <Loading />}

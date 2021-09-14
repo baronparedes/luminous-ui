@@ -7,12 +7,18 @@ type Props = {
   className?: string;
 };
 
-export const LabeledCurrency = (props: Props & BadgeProps & CurrencyProps) => {
+export const LabeledCurrency = ({
+  label,
+  className,
+  noCurrencyColor,
+  currency,
+  ...rest
+}: Props & BadgeProps & CurrencyProps) => {
   return (
-    <div className={props.className}>
-      <Badge {...props}>{props.label}</Badge>
+    <div className={className}>
+      <Badge {...rest}>{label}</Badge>
       <h5>
-        <Currency {...props} />
+        <Currency noCurrencyColor={noCurrencyColor} currency={currency} />
       </h5>
     </div>
   );

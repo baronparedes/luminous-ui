@@ -112,6 +112,7 @@ export type Month = "JAN" | "FEB" | "MAR" | "APR" | "MAY" | "JUN" | "JUL" | "AUG
 export type TransactionType = "charged" | "collected";
 
 export interface TransactionAttr {
+  id?: number;
   chargeId: number;
   charge?: ChargeAttr;
   propertyId: number;
