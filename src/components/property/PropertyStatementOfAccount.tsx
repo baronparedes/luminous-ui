@@ -1,5 +1,6 @@
 import {Col, Row} from 'react-bootstrap';
 
+import {getCurrentMonthYear} from '../../@utils/dates';
 import {sumTransactions} from '../../@utils/helpers';
 import {PropertyAccount} from '../../Api';
 import {Currency} from '../@ui/Currency';
@@ -12,6 +13,7 @@ type Props = {
 };
 
 const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
+  const {year, month} = getCurrentMonthYear();
   const {property, balance, transactions} = propertyAccount;
   const currentBalance = sumTransactions(transactions);
   return (
@@ -40,7 +42,7 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
       </RoundedPanel>
       <RoundedPanel className="p-0 m-auto">
         <Table
-          renderHeaderContent={<h5>SOA - SEP 2020</h5>}
+          renderHeaderContent={<h5>SOA - {`${month} ${year}`}</h5>}
           headers={['area', 'charge code', 'rate', 'amount']}
         >
           <tbody>

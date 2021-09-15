@@ -1,20 +1,24 @@
-import {Col, Container, Row} from 'react-bootstrap';
+import {Button, Col, Container, Row} from 'react-bootstrap';
 
 import {useGetPropertyAccount, useGetPropertyAssignments} from '../../Api';
 import {useUrl} from '../../hooks/useUrl';
+import {useRootState} from '../../store';
 import Loading from '../@ui/Loading';
+import RoundedPanel from '../@ui/RoundedPanel';
 import PropertyAssignmentCard from './PropertyAssignmentCard';
 import PropertyDetails from './PropertyDetails';
 import PropertyStatementOfAccount from './PropertyStatementOfAccount';
 
 export const PropertyView = () => {
+  const {me} = useRootState(state => state.profile);
   const {id} = useUrl();
+  const propertyId = Number(id);
   const {data: propertyAccountData, loading: propertyAccountLoading} =
     useGetPropertyAccount({
-      propertyId: Number(id),
+      propertyId,
     });
   const {data: assignedPropertyData, loading: assignedPropertyLoading} =
-    useGetPropertyAssignments({propertyId: Number(id)});
+    useGetPropertyAssignments({propertyId});
   return (
     <>
       <Container>
@@ -36,23 +40,35 @@ export const PropertyView = () => {
             )}
           </Col>
           <Col md={3}>
+            <RoundedPanel className="mb-2">
+              {me?.type === 'admin' && (
+                <>
+                  <Button className="mb-2 w-100">process payment</Button>
+                  <Button className="mb-2 w-100">waive a transaction</Button>
+                </>
+              )}
+              <Button className="mb-2 w-100">print current statement</Button>
+              <Button className="mb-2 w-100">view previous statements</Button>
+            </RoundedPanel>
             {assignedPropertyLoading && <Loading />}
-            {!assignedPropertyLoading &&
-              assignedPropertyData &&
-              assignedPropertyData.map((pa, i) => {
-                const {profile} = pa;
-                if (!profile) return null;
-                return (
-                  <PropertyAssignmentCard
-                    key={i}
-                    profileId={Number(profile.id)}
-                    name={profile.name}
-                    username={profile.username}
-                    email={profile.email}
-                    mobileNumber={profile.mobileNumber}
-                  />
-                );
-              })}
+            <div>
+              {!assignedPropertyLoading &&
+                assignedPropertyData &&
+                assignedPropertyData.map((pa, i) => {
+                  const {profile} = pa;
+                  if (!profile) return null;
+                  return (
+                    <PropertyAssignmentCard
+                      key={i}
+                      profileId={Number(profile.id)}
+                      name={profile.name}
+                      username={profile.username}
+                      email={profile.email}
+                      mobileNumber={profile.mobileNumber}
+                    />
+                  );
+                })}
+            </div>
             <div className="text-muted text-center">
               <small>assigned to</small>
             </div>

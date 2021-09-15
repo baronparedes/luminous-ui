@@ -34,7 +34,7 @@ export const Table: React.FC<TableProps> = ({
       <TableContent>
         {loading && <Loading />}
         {!loading && (
-          <RBTable responsive hover>
+          <RBTable responsive hover role="table">
             <thead>
               <tr>
                 {headers.map((header, i) => {

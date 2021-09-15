@@ -3,13 +3,20 @@ import faker from 'faker';
 import {
   AuthProfile,
   AuthResult,
+  ChargeAttr,
+  ChargeType,
+  PostingType,
   ProfileAttr,
   ProfileType,
   PropertyAccount,
   PropertyAssignmentAttr,
   PropertyAttr,
   RecordStatus,
+  TransactionAttr,
+  TransactionType,
 } from '../Api';
+import {toMonthName} from './dates';
+import {generateNumberedSeries} from './helpers';
 
 export function generateFakeProfileAttr(type?: ProfileType): ProfileAttr {
   return {
@@ -65,11 +72,52 @@ export function generateFakePropertyAssignment(): PropertyAssignmentAttr {
   };
 }
 
-export function generateFakePropertyAccount(): PropertyAccount {
+export function generateFakeCharge(): ChargeAttr {
+  return {
+    chargeType: faker.random.arrayElement<ChargeType>([
+      'amount',
+      'percentage',
+      'unit',
+    ]),
+    code: faker.datatype.string(),
+    communityId: faker.datatype.number(),
+    postingType: faker.random.arrayElement<PostingType>([
+      'accrued',
+      'manual',
+      'monthly',
+    ]),
+    rate: faker.datatype.number(),
+  };
+}
+
+export function generateFakeTranasction(): TransactionAttr {
+  const charge = generateFakeCharge();
+  return {
+    amount: faker.datatype.number(),
+    chargeId: faker.datatype.number(),
+    propertyId: faker.datatype.number(),
+    transactionMonth: toMonthName(faker.date.recent().getMonth()),
+    transactionYear: faker.date.recent().getFullYear(),
+    transactionType: faker.random.arrayElement<TransactionType>([
+      'charged',
+      'collected',
+    ]),
+    id: faker.datatype.number(),
+    charge,
+  };
+}
+
+export function generateFakePropertyAccount(
+  tranasctionCount = 2
+): PropertyAccount {
   const property = generateFakeProperty();
+  const transactions = generateNumberedSeries(tranasctionCount).map(() =>
+    generateFakeTranasction()
+  );
   return {
     propertyId: Number(property.id),
     property,
     balance: faker.datatype.number(),
+    transactions,
   };
 }
