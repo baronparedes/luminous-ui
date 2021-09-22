@@ -10,7 +10,9 @@ import {
   generateFakePropertyAssignment,
 } from '../../../@utils/fake-models';
 import routes from '../../../@utils/routes';
-import {renderWithProviderAndRouterAndRestful} from '../../../@utils/test-renderers';
+import {
+  renderWithProviderAndRouterAndRestful,
+} from '../../../@utils/test-renderers';
 import {ProfileType} from '../../../Api';
 import {profileActions} from '../../../store/reducers/profile.reducer';
 import PropertyAssignmentCard from '../PropertyAssignmentCard';
@@ -52,7 +54,7 @@ describe('PropertyView', () => {
   const base = 'http://localhost';
 
   async function renderTarget(opts?: {isAdmin?: boolean}) {
-    const type: ProfileType = opts?.isAdmin ? 'admin' : 'user';
+    const type: ProfileType = opts?.isAdmin ? 'admin' : 'unit owner';
     const propertyId = faker.datatype.number();
     const mockedProfile = generateFakeProfile(type);
     const mockedPropertyAccount = generateFakePropertyAccount();

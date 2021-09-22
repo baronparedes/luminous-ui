@@ -28,7 +28,6 @@
     "prestart": "npm run restful",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "pretest": "npm.cmd run compile",
     "posttest": "npm.cmd run lint",
     "test": "react-scripts test",
     "pretest:ci": "npm run compile",

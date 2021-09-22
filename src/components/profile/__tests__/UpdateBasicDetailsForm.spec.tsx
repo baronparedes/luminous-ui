@@ -36,6 +36,7 @@ describe('UpdateBasicDetailsForm', () => {
     const name = faker.name.findName();
     const email = faker.internet.email();
     const mobileNumber = faker.phone.phoneNumber();
+    const remarks = faker.random.words();
 
     const target = renderTarget();
 
@@ -48,19 +49,25 @@ describe('UpdateBasicDetailsForm', () => {
     const mobileNumberInput = target.getByPlaceholderText(
       /mobile number/i
     ) as HTMLInputElement;
+    const remarksInput = target.getByPlaceholderText(
+      /remarks/i
+    ) as HTMLInputElement;
     const submit = target.getByText(/update/i, {selector: 'button'});
 
     fireEvent.change(nameInput, {target: {value: name}});
     fireEvent.change(emailInput, {target: {value: email}});
     fireEvent.change(mobileNumberInput, {target: {value: mobileNumber}});
+    fireEvent.change(remarksInput, {target: {value: remarks}});
 
     return {
       name,
       email,
       mobileNumber,
+      remarks,
       nameInput,
       emailInput,
       mobileNumberInput,
+      remarksInput,
       submit,
       ...target,
     };
@@ -69,16 +76,17 @@ describe('UpdateBasicDetailsForm', () => {
   afterEach(() => jest.clearAllMocks());
 
   it('should render', () => {
-    const {nameInput, emailInput, mobileNumberInput, submit} =
+    const {nameInput, emailInput, mobileNumberInput, remarksInput, submit} =
       renderTargetAndFillUpForm();
     expect(nameInput).toBeInTheDocument();
     expect(emailInput).toBeInTheDocument();
     expect(mobileNumberInput).toBeInTheDocument();
+    expect(remarksInput).toBeInTheDocument();
     expect(submit).toBeInTheDocument();
   });
 
   it('should submit form without errors', async () => {
-    const {name, email, mobileNumber, submit, store} =
+    const {name, email, mobileNumber, remarks, submit, store} =
       renderTargetAndFillUpForm();
     const body = {
       type: expectedProfile.type,
@@ -86,10 +94,11 @@ describe('UpdateBasicDetailsForm', () => {
       name,
       email,
       mobileNumber,
+      remarks,
     };
     nock(base)
       .patch(`/api/profile/updateProfile/${expectedProfile.id}`, body)
-      .reply(200, {...expectedProfile, name, email, mobileNumber});
+      .reply(200, {...expectedProfile, name, email, mobileNumber, remarks});
 
     fireEvent.click(submit);
     await waitFor(() => {
@@ -101,10 +110,11 @@ describe('UpdateBasicDetailsForm', () => {
     expect(actualProfileInStore?.email).toEqual(email);
     expect(actualProfileInStore?.name).toEqual(name);
     expect(actualProfileInStore?.mobileNumber).toEqual(mobileNumber);
+    expect(actualProfileInStore?.remarks).toEqual(remarks);
   });
 
   it('should fail submitting form and show error', async () => {
-    const {name, email, mobileNumber, submit, getByRole} =
+    const {name, email, mobileNumber, remarks, submit, getByRole} =
       renderTargetAndFillUpForm();
     const body = {
       type: expectedProfile.type,
@@ -112,6 +122,7 @@ describe('UpdateBasicDetailsForm', () => {
       name,
       email,
       mobileNumber,
+      remarks,
     };
     nock(base)
       .patch(`/api/profile/updateProfile/${expectedProfile.id}`, body)

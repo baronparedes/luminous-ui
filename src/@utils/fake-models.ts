@@ -15,7 +15,6 @@ import {
   TransactionAttr,
   TransactionType,
 } from '../Api';
-import {toMonthName} from './dates';
 import {generateNumberedSeries} from './helpers';
 
 export function generateFakeProfileAttr(type?: ProfileType): ProfileAttr {
@@ -29,7 +28,11 @@ export function generateFakeProfileAttr(type?: ProfileType): ProfileAttr {
     status: faker.random.arrayElement<RecordStatus>(['active', 'inactive']),
     type:
       type ??
-      faker.random.arrayElement<ProfileType>(['user', 'stakeholder', 'admin']),
+      faker.random.arrayElement<ProfileType>([
+        'unit owner',
+        'stakeholder',
+        'admin',
+      ]),
   };
 }
 
@@ -41,9 +44,14 @@ export function generateFakeProfile(type?: ProfileType): AuthProfile {
     email: faker.internet.email(),
     mobileNumber: faker.phone.phoneNumber(),
     status: faker.random.arrayElement<RecordStatus>(['active', 'inactive']),
+    remarks: faker.random.words(),
     type:
       type ??
-      faker.random.arrayElement<ProfileType>(['user', 'stakeholder', 'admin']),
+      faker.random.arrayElement<ProfileType>([
+        'unit owner',
+        'stakeholder',
+        'admin',
+      ]),
   };
 }
 
@@ -90,14 +98,13 @@ export function generateFakeCharge(): ChargeAttr {
   };
 }
 
-export function generateFakeTranasction(): TransactionAttr {
+export function generateFakeTransaction(): TransactionAttr {
   const charge = generateFakeCharge();
   return {
     amount: faker.datatype.number(),
     chargeId: faker.datatype.number(),
     propertyId: faker.datatype.number(),
-    transactionMonth: toMonthName(faker.date.recent().getMonth()),
-    transactionYear: faker.date.recent().getFullYear(),
+    transactionPeriod: faker.date.recent().toDateString(),
     transactionType: faker.random.arrayElement<TransactionType>([
       'charged',
       'collected',
@@ -108,11 +115,11 @@ export function generateFakeTranasction(): TransactionAttr {
 }
 
 export function generateFakePropertyAccount(
-  tranasctionCount = 2
+  transactionCount = 2
 ): PropertyAccount {
   const property = generateFakeProperty();
-  const transactions = generateNumberedSeries(tranasctionCount).map(() =>
-    generateFakeTranasction()
+  const transactions = generateNumberedSeries(transactionCount).map(() =>
+    generateFakeTransaction()
   );
   return {
     propertyId: Number(property.id),

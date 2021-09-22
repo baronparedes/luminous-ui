@@ -99,7 +99,7 @@ const NavigationSection = (props: NavSection) => {
 
 const Navigation: React.FC = () => {
   const {me} = useRootState(state => state.profile);
-  const profileType = me?.type || 'user';
+  const profileType = me?.type || 'unit owner';
   return (
     <Container>
       <Navbar expand="lg" variant="dark" className="p-0">

@@ -27,6 +27,7 @@ const ProfileUpdateButton: React.FC<{
     mobileNumber: profile.mobileNumber,
     type: profile.type,
     status: profile.status,
+    remarks: profile.remarks,
   };
   const [toggle, setToggle] = useState(false);
   const {loading, error, mutate} = useUpdateProfile({id: profile.id});
@@ -59,6 +60,7 @@ const ProfileUpdateButton: React.FC<{
         <FaPencilAlt />
       </Button>
       <ModalContainer
+        size="lg"
         header={<h5>Update Profile of {profile.username}</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
@@ -71,7 +73,7 @@ const ProfileUpdateButton: React.FC<{
                 control={control}
                 render={({field}) => (
                   <InputGroup className="mb-2">
-                    <Form.Label htmlFor="name" column sm={2}>
+                    <Form.Label htmlFor="name" column sm={3}>
                       name
                     </Form.Label>
                     <Form.Control
@@ -91,7 +93,7 @@ const ProfileUpdateButton: React.FC<{
                 control={control}
                 render={({field}) => (
                   <InputGroup className="mb-2">
-                    <Form.Label htmlFor="email" column sm={2}>
+                    <Form.Label htmlFor="email" column sm={3}>
                       email
                     </Form.Label>
                     <Form.Control
@@ -112,7 +114,7 @@ const ProfileUpdateButton: React.FC<{
                 control={control}
                 render={({field}) => (
                   <InputGroup className="mb-2">
-                    <Form.Label htmlFor="mobileNumber" column sm={2}>
+                    <Form.Label htmlFor="mobileNumber" column sm={3}>
                       mobile
                     </Form.Label>
                     <Form.Control
@@ -131,7 +133,7 @@ const ProfileUpdateButton: React.FC<{
                 control={control}
                 render={({field}) => (
                   <InputGroup className="mb-2">
-                    <Form.Label htmlFor="type" column sm={2}>
+                    <Form.Label htmlFor="type" column sm={3}>
                       type
                     </Form.Label>
                     <Form.Control as="select" {...field} id="type">
@@ -153,7 +155,7 @@ const ProfileUpdateButton: React.FC<{
                 control={control}
                 render={({field}) => (
                   <InputGroup className="mb-2">
-                    <Form.Label htmlFor="status" column sm={2}>
+                    <Form.Label htmlFor="status" column sm={3}>
                       status
                     </Form.Label>
                     <Form.Control as="select" {...field} id="status">
@@ -165,6 +167,27 @@ const ProfileUpdateButton: React.FC<{
                         );
                       })}
                     </Form.Control>
+                  </InputGroup>
+                )}
+              />
+            </Col>
+            <Col>
+              <Controller
+                name="remarks"
+                control={control}
+                render={({field}) => (
+                  <InputGroup className="mb-2">
+                    <Form.Label htmlFor="remarks" column sm={3}>
+                      remarks
+                    </Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      {...field}
+                      rows={5}
+                      disabled={loading}
+                      placeholder="remarks"
+                      id="remarks"
+                    />
                   </InputGroup>
                 )}
               />

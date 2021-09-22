@@ -6,4 +6,8 @@ export const STATUS_COLORS = {
 };
 
 export const RECORD_STATUS: RecordStatus[] = ['active', 'inactive'];
-export const PROFILE_TYPE: ProfileType[] = ['user', 'stakeholder', 'admin'];
+export const PROFILE_TYPE: ProfileType[] = [
+  'unit owner',
+  'stakeholder',
+  'admin',
+];

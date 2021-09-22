@@ -5,6 +5,7 @@ import {useUrl} from '../../hooks/useUrl';
 import {useRootState} from '../../store';
 import Loading from '../@ui/Loading';
 import RoundedPanel from '../@ui/RoundedPanel';
+import ProcessPayment from './actions/ProcessPayment';
 import PropertyAssignmentCard from './PropertyAssignmentCard';
 import PropertyDetails from './PropertyDetails';
 import PropertyStatementOfAccount from './PropertyStatementOfAccount';
@@ -43,7 +44,7 @@ export const PropertyView = () => {
             <RoundedPanel className="mb-2">
               {me?.type === 'admin' && (
                 <>
-                  <Button className="mb-2 w-100">process payment</Button>
+                  <ProcessPayment amount={propertyAccountData?.balance} />
                   <Button className="mb-2 w-100">waive a transaction</Button>
                 </>
               )}

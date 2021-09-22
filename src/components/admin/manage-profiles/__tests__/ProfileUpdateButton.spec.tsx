@@ -30,6 +30,7 @@ describe('ProfilesTableRow', () => {
     const typeInput = target.getByLabelText(/type/i);
     const statusInput = target.getByLabelText(/status/i);
     const mobileNumberInput = target.getByLabelText(/mobile/i);
+    const remarksInput = target.getByLabelText(/remarks/i);
     const formContainer = target.getByRole('form');
     const updateFormButton = within(formContainer).getByText(/update/i);
     const resetFormButton = within(formContainer).getByText(/reset/i);
@@ -41,6 +42,7 @@ describe('ProfilesTableRow', () => {
       mobileNumberInput,
       typeInput,
       statusInput,
+      remarksInput,
       formContainer,
       updateFormButton,
       resetFormButton,
@@ -56,6 +58,7 @@ describe('ProfilesTableRow', () => {
       mobileNumberInput,
       typeInput,
       statusInput,
+      remarksInput,
       formContainer,
       updateFormButton,
       getByRole,
@@ -68,6 +71,7 @@ describe('ProfilesTableRow', () => {
       mobileNumber: updatedMockedProfile.mobileNumber,
       type: updatedMockedProfile.type,
       status: updatedMockedProfile.status,
+      remarks: updatedMockedProfile.remarks,
     };
 
     nock(base)
@@ -84,6 +88,9 @@ describe('ProfilesTableRow', () => {
     fireEvent.change(statusInput, {
       target: {value: updatedMockedProfile.status},
     });
+    fireEvent.change(remarksInput, {
+      target: {value: updatedMockedProfile.remarks},
+    });
     fireEvent.click(updateFormButton);
     await waitFor(() => expect(getByRole('progressbar')).toBeInTheDocument());
     await waitFor(() =>
@@ -98,6 +105,7 @@ describe('ProfilesTableRow', () => {
       mobileNumberInput,
       typeInput,
       statusInput,
+      remarksInput,
       formContainer,
       resetFormButton,
     } = await renderAndOpenModal();
@@ -112,7 +120,9 @@ describe('ProfilesTableRow', () => {
     fireEvent.change(statusInput, {
       target: {value: updatedMockedProfile.status},
     });
-
+    fireEvent.change(remarksInput, {
+      target: {value: updatedMockedProfile.remarks},
+    });
     await waitFor(() => {
       expect((nameInput as HTMLInputElement).value).toBe(
         updatedMockedProfile.name

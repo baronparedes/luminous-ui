@@ -14,6 +14,7 @@ export type UpdateCurrentProfilePayload = {
   name: string;
   email: string;
   mobileNumber?: string;
+  remarks?: string;
 };
 
 const PROFILE_KEY = 'LUMINOUS_PROFILE_KEY';
@@ -56,6 +57,7 @@ export const profileSlice = createSlice({
         state.me.email = action.payload.email;
         state.me.name = action.payload.name;
         state.me.mobileNumber = action.payload.mobileNumber;
+        state.me.remarks = action.payload.remarks;
       }
     },
   },

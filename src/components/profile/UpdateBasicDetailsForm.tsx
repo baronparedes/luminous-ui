@@ -1,6 +1,6 @@
 import {Button, Col, Form, InputGroup} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
-import {FaEnvelope, FaMobile, FaTag} from 'react-icons/fa';
+import {FaEnvelope, FaMobile, FaStickyNote, FaTag} from 'react-icons/fa';
 import {useDispatch} from 'react-redux';
 
 import {AuthProfile, UpdateProfile, useUpdateProfile} from '../../Api';
@@ -12,6 +12,7 @@ type BasicDetailsFormData = {
   name: string;
   email: string;
   mobileNumber?: string;
+  remarks?: string;
 };
 
 const UpdateBasicDetailsForm: React.FC<{
@@ -22,6 +23,7 @@ const UpdateBasicDetailsForm: React.FC<{
     name: profile.name,
     email: profile.email,
     mobileNumber: profile.mobileNumber || '',
+    remarks: profile.remarks || '',
   };
   const dispatch = useDispatch();
   const {loading, error, mutate} = useUpdateProfile({id: profile.id});
@@ -35,6 +37,7 @@ const UpdateBasicDetailsForm: React.FC<{
       name: formData.name,
       email: formData.email,
       mobileNumber: formData.mobileNumber,
+      remarks: formData.remarks,
     };
     mutate(body)
       .then(data => {
@@ -43,6 +46,7 @@ const UpdateBasicDetailsForm: React.FC<{
             email: data.email,
             name: data.name,
             mobileNumber: data.mobileNumber,
+            remarks: data.remarks,
           })
         );
         onUpdate && onUpdate();
@@ -107,6 +111,26 @@ const UpdateBasicDetailsForm: React.FC<{
                 {...field}
                 disabled={loading}
                 placeholder="mobile number"
+              />
+            </InputGroup>
+          )}
+        />
+      </Col>
+      <Col>
+        <Controller
+          name="remarks"
+          control={control}
+          render={({field}) => (
+            <InputGroup className="mb-2">
+              <InputGroup.Text>
+                <FaStickyNote />
+              </InputGroup.Text>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                {...field}
+                disabled={loading}
+                placeholder="remarks"
               />
             </InputGroup>
           )}
