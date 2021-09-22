@@ -1,4 +1,4 @@
-import {getByRole, render, within} from '@testing-library/react';
+import {render, within} from '@testing-library/react';
 
 import {currencyFormat, roundOff} from '../../../@utils/currencies';
 import {generateFakePropertyAccount} from '../../../@utils/fake-models';
