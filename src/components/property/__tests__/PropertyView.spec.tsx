@@ -101,7 +101,6 @@ describe('PropertyView', () => {
 
     expect(target.getByText(/print current statement/i)).toBeInTheDocument();
     expect(target.getByText(/view previous statements/i)).toBeInTheDocument();
-    expect(target.getByText(/assigned to/i)).toBeInTheDocument();
 
     return {
       ...target,

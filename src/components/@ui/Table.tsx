@@ -16,7 +16,7 @@ const TableContent = styled('div')`
 type TableProps = {
   loading?: boolean;
   headers: ReactNode[];
-  renderHeaderContent: ReactNode;
+  renderHeaderContent?: ReactNode;
   renderFooterContent?: ReactNode;
 };
 export const Table: React.FC<TableProps> = ({
@@ -28,9 +28,11 @@ export const Table: React.FC<TableProps> = ({
 }) => {
   return (
     <>
-      <TableContentHeader className="bg-primary">
-        {renderHeaderContent}
-      </TableContentHeader>
+      {renderHeaderContent && (
+        <TableContentHeader className="bg-primary">
+          {renderHeaderContent}
+        </TableContentHeader>
+      )}
       <TableContent>
         {loading && <Loading />}
         {!loading && (

@@ -15,7 +15,7 @@ const UpdateFormContainer = styled(Container)`
   width: '600px';
 `;
 
-type FormData = UpdateProfile;
+type FormData = UpdateProfile & {remarks?: string};
 
 const ProfileUpdateButton: React.FC<{
   profile: AuthProfile;

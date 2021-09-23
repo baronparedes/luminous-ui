@@ -12,10 +12,20 @@ type Props = {
   propertyAccount: PropertyAccount;
 };
 
+export function calculateAccount(propertyAccount: PropertyAccount) {
+  const {balance, transactions} = propertyAccount;
+  const currentBalance = sumTransactions(transactions);
+  const previousBalance = balance - currentBalance;
+  return {
+    previousBalance,
+    currentBalance,
+  };
+}
+
 const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
   const {year, month} = getCurrentMonthYear();
-  const {property, balance, transactions} = propertyAccount;
-  const currentBalance = sumTransactions(transactions);
+  const {property, transactions} = propertyAccount;
+  const {currentBalance, previousBalance} = calculateAccount(propertyAccount);
   return (
     <>
       <RoundedPanel className="mb-3 text-center">
@@ -23,7 +33,7 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
           <Col>
             <LabeledCurrency
               label="previous balance"
-              currency={balance - currentBalance}
+              currency={previousBalance}
               pill
               noCurrencyColor
               variant="info"
