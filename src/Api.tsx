@@ -140,6 +140,11 @@ export interface PostTransactionBody {
   year: number;
 }
 
+export interface Period {
+  month: Month;
+  year: number;
+}
+
 export type AuthProps = Omit<MutateProps<AuthResult, unknown, void, void, void>, "path" | "verb">;
 
 export const Auth = (props: AuthProps) => (
@@ -370,23 +375,28 @@ export type UseGetPropertyAccountsByProfileProps = Omit<UseGetProps<PropertyAcco
 export const useGetPropertyAccountsByProfile = ({profileId, ...props}: UseGetPropertyAccountsByProfileProps) => useGet<PropertyAccount[], unknown, void, GetPropertyAccountsByProfilePathParams>((paramsInPath: GetPropertyAccountsByProfilePathParams) => `/api/property/getPropertyAccountsByProfile/${paramsInPath.profileId}`, {  pathParams: { profileId }, ...props });
 
 
+export interface GetPropertyAccountQueryParams {
+  year?: number;
+  month?: Month;
+}
+
 export interface GetPropertyAccountPathParams {
   propertyId: number
 }
 
-export type GetPropertyAccountProps = Omit<GetProps<PropertyAccount, unknown, void, GetPropertyAccountPathParams>, "path"> & GetPropertyAccountPathParams;
+export type GetPropertyAccountProps = Omit<GetProps<PropertyAccount, unknown, GetPropertyAccountQueryParams, GetPropertyAccountPathParams>, "path"> & GetPropertyAccountPathParams;
 
 export const GetPropertyAccount = ({propertyId, ...props}: GetPropertyAccountProps) => (
-  <Get<PropertyAccount, unknown, void, GetPropertyAccountPathParams>
+  <Get<PropertyAccount, unknown, GetPropertyAccountQueryParams, GetPropertyAccountPathParams>
     path={`/api/property/getPropertyAccount/${propertyId}`}
     
     {...props}
   />
 );
 
-export type UseGetPropertyAccountProps = Omit<UseGetProps<PropertyAccount, unknown, void, GetPropertyAccountPathParams>, "path"> & GetPropertyAccountPathParams;
+export type UseGetPropertyAccountProps = Omit<UseGetProps<PropertyAccount, unknown, GetPropertyAccountQueryParams, GetPropertyAccountPathParams>, "path"> & GetPropertyAccountPathParams;
 
-export const useGetPropertyAccount = ({propertyId, ...props}: UseGetPropertyAccountProps) => useGet<PropertyAccount, unknown, void, GetPropertyAccountPathParams>((paramsInPath: GetPropertyAccountPathParams) => `/api/property/getPropertyAccount/${paramsInPath.propertyId}`, {  pathParams: { propertyId }, ...props });
+export const useGetPropertyAccount = ({propertyId, ...props}: UseGetPropertyAccountProps) => useGet<PropertyAccount, unknown, GetPropertyAccountQueryParams, GetPropertyAccountPathParams>((paramsInPath: GetPropertyAccountPathParams) => `/api/property/getPropertyAccount/${paramsInPath.propertyId}`, {  pathParams: { propertyId }, ...props });
 
 
 export type CreatePropertyProps = Omit<MutateProps<PropertyAttr, EntityError, void, PropertyAttr, void>, "path" | "verb">;
@@ -483,4 +493,23 @@ export const PostMonthlyCharges = (props: PostMonthlyChargesProps) => (
 export type UsePostMonthlyChargesProps = Omit<UseMutateProps<void, unknown, void, PostTransactionBody, void>, "path" | "verb">;
 
 export const usePostMonthlyCharges = (props: UsePostMonthlyChargesProps) => useMutate<void, unknown, void, PostTransactionBody, void>("POST", `/api/transaction/postMonthlyCharges`, props);
+
+
+export interface GetAvailablePeriodsPathParams {
+  propertyId: number
+}
+
+export type GetAvailablePeriodsProps = Omit<GetProps<Period[], unknown, void, GetAvailablePeriodsPathParams>, "path"> & GetAvailablePeriodsPathParams;
+
+export const GetAvailablePeriods = ({propertyId, ...props}: GetAvailablePeriodsProps) => (
+  <Get<Period[], unknown, void, GetAvailablePeriodsPathParams>
+    path={`/api/transaction/getAvailablePeriods/${propertyId}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetAvailablePeriodsProps = Omit<UseGetProps<Period[], unknown, void, GetAvailablePeriodsPathParams>, "path"> & GetAvailablePeriodsPathParams;
+
+export const useGetAvailablePeriods = ({propertyId, ...props}: UseGetAvailablePeriodsProps) => useGet<Period[], unknown, void, GetAvailablePeriodsPathParams>((paramsInPath: GetAvailablePeriodsPathParams) => `/api/transaction/getAvailablePeriods/${paramsInPath.propertyId}`, {  pathParams: { propertyId }, ...props });
 

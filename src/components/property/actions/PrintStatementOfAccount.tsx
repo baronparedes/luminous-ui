@@ -3,17 +3,24 @@ import {Button, ButtonProps} from 'react-bootstrap';
 import {useReactToPrint} from 'react-to-print';
 
 import {ApprovedAny} from '../../../@types';
-import PaperStatementOfAccount, {
-  PaperStatementOfAccountProps,
-} from '../PaperStatementOfAccount';
+import PaperStatementOfAccount from '../PaperStatementOfAccount';
+
+type Props = {
+  buttonLabel: string;
+};
+
+type PaperStatementOfAccountProps = React.ComponentProps<
+  typeof PaperStatementOfAccount
+>;
 
 const PrintStatementOfAccount = ({
+  buttonLabel,
   propertyAccount,
-  assignedTo,
+  propertyAssignments,
   month,
   year,
   ...buttonProps
-}: PaperStatementOfAccountProps & ButtonProps) => {
+}: Props & PaperStatementOfAccountProps & ButtonProps) => {
   const printPaperRef = React.createRef<ApprovedAny>();
   const handlePrint = useReactToPrint({
     bodyClass: 'print-body',
@@ -25,17 +32,16 @@ const PrintStatementOfAccount = ({
     <>
       <Button
         {...buttonProps}
-        className="mb-2 w-100"
         onClick={() => {
           handlePrint && handlePrint();
         }}
       >
-        print current statements
+        {buttonLabel}
       </Button>
       <PaperStatementOfAccount
         ref={printPaperRef}
         propertyAccount={propertyAccount}
-        assignedTo={assignedTo}
+        propertyAssignments={propertyAssignments}
         month={month}
         year={year}
       />

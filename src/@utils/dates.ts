@@ -30,3 +30,8 @@ export function toMonthValue(value: Month) {
 export function toMonthName(value: number) {
   return moment().month(value).format('MMM').toUpperCase() as Month;
 }
+
+export function toTransactionPeriod(year: number, month: Month) {
+  const dateString = `${year}-${moment().month(month).format('MM')}-01`;
+  return new Date(dateString);
+}

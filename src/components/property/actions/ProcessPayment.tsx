@@ -1,18 +1,23 @@
 import {useState} from 'react';
-import {Button} from 'react-bootstrap';
+import {Button, ButtonProps} from 'react-bootstrap';
 
 import ModalContainer from '../../@ui/ModalContainer';
 
 type Props = {
   amount?: number;
+  buttonLabel: string;
 };
 
-const ProcessPayment = ({amount}: Props) => {
+const ProcessPayment = ({
+  amount,
+  buttonLabel,
+  ...buttonProps
+}: Props & ButtonProps) => {
   const [toggle, setToggle] = useState(false);
   return (
     <>
-      <Button className="mb-2 w-100" onClick={() => setToggle(true)}>
-        process payment
+      <Button {...buttonProps} onClick={() => setToggle(true)}>
+        {buttonLabel}
       </Button>
       <ModalContainer
         header={<h5>Process Payment</h5>}

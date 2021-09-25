@@ -13,17 +13,24 @@ import routes from '../../../@utils/routes';
 import {renderWithProviderAndRouterAndRestful} from '../../../@utils/test-renderers';
 import {ProfileType} from '../../../Api';
 import {profileActions} from '../../../store/reducers/profile.reducer';
+import PrintStatementOfAccount from '../actions/PrintStatementOfAccount';
 import PropertyAssignmentCard from '../PropertyAssignmentCard';
 import PropertyDetails from '../PropertyDetails';
 import PropertyStatementOfAccount from '../PropertyStatementOfAccount';
 import {PropertyView} from '../PropertyView';
 
 type PropertyDetailsProps = React.ComponentProps<typeof PropertyDetails>;
+
 type PropertyStatementOfAccountProps = React.ComponentProps<
   typeof PropertyStatementOfAccount
 >;
+
 type PropertyAssignmentCardProps = React.ComponentProps<
   typeof PropertyAssignmentCard
+>;
+
+type PrintStatementOfAccountProps = React.ComponentProps<
+  typeof PrintStatementOfAccount
 >;
 
 jest.mock('../PropertyDetails', () => (props: PropertyDetailsProps) => {
@@ -46,6 +53,14 @@ jest.mock(
       </div>
     );
   }
+);
+
+jest.mock(
+  '../actions/PrintStatementOfAccount',
+  () =>
+    ({buttonLabel}: PrintStatementOfAccountProps) => {
+      return <button>{buttonLabel}</button>;
+    }
 );
 
 describe('PropertyView', () => {
@@ -79,13 +94,15 @@ describe('PropertyView', () => {
         history.push(routes.PROPERTY(propertyId));
       }
     );
-
     await waitFor(() => {
       expect(target.history.location.pathname).toEqual(
         routes.PROPERTY(propertyId)
       );
     });
-
+    await waitFor(() => {
+      const loading = target.queryAllByRole('loading');
+      expect(loading.length).toEqual(0);
+    });
     await waitFor(() =>
       expect(target.getByTestId('mock-property-details')).toBeInTheDocument()
     );

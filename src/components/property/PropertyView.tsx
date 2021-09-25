@@ -23,10 +23,6 @@ export const PropertyView = () => {
     });
   const {data: assignedPropertyData, loading: assignedPropertyLoading} =
     useGetPropertyAssignments({propertyId});
-  const assignedTo =
-    (assignedPropertyData &&
-      assignedPropertyData.map(a => a.profile?.name ?? '')) ??
-    [];
   return (
     <>
       <Container>
@@ -51,19 +47,23 @@ export const PropertyView = () => {
             <RoundedPanel className="mb-2">
               {me?.type === 'admin' && (
                 <>
-                  <ProcessPayment amount={propertyAccountData?.balance} />
+                  <ProcessPayment
+                    className="mb-2 w-100"
+                    buttonLabel="process payment"
+                    amount={propertyAccountData?.balance}
+                  />
                   <Button className="mb-2 w-100">waive a transaction</Button>
                 </>
               )}
-              {propertyAccountData && (
-                <PrintStatementOfAccount
-                  propertyAccount={propertyAccountData}
-                  assignedTo={assignedTo}
-                  disabled={propertyAccountLoading}
-                  year={year}
-                  month={month}
-                />
-              )}
+              <PrintStatementOfAccount
+                className="mb-2 w-100"
+                buttonLabel="print current statement"
+                propertyAccount={propertyAccountData}
+                propertyAssignments={assignedPropertyData}
+                disabled={propertyAccountLoading}
+                year={year}
+                month={month}
+              />
               <Button className="mb-2 w-100">view previous statements</Button>
             </RoundedPanel>
             {assignedPropertyLoading && <Loading />}
