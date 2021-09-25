@@ -14,6 +14,7 @@ import {renderWithProviderAndRouterAndRestful} from '../../../@utils/test-render
 import {ProfileType} from '../../../Api';
 import {profileActions} from '../../../store/reducers/profile.reducer';
 import PrintStatementOfAccount from '../actions/PrintStatementOfAccount';
+import ViewPreviousStatements from '../actions/ViewPreviousStatements';
 import PropertyAssignmentCard from '../PropertyAssignmentCard';
 import PropertyDetails from '../PropertyDetails';
 import PropertyStatementOfAccount from '../PropertyStatementOfAccount';
@@ -31,6 +32,10 @@ type PropertyAssignmentCardProps = React.ComponentProps<
 
 type PrintStatementOfAccountProps = React.ComponentProps<
   typeof PrintStatementOfAccount
+>;
+
+type ViewPreviousStatementsProps = React.ComponentProps<
+  typeof ViewPreviousStatements
 >;
 
 jest.mock('../PropertyDetails', () => (props: PropertyDetailsProps) => {
@@ -59,6 +64,14 @@ jest.mock(
   '../actions/PrintStatementOfAccount',
   () =>
     ({buttonLabel}: PrintStatementOfAccountProps) => {
+      return <button>{buttonLabel}</button>;
+    }
+);
+
+jest.mock(
+  '../actions/ViewPreviousStatements',
+  () =>
+    ({buttonLabel}: ViewPreviousStatementsProps) => {
       return <button>{buttonLabel}</button>;
     }
 );

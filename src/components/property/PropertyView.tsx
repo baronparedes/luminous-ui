@@ -8,6 +8,7 @@ import Loading from '../@ui/Loading';
 import RoundedPanel from '../@ui/RoundedPanel';
 import PrintStatementOfAccount from './actions/PrintStatementOfAccount';
 import ProcessPayment from './actions/ProcessPayment';
+import ViewPreviousStatements from './actions/ViewPreviousStatements';
 import PropertyAssignmentCard from './PropertyAssignmentCard';
 import PropertyDetails from './PropertyDetails';
 import PropertyStatementOfAccount from './PropertyStatementOfAccount';
@@ -58,13 +59,19 @@ export const PropertyView = () => {
               <PrintStatementOfAccount
                 className="mb-2 w-100"
                 buttonLabel="print current statement"
+                disabled={propertyAccountLoading}
                 propertyAccount={propertyAccountData}
                 propertyAssignments={assignedPropertyData}
-                disabled={propertyAccountLoading}
                 year={year}
                 month={month}
               />
-              <Button className="mb-2 w-100">view previous statements</Button>
+              <ViewPreviousStatements
+                className="mb-2 w-100"
+                buttonLabel="view previous statements"
+                disabled={id === undefined}
+                propertyId={Number(id)}
+                propertyAssignments={assignedPropertyData}
+              />
             </RoundedPanel>
             {assignedPropertyLoading && <Loading />}
             <div>

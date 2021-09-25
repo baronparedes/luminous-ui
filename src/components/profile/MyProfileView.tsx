@@ -43,7 +43,7 @@ const MyProfileView = () => {
                   className="text-center"
                   pill
                   variant="danger"
-                  label="total balance"
+                  label="total amount due"
                   currency={sum(data.map(d => d.balance))}
                   noCurrencyColor
                 />

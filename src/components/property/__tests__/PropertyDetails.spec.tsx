@@ -9,7 +9,7 @@ describe('PropertyCard', () => {
     const {getByText} = renderWithRouter(
       <PropertyDetails propertyAccount={mockedProperty} />
     );
-    expect(getByText(/balance/i)).toBeInTheDocument();
+    expect(getByText(/amount due/i)).toBeInTheDocument();
     expect(
       getByText(currencyFormat(roundOff(mockedProperty.balance)))
     ).toBeInTheDocument();

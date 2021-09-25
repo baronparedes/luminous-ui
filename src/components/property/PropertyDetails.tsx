@@ -20,7 +20,7 @@ const PropertyDetails = ({propertyAccount}: Props) => {
         )}
         <Col md={4}>
           <LabeledCurrency
-            label="balance"
+            label="amount due"
             pill
             variant="danger"
             className="text-right"

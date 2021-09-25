@@ -17,9 +17,9 @@ export const LabeledCurrency = ({
   return (
     <div className={className}>
       <Badge {...rest}>{label}</Badge>
-      <h5>
+      <h4>
         <Currency noCurrencyColor={noCurrencyColor} currency={currency} />
-      </h5>
+      </h4>
     </div>
   );
 };
