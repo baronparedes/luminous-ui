@@ -98,17 +98,17 @@ export const PaperStatementOfAccount = React.forwardRef<HTMLDivElement, Props>(
           <PageSection className="pt-3">
             <small>
               <Label>
-                <strong className="text-muted">Previous Balance</strong>
+                <strong className="text-muted">Current Balance</strong>
                 <strong className="float-right">
-                  <Currency noCurrencyColor currency={previousBalance} />
+                  <Currency noCurrencyColor currency={currentBalance} />
                 </strong>
               </Label>
             </small>
             <small>
               <Label>
-                <strong className="text-muted">Current Balance</strong>
+                <strong className="text-muted">Previous Balance</strong>
                 <strong className="float-right">
-                  <Currency noCurrencyColor currency={currentBalance} />
+                  <Currency noCurrencyColor currency={previousBalance} />
                 </strong>
               </Label>
             </small>

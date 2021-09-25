@@ -127,7 +127,7 @@ exports[`PaperStatementOfAccount should render 1`] = `
             <strong
               class="text-muted"
             >
-              Previous Balance
+              Current Balance
             </strong>
             <strong
               class="float-right"
@@ -147,7 +147,7 @@ exports[`PaperStatementOfAccount should render 1`] = `
             <strong
               class="text-muted"
             >
-              Current Balance
+              Previous Balance
             </strong>
             <strong
               class="float-right"
