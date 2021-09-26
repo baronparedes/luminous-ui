@@ -3,6 +3,7 @@ import {Button, ButtonProps} from 'react-bootstrap';
 import {useReactToPrint} from 'react-to-print';
 
 import {ApprovedAny} from '../../../@types';
+import {VERBIAGE} from '../../../constants';
 import PaperStatementOfAccount from '../PaperStatementOfAccount';
 
 type Props = {
@@ -25,7 +26,10 @@ const PrintStatementOfAccount = ({
   const handlePrint = useReactToPrint({
     bodyClass: 'print-body',
     content: () => printPaperRef.current,
-    documentTitle: 'Statement of Account',
+    documentTitle: VERBIAGE.SOA.DOC_TITLE(propertyAccount?.property?.code, {
+      year,
+      month,
+    }),
   });
 
   return (

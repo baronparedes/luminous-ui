@@ -1,4 +1,4 @@
-import {ProfileType, RecordStatus} from './Api';
+import {Period, ProfileType, RecordStatus} from './Api';
 
 export const STATUS_COLORS = {
   active: 'text-success',
@@ -15,4 +15,11 @@ export const PROFILE_TYPE: ProfileType[] = [
 export const SETTING_KEYS = {
   SOA_NOTES: 'SOA_NOTES',
   BILLING_CUTOFF_DAY: 'BILLING_CUTOFF_DAY',
+};
+
+export const VERBIAGE = {
+  SOA: {
+    DOC_TITLE: (propertyCode: string | undefined, period: Period) =>
+      `${propertyCode ?? 'Unit'} - SOA - ${period.year} ${period.month}`,
+  },
 };

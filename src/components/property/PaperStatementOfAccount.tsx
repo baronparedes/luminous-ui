@@ -127,7 +127,7 @@ export const PaperStatementOfAccount = React.forwardRef<HTMLDivElement, Props>(
             </Label>
           </PageSection>
           {notes && notes.value !== '' && (
-            <PageSection className="pt-3" hasPageBreak>
+            <PageSection className="pt-3">
               <hr />
               <Markup value={notes.value} />
             </PageSection>

@@ -18,6 +18,7 @@ import {
   useGetAvailablePeriods,
   useGetPropertyAccount,
 } from '../../../Api';
+import {VERBIAGE} from '../../../constants';
 import Loading from '../../@ui/Loading';
 import ModalContainer from '../../@ui/ModalContainer';
 import PaperStatementOfAccount from '../PaperStatementOfAccount';
@@ -54,7 +55,9 @@ const ViewPreviousStatements = ({
   const handlePrint = useReactToPrint({
     bodyClass: 'print-body',
     content: () => printPaperRef.current,
-    documentTitle: 'Statement of Account',
+    documentTitle: selectedPeriod
+      ? VERBIAGE.SOA.DOC_TITLE(propertyAccount?.property?.code, selectedPeriod)
+      : 'SOA',
   });
 
   const availableYears = data ? [...new Set(data.map(f => f.year))] : [];

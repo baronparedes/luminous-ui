@@ -189,9 +189,6 @@ exports[`PaperStatementOfAccount should render 1`] = `
             SOA Notes
           </h1>
         </div>
-        <div
-          class="page-break"
-        />
       </div>
     </div>
   </div>
