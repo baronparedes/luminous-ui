@@ -6,6 +6,7 @@ const routes = {
   ADMIN: '/admin',
   ADMIN_PROFILES: '/admin/profiles',
   ADMIN_PROPERTIES: '/admin/properties',
+  ADMIN_SETTINGS: '/admin/settings',
 };
 
 export default routes;

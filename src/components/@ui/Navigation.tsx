@@ -1,5 +1,5 @@
 import {Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
-import {FaHome, FaUsers} from 'react-icons/fa';
+import {FaCogs, FaHome, FaUsers} from 'react-icons/fa';
 import {RiCommunityLine} from 'react-icons/ri';
 import {LinkContainer} from 'react-router-bootstrap';
 import {NavLink} from 'react-router-dom';
@@ -56,6 +56,20 @@ function buildNavigationSections(profileType: ProfileType) {
             <>
               <RiCommunityLine className="mr-1" />
               properties
+            </>
+          ),
+        },
+        {
+          isDivider: true,
+          to: 'divider',
+        },
+        {
+          to: routes.ADMIN_SETTINGS,
+          exact: true,
+          title: (
+            <>
+              <FaCogs className="mr-1" />
+              settings
             </>
           ),
         },

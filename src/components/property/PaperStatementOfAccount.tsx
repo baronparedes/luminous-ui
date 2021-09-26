@@ -2,7 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import {Month, PropertyAccount, PropertyAssignmentAttr} from '../../Api';
+import {SETTING_KEYS} from '../../constants';
+import {useRootState} from '../../store';
 import {Currency} from '../@ui/Currency';
+import Markup from '../@ui/Markup';
 import {PageSection, PrintPaper} from '../@ui/PaperPdf';
 import {calculateAccount} from './PropertyStatementOfAccount';
 
@@ -28,6 +31,9 @@ function getNames(propertyAssignments: PropertyAssignmentAttr[] | null) {
 export const PaperStatementOfAccount = React.forwardRef<HTMLDivElement, Props>(
   ({propertyAccount, propertyAssignments, month, year}, ref) => {
     if (!propertyAccount) return null;
+    const notes = useRootState(state =>
+      state.setting.values.find(v => v.key === SETTING_KEYS.SOA_NOTES)
+    );
     const {currentBalance, previousBalance} = calculateAccount(propertyAccount);
     const {transactions, property, balance} = propertyAccount;
     return (
@@ -95,7 +101,7 @@ export const PaperStatementOfAccount = React.forwardRef<HTMLDivElement, Props>(
             </table>
             <hr />
           </PageSection>
-          <PageSection className="pt-3">
+          <PageSection className="pt-1">
             <small>
               <Label>
                 <strong className="text-muted">Current Balance</strong>
@@ -120,6 +126,12 @@ export const PaperStatementOfAccount = React.forwardRef<HTMLDivElement, Props>(
               </strong>
             </Label>
           </PageSection>
+          {notes && notes.value !== '' && (
+            <PageSection className="pt-3" hasPageBreak>
+              <hr />
+              <Markup value={notes.value} />
+            </PageSection>
+          )}
         </PrintPaper>
       </div>
     );

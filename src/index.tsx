@@ -1,6 +1,7 @@
 import './@assets/styles/theme.scss';
 import './index.scss';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom';

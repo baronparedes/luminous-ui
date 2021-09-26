@@ -1,7 +1,12 @@
-import {render} from '@testing-library/react';
-
 import {toTransactionPeriod} from '../../../@utils/dates';
-import {PropertyAccount, PropertyAssignmentAttr} from '../../../Api';
+import {renderWithProvider} from '../../../@utils/test-renderers';
+import {
+  PropertyAccount,
+  PropertyAssignmentAttr,
+  SettingAttr,
+} from '../../../Api';
+import {SETTING_KEYS} from '../../../constants';
+import {settingActions} from '../../../store/reducers/setting.reducer';
 import PaperStatementOfAccount from '../PaperStatementOfAccount';
 
 describe('PaperStatementOfAccount', () => {
@@ -48,14 +53,22 @@ describe('PaperStatementOfAccount', () => {
     },
   ];
 
+  const settings: SettingAttr[] = [
+    {
+      key: SETTING_KEYS.SOA_NOTES,
+      value: '<h1>SOA Notes</h1>',
+    },
+  ];
+
   it('should render', () => {
-    const {asFragment} = render(
+    const {asFragment} = renderWithProvider(
       <PaperStatementOfAccount
         year={2021}
         month={'SEP'}
         propertyAssignments={propertyAssignments}
         propertyAccount={propertyAccount}
-      />
+      />,
+      store => store.dispatch(settingActions.init(settings))
     );
     expect(asFragment()).toMatchSnapshot();
   });

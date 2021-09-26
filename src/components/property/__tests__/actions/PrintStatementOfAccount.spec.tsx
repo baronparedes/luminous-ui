@@ -1,11 +1,12 @@
 import * as reactToPrint from 'react-to-print';
 
-import {fireEvent, render, waitFor} from '@testing-library/react';
+import {fireEvent, waitFor} from '@testing-library/react';
 
 import {
   generateFakePropertyAccount,
   generateFakePropertyAssignment,
 } from '../../../../@utils/fake-models';
+import {renderWithProvider} from '../../../../@utils/test-renderers';
 import PrintStatementOfAccount from '../../actions/PrintStatementOfAccount';
 
 describe('PrintStatementOfAccount', () => {
@@ -20,7 +21,7 @@ describe('PrintStatementOfAccount', () => {
     const mocked = jest.spyOn(reactToPrint, 'useReactToPrint');
     mocked.mockImplementation(() => handlePrintFn);
 
-    const {getByText} = render(
+    const {getByText} = renderWithProvider(
       <PrintStatementOfAccount
         buttonLabel="print"
         year={2021}

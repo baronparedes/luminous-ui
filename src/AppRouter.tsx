@@ -7,13 +7,16 @@ import NotFound from './components/@ui/NotFound';
 import ProtectedRoute from './components/@ui/ProtectedRoute';
 import ProfilesView from './components/admin/manage-profiles/ProfilesView';
 import PropertiesView from './components/admin/manage-properties/PropertiesView';
+import SettingsView from './components/admin/manage-settings/SettingsView';
 import DashboardView from './components/dashboard/DashboardView';
 import LoginView from './components/profile/LoginView';
 import MyProfileView from './components/profile/MyProfileView';
 import {PropertyView} from './components/property/PropertyView';
+import {useInitSettings} from './hooks/useInitSettings';
 import {useRootState} from './store';
 
 const AppRouter: React.FC = () => {
+  useInitSettings();
   const {me} = useRootState(state => state.profile);
   if (!me) {
     <Redirect to={routes.LOGIN} />;
@@ -51,6 +54,12 @@ const AppRouter: React.FC = () => {
               exact
               onlyFor={['admin']}
               component={PropertiesView}
+            />
+            <ProtectedRoute
+              path={routes.ADMIN_SETTINGS}
+              exact
+              onlyFor={['admin']}
+              component={SettingsView}
             />
             <Route component={NotFound} />
           </Switch>

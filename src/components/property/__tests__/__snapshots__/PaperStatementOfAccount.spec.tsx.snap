@@ -118,7 +118,7 @@ exports[`PaperStatementOfAccount should render 1`] = `
         <hr />
       </div>
       <div
-        class="sc-bdfBQB dxnWgn pt-3"
+        class="sc-bdfBQB dxnWgn pt-1"
       >
         <small>
           <div
@@ -179,6 +179,19 @@ exports[`PaperStatementOfAccount should render 1`] = `
             </span>
           </strong>
         </div>
+      </div>
+      <div
+        class="sc-bdfBQB dxnWgn pt-3"
+      >
+        <hr />
+        <div>
+          <h1>
+            SOA Notes
+          </h1>
+        </div>
+        <div
+          class="page-break"
+        />
       </div>
     </div>
   </div>

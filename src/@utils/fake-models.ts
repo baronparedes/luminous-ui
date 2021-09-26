@@ -12,6 +12,7 @@ import {
   PropertyAssignmentAttr,
   PropertyAttr,
   RecordStatus,
+  SettingAttr,
   TransactionAttr,
   TransactionType,
 } from '../Api';
@@ -128,3 +129,10 @@ export function generateFakePropertyAccount(
     transactions,
   };
 }
+
+export const generateFakeSetting = (): SettingAttr => {
+  return {
+    key: faker.random.word(),
+    value: faker.random.words(),
+  };
+};

@@ -134,6 +134,11 @@ export interface PropertyAccount {
 
 export type Month = "JAN" | "FEB" | "MAR" | "APR" | "MAY" | "JUN" | "JUL" | "AUG" | "SEP" | "OCT" | "NOV" | "DEC";
 
+export interface SettingAttr {
+  key: string;
+  value: string;
+}
+
 export interface PostTransactionBody {
   propertyId: number;
   month: Month;
@@ -477,6 +482,56 @@ export const UpdatePropertyAssignments = ({id, ...props}: UpdatePropertyAssignme
 export type UseUpdatePropertyAssignmentsProps = Omit<UseMutateProps<void, unknown, void, number[], UpdatePropertyAssignmentsPathParams>, "path" | "verb"> & UpdatePropertyAssignmentsPathParams;
 
 export const useUpdatePropertyAssignments = ({id, ...props}: UseUpdatePropertyAssignmentsProps) => useMutate<void, unknown, void, number[], UpdatePropertyAssignmentsPathParams>("PATCH", (paramsInPath: UpdatePropertyAssignmentsPathParams) => `/api/property/updatePropertyAssignments/${paramsInPath.id}`, {  pathParams: { id }, ...props });
+
+
+export type GetAllSettingsProps = Omit<GetProps<SettingAttr[], unknown, void, void>, "path">;
+
+export const GetAllSettings = (props: GetAllSettingsProps) => (
+  <Get<SettingAttr[], unknown, void, void>
+    path={`/api/setting/getAll`}
+    
+    {...props}
+  />
+);
+
+export type UseGetAllSettingsProps = Omit<UseGetProps<SettingAttr[], unknown, void, void>, "path">;
+
+export const useGetAllSettings = (props: UseGetAllSettingsProps) => useGet<SettingAttr[], unknown, void, void>(`/api/setting/getAll`, props);
+
+
+export interface GetSettingValueQueryParams {
+  key: string;
+}
+
+export type GetSettingValueProps = Omit<GetProps<string, unknown, GetSettingValueQueryParams, void>, "path">;
+
+export const GetSettingValue = (props: GetSettingValueProps) => (
+  <Get<string, unknown, GetSettingValueQueryParams, void>
+    path={`/api/setting/getSettingValue`}
+    
+    {...props}
+  />
+);
+
+export type UseGetSettingValueProps = Omit<UseGetProps<string, unknown, GetSettingValueQueryParams, void>, "path">;
+
+export const useGetSettingValue = (props: UseGetSettingValueProps) => useGet<string, unknown, GetSettingValueQueryParams, void>(`/api/setting/getSettingValue`, props);
+
+
+export type UpdateSettingValueProps = Omit<MutateProps<void, unknown, void, SettingAttr, void>, "path" | "verb">;
+
+export const UpdateSettingValue = (props: UpdateSettingValueProps) => (
+  <Mutate<void, unknown, void, SettingAttr, void>
+    verb="PATCH"
+    path={`/api/setting/updateSettingValue`}
+    
+    {...props}
+  />
+);
+
+export type UseUpdateSettingValueProps = Omit<UseMutateProps<void, unknown, void, SettingAttr, void>, "path" | "verb">;
+
+export const useUpdateSettingValue = (props: UseUpdateSettingValueProps) => useMutate<void, unknown, void, SettingAttr, void>("PATCH", `/api/setting/updateSettingValue`, props);
 
 
 export type PostMonthlyChargesProps = Omit<MutateProps<void, unknown, void, PostTransactionBody, void>, "path" | "verb">;

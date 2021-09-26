@@ -9,7 +9,7 @@ import {
   generateFakePropertyAccount,
   generateFakePropertyAssignment,
 } from '../../../../@utils/fake-models';
-import {renderWithRestful} from '../../../../@utils/test-renderers';
+import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
 import {Month, Period} from '../../../../Api';
 import ViewPreviousStatements from '../../actions/ViewPreviousStatements';
 
@@ -37,7 +37,7 @@ describe('ViewPreviousStatements', () => {
       .get(`/api/transaction/getAvailablePeriods/${propertyId}`)
       .reply(200, availableYears);
 
-    const target = renderWithRestful(
+    const target = renderWithProviderAndRestful(
       <ViewPreviousStatements
         buttonLabel="view previous statements"
         propertyId={propertyId}

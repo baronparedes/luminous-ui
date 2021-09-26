@@ -4,9 +4,11 @@ import {ThunkAction} from 'redux-thunk';
 import {Action, combineReducers, configureStore} from '@reduxjs/toolkit';
 
 import profileReducer from './reducers/profile.reducer';
+import settingReducer from './reducers/setting.reducer';
 
 const rootReducer = combineReducers({
   profile: profileReducer,
+  setting: settingReducer,
 });
 
 const store = createStore();

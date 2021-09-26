@@ -11,3 +11,8 @@ export const PROFILE_TYPE: ProfileType[] = [
   'stakeholder',
   'admin',
 ];
+
+export const SETTING_KEYS = {
+  SOA_NOTES: 'SOA_NOTES',
+  BILLING_CUTOFF_DAY: 'BILLING_CUTOFF_DAY',
+};
