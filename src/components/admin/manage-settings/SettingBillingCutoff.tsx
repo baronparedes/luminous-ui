@@ -56,7 +56,7 @@ const SettingBillingCutoff = () => {
                 <p>
                   Billing Cutoff Date is every{' '}
                   <Form.Control
-                    style={{width: '4em'}}
+                    style={{width: '4.5em'}}
                     className="d-inline"
                     as="select"
                     name="billing"
