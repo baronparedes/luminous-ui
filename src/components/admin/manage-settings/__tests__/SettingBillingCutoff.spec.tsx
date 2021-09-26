@@ -1,3 +1,4 @@
+import faker from 'faker';
 import nock from 'nock';
 
 import {fireEvent, waitFor} from '@testing-library/react';
@@ -6,16 +7,16 @@ import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
 import {SettingAttr} from '../../../../Api';
 import {SETTING_KEYS} from '../../../../constants';
 import {settingActions} from '../../../../store/reducers/setting.reducer';
-import SettingSOA from '../SettingSOA';
+import SettingBillingCutoff from '../SettingBillingCutoff';
 
-describe('SettingSOA', () => {
+describe('SettingBillingCutoff', () => {
   it('should render and save', async () => {
     const base = 'http://localhost';
-    const expectedKey = SETTING_KEYS.SOA_NOTES;
-    const expected = '<h1>Test SOA Notes</h1>\n';
+    const expectedKey = SETTING_KEYS.BILLING_CUTOFF_DAY;
+    const expected = faker.datatype.number({min: 1, max: 30}).toString();
     const setting: SettingAttr = {
       key: expectedKey,
-      value: "<script>alert('hello world')</script><h1>Test SOA Notes</h1>",
+      value: '10',
     };
 
     nock(base)
@@ -25,14 +26,15 @@ describe('SettingSOA', () => {
       })
       .reply(200);
 
-    const {getByText, getByRole, queryByRole, store} =
-      renderWithProviderAndRestful(<SettingSOA />, base, store =>
+    const {getByText, getByPlaceholderText, getByRole, queryByRole, store} =
+      renderWithProviderAndRestful(<SettingBillingCutoff />, base, store =>
         store.dispatch(settingActions.init([setting]))
       );
-    expect(getByText(/^notes$/i)).toBeInTheDocument();
-    expect(getByText(/save/i)).toBeInTheDocument();
-    expect(getByText(/^Test SOA Notes$/i)).toBeInTheDocument();
+    expect(getByPlaceholderText(/billing/i)).toBeInTheDocument();
 
+    fireEvent.change(getByPlaceholderText(/billing/i), {
+      target: {value: expected},
+    });
     fireEvent.click(getByText(/save/i));
     await waitFor(() => expect(getByRole('progressbar')).toBeInTheDocument());
     await waitFor(() => expect(queryByRole('progressbar')).toBeInTheDocument());

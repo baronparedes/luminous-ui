@@ -55,24 +55,26 @@ const SettingSOA = () => {
 
   return (
     <>
-      <SettingContainer heading="Statement of Account">
+      <SettingContainer
+        heading="Statement of Account"
+        renderRightContent={
+          <Button disabled={loading} onClick={() => handleSave()}>
+            Save
+          </Button>
+        }
+      >
         <Container>
           <Row>
             <Col>
               <h6>Notes</h6>
-              <Editor
-                editorState={header}
-                onEditorStateChange={setHeader}
-                placeholder="Enter statement of account notes"
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col className="text-right">
-              <Button disabled={loading} onClick={() => handleSave()}>
-                {loading && <Loading />}
-                Save
-              </Button>
+              {loading && <Loading />}
+              {!loading && (
+                <Editor
+                  editorState={header}
+                  onEditorStateChange={setHeader}
+                  placeholder="Enter statement of account notes"
+                />
+              )}
             </Col>
           </Row>
         </Container>
