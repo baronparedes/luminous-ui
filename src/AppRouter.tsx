@@ -5,6 +5,7 @@ import routes from './@utils/routes';
 import Header from './components/@ui/Header';
 import NotFound from './components/@ui/NotFound';
 import ProtectedRoute from './components/@ui/ProtectedRoute';
+import BatchTransactionView from './components/admin/batch-transaction/BatchTransactionView';
 import ProfilesView from './components/admin/manage-profiles/ProfilesView';
 import PropertiesView from './components/admin/manage-properties/PropertiesView';
 import SettingsView from './components/admin/manage-settings/SettingsView';
@@ -60,6 +61,12 @@ const AppRouter: React.FC = () => {
               exact
               onlyFor={['admin']}
               component={SettingsView}
+            />
+            <ProtectedRoute
+              path={routes.ADMIN_BATCH_TRANSACTIONS}
+              exact
+              onlyFor={['admin']}
+              component={BatchTransactionView}
             />
             <Route component={NotFound} />
           </Switch>

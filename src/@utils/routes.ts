@@ -7,6 +7,7 @@ const routes = {
   ADMIN_PROFILES: '/admin/profiles',
   ADMIN_PROPERTIES: '/admin/properties',
   ADMIN_SETTINGS: '/admin/settings',
+  ADMIN_BATCH_TRANSACTIONS: '/admin/batch-transactions',
 };
 
 export default routes;

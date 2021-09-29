@@ -534,10 +534,10 @@ export type UseUpdateSettingValueProps = Omit<UseMutateProps<void, unknown, void
 export const useUpdateSettingValue = (props: UseUpdateSettingValueProps) => useMutate<void, unknown, void, SettingAttr, void>("PATCH", `/api/setting/updateSettingValue`, props);
 
 
-export type PostMonthlyChargesProps = Omit<MutateProps<void, unknown, void, PostTransactionBody, void>, "path" | "verb">;
+export type PostMonthlyChargesProps = Omit<MutateProps<void, ApiError, void, PostTransactionBody, void>, "path" | "verb">;
 
 export const PostMonthlyCharges = (props: PostMonthlyChargesProps) => (
-  <Mutate<void, unknown, void, PostTransactionBody, void>
+  <Mutate<void, ApiError, void, PostTransactionBody, void>
     verb="POST"
     path={`/api/transaction/postMonthlyCharges`}
     
@@ -545,9 +545,9 @@ export const PostMonthlyCharges = (props: PostMonthlyChargesProps) => (
   />
 );
 
-export type UsePostMonthlyChargesProps = Omit<UseMutateProps<void, unknown, void, PostTransactionBody, void>, "path" | "verb">;
+export type UsePostMonthlyChargesProps = Omit<UseMutateProps<void, ApiError, void, PostTransactionBody, void>, "path" | "verb">;
 
-export const usePostMonthlyCharges = (props: UsePostMonthlyChargesProps) => useMutate<void, unknown, void, PostTransactionBody, void>("POST", `/api/transaction/postMonthlyCharges`, props);
+export const usePostMonthlyCharges = (props: UsePostMonthlyChargesProps) => useMutate<void, ApiError, void, PostTransactionBody, void>("POST", `/api/transaction/postMonthlyCharges`, props);
 
 
 export interface GetAvailablePeriodsPathParams {

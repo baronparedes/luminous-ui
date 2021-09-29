@@ -1,5 +1,5 @@
 import {Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
-import {FaCogs, FaHome, FaUsers} from 'react-icons/fa';
+import {FaCogs, FaHome, FaStream, FaUsers} from 'react-icons/fa';
 import {RiCommunityLine} from 'react-icons/ri';
 import {LinkContainer} from 'react-router-bootstrap';
 import {NavLink} from 'react-router-dom';
@@ -23,6 +23,10 @@ type NavSection = NavItem & {
 
 function buildNavigationSections(profileType: ProfileType) {
   const sections: NavSection[] = [];
+  const divider: NavItem = {
+    isDivider: true,
+    to: 'divider',
+  };
 
   if (['admin', 'stakeholder'].includes(profileType)) {
     sections.push({
@@ -59,10 +63,18 @@ function buildNavigationSections(profileType: ProfileType) {
             </>
           ),
         },
+        divider,
         {
-          isDivider: true,
-          to: 'divider',
+          to: routes.ADMIN_BATCH_TRANSACTIONS,
+          exact: true,
+          title: (
+            <>
+              <FaStream className="mr-1" />
+              batch transactions
+            </>
+          ),
         },
+        divider,
         {
           to: routes.ADMIN_SETTINGS,
           exact: true,
