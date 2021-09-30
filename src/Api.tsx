@@ -568,3 +568,31 @@ export type UseGetAvailablePeriodsProps = Omit<UseGetProps<Period[], unknown, vo
 
 export const useGetAvailablePeriods = ({propertyId, ...props}: UseGetAvailablePeriodsProps) => useGet<Period[], unknown, void, GetAvailablePeriodsPathParams>((paramsInPath: GetAvailablePeriodsPathParams) => `/api/transaction/getAvailablePeriods/${paramsInPath.propertyId}`, {  pathParams: { propertyId }, ...props });
 
+
+export interface SuggestPaymentBreakdownResponse {
+  collected: TransactionAttr[];
+  charges: TransactionAttr[];
+}
+
+export interface SuggestPaymentBreakdownQueryParams {
+  amount: number;
+}
+
+export interface SuggestPaymentBreakdownPathParams {
+  propertyId: number
+}
+
+export type SuggestPaymentBreakdownProps = Omit<GetProps<SuggestPaymentBreakdownResponse, unknown, SuggestPaymentBreakdownQueryParams, SuggestPaymentBreakdownPathParams>, "path"> & SuggestPaymentBreakdownPathParams;
+
+export const SuggestPaymentBreakdown = ({propertyId, ...props}: SuggestPaymentBreakdownProps) => (
+  <Get<SuggestPaymentBreakdownResponse, unknown, SuggestPaymentBreakdownQueryParams, SuggestPaymentBreakdownPathParams>
+    path={`/api/transaction/suggestPaymentBreakdown/${propertyId}`}
+    
+    {...props}
+  />
+);
+
+export type UseSuggestPaymentBreakdownProps = Omit<UseGetProps<SuggestPaymentBreakdownResponse, unknown, SuggestPaymentBreakdownQueryParams, SuggestPaymentBreakdownPathParams>, "path"> & SuggestPaymentBreakdownPathParams;
+
+export const useSuggestPaymentBreakdown = ({propertyId, ...props}: UseSuggestPaymentBreakdownProps) => useGet<SuggestPaymentBreakdownResponse, unknown, SuggestPaymentBreakdownQueryParams, SuggestPaymentBreakdownPathParams>((paramsInPath: SuggestPaymentBreakdownPathParams) => `/api/transaction/suggestPaymentBreakdown/${paramsInPath.propertyId}`, {  pathParams: { propertyId }, ...props });
+
