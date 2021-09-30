@@ -17,6 +17,10 @@ export const SETTING_KEYS = {
   BILLING_CUTOFF_DAY: 'BILLING_CUTOFF_DAY',
 };
 
+export const DEFAULTS = {
+  BILLING_CUTOFF_DAY: 30,
+};
+
 export const VERBIAGE = {
   SOA: {
     DOC_TITLE: (propertyCode: string | undefined, period: Period) =>

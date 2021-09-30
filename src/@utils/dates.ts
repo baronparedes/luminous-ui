@@ -23,6 +23,15 @@ export function getCurrentMonthYear() {
   };
 }
 
+export function getCurrentMonthYearRelativeToCutoff(cutoffDay: number) {
+  const currentDay = moment().day();
+  const period = getCurrentMonthYear();
+  if (currentDay > cutoffDay) {
+    return addFromYearMonth(period.year, period.month, 1);
+  }
+  return period;
+}
+
 export function toMonthValue(value: Month) {
   return Number(moment().month(value).format('M'));
 }
@@ -34,6 +43,36 @@ export function toMonthName(value: number) {
 export function toTransactionPeriod(year: number, month: Month) {
   const dateString = `${year}-${moment().month(month).format('MM')}-01`;
   return new Date(dateString);
+}
+
+export function toTransactionPeriodFromDate(date: Date) {
+  const [year, month] = moment(date).format('YYYY MMM').split(' ');
+  return {
+    year: Number(year),
+    month: month.toUpperCase() as Month,
+  };
+}
+
+export function addFromYearMonth(year: number, month: Month, amount: number) {
+  const result = moment().month(month).year(year).add(amount, 'month');
+  const [x, y] = result.format('YYYY-MMM').split('-');
+  return {
+    year: Number(x),
+    month: y.toUpperCase() as Month,
+  };
+}
+
+export function subtractFromYearMonth(
+  year: number,
+  month: Month,
+  amount: number
+) {
+  const result = moment().month(month).year(year).subtract(amount, 'month');
+  const [x, y] = result.format('YYYY-MMM').split('-');
+  return {
+    year: Number(x),
+    month: y.toUpperCase() as Month,
+  };
 }
 
 export function getPastYears(count: number) {

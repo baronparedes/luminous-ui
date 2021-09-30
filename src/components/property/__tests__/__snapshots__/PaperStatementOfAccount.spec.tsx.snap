@@ -26,7 +26,7 @@ exports[`PaperStatementOfAccount should render 1`] = `
         class="sc-bdfBQB dxnWgn pt-3"
       >
         <div
-          class="sc-eCstlR duHawa"
+          class="sc-gsTEea bjzFuM"
         >
           <strong>
             Unit Number: 
@@ -34,7 +34,7 @@ exports[`PaperStatementOfAccount should render 1`] = `
           G-111
         </div>
         <div
-          class="sc-eCstlR duHawa"
+          class="sc-gsTEea bjzFuM"
         >
           <strong>
             Unit owner: 
@@ -43,7 +43,7 @@ exports[`PaperStatementOfAccount should render 1`] = `
         </div>
         <small>
           <div
-            class="sc-eCstlR duHawa"
+            class="sc-gsTEea bjzFuM"
           >
             <strong>
               Address: 
@@ -53,7 +53,7 @@ exports[`PaperStatementOfAccount should render 1`] = `
         </small>
         <small>
           <div
-            class="sc-eCstlR duHawa"
+            class="sc-gsTEea bjzFuM"
           >
             <strong>
               Floor area: 
@@ -67,7 +67,7 @@ exports[`PaperStatementOfAccount should render 1`] = `
         class="sc-bdfBQB dxnWgn pt-3"
       >
         <div
-          class="sc-eCstlR duHawa"
+          class="sc-gsTEea bjzFuM"
         >
           <strong>
             Billing Period: 
@@ -122,7 +122,7 @@ exports[`PaperStatementOfAccount should render 1`] = `
       >
         <small>
           <div
-            class="sc-eCstlR duHawa"
+            class="sc-gsTEea bjzFuM"
           >
             <strong
               class="text-muted"
@@ -142,7 +142,7 @@ exports[`PaperStatementOfAccount should render 1`] = `
         </small>
         <small>
           <div
-            class="sc-eCstlR duHawa"
+            class="sc-gsTEea bjzFuM"
           >
             <strong
               class="text-muted"
@@ -160,9 +160,29 @@ exports[`PaperStatementOfAccount should render 1`] = `
             </strong>
           </div>
         </small>
+        <small>
+          <div
+            class="sc-gsTEea bjzFuM"
+          >
+            <strong
+              class="text-muted"
+            >
+              Less Payments
+            </strong>
+            <strong
+              class="float-right"
+            >
+              <span
+                class="currency"
+              >
+                0
+              </span>
+            </strong>
+          </div>
+        </small>
         <hr />
         <div
-          class="sc-eCstlR duHawa"
+          class="sc-gsTEea bjzFuM"
         >
           <strong
             class="text-muted"

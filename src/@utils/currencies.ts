@@ -8,6 +8,7 @@ export function currencyFixedFormat(num?: number) {
   return num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 }
 
-export function roundOff(num: number) {
+export function roundOff(num?: number) {
+  if (!num) return 0;
   return num === 0 ? 0 : Math.round(num * 100) / 100;
 }

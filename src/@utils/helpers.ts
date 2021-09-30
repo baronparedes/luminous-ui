@@ -1,4 +1,4 @@
-import {TransactionAttr} from '../Api';
+import {PropertyAccount} from '../Api';
 
 export function generateNumberedSeries(n: number): number[] {
   return Array(n)
@@ -11,13 +11,24 @@ export function sum(numbers: number[] | undefined) {
   return numbers.reduce((p, c) => Number(p) + Number(c));
 }
 
-export function sumTransactions(transactions: TransactionAttr[] | undefined) {
-  if (!transactions || transactions.length === 0) return 0;
-  const charged = transactions
-    .filter(t => t.transactionType === 'charged')
-    .map(t => t.amount);
-  const collected = transactions
-    .filter(t => t.transactionType === 'collected')
-    .map(t => t.amount);
-  return sum(charged) - sum(collected);
+export function calculateAccount(propertyAccount: PropertyAccount) {
+  const {balance, transactions} = propertyAccount;
+  const currentBalance = sum(
+    transactions
+      ?.filter(t => t.transactionType === 'charged')
+      .map(t => t.amount)
+  );
+  const collectionBalance = sum(
+    transactions
+      ?.filter(t => t.transactionType === 'collected')
+      .map(t => t.amount)
+  );
+  const totalAmountDue = currentBalance - collectionBalance;
+  const previousBalance = balance - totalAmountDue;
+  return {
+    previousBalance,
+    currentBalance,
+    collectionBalance,
+    totalAmountDue,
+  };
 }

@@ -5,6 +5,7 @@ import {PropertyAttr} from '../../../Api';
 import {RECORD_STATUS} from '../../../constants';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import Loading from '../../@ui/Loading';
+import {decimalPatternRule, validateGreaterThanZero} from '../../@validation';
 
 type Props = {
   loading?: boolean;
@@ -76,11 +77,8 @@ const PropertyForm = ({value, onSubmit, loading, error}: Props) => {
               name="floorArea"
               control={control}
               rules={{
-                pattern: {
-                  value: /^(\d+(\.\d{0,2})?|\.?\d{1,2})$/,
-                  message: 'should be a number with up to 2 decimal places',
-                },
-                validate: value => value > 0 || 'should be greater than 0',
+                pattern: decimalPatternRule,
+                validate: validateGreaterThanZero,
               }}
               render={({field}) => (
                 <InputGroup className="mb-2">

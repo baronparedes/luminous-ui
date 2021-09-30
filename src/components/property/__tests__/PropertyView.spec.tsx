@@ -141,7 +141,7 @@ describe('PropertyView', () => {
     const {queryByText} = await renderTarget();
     await waitFor(() => {
       expect(queryByText(/process payment/i)).not.toBeInTheDocument();
-      expect(queryByText(/waive a transaction/i)).not.toBeInTheDocument();
+      expect(queryByText(/adjustments/i)).not.toBeInTheDocument();
     });
   });
 
@@ -149,7 +149,7 @@ describe('PropertyView', () => {
     const {getByText} = await renderTarget({isAdmin: true});
     await waitFor(() => {
       expect(getByText(/process payment/i)).toBeInTheDocument();
-      expect(getByText(/waive a transaction/i)).toBeInTheDocument();
+      expect(getByText(/adjustments/i)).toBeInTheDocument();
     });
   });
 });

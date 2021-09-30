@@ -108,6 +108,7 @@ export interface ChargeAttr {
   chargeType: ChargeType;
   postingType: PostingType;
   thresholdInMonths?: number;
+  priority?: number;
 }
 
 export type TransactionType = "charged" | "collected";
@@ -550,6 +551,22 @@ export type UsePostMonthlyChargesProps = Omit<UseMutateProps<void, ApiError, voi
 export const usePostMonthlyCharges = (props: UsePostMonthlyChargesProps) => useMutate<void, ApiError, void, PostTransactionBody, void>("POST", `/api/transaction/postMonthlyCharges`, props);
 
 
+export type PostCollectionsProps = Omit<MutateProps<void, unknown, void, TransactionAttr[], void>, "path" | "verb">;
+
+export const PostCollections = (props: PostCollectionsProps) => (
+  <Mutate<void, unknown, void, TransactionAttr[], void>
+    verb="POST"
+    path={`/api/transaction/postCollections`}
+    
+    {...props}
+  />
+);
+
+export type UsePostCollectionsProps = Omit<UseMutateProps<void, unknown, void, TransactionAttr[], void>, "path" | "verb">;
+
+export const usePostCollections = (props: UsePostCollectionsProps) => useMutate<void, unknown, void, TransactionAttr[], void>("POST", `/api/transaction/postCollections`, props);
+
+
 export interface GetAvailablePeriodsPathParams {
   propertyId: number
 }
@@ -569,30 +586,27 @@ export type UseGetAvailablePeriodsProps = Omit<UseGetProps<Period[], unknown, vo
 export const useGetAvailablePeriods = ({propertyId, ...props}: UseGetAvailablePeriodsProps) => useGet<Period[], unknown, void, GetAvailablePeriodsPathParams>((paramsInPath: GetAvailablePeriodsPathParams) => `/api/transaction/getAvailablePeriods/${paramsInPath.propertyId}`, {  pathParams: { propertyId }, ...props });
 
 
-export interface SuggestPaymentBreakdownResponse {
-  collected: TransactionAttr[];
-  charges: TransactionAttr[];
-}
-
 export interface SuggestPaymentBreakdownQueryParams {
   amount: number;
+  year: number;
+  month: Month;
 }
 
 export interface SuggestPaymentBreakdownPathParams {
   propertyId: number
 }
 
-export type SuggestPaymentBreakdownProps = Omit<GetProps<SuggestPaymentBreakdownResponse, unknown, SuggestPaymentBreakdownQueryParams, SuggestPaymentBreakdownPathParams>, "path"> & SuggestPaymentBreakdownPathParams;
+export type SuggestPaymentBreakdownProps = Omit<GetProps<TransactionAttr[], unknown, SuggestPaymentBreakdownQueryParams, SuggestPaymentBreakdownPathParams>, "path"> & SuggestPaymentBreakdownPathParams;
 
 export const SuggestPaymentBreakdown = ({propertyId, ...props}: SuggestPaymentBreakdownProps) => (
-  <Get<SuggestPaymentBreakdownResponse, unknown, SuggestPaymentBreakdownQueryParams, SuggestPaymentBreakdownPathParams>
+  <Get<TransactionAttr[], unknown, SuggestPaymentBreakdownQueryParams, SuggestPaymentBreakdownPathParams>
     path={`/api/transaction/suggestPaymentBreakdown/${propertyId}`}
     
     {...props}
   />
 );
 
-export type UseSuggestPaymentBreakdownProps = Omit<UseGetProps<SuggestPaymentBreakdownResponse, unknown, SuggestPaymentBreakdownQueryParams, SuggestPaymentBreakdownPathParams>, "path"> & SuggestPaymentBreakdownPathParams;
+export type UseSuggestPaymentBreakdownProps = Omit<UseGetProps<TransactionAttr[], unknown, SuggestPaymentBreakdownQueryParams, SuggestPaymentBreakdownPathParams>, "path"> & SuggestPaymentBreakdownPathParams;
 
-export const useSuggestPaymentBreakdown = ({propertyId, ...props}: UseSuggestPaymentBreakdownProps) => useGet<SuggestPaymentBreakdownResponse, unknown, SuggestPaymentBreakdownQueryParams, SuggestPaymentBreakdownPathParams>((paramsInPath: SuggestPaymentBreakdownPathParams) => `/api/transaction/suggestPaymentBreakdown/${paramsInPath.propertyId}`, {  pathParams: { propertyId }, ...props });
+export const useSuggestPaymentBreakdown = ({propertyId, ...props}: UseSuggestPaymentBreakdownProps) => useGet<TransactionAttr[], unknown, SuggestPaymentBreakdownQueryParams, SuggestPaymentBreakdownPathParams>((paramsInPath: SuggestPaymentBreakdownPathParams) => `/api/transaction/suggestPaymentBreakdown/${paramsInPath.propertyId}`, {  pathParams: { propertyId }, ...props });
 

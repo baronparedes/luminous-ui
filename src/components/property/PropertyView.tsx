@@ -1,5 +1,6 @@
 import {Button, Col, Container, Row} from 'react-bootstrap';
 
+import {roundOff} from '../../@utils/currencies';
 import {getCurrentMonthYear} from '../../@utils/dates';
 import {useGetPropertyAccount, useGetPropertyAssignments} from '../../Api';
 import {useUrl} from '../../hooks/useUrl';
@@ -18,12 +19,18 @@ export const PropertyView = () => {
   const {me} = useRootState(state => state.profile);
   const {id} = useUrl();
   const propertyId = Number(id);
-  const {data: propertyAccountData, loading: propertyAccountLoading} =
-    useGetPropertyAccount({
-      propertyId,
-    });
+  const {
+    data: propertyAccountData,
+    loading: propertyAccountLoading,
+    refetch: refetchPropertyAccount,
+  } = useGetPropertyAccount({
+    propertyId,
+  });
   const {data: assignedPropertyData, loading: assignedPropertyLoading} =
     useGetPropertyAssignments({propertyId});
+  const handleOnProcessedPayment = () => {
+    refetchPropertyAccount();
+  };
   return (
     <>
       <Container>
@@ -48,12 +55,18 @@ export const PropertyView = () => {
             <RoundedPanel className="mb-2">
               {me?.type === 'admin' && (
                 <>
-                  <ProcessPayment
-                    className="mb-2 w-100"
-                    buttonLabel="process payment"
-                    amount={propertyAccountData?.balance}
-                  />
-                  <Button className="mb-2 w-100">waive a transaction</Button>
+                  {propertyAccountData && (
+                    <ProcessPayment
+                      className="mb-2 w-100"
+                      buttonLabel="process payment"
+                      propertyId={propertyId}
+                      onProcessedPayment={handleOnProcessedPayment}
+                      amount={parseFloat(
+                        roundOff(propertyAccountData.balance).toFixed(2)
+                      )}
+                    />
+                  )}
+                  <Button className="mb-2 w-100">adjustments</Button>
                 </>
               )}
               <PrintStatementOfAccount

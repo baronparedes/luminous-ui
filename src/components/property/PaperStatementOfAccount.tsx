@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import {calculateAccount} from '../../@utils/helpers';
 import {Month, PropertyAccount, PropertyAssignmentAttr} from '../../Api';
 import {SETTING_KEYS} from '../../constants';
 import {useRootState} from '../../store';
 import {Currency} from '../@ui/Currency';
 import Markup from '../@ui/Markup';
 import {PageSection, PrintPaper} from '../@ui/PaperPdf';
-import {calculateAccount} from './PropertyStatementOfAccount';
 
 type Props = {
   propertyAccount: PropertyAccount | null;
@@ -34,7 +34,8 @@ export const PaperStatementOfAccount = React.forwardRef<HTMLDivElement, Props>(
     const notes = useRootState(state =>
       state.setting.values.find(v => v.key === SETTING_KEYS.SOA_NOTES)
     );
-    const {currentBalance, previousBalance} = calculateAccount(propertyAccount);
+    const {currentBalance, previousBalance, collectionBalance} =
+      calculateAccount(propertyAccount);
     const {transactions, property, balance} = propertyAccount;
     return (
       <div className="d-none">
@@ -84,19 +85,21 @@ export const PaperStatementOfAccount = React.forwardRef<HTMLDivElement, Props>(
               </thead>
               <tbody>
                 {transactions &&
-                  transactions.map((t, i) => {
-                    return (
-                      <tr key={i}>
-                        <td>{t.charge?.code}</td>
-                        <td>{t.charge?.rate}</td>
-                        <td className="float-right">
-                          <strong>
-                            <Currency noCurrencyColor currency={t.amount} />
-                          </strong>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  transactions
+                    .filter(t => t.transactionType === 'charged')
+                    .map((t, i) => {
+                      return (
+                        <tr key={i}>
+                          <td>{t.charge?.code}</td>
+                          <td>{t.charge?.rate}</td>
+                          <td className="float-right">
+                            <strong>
+                              <Currency noCurrencyColor currency={t.amount} />
+                            </strong>
+                          </td>
+                        </tr>
+                      );
+                    })}
               </tbody>
             </table>
             <hr />
@@ -115,6 +118,14 @@ export const PaperStatementOfAccount = React.forwardRef<HTMLDivElement, Props>(
                 <strong className="text-muted">Previous Balance</strong>
                 <strong className="float-right">
                   <Currency noCurrencyColor currency={previousBalance} />
+                </strong>
+              </Label>
+            </small>
+            <small>
+              <Label>
+                <strong className="text-muted">Less Payments</strong>
+                <strong className="float-right">
+                  <Currency noCurrencyColor currency={collectionBalance} />
                 </strong>
               </Label>
             </small>
