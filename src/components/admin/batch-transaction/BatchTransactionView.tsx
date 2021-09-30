@@ -10,21 +10,20 @@ import BatchPropertiesToProcess from './BatchPropertiesToProcess';
 const BatchTransactionView = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<Period>();
   const [inProgress, setInProgress] = useState(false);
+  const {data, loading, refetch} = useGetAllProperties({
+    debounce: 300,
+    lazy: true,
+  });
   const handleOnSelect = (period: Period) => {
-    const confirmed = confirm('Start Process?');
-    if (confirmed) {
+    if (confirm('Start Process?')) {
+      refetch();
       setSelectedPeriod(period);
       setInProgress(true);
-      refetch();
     }
   };
   const handleOnProcessComplete = () => {
     setInProgress(false);
   };
-  const {data, loading, refetch} = useGetAllProperties({
-    debounce: 300,
-    lazy: true,
-  });
   return (
     <>
       <Prompt
@@ -42,7 +41,7 @@ const BatchTransactionView = () => {
             disabled={inProgress || loading}
           />
         </RoundedPanel>
-        {selectedPeriod && !loading && (
+        {selectedPeriod && !loading && data && (
           <RoundedPanel className="p-3 mt-2">
             <BatchPropertiesToProcess
               properties={data}

@@ -45,22 +45,24 @@ const BatchPropertiesToProcess = ({period, properties, onComplete}: Props) => {
     if (properties) {
       if (progress <= properties.length - 1) {
         if (currentPropertyToProcess && period) {
+          const targetProperty = {...currentPropertyToProcess};
           mutate({
-            propertyId: Number(currentPropertyToProcess.id),
+            propertyId: Number(targetProperty.id),
             year: period.year,
             month: period.month,
           })
-            .then(() => {
-              setProgress(state => state + 1);
-            })
             .catch(err => {
               const apiError = err.data as ApiError;
               const error: ProcessError = {
-                property: currentPropertyToProcess,
+                property: targetProperty,
                 message: apiError ? apiError.message : err.message,
               };
               setErrors(state => [...state, error]);
-              setProgress(state => state + 1);
+            })
+            .finally(() => {
+              setTimeout(() => {
+                setProgress(state => state + 1);
+              }, 100);
             });
         }
       } else {
@@ -89,12 +91,13 @@ const BatchPropertiesToProcess = ({period, properties, onComplete}: Props) => {
         period: nextPeriod,
       });
       if (properties) {
-        setProgress(0);
+        setCurrentPropertyToProcess(undefined);
         setErrors([]);
         setToggleErrors(false);
+        setProgress(0);
       }
     }
-  }, [properties, period]);
+  }, [properties]);
 
   return (
     <>
