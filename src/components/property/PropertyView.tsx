@@ -88,25 +88,31 @@ export const PropertyView = () => {
             </RoundedPanel>
             {assignedPropertyLoading && <Loading />}
             <div>
-              {!assignedPropertyLoading &&
-                assignedPropertyData &&
-                assignedPropertyData.map((pa, i) => {
-                  const {profile} = pa;
-                  if (!profile) return null;
-                  return (
-                    <PropertyAssignmentCard
-                      key={i}
-                      profileId={Number(profile.id)}
-                      name={profile.name}
-                      username={profile.username}
-                      email={profile.email}
-                      mobileNumber={profile.mobileNumber}
-                    />
-                  );
-                })}
-            </div>
-            <div className="text-muted text-center">
-              <small>assigned to</small>
+              {!assignedPropertyLoading && assignedPropertyData && (
+                <>
+                  <div>
+                    {assignedPropertyData.map((pa, i) => {
+                      const {profile} = pa;
+                      if (!profile) return null;
+                      return (
+                        <PropertyAssignmentCard
+                          key={i}
+                          profileId={Number(profile.id)}
+                          name={profile.name}
+                          username={profile.username}
+                          email={profile.email}
+                          mobileNumber={profile.mobileNumber}
+                        />
+                      );
+                    })}
+                  </div>
+                  {assignedPropertyData.length > 0 && (
+                    <div className="text-muted text-center">
+                      <small>assigned to</small>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </Col>
         </Row>
