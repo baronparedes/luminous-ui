@@ -45,7 +45,9 @@ describe('MyProfileView', () => {
     const expctedTotalBalance = sum(mockedPropertyAccounts.map(p => p.balance));
 
     nock(base)
-      .get(`/api/property/getPropertyAccountsByProfile/${mockedProfile.id}`)
+      .get(
+        `/api/property-account/getPropertyAccountsByProfile/${mockedProfile.id}`
+      )
       .reply(200, mockedPropertyAccounts);
 
     const target = renderWithProviderAndRestful(<MyProfileView />, base);

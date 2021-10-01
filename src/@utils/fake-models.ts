@@ -122,11 +122,16 @@ export function generateFakePropertyAccount(
   const transactions = generateNumberedSeries(transactionCount).map(() =>
     generateFakeTransaction()
   );
+  const assignedProfiles = [
+    generateFakeProfileAttr(),
+    generateFakeProfileAttr(),
+  ];
   return {
     propertyId: Number(property.id),
     property,
     balance: faker.datatype.number(),
     transactions,
+    assignedProfiles,
   };
 }
 

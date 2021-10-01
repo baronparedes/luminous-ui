@@ -5,10 +5,7 @@ import * as reactToPrint from 'react-to-print';
 import {fireEvent, waitFor} from '@testing-library/react';
 
 import {getCurrentMonthYear} from '../../../../@utils/dates';
-import {
-  generateFakePropertyAccount,
-  generateFakePropertyAssignment,
-} from '../../../../@utils/fake-models';
+import {generateFakePropertyAccount} from '../../../../@utils/fake-models';
 import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
 import {Month, Period} from '../../../../Api';
 import ViewPreviousStatements from '../../actions/ViewPreviousStatements';
@@ -19,10 +16,6 @@ describe('ViewPreviousStatements', () => {
 
   async function renderTarget() {
     const propertyId = faker.datatype.number();
-    const mockedPropertyAssignments = [
-      generateFakePropertyAssignment(),
-      generateFakePropertyAssignment(),
-    ];
 
     const availableYears: Period[] = [
       {year: currentPeriod.year, month: currentPeriod.month},
@@ -41,7 +34,6 @@ describe('ViewPreviousStatements', () => {
       <ViewPreviousStatements
         buttonLabel="view previous statements"
         propertyId={propertyId}
-        propertyAssignments={mockedPropertyAssignments}
       />,
       base
     );
@@ -80,7 +72,7 @@ describe('ViewPreviousStatements', () => {
     const propertyAccount = generateFakePropertyAccount();
     nock(base)
       .get(
-        `/api/property/getPropertyAccount/${propertyId}?month=${month}&year=${year}`
+        `/api/property-account/getPropertyAccount/${propertyId}?month=${month}&year=${year}`
       )
       .reply(200, propertyAccount);
   }

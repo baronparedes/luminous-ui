@@ -5,6 +5,7 @@ import routes from './@utils/routes';
 import Header from './components/@ui/Header';
 import NotFound from './components/@ui/NotFound';
 import ProtectedRoute from './components/@ui/ProtectedRoute';
+import BatchPrintView from './components/admin/batch-print/BatchPrintView';
 import BatchTransactionView from './components/admin/batch-transaction/BatchTransactionView';
 import ProfilesView from './components/admin/manage-profiles/ProfilesView';
 import PropertiesView from './components/admin/manage-properties/PropertiesView';
@@ -67,6 +68,12 @@ const AppRouter: React.FC = () => {
               exact
               onlyFor={['admin']}
               component={BatchTransactionView}
+            />
+            <ProtectedRoute
+              path={routes.ADMIN_BATCH_PRINT_SOA}
+              exact
+              onlyFor={['admin']}
+              component={BatchPrintView}
             />
             <Route component={NotFound} />
           </Switch>

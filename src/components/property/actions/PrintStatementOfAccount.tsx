@@ -17,7 +17,6 @@ type PaperStatementOfAccountProps = React.ComponentProps<
 const PrintStatementOfAccount = ({
   buttonLabel,
   propertyAccount,
-  propertyAssignments,
   month,
   year,
   ...buttonProps
@@ -45,7 +44,6 @@ const PrintStatementOfAccount = ({
       <PaperStatementOfAccount
         ref={printPaperRef}
         propertyAccount={propertyAccount}
-        propertyAssignments={propertyAssignments}
         month={month}
         year={year}
       />

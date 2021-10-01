@@ -1,5 +1,5 @@
 import {Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
-import {FaCogs, FaHome, FaStream, FaUsers} from 'react-icons/fa';
+import {FaCogs, FaHome, FaPrint, FaStream, FaUsers} from 'react-icons/fa';
 import {RiCommunityLine} from 'react-icons/ri';
 import {LinkContainer} from 'react-router-bootstrap';
 import {NavLink} from 'react-router-dom';
@@ -71,6 +71,16 @@ function buildNavigationSections(profileType: ProfileType) {
             <>
               <FaStream className="mr-1" />
               batch transactions
+            </>
+          ),
+        },
+        {
+          to: routes.ADMIN_BATCH_PRINT_SOA,
+          exact: true,
+          title: (
+            <>
+              <FaPrint className="mr-1" />
+              batch print soa
             </>
           ),
         },

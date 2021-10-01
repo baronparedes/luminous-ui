@@ -85,13 +85,6 @@ export interface ProfileAttr {
   remarks?: string;
 }
 
-export interface PropertyAssignmentAttr {
-  profileId: number;
-  propertyId: number;
-  profile?: ProfileAttr;
-  property?: PropertyAttr;
-}
-
 export interface CommunityAttr {
   description: string;
 }
@@ -130,10 +123,18 @@ export interface PropertyAccount {
   balance: number;
   propertyId: number;
   property?: PropertyAttr;
+  assignedProfiles?: ProfileAttr[];
   transactions?: TransactionAttr[];
 }
 
 export type Month = "JAN" | "FEB" | "MAR" | "APR" | "MAY" | "JUN" | "JUL" | "AUG" | "SEP" | "OCT" | "NOV" | "DEC";
+
+export interface PropertyAssignmentAttr {
+  profileId: number;
+  propertyId: number;
+  profile?: ProfileAttr;
+  property?: PropertyAttr;
+}
 
 export interface SettingAttr {
   key: string;
@@ -286,6 +287,69 @@ export type UseChangePasswordProps = Omit<UseMutateProps<void, unknown, void, Ch
 export const useChangePassword = ({id, ...props}: UseChangePasswordProps) => useMutate<void, unknown, void, ChangePasswordRequestBody, ChangePasswordPathParams>("PATCH", (paramsInPath: ChangePasswordPathParams) => `/api/profile/changePassword/${paramsInPath.id}`, {  pathParams: { id }, ...props });
 
 
+export interface GetPropertyAccountsByProfilePathParams {
+  profileId: number
+}
+
+export type GetPropertyAccountsByProfileProps = Omit<GetProps<PropertyAccount[], unknown, void, GetPropertyAccountsByProfilePathParams>, "path"> & GetPropertyAccountsByProfilePathParams;
+
+export const GetPropertyAccountsByProfile = ({profileId, ...props}: GetPropertyAccountsByProfileProps) => (
+  <Get<PropertyAccount[], unknown, void, GetPropertyAccountsByProfilePathParams>
+    path={`/api/property-account/getPropertyAccountsByProfile/${profileId}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetPropertyAccountsByProfileProps = Omit<UseGetProps<PropertyAccount[], unknown, void, GetPropertyAccountsByProfilePathParams>, "path"> & GetPropertyAccountsByProfilePathParams;
+
+export const useGetPropertyAccountsByProfile = ({profileId, ...props}: UseGetPropertyAccountsByProfileProps) => useGet<PropertyAccount[], unknown, void, GetPropertyAccountsByProfilePathParams>((paramsInPath: GetPropertyAccountsByProfilePathParams) => `/api/property-account/getPropertyAccountsByProfile/${paramsInPath.profileId}`, {  pathParams: { profileId }, ...props });
+
+
+export interface GetPropertyAccountQueryParams {
+  year?: number;
+  month?: Month;
+}
+
+export interface GetPropertyAccountPathParams {
+  propertyId: number
+}
+
+export type GetPropertyAccountProps = Omit<GetProps<PropertyAccount, unknown, GetPropertyAccountQueryParams, GetPropertyAccountPathParams>, "path"> & GetPropertyAccountPathParams;
+
+export const GetPropertyAccount = ({propertyId, ...props}: GetPropertyAccountProps) => (
+  <Get<PropertyAccount, unknown, GetPropertyAccountQueryParams, GetPropertyAccountPathParams>
+    path={`/api/property-account/getPropertyAccount/${propertyId}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetPropertyAccountProps = Omit<UseGetProps<PropertyAccount, unknown, GetPropertyAccountQueryParams, GetPropertyAccountPathParams>, "path"> & GetPropertyAccountPathParams;
+
+export const useGetPropertyAccount = ({propertyId, ...props}: UseGetPropertyAccountProps) => useGet<PropertyAccount, unknown, GetPropertyAccountQueryParams, GetPropertyAccountPathParams>((paramsInPath: GetPropertyAccountPathParams) => `/api/property-account/getPropertyAccount/${paramsInPath.propertyId}`, {  pathParams: { propertyId }, ...props });
+
+
+export interface GetPropertyAccountsByPeriodQueryParams {
+  year?: number;
+  month?: Month;
+}
+
+export type GetPropertyAccountsByPeriodProps = Omit<GetProps<PropertyAccount[], unknown, GetPropertyAccountsByPeriodQueryParams, void>, "path">;
+
+export const GetPropertyAccountsByPeriod = (props: GetPropertyAccountsByPeriodProps) => (
+  <Get<PropertyAccount[], unknown, GetPropertyAccountsByPeriodQueryParams, void>
+    path={`/api/property-account/getPropertyAccountsByPeriod`}
+    
+    {...props}
+  />
+);
+
+export type UseGetPropertyAccountsByPeriodProps = Omit<UseGetProps<PropertyAccount[], unknown, GetPropertyAccountsByPeriodQueryParams, void>, "path">;
+
+export const useGetPropertyAccountsByPeriod = (props: UseGetPropertyAccountsByPeriodProps) => useGet<PropertyAccount[], unknown, GetPropertyAccountsByPeriodQueryParams, void>(`/api/property-account/getPropertyAccountsByPeriod`, props);
+
+
 export interface GetAllPropertiesQueryParams {
   search?: string;
 }
@@ -360,49 +424,6 @@ export const GetAssignedProperties = ({profileId, ...props}: GetAssignedProperti
 export type UseGetAssignedPropertiesProps = Omit<UseGetProps<PropertyAssignmentAttr[], unknown, void, GetAssignedPropertiesPathParams>, "path"> & GetAssignedPropertiesPathParams;
 
 export const useGetAssignedProperties = ({profileId, ...props}: UseGetAssignedPropertiesProps) => useGet<PropertyAssignmentAttr[], unknown, void, GetAssignedPropertiesPathParams>((paramsInPath: GetAssignedPropertiesPathParams) => `/api/property/getAssignedProperties/${paramsInPath.profileId}`, {  pathParams: { profileId }, ...props });
-
-
-export interface GetPropertyAccountsByProfilePathParams {
-  profileId: number
-}
-
-export type GetPropertyAccountsByProfileProps = Omit<GetProps<PropertyAccount[], unknown, void, GetPropertyAccountsByProfilePathParams>, "path"> & GetPropertyAccountsByProfilePathParams;
-
-export const GetPropertyAccountsByProfile = ({profileId, ...props}: GetPropertyAccountsByProfileProps) => (
-  <Get<PropertyAccount[], unknown, void, GetPropertyAccountsByProfilePathParams>
-    path={`/api/property/getPropertyAccountsByProfile/${profileId}`}
-    
-    {...props}
-  />
-);
-
-export type UseGetPropertyAccountsByProfileProps = Omit<UseGetProps<PropertyAccount[], unknown, void, GetPropertyAccountsByProfilePathParams>, "path"> & GetPropertyAccountsByProfilePathParams;
-
-export const useGetPropertyAccountsByProfile = ({profileId, ...props}: UseGetPropertyAccountsByProfileProps) => useGet<PropertyAccount[], unknown, void, GetPropertyAccountsByProfilePathParams>((paramsInPath: GetPropertyAccountsByProfilePathParams) => `/api/property/getPropertyAccountsByProfile/${paramsInPath.profileId}`, {  pathParams: { profileId }, ...props });
-
-
-export interface GetPropertyAccountQueryParams {
-  year?: number;
-  month?: Month;
-}
-
-export interface GetPropertyAccountPathParams {
-  propertyId: number
-}
-
-export type GetPropertyAccountProps = Omit<GetProps<PropertyAccount, unknown, GetPropertyAccountQueryParams, GetPropertyAccountPathParams>, "path"> & GetPropertyAccountPathParams;
-
-export const GetPropertyAccount = ({propertyId, ...props}: GetPropertyAccountProps) => (
-  <Get<PropertyAccount, unknown, GetPropertyAccountQueryParams, GetPropertyAccountPathParams>
-    path={`/api/property/getPropertyAccount/${propertyId}`}
-    
-    {...props}
-  />
-);
-
-export type UseGetPropertyAccountProps = Omit<UseGetProps<PropertyAccount, unknown, GetPropertyAccountQueryParams, GetPropertyAccountPathParams>, "path"> & GetPropertyAccountPathParams;
-
-export const useGetPropertyAccount = ({propertyId, ...props}: UseGetPropertyAccountProps) => useGet<PropertyAccount, unknown, GetPropertyAccountQueryParams, GetPropertyAccountPathParams>((paramsInPath: GetPropertyAccountPathParams) => `/api/property/getPropertyAccount/${paramsInPath.propertyId}`, {  pathParams: { propertyId }, ...props });
 
 
 export type CreatePropertyProps = Omit<MutateProps<PropertyAttr, EntityError, void, PropertyAttr, void>, "path" | "verb">;

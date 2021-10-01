@@ -7,7 +7,6 @@ import {waitFor} from '@testing-library/react';
 import {
   generateFakeProfile,
   generateFakePropertyAccount,
-  generateFakePropertyAssignment,
 } from '../../../@utils/fake-models';
 import routes from '../../../@utils/routes';
 import {renderWithProviderAndRouterAndRestful} from '../../../@utils/test-renderers';
@@ -84,18 +83,10 @@ describe('PropertyView', () => {
     const propertyId = faker.datatype.number();
     const mockedProfile = generateFakeProfile(type);
     const mockedPropertyAccount = generateFakePropertyAccount();
-    const mockedPropertyAssignments = [
-      generateFakePropertyAssignment(),
-      generateFakePropertyAssignment(),
-    ];
 
     nock(base)
-      .get(`/api/property/getPropertyAccount/${propertyId}`)
+      .get(`/api/property-account/getPropertyAccount/${propertyId}`)
       .reply(200, mockedPropertyAccount);
-
-    nock(base)
-      .get(`/api/property/getPropertyAssignments/${propertyId}`)
-      .reply(200, mockedPropertyAssignments);
 
     const target = renderWithProviderAndRouterAndRestful(
       <Route path={routes.PROPERTY(':id')} component={PropertyView} />,
@@ -126,7 +117,7 @@ describe('PropertyView', () => {
       const count = target.getAllByTestId(
         'mock-property-assignment-card'
       ).length;
-      expect(count).toEqual(mockedPropertyAssignments.length);
+      expect(count).toEqual(mockedPropertyAccount.assignedProfiles?.length);
     });
 
     expect(target.getByText(/print current statement/i)).toBeInTheDocument();

@@ -3,18 +3,17 @@ import * as reactToPrint from 'react-to-print';
 import {fireEvent, waitFor} from '@testing-library/react';
 
 import {
+  generateFakeProfileAttr,
   generateFakePropertyAccount,
-  generateFakePropertyAssignment,
 } from '../../../../@utils/fake-models';
 import {renderWithProvider} from '../../../../@utils/test-renderers';
 import PrintStatementOfAccount from '../../actions/PrintStatementOfAccount';
 
 describe('PrintStatementOfAccount', () => {
-  const mockedPropertyAccount = generateFakePropertyAccount();
-  const mockedPropertyAssignments = [
-    generateFakePropertyAssignment(),
-    generateFakePropertyAssignment(),
-  ];
+  const mockedPropertyAccount = {
+    ...generateFakePropertyAccount(),
+    assignedProfiles: [generateFakeProfileAttr()],
+  };
 
   it('should render and print', async () => {
     const handlePrintFn = jest.fn();
@@ -26,7 +25,6 @@ describe('PrintStatementOfAccount', () => {
         buttonLabel="print"
         year={2021}
         month={'SEP'}
-        propertyAssignments={mockedPropertyAssignments}
         propertyAccount={mockedPropertyAccount}
       />
     );

@@ -10,124 +10,186 @@ exports[`PaperStatementOfAccount should render 1`] = `
         class="sc-bdfBQB dxnWgn"
       >
         <div
-          class="text-center"
+          class="sc-bdfBQB dxnWgn"
         >
-          <h1
-            class="brand"
+          <div
+            class="text-center"
           >
-            Luminous
-          </h1>
-          <h4>
-            STATEMENT OF ACCOUNT
-          </h4>
-        </div>
-      </div>
-      <div
-        class="sc-bdfBQB dxnWgn pt-3"
-      >
-        <div
-          class="sc-gsTEea bjzFuM"
-        >
-          <strong>
-            Unit Number: 
-          </strong>
-          G-111
+            <h1
+              class="brand"
+            >
+              Luminous
+            </h1>
+            <h4>
+              STATEMENT OF ACCOUNT
+            </h4>
+          </div>
         </div>
         <div
-          class="sc-gsTEea bjzFuM"
+          class="sc-bdfBQB dxnWgn pt-3"
         >
-          <strong>
-            Unit owner: 
-          </strong>
-          John Doe
-        </div>
-        <small>
           <div
             class="sc-gsTEea bjzFuM"
           >
             <strong>
-              Address: 
+              Unit Number: 
             </strong>
-            Pasig City Philippines
+            G-111
           </div>
-        </small>
-        <small>
           <div
             class="sc-gsTEea bjzFuM"
           >
             <strong>
-              Floor area: 
+              Unit owner: 
             </strong>
-            33.1
           </div>
-        </small>
-        <hr />
-      </div>
-      <div
-        class="sc-bdfBQB dxnWgn pt-3"
-      >
-        <div
-          class="sc-gsTEea bjzFuM"
-        >
-          <strong>
-            Billing Period: 
-          </strong>
-          SEP 2021
+          <small>
+            <div
+              class="sc-gsTEea bjzFuM"
+            >
+              <strong>
+                Address: 
+              </strong>
+              Pasig City Philippines
+            </div>
+          </small>
+          <small>
+            <div
+              class="sc-gsTEea bjzFuM"
+            >
+              <strong>
+                Floor area: 
+              </strong>
+              33.1
+            </div>
+          </small>
+          <hr />
         </div>
-        <hr />
-        <table
-          class="w-100"
+        <div
+          class="sc-bdfBQB dxnWgn pt-3"
         >
-          <thead>
-            <tr>
-              <th>
-                Charge Description
-              </th>
-              <th>
-                Rate
-              </th>
-              <th
+          <div
+            class="sc-gsTEea bjzFuM"
+          >
+            <strong>
+              Billing Period: 
+            </strong>
+            SEP 2021
+          </div>
+          <hr />
+          <table
+            class="w-100"
+          >
+            <thead>
+              <tr>
+                <th>
+                  Charge Description
+                </th>
+                <th>
+                  Rate
+                </th>
+                <th
+                  class="float-right"
+                >
+                  Amount
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  DUES
+                </td>
+                <td>
+                  50
+                </td>
+                <td
+                  class="float-right"
+                >
+                  <strong>
+                    <span
+                      class="currency"
+                    >
+                      1,000
+                    </span>
+                  </strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <hr />
+        </div>
+        <div
+          class="sc-bdfBQB dxnWgn pt-1"
+        >
+          <small>
+            <div
+              class="sc-gsTEea bjzFuM"
+            >
+              <strong
+                class="text-muted"
+              >
+                Current Balance
+              </strong>
+              <strong
                 class="float-right"
               >
-                Amount
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                DUES
-              </td>
-              <td>
-                50
-              </td>
-              <td
+                <span
+                  class="currency"
+                >
+                  1,000
+                </span>
+              </strong>
+            </div>
+          </small>
+          <small>
+            <div
+              class="sc-gsTEea bjzFuM"
+            >
+              <strong
+                class="text-muted"
+              >
+                Previous Balance
+              </strong>
+              <strong
                 class="float-right"
               >
-                <strong>
-                  <span
-                    class="currency"
-                  >
-                    1,000
-                  </span>
-                </strong>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <hr />
-      </div>
-      <div
-        class="sc-bdfBQB dxnWgn pt-1"
-      >
-        <small>
+                <span
+                  class="currency"
+                >
+                  1,000
+                </span>
+              </strong>
+            </div>
+          </small>
+          <small>
+            <div
+              class="sc-gsTEea bjzFuM"
+            >
+              <strong
+                class="text-muted"
+              >
+                Less Payments
+              </strong>
+              <strong
+                class="float-right"
+              >
+                <span
+                  class="currency"
+                >
+                  0
+                </span>
+              </strong>
+            </div>
+          </small>
+          <hr />
           <div
             class="sc-gsTEea bjzFuM"
           >
             <strong
               class="text-muted"
             >
-              Current Balance
+              Total Amount Due
             </strong>
             <strong
               class="float-right"
@@ -135,80 +197,24 @@ exports[`PaperStatementOfAccount should render 1`] = `
               <span
                 class="currency"
               >
-                1,000
+                2,000
               </span>
             </strong>
           </div>
-        </small>
-        <small>
-          <div
-            class="sc-gsTEea bjzFuM"
-          >
-            <strong
-              class="text-muted"
-            >
-              Previous Balance
-            </strong>
-            <strong
-              class="float-right"
-            >
-              <span
-                class="currency"
-              >
-                1,000
-              </span>
-            </strong>
-          </div>
-        </small>
-        <small>
-          <div
-            class="sc-gsTEea bjzFuM"
-          >
-            <strong
-              class="text-muted"
-            >
-              Less Payments
-            </strong>
-            <strong
-              class="float-right"
-            >
-              <span
-                class="currency"
-              >
-                0
-              </span>
-            </strong>
-          </div>
-        </small>
-        <hr />
+        </div>
         <div
-          class="sc-gsTEea bjzFuM"
+          class="sc-bdfBQB dxnWgn pt-3"
         >
-          <strong
-            class="text-muted"
-          >
-            Total Amount Due
-          </strong>
-          <strong
-            class="float-right"
-          >
-            <span
-              class="currency"
-            >
-              2,000
-            </span>
-          </strong>
+          <hr />
+          <div>
+            <h1>
+              SOA Notes
+            </h1>
+          </div>
         </div>
-      </div>
-      <div
-        class="sc-bdfBQB dxnWgn pt-3"
-      >
-        <hr />
-        <div>
-          <h1>
-            SOA Notes
-          </h1>
-        </div>
+        <div
+          class="page-break"
+        />
       </div>
     </div>
   </div>

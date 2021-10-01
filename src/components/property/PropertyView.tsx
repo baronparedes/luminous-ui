@@ -2,7 +2,7 @@ import {Button, Col, Container, Row} from 'react-bootstrap';
 
 import {roundOff} from '../../@utils/currencies';
 import {getCurrentMonthYear} from '../../@utils/dates';
-import {useGetPropertyAccount, useGetPropertyAssignments} from '../../Api';
+import {useGetPropertyAccount} from '../../Api';
 import {useUrl} from '../../hooks/useUrl';
 import {useRootState} from '../../store';
 import Loading from '../@ui/Loading';
@@ -26,8 +26,6 @@ export const PropertyView = () => {
   } = useGetPropertyAccount({
     propertyId,
   });
-  const {data: assignedPropertyData, loading: assignedPropertyLoading} =
-    useGetPropertyAssignments({propertyId});
   const handleOnProcessedPayment = () => {
     refetchPropertyAccount();
   };
@@ -74,7 +72,6 @@ export const PropertyView = () => {
                 buttonLabel="print current statement"
                 disabled={propertyAccountLoading}
                 propertyAccount={propertyAccountData}
-                propertyAssignments={assignedPropertyData}
                 year={year}
                 month={month}
               />
@@ -83,36 +80,37 @@ export const PropertyView = () => {
                 buttonLabel="view previous statements"
                 disabled={id === undefined}
                 propertyId={Number(id)}
-                propertyAssignments={assignedPropertyData}
               />
             </RoundedPanel>
-            {assignedPropertyLoading && <Loading />}
+            {propertyAccountLoading && <Loading />}
             <div>
-              {!assignedPropertyLoading && assignedPropertyData && (
-                <>
-                  <div>
-                    {assignedPropertyData.map((pa, i) => {
-                      const {profile} = pa;
-                      if (!profile) return null;
-                      return (
-                        <PropertyAssignmentCard
-                          key={i}
-                          profileId={Number(profile.id)}
-                          name={profile.name}
-                          username={profile.username}
-                          email={profile.email}
-                          mobileNumber={profile.mobileNumber}
-                        />
-                      );
-                    })}
-                  </div>
-                  {assignedPropertyData.length > 0 && (
-                    <div className="text-muted text-center">
-                      <small>assigned to</small>
+              {!propertyAccountLoading &&
+                propertyAccountData &&
+                propertyAccountData.assignedProfiles && (
+                  <>
+                    <div>
+                      {propertyAccountData.assignedProfiles.map(
+                        (profile, i) => {
+                          return (
+                            <PropertyAssignmentCard
+                              key={i}
+                              profileId={Number(profile.id)}
+                              name={profile.name}
+                              username={profile.username}
+                              email={profile.email}
+                              mobileNumber={profile.mobileNumber}
+                            />
+                          );
+                        }
+                      )}
                     </div>
-                  )}
-                </>
-              )}
+                    {propertyAccountData.assignedProfiles.length > 0 && (
+                      <div className="text-muted text-center">
+                        <small>assigned to</small>
+                      </div>
+                    )}
+                  </>
+                )}
             </div>
           </Col>
         </Row>

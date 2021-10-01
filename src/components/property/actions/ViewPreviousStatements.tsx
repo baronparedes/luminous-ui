@@ -14,25 +14,23 @@ import {getCurrentMonthYear} from '../../../@utils/dates';
 import {
   Month,
   Period,
-  PropertyAssignmentAttr,
   useGetAvailablePeriods,
   useGetPropertyAccount,
 } from '../../../Api';
 import {VERBIAGE} from '../../../constants';
 import Loading from '../../@ui/Loading';
 import ModalContainer from '../../@ui/ModalContainer';
+import {PrintPaper} from '../../@ui/PaperPdf';
 import PaperStatementOfAccount from '../PaperStatementOfAccount';
 
 type Props = {
   propertyId: number;
   buttonLabel: string;
-  propertyAssignments: PropertyAssignmentAttr[] | null;
 };
 
 const ViewPreviousStatements = ({
   propertyId,
   buttonLabel,
-  propertyAssignments,
   ...buttonProps
 }: Props & ButtonProps) => {
   const {year, month} = getCurrentMonthYear();
@@ -144,13 +142,13 @@ const ViewPreviousStatements = ({
             </ListGroup>
           </div>
         )}
-        <PaperStatementOfAccount
-          ref={printPaperRef}
-          propertyAccount={propertyAccount}
-          propertyAssignments={propertyAssignments}
-          month={selectedPeriod?.month as Month}
-          year={Number(selectedPeriod?.year)}
-        />
+        <PrintPaper ref={printPaperRef}>
+          <PaperStatementOfAccount
+            propertyAccount={propertyAccount}
+            month={selectedPeriod?.month as Month}
+            year={Number(selectedPeriod?.year)}
+          />
+        </PrintPaper>
       </ModalContainer>
     </>
   );

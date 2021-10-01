@@ -8,6 +8,7 @@ const routes = {
   ADMIN_PROPERTIES: '/admin/properties',
   ADMIN_SETTINGS: '/admin/settings',
   ADMIN_BATCH_TRANSACTIONS: '/admin/batch-transactions',
+  ADMIN_BATCH_PRINT_SOA: '/admin/batch-print-soa',
 };
 
 export default routes;
