@@ -1,13 +1,11 @@
 import {Button, Col, Container, Row} from 'react-bootstrap';
 
 import {roundOff} from '../../@utils/currencies';
-import {getCurrentMonthYear} from '../../@utils/dates';
 import {useGetPropertyAccount} from '../../Api';
 import {useUrl} from '../../hooks/useUrl';
 import {useRootState} from '../../store';
 import Loading from '../@ui/Loading';
 import RoundedPanel from '../@ui/RoundedPanel';
-import PrintStatementOfAccount from './actions/PrintStatementOfAccount';
 import ProcessPayment from './actions/ProcessPayment';
 import ViewPreviousStatements from './actions/ViewPreviousStatements';
 import PropertyAssignmentCard from './PropertyAssignmentCard';
@@ -15,7 +13,6 @@ import PropertyDetails from './PropertyDetails';
 import PropertyStatementOfAccount from './PropertyStatementOfAccount';
 
 export const PropertyView = () => {
-  const {year, month} = getCurrentMonthYear();
   const {me} = useRootState(state => state.profile);
   const {id} = useUrl();
   const propertyId = Number(id);
@@ -67,14 +64,6 @@ export const PropertyView = () => {
                   <Button className="mb-2 w-100">adjustments</Button>
                 </>
               )}
-              <PrintStatementOfAccount
-                className="mb-2 w-100"
-                buttonLabel="print current statement"
-                disabled={propertyAccountLoading}
-                propertyAccount={propertyAccountData}
-                year={year}
-                month={month}
-              />
               <ViewPreviousStatements
                 className="mb-2 w-100"
                 buttonLabel="view previous statements"

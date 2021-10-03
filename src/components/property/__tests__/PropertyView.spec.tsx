@@ -12,7 +12,6 @@ import routes from '../../../@utils/routes';
 import {renderWithProviderAndRouterAndRestful} from '../../../@utils/test-renderers';
 import {ProfileType} from '../../../Api';
 import {profileActions} from '../../../store/reducers/profile.reducer';
-import PrintStatementOfAccount from '../actions/PrintStatementOfAccount';
 import ViewPreviousStatements from '../actions/ViewPreviousStatements';
 import PropertyAssignmentCard from '../PropertyAssignmentCard';
 import PropertyDetails from '../PropertyDetails';
@@ -27,10 +26,6 @@ type PropertyStatementOfAccountProps = React.ComponentProps<
 
 type PropertyAssignmentCardProps = React.ComponentProps<
   typeof PropertyAssignmentCard
->;
-
-type PrintStatementOfAccountProps = React.ComponentProps<
-  typeof PrintStatementOfAccount
 >;
 
 type ViewPreviousStatementsProps = React.ComponentProps<
@@ -57,14 +52,6 @@ jest.mock(
       </div>
     );
   }
-);
-
-jest.mock(
-  '../actions/PrintStatementOfAccount',
-  () =>
-    ({buttonLabel}: PrintStatementOfAccountProps) => {
-      return <button>{buttonLabel}</button>;
-    }
 );
 
 jest.mock(
@@ -120,7 +107,6 @@ describe('PropertyView', () => {
       expect(count).toEqual(mockedPropertyAccount.assignedProfiles?.length);
     });
 
-    expect(target.getByText(/print current statement/i)).toBeInTheDocument();
     expect(target.getByText(/view previous statements/i)).toBeInTheDocument();
 
     return {

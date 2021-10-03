@@ -4,7 +4,20 @@ import {currencyFormat, roundOff} from '../../../@utils/currencies';
 import {generateFakePropertyAccount} from '../../../@utils/fake-models';
 import {calculateAccount} from '../../../@utils/helpers';
 import {TransactionAttr} from '../../../Api';
+import PrintStatementOfAccount from '../actions/PrintStatementOfAccount';
 import PropertyStatementOfAccount from '../PropertyStatementOfAccount';
+
+type PrintStatementOfAccountProps = React.ComponentProps<
+  typeof PrintStatementOfAccount
+>;
+
+jest.mock(
+  '../actions/PrintStatementOfAccount',
+  () =>
+    ({buttonLabel}: PrintStatementOfAccountProps) => {
+      return <button>{buttonLabel}</button>;
+    }
+);
 
 describe('PropertyStatementOfAccount', () => {
   beforeAll(() => {
@@ -30,7 +43,7 @@ describe('PropertyStatementOfAccount', () => {
       t => t.transactionType === 'charged'
     ) as TransactionAttr[];
 
-    const {getByText, getByRole} = render(
+    const {getByText, getByRole, getByTitle} = render(
       <PropertyStatementOfAccount propertyAccount={mockedPropertyAccount} />
     );
 
@@ -56,6 +69,7 @@ describe('PropertyStatementOfAccount', () => {
     );
 
     expect(getByText(/soa - sep 2021/i)).toBeInTheDocument();
+    expect(getByTitle(/print current statement/i)).toBeInTheDocument();
 
     for (const expectedHeader of expectedHeaders) {
       expect(getByText(expectedHeader, {selector: 'th'})).toBeInTheDocument();

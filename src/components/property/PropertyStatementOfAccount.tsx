@@ -1,4 +1,5 @@
 import {Col, Row} from 'react-bootstrap';
+import {FaPrint} from 'react-icons/fa';
 
 import {getCurrentMonthYear} from '../../@utils/dates';
 import {calculateAccount} from '../../@utils/helpers';
@@ -7,6 +8,7 @@ import {Currency} from '../@ui/Currency';
 import {LabeledCurrency} from '../@ui/LabeledCurrency';
 import RoundedPanel from '../@ui/RoundedPanel';
 import {Table} from '../@ui/Table';
+import PrintStatementOfAccount from './actions/PrintStatementOfAccount';
 
 type Props = {
   propertyAccount: PropertyAccount;
@@ -21,7 +23,26 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
     <>
       <RoundedPanel className="p-0 m-auto">
         <Table
-          renderHeaderContent={<h5>SOA - {`${month} ${year}`}</h5>}
+          renderHeaderContent={
+            <>
+              <Row>
+                <Col>
+                  <div className="center-content">
+                    <h5 className="m-auto">SOA - {`${month} ${year}`}</h5>
+                  </div>
+                </Col>
+                <Col className="text-right">
+                  <PrintStatementOfAccount
+                    variant="secondary"
+                    buttonLabel={<FaPrint title="print current statement" />}
+                    propertyAccount={propertyAccount}
+                    year={year}
+                    month={month}
+                  />
+                </Col>
+              </Row>
+            </>
+          }
           headers={['area', 'charge code', 'rate', 'amount']}
         >
           <tbody>

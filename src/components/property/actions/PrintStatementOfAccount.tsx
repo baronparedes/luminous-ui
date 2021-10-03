@@ -7,7 +7,7 @@ import {VERBIAGE} from '../../../constants';
 import PaperStatementOfAccount from '../PaperStatementOfAccount';
 
 type Props = {
-  buttonLabel: string;
+  buttonLabel: React.ReactNode;
 };
 
 type PaperStatementOfAccountProps = React.ComponentProps<
