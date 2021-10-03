@@ -11,3 +11,11 @@ export const decimalPatternRule: ValidationRule<RegExp> = {
 
 export const validateGreaterThanZero: Validate<number | undefined> = value =>
   Number(value) > 0 || 'should be greater than 0';
+
+export const requiredIf = (condition: boolean) => {
+  const rule = (value: string | undefined) => {
+    if (!value && condition) return 'should be required';
+    return true;
+  };
+  return rule;
+};

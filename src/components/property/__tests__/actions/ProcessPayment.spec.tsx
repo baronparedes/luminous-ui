@@ -32,6 +32,9 @@ describe('ProcessPayment', () => {
       generateFakeTransaction(),
       generateFakeTransaction(),
     ];
+    const orNumber = faker.random.alphaNumeric();
+
+    window.confirm = jest.fn().mockImplementation(() => true);
 
     nock(base)
       .get(
@@ -41,14 +44,15 @@ describe('ProcessPayment', () => {
 
     nock(base).post('/api/transaction/postCollections').reply(204);
 
-    const {getByText, getByRole, queryByRole} = renderWithProviderAndRestful(
-      <ProcessPayment
-        propertyId={propertyId}
-        amount={amountToProcess}
-        buttonLabel="process payment"
-      />,
-      base
-    );
+    const {getByText, getByRole, getByPlaceholderText, queryByRole} =
+      renderWithProviderAndRestful(
+        <ProcessPayment
+          propertyId={propertyId}
+          amount={amountToProcess}
+          buttonLabel="process payment"
+        />,
+        base
+      );
 
     const toggleModalButton = getByText(/process payment/i, {
       selector: 'button',
@@ -85,9 +89,19 @@ describe('ProcessPayment', () => {
       expect(amountInput.value).toEqual(t.amount.toString());
     }
 
-    await waitFor(() => getByText(/collect/i, {selector: 'button'}));
-    fireEvent.click(getByText(/collect/i, {selector: 'button'}));
+    const enterPaymentDetailButton = getByText(/enter payment details/i, {
+      selector: 'button',
+    });
+    await waitFor(() => expect(enterPaymentDetailButton).toBeInTheDocument());
+    fireEvent.click(enterPaymentDetailButton);
+
+    await waitFor(() => expect(getByRole('form')).toBeInTheDocument());
+    fireEvent.change(getByPlaceholderText(/official receipt/i), {
+      target: {value: orNumber},
+    });
+    fireEvent.click(getByText(/collect/i));
 
     await waitFor(() => expect(queryByRole('dialog')).not.toBeInTheDocument());
+    expect(window.confirm).toBeCalled();
   });
 });

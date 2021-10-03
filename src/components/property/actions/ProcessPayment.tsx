@@ -8,18 +8,22 @@ import {
 } from '../../../@utils/dates';
 import {sum} from '../../../@utils/helpers';
 import {
+  PaymentDetailAttr,
   TransactionAttr,
   usePostCollections,
   useSuggestPaymentBreakdown,
 } from '../../../Api';
 import {DEFAULTS, SETTING_KEYS} from '../../../constants';
 import {useRootState} from '../../../store';
-import {Currency} from '../../@ui/Currency';
+import ErrorInfo from '../../@ui/ErrorInfo';
 import Loading from '../../@ui/Loading';
 import ModalContainer from '../../@ui/ModalContainer';
 import RoundedPanel from '../../@ui/RoundedPanel';
 import {PATTERN_MATCH} from '../../@validation';
-import ProcessAmountForm, {AmountChargeChangeProps} from './ProcessAmountForm';
+import ProcessAmountInput, {
+  AmountChargeChangeProps,
+} from './ProcessAmountInput';
+import ProcessPaymentDetails from './ProcessPaymentDetails';
 
 type Props = {
   propertyId: number;
@@ -44,16 +48,26 @@ const ProcessPayment = ({
     ? Number(setting.value)
     : DEFAULTS.BILLING_CUTOFF_DAY;
   const period = getCurrentMonthYearRelativeToCutoff(billingCutoffDay);
+
   const [suggestedBreakdown, setSuggestedBreakdown] =
     useState<TransactionAttr[]>();
   const [toggle, setToggle] = useState(false);
   const [areChargesValid, setAreChargesValid] = useState(false);
+  const [amountToBeProcess, setAmountToBeProcessed] = useState(amount);
+
+  const totalCollected = suggestedBreakdown
+    ? sum(suggestedBreakdown.map(bd => bd.amount))
+    : 0;
+
   const {data, loading, refetch} = useSuggestPaymentBreakdown({
     propertyId,
     lazy: true,
   });
-  const {mutate, loading: loadingCollections} = usePostCollections({});
+  const {mutate, loading: loadingCollections, error} = usePostCollections({});
+
   const handleOnCompute = (formData: FormData) => {
+    setSuggestedBreakdown(undefined);
+    setAmountToBeProcessed(formData.amount);
     refetch({
       queryParams: {
         amount: formData.amount ?? 0,
@@ -90,13 +104,15 @@ const ProcessPayment = ({
       return state;
     });
   };
-  const handleOnCollect = () => {
+  const handleOnCollect = (paymentDetail: PaymentDetailAttr) => {
     if (suggestedBreakdown) {
-      mutate(
-        suggestedBreakdown.map(bd => {
-          return {...bd, charge: undefined};
-        })
-      ).then(() => {
+      const transactionsCleaned = suggestedBreakdown.map(bd => {
+        return {...bd, charge: undefined};
+      });
+      mutate({
+        paymentDetail,
+        transactions: transactionsCleaned,
+      }).then(() => {
         setToggle(false);
         setSuggestedBreakdown(undefined);
         onProcessedPayment && onProcessedPayment();
@@ -109,8 +125,12 @@ const ProcessPayment = ({
   }, [data]);
 
   useEffect(() => {
+    setAmountToBeProcessed(amount);
+  }, [toggle]);
+
+  useEffect(() => {
     let result = true;
-    if (suggestedBreakdown && suggestedBreakdown.length > 1) {
+    if (suggestedBreakdown && suggestedBreakdown.length > 0) {
       for (const item of suggestedBreakdown) {
         const regex = new RegExp(PATTERN_MATCH.TWO_DECIMAL_PLACE_NUMBER);
         if (
@@ -134,12 +154,13 @@ const ProcessPayment = ({
         {buttonLabel}
       </Button>
       <ModalContainer
+        centered
         size="lg"
         header={<h5>Process Payment</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >
-        <ProcessAmountForm
+        <ProcessAmountInput
           size="lg"
           buttonLabel="compute"
           onSubmit={handleOnCompute}
@@ -161,15 +182,15 @@ const ProcessPayment = ({
                   >
                     <Row>
                       <Col md={3}>
-                        <label>
+                        <span>
                           {`${item.charge?.code}`}
                           <div className="text-muted">
                             <small>{`${period.year} ${period.month}`}</small>
                           </div>
-                        </label>
+                        </span>
                       </Col>
                       <Col>
-                        <ProcessAmountForm
+                        <ProcessAmountInput
                           chargeId={item.chargeId}
                           onChange={handleOnAmountChange}
                           onRemove={handleOnRemove}
@@ -180,19 +201,26 @@ const ProcessPayment = ({
                   </RoundedPanel>
                 );
               })}
-              <div className="pt-3 text-right ">
-                <strong className="pr-3" style={{fontSize: '2em'}}>
-                  <Currency
-                    currency={sum(suggestedBreakdown.map(bd => bd.amount))}
+              <div className="pt-3">
+                <div>
+                  {!loading && error && (
+                    <ErrorInfo>
+                      unable to collect payment at this moment
+                    </ErrorInfo>
+                  )}
+                </div>
+                <div className="pt-2 pb-2 text-right">
+                  <ProcessPaymentDetails
+                    totalCollected={totalCollected}
+                    totalChange={
+                      amountToBeProcess
+                        ? amountToBeProcess - totalCollected
+                        : undefined
+                    }
+                    disabled={!areChargesValid || loadingCollections}
+                    onCollect={handleOnCollect}
                   />
-                </strong>
-                <Button
-                  disabled={!areChargesValid || loadingCollections}
-                  className="w-25"
-                  onClick={handleOnCollect}
-                >
-                  collect
-                </Button>
+                </div>
               </div>
             </>
           )}

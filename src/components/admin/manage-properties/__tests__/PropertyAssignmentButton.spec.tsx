@@ -61,8 +61,6 @@ describe('PropertyAssignmentButton', () => {
     };
   }
 
-  afterAll(() => jest.clearAllMocks());
-
   it('should render when modal is opened', async () => {
     const {getByText, getByTestId} = await renderTarget();
     expect(getByText(/manage assignment for/i)).toBeInTheDocument();

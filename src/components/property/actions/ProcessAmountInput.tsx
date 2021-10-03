@@ -12,7 +12,7 @@ export type AmountChargeChangeProps = {
   amount: number | undefined;
 };
 
-type ProcessAmountFormProps = {
+type ProcessAmountInputProps = {
   chargeId?: number;
   amount?: number;
   onSubmit?: (formData: FormData) => void;
@@ -24,7 +24,7 @@ type ProcessAmountFormProps = {
   size?: 'sm' | 'lg';
 };
 
-const ProcessAmountForm = ({
+const ProcessAmountInput = ({
   chargeId,
   amount,
   onSubmit,
@@ -34,7 +34,7 @@ const ProcessAmountForm = ({
   buttonLabel,
   className,
   size,
-}: ProcessAmountFormProps) => {
+}: ProcessAmountInputProps) => {
   const defaultValues: FormData = {
     amount,
   };
@@ -50,59 +50,60 @@ const ProcessAmountForm = ({
   return (
     <Form onSubmit={handleSubmit(onFormSubmit)} role="form">
       <Col className={className}>
-        <Controller
-          name="amount"
-          control={control}
-          rules={{
-            pattern: decimalPatternRule,
-            validate: validateGreaterThanZero,
-          }}
-          render={({field}) => (
-            <InputGroup className="mb-2">
-              <InputGroup.Text>
-                <FaMoneyBill />
-              </InputGroup.Text>
+        <InputGroup className="mb-2">
+          <InputGroup.Text>
+            <FaMoneyBill />
+          </InputGroup.Text>
+          <Controller
+            name="amount"
+            control={control}
+            rules={{
+              pattern: decimalPatternRule,
+              validate: validateGreaterThanZero,
+            }}
+            render={({field}) => (
               <Form.Control
                 {...field}
                 onChange={e => {
+                  field.onChange(e);
                   onChange &&
                     onChange({
                       amount: parseFloat(e.target.value),
                       chargeId,
                     });
-                  field.onChange(e);
                   trigger('amount');
                 }}
-                size={size}
-                id="amount"
-                required
                 type="number"
+                size={size}
+                required
+                step="any"
                 placeholder="amount to pay"
                 isInvalid={formState.errors.amount !== undefined}
               />
-              {buttonLabel && (
-                <Button size="sm" type="submit">
-                  {buttonLabel}
-                </Button>
-              )}
-              {onRemove && (
-                <Button
-                  size="sm"
-                  variant="danger"
-                  onClick={() => onRemove(chargeId)}
-                >
-                  <FaTimes />
-                </Button>
-              )}
-              <Form.Control.Feedback type="invalid" className="text-right">
-                {formState.errors.amount?.message}
-              </Form.Control.Feedback>
-            </InputGroup>
+            )}
+          />
+          {buttonLabel && (
+            <Button size="sm" type="submit">
+              {buttonLabel}
+            </Button>
           )}
-        />
+          {onRemove && (
+            <Button
+              title="remove"
+              size="sm"
+              variant="danger"
+              onClick={() => onRemove(chargeId)}
+            >
+              <FaTimes />
+            </Button>
+          )}
+          <Form.Control.Feedback type="invalid" className="text-right">
+            {formState.errors.amount?.message}
+          </Form.Control.Feedback>
+        </InputGroup>
       </Col>
     </Form>
   );
 };
 
-export default ProcessAmountForm;
+export default ProcessAmountInput;

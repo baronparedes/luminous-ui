@@ -1,10 +1,13 @@
 import faker from 'faker';
+import moment from 'moment';
 
 import {
   AuthProfile,
   AuthResult,
   ChargeAttr,
   ChargeType,
+  PaymentDetailAttr,
+  PaymentType,
   PostingType,
   ProfileAttr,
   ProfileType,
@@ -36,6 +39,19 @@ export function generateFakeProfileAttr(type?: ProfileType): ProfileAttr {
       ]),
   };
 }
+
+export const generateFakePaymentDetail = (
+  paymentType?: PaymentType
+): PaymentDetailAttr => {
+  return {
+    collectedBy: faker.datatype.number(),
+    orNumber: faker.random.alphaNumeric(),
+    paymentType: paymentType ?? faker.random.arrayElement(['cash', 'check']),
+    checkNumber: faker.random.alphaNumeric(),
+    checkIssuingBank: faker.random.words(),
+    checkPostingDate: moment(faker.date.recent()).format('YYYY-MM-DD'),
+  };
+};
 
 export function generateFakeProfile(type?: ProfileType): AuthProfile {
   return {

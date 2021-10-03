@@ -24,10 +24,6 @@ jest.mock('../../../@ui/SOA', () => (props: SOAProps) => {
 describe('BatchPrintView', () => {
   const base = 'http://localhost';
 
-  afterAll(() => {
-    jest.resetAllMocks();
-  });
-
   it('should render', async () => {
     const currentPeriod = getCurrentMonthYear();
     const mockPropertyAccounts = [

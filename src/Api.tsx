@@ -106,6 +106,17 @@ export interface ChargeAttr {
 
 export type TransactionType = "charged" | "collected";
 
+export type PaymentType = "cash" | "check";
+
+export interface PaymentDetailAttr {
+  collectedBy: number;
+  orNumber: string;
+  paymentType: PaymentType;
+  checkNumber?: string;
+  checkPostingDate?: string;
+  checkIssuingBank?: string;
+}
+
 export interface TransactionAttr {
   id?: number;
   chargeId: number;
@@ -117,6 +128,8 @@ export interface TransactionAttr {
   transactionType: TransactionType;
   waivedBy?: number;
   comments?: string;
+  paymentDetailId?: number;
+  paymentDetail?: PaymentDetailAttr;
 }
 
 export interface PropertyAccount {
@@ -145,6 +158,11 @@ export interface PostTransactionBody {
   propertyId: number;
   month: Month;
   year: number;
+}
+
+export interface PostCollectionBody {
+  transactions: TransactionAttr[];
+  paymentDetail: PaymentDetailAttr;
 }
 
 export interface Period {
@@ -572,10 +590,10 @@ export type UsePostMonthlyChargesProps = Omit<UseMutateProps<void, ApiError, voi
 export const usePostMonthlyCharges = (props: UsePostMonthlyChargesProps) => useMutate<void, ApiError, void, PostTransactionBody, void>("POST", `/api/transaction/postMonthlyCharges`, props);
 
 
-export type PostCollectionsProps = Omit<MutateProps<void, unknown, void, TransactionAttr[], void>, "path" | "verb">;
+export type PostCollectionsProps = Omit<MutateProps<void, unknown, void, PostCollectionBody, void>, "path" | "verb">;
 
 export const PostCollections = (props: PostCollectionsProps) => (
-  <Mutate<void, unknown, void, TransactionAttr[], void>
+  <Mutate<void, unknown, void, PostCollectionBody, void>
     verb="POST"
     path={`/api/transaction/postCollections`}
     
@@ -583,9 +601,9 @@ export const PostCollections = (props: PostCollectionsProps) => (
   />
 );
 
-export type UsePostCollectionsProps = Omit<UseMutateProps<void, unknown, void, TransactionAttr[], void>, "path" | "verb">;
+export type UsePostCollectionsProps = Omit<UseMutateProps<void, unknown, void, PostCollectionBody, void>, "path" | "verb">;
 
-export const usePostCollections = (props: UsePostCollectionsProps) => useMutate<void, unknown, void, TransactionAttr[], void>("POST", `/api/transaction/postCollections`, props);
+export const usePostCollections = (props: UsePostCollectionsProps) => useMutate<void, unknown, void, PostCollectionBody, void>("POST", `/api/transaction/postCollections`, props);
 
 
 export interface GetAvailablePeriodsPathParams {

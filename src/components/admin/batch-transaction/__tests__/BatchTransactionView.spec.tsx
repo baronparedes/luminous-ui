@@ -32,10 +32,6 @@ jest.mock(
 describe('BatchTranasctionView', () => {
   const base = 'http://localhost';
 
-  afterAll(() => {
-    jest.resetAllMocks();
-  });
-
   it('should render', async () => {
     const currentPeriod = getCurrentMonthYear();
     const mockProperties = [generateFakeProperty(), generateFakeProperty()];
