@@ -1,6 +1,7 @@
+import {Col, Container, Row} from 'react-bootstrap';
 import styled from 'styled-components';
 
-import {calculateAccount} from '../../@utils/helpers';
+import {calculateAccount, sum} from '../../@utils/helpers';
 import {Month, ProfileAttr, PropertyAccount, SettingAttr} from '../../Api';
 import {Currency} from './Currency';
 import Markup from './Markup';
@@ -16,19 +17,20 @@ function getNames(profiles?: ProfileAttr[]) {
 }
 
 type Props = {
+  hasPageBreak?: boolean;
   propertyAccount: PropertyAccount | null;
   month: Month;
   year: number;
   notes?: SettingAttr;
 };
 
-const SOA = ({propertyAccount, month, year, notes}: Props) => {
+const SOA = ({hasPageBreak, propertyAccount, month, year, notes}: Props) => {
   if (!propertyAccount) return null;
   const {currentBalance, previousBalance, collectionBalance} =
     calculateAccount(propertyAccount);
-  const {transactions, property, balance} = propertyAccount;
+  const {transactions, property, balance, paymentDetails} = propertyAccount;
   return (
-    <PageSection hasPageBreak>
+    <PageSection hasPageBreak={hasPageBreak}>
       <PageSection>
         <div className="text-center">
           <h1 className="brand">Luminous</h1>
@@ -93,6 +95,48 @@ const SOA = ({propertyAccount, month, year, notes}: Props) => {
         </table>
         <hr />
       </PageSection>
+      {paymentDetails && paymentDetails.length > 0 && (
+        <PageSection>
+          <small>
+            <Label>
+              <strong className="text-muted">Received Payments</strong>
+            </Label>
+          </small>
+          <Container>
+            {paymentDetails.map((item, i) => {
+              const transactions = propertyAccount.transactions?.filter(
+                t => t.paymentDetailId === item.id
+              );
+              const totalCollected = transactions
+                ? sum(transactions.map(t => t.amount))
+                : 0;
+              return (
+                <Row key={i}>
+                  <Col className="p-0 m-0">
+                    <div>
+                      <div className="d-inline pr-2">
+                        <span className="text-muted pr-2">OR#</span>
+                        {item.orNumber}
+                      </div>
+                      <div className="d-inline pr-2">
+                        <span className="text-muted pr-2">received</span>
+                        {item.paymentType}
+                      </div>
+                      <div className="d-inline pr-2">
+                        <span className="text-muted pr-2">
+                          with an amount of
+                        </span>
+                        <Currency currency={totalCollected} noCurrencyColor />
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+              );
+            })}
+          </Container>
+          <hr />
+        </PageSection>
+      )}
       <PageSection className="pt-1">
         <small>
           <Label>

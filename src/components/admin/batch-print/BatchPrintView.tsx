@@ -89,6 +89,7 @@ const BatchPrintView = () => {
                 {data.map((item, i) => {
                   return (
                     <SOA
+                      hasPageBreak
                       key={i}
                       propertyAccount={item}
                       notes={notes}

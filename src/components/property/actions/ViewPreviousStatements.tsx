@@ -20,7 +20,6 @@ import {
 import {VERBIAGE} from '../../../constants';
 import Loading from '../../@ui/Loading';
 import ModalContainer from '../../@ui/ModalContainer';
-import {PrintPaper} from '../../@ui/PaperPdf';
 import PaperStatementOfAccount from '../PaperStatementOfAccount';
 
 type Props = {
@@ -142,13 +141,12 @@ const ViewPreviousStatements = ({
             </ListGroup>
           </div>
         )}
-        <PrintPaper ref={printPaperRef}>
-          <PaperStatementOfAccount
-            propertyAccount={propertyAccount}
-            month={selectedPeriod?.month as Month}
-            year={Number(selectedPeriod?.year)}
-          />
-        </PrintPaper>
+        <PaperStatementOfAccount
+          ref={printPaperRef}
+          propertyAccount={propertyAccount}
+          month={selectedPeriod?.month as Month}
+          year={Number(selectedPeriod?.year)}
+        />
       </ModalContainer>
     </>
   );

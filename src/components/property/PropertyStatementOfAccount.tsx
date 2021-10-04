@@ -1,8 +1,8 @@
-import {Col, Row} from 'react-bootstrap';
+import {Col, Container, ListGroup, Row} from 'react-bootstrap';
 import {FaPrint} from 'react-icons/fa';
 
 import {getCurrentMonthYear} from '../../@utils/dates';
-import {calculateAccount} from '../../@utils/helpers';
+import {calculateAccount, sum} from '../../@utils/helpers';
 import {PropertyAccount} from '../../Api';
 import {Currency} from '../@ui/Currency';
 import {LabeledCurrency} from '../@ui/LabeledCurrency';
@@ -66,6 +66,7 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
           </tbody>
         </Table>
       </RoundedPanel>
+
       <RoundedPanel className="mt-3 text-center">
         <Row style={{fontSize: '1.2em'}}>
           <Col>
@@ -97,6 +98,45 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
           </Col>
         </Row>
       </RoundedPanel>
+      {propertyAccount.paymentDetails &&
+        propertyAccount.paymentDetails.length > 0 && (
+          <RoundedPanel className="mt-3 p-2">
+            <ListGroup>
+              {propertyAccount.paymentDetails.map((item, i) => {
+                const transactions = propertyAccount.transactions?.filter(
+                  t => t.paymentDetailId === item.id
+                );
+                const totalCollected = transactions
+                  ? sum(transactions.map(t => t.amount))
+                  : 0;
+                return (
+                  <ListGroup.Item key={i} className="p-2">
+                    <Container>
+                      <Row>
+                        <Col className="text-right">
+                          <div className="d-inline pr-2">
+                            <span className="text-muted pr-2">OR#</span>
+                            {item.orNumber}
+                          </div>
+                          <div className="d-inline pr-2">
+                            <span className="text-muted pr-2">received</span>
+                            {item.paymentType}
+                          </div>
+                          <div className="d-inline pr-2">
+                            <span className="text-muted pr-2">
+                              with an amount of
+                            </span>
+                            <Currency currency={totalCollected} />
+                          </div>
+                        </Col>
+                      </Row>
+                    </Container>
+                  </ListGroup.Item>
+                );
+              })}
+            </ListGroup>
+          </RoundedPanel>
+        )}
     </>
   );
 };

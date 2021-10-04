@@ -42,6 +42,7 @@ exports[`PaperStatementOfAccount should render 1`] = `
             <strong>
               Unit owner: 
             </strong>
+            John Doe
           </div>
           <small>
             <div
@@ -117,6 +118,70 @@ exports[`PaperStatementOfAccount should render 1`] = `
               </tr>
             </tbody>
           </table>
+          <hr />
+        </div>
+        <div
+          class="sc-bdfBQB dxnWgn"
+        >
+          <small>
+            <div
+              class="sc-gsTEea bjzFuM"
+            >
+              <strong
+                class="text-muted"
+              >
+                Received Payments
+              </strong>
+            </div>
+          </small>
+          <div
+            class="container"
+          >
+            <div
+              class="row"
+            >
+              <div
+                class="p-0 m-0 col"
+              >
+                <div>
+                  <div
+                    class="d-inline pr-2"
+                  >
+                    <span
+                      class="text-muted pr-2"
+                    >
+                      OR#
+                    </span>
+                    1234-1234
+                  </div>
+                  <div
+                    class="d-inline pr-2"
+                  >
+                    <span
+                      class="text-muted pr-2"
+                    >
+                      received
+                    </span>
+                    cash
+                  </div>
+                  <div
+                    class="d-inline pr-2"
+                  >
+                    <span
+                      class="text-muted pr-2"
+                    >
+                      with an amount of
+                    </span>
+                    <span
+                      class="currency"
+                    >
+                      1,000
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <hr />
         </div>
         <div
@@ -212,9 +277,6 @@ exports[`PaperStatementOfAccount should render 1`] = `
             </h1>
           </div>
         </div>
-        <div
-          class="page-break"
-        />
       </div>
     </div>
   </div>

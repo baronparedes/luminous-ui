@@ -109,6 +109,7 @@ export type TransactionType = "charged" | "collected";
 export type PaymentType = "cash" | "check";
 
 export interface PaymentDetailAttr {
+  id?: number;
   collectedBy: number;
   orNumber: string;
   paymentType: PaymentType;
@@ -138,6 +139,7 @@ export interface PropertyAccount {
   property?: PropertyAttr;
   assignedProfiles?: ProfileAttr[];
   transactions?: TransactionAttr[];
+  paymentDetails?: PaymentDetailAttr[];
 }
 
 export type Month = "JAN" | "FEB" | "MAR" | "APR" | "MAY" | "JUN" | "JUL" | "AUG" | "SEP" | "OCT" | "NOV" | "DEC";

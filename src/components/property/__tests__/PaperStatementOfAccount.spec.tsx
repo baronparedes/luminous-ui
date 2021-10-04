@@ -1,10 +1,6 @@
 import {toTransactionPeriod} from '../../../@utils/dates';
 import {renderWithProvider} from '../../../@utils/test-renderers';
-import {
-  PropertyAccount,
-  PropertyAssignmentAttr,
-  SettingAttr,
-} from '../../../Api';
+import {PropertyAccount, SettingAttr} from '../../../Api';
 import {SETTING_KEYS} from '../../../constants';
 import {settingActions} from '../../../store/reducers/setting.reducer';
 import PaperStatementOfAccount from '../PaperStatementOfAccount';
@@ -36,13 +32,15 @@ describe('PaperStatementOfAccount', () => {
         },
       },
     ],
-  };
-
-  const propertyAssignments: PropertyAssignmentAttr[] = [
-    {
-      propertyId: 1,
-      profileId: 1,
-      profile: {
+    paymentDetails: [
+      {
+        collectedBy: 1,
+        orNumber: '1234-1234',
+        paymentType: 'cash',
+      },
+    ],
+    assignedProfiles: [
+      {
         email: 'JohnDoe@email.com',
         password: '',
         status: 'active',
@@ -50,8 +48,8 @@ describe('PaperStatementOfAccount', () => {
         username: 'johndoe',
         name: 'John Doe',
       },
-    },
-  ];
+    ],
+  };
 
   const settings: SettingAttr[] = [
     {
@@ -65,7 +63,6 @@ describe('PaperStatementOfAccount', () => {
       <PaperStatementOfAccount
         year={2021}
         month={'SEP'}
-        propertyAssignments={propertyAssignments}
         propertyAccount={propertyAccount}
       />,
       store => store.dispatch(settingActions.init(settings))
