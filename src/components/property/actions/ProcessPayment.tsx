@@ -19,7 +19,7 @@ import ErrorInfo from '../../@ui/ErrorInfo';
 import Loading from '../../@ui/Loading';
 import ModalContainer from '../../@ui/ModalContainer';
 import RoundedPanel from '../../@ui/RoundedPanel';
-import {PATTERN_MATCH} from '../../@validation';
+import {getFieldErrorsFromRequest, PATTERN_MATCH} from '../../@validation';
 import ProcessAmountInput, {
   AmountChargeChangeProps,
 } from './ProcessAmountInput';
@@ -55,15 +55,16 @@ const ProcessPayment = ({
   const [areChargesValid, setAreChargesValid] = useState(false);
   const [amountToBeProcess, setAmountToBeProcessed] = useState(amount);
 
-  const totalCollected = suggestedBreakdown
-    ? sum(suggestedBreakdown.map(bd => bd.amount))
-    : 0;
-
   const {data, loading, refetch} = useSuggestPaymentBreakdown({
     propertyId,
     lazy: true,
   });
   const {mutate, loading: loadingCollections, error} = usePostCollections({});
+
+  const orNumberError = getFieldErrorsFromRequest(error, 'or_number');
+  const totalCollected = suggestedBreakdown
+    ? sum(suggestedBreakdown.map(bd => bd.amount))
+    : 0;
 
   const handleOnCompute = (formData: FormData) => {
     setSuggestedBreakdown(undefined);
@@ -204,9 +205,16 @@ const ProcessPayment = ({
               <div className="pt-3">
                 <div>
                   {!loading && error && (
-                    <ErrorInfo>
-                      unable to collect payment at this moment
-                    </ErrorInfo>
+                    <>
+                      {!orNumberError && (
+                        <ErrorInfo>
+                          unable to collect payment at this moment
+                        </ErrorInfo>
+                      )}
+                      {orNumberError && (
+                        <ErrorInfo>OR# should be unique</ErrorInfo>
+                      )}
+                    </>
                   )}
                 </div>
                 <div className="pt-2 pb-2 text-right">

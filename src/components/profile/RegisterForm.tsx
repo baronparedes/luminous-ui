@@ -3,14 +3,14 @@ import {Controller, useForm} from 'react-hook-form';
 import {FaEnvelope, FaKey, FaMobile, FaTag, FaUserAlt} from 'react-icons/fa';
 import {useDispatch} from 'react-redux';
 import {Redirect} from 'react-router-dom';
-import {GetDataError} from 'restful-react';
 
 import routes from '../../@utils/routes';
-import {EntityError, RegisterProfile, useRegister} from '../../Api';
+import {RegisterProfile, useRegister} from '../../Api';
 import {useRootState} from '../../store';
 import {profileActions} from '../../store/reducers/profile.reducer';
 import ErrorInfo from '../@ui/ErrorInfo';
 import Loading from '../@ui/Loading';
+import {getFieldErrorsFromRequest} from '../@validation';
 
 type FormData = RegisterProfile & {confirmPassword: string};
 
@@ -48,12 +48,6 @@ const RegisterForm = () => {
         }
       })
       .catch(() => {});
-  };
-  const getFieldErrorsFromRequest = (
-    e: GetDataError<EntityError>,
-    name: string
-  ) => {
-    return (e.data as EntityError).fieldErrors?.find(fe => fe.field === name);
   };
   const onReset = () => {
     reset(initialValue);

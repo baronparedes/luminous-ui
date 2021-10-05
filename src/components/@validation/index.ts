@@ -1,4 +1,17 @@
 import {Validate, ValidationRule} from 'react-hook-form';
+import {GetDataError} from 'restful-react';
+
+import {EntityError} from '../../Api';
+
+export function getFieldErrorsFromRequest(
+  e: GetDataError<EntityError> | null,
+  name: string
+) {
+  if (e) {
+    return (e.data as EntityError).fieldErrors?.find(fe => fe.field === name);
+  }
+  return undefined;
+}
 
 export const PATTERN_MATCH = {
   TWO_DECIMAL_PLACE_NUMBER: /^(\d+(\.\d{0,2})?|\.?\d{1,2})$/,

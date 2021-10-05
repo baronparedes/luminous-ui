@@ -592,10 +592,10 @@ export type UsePostMonthlyChargesProps = Omit<UseMutateProps<void, ApiError, voi
 export const usePostMonthlyCharges = (props: UsePostMonthlyChargesProps) => useMutate<void, ApiError, void, PostTransactionBody, void>("POST", `/api/transaction/postMonthlyCharges`, props);
 
 
-export type PostCollectionsProps = Omit<MutateProps<void, unknown, void, PostCollectionBody, void>, "path" | "verb">;
+export type PostCollectionsProps = Omit<MutateProps<void, EntityError, void, PostCollectionBody, void>, "path" | "verb">;
 
 export const PostCollections = (props: PostCollectionsProps) => (
-  <Mutate<void, unknown, void, PostCollectionBody, void>
+  <Mutate<void, EntityError, void, PostCollectionBody, void>
     verb="POST"
     path={`/api/transaction/postCollections`}
     
@@ -603,9 +603,9 @@ export const PostCollections = (props: PostCollectionsProps) => (
   />
 );
 
-export type UsePostCollectionsProps = Omit<UseMutateProps<void, unknown, void, PostCollectionBody, void>, "path" | "verb">;
+export type UsePostCollectionsProps = Omit<UseMutateProps<void, EntityError, void, PostCollectionBody, void>, "path" | "verb">;
 
-export const usePostCollections = (props: UsePostCollectionsProps) => useMutate<void, unknown, void, PostCollectionBody, void>("POST", `/api/transaction/postCollections`, props);
+export const usePostCollections = (props: UsePostCollectionsProps) => useMutate<void, EntityError, void, PostCollectionBody, void>("POST", `/api/transaction/postCollections`, props);
 
 
 export interface GetAvailablePeriodsPathParams {
