@@ -6,6 +6,7 @@ import {Month, ProfileAttr, PropertyAccount, SettingAttr} from '../../Api';
 import {Currency} from './Currency';
 import Markup from './Markup';
 import {PageSection} from './PaperPdf';
+import PaymentDetail from './PaymentDetail';
 
 const Label = styled('div')`
   font-size: 1.5em;
@@ -114,20 +115,11 @@ const SOA = ({hasPageBreak, propertyAccount, month, year, notes}: Props) => {
                 <Row key={i}>
                   <Col className="p-0 m-0">
                     <div>
-                      <div className="d-inline pr-2">
-                        <span className="text-muted pr-2">OR#</span>
-                        {item.orNumber}
-                      </div>
-                      <div className="d-inline pr-2">
-                        <span className="text-muted pr-2">received</span>
-                        {item.paymentType}
-                      </div>
-                      <div className="d-inline pr-2">
-                        <span className="text-muted pr-2">
-                          with an amount of
-                        </span>
-                        <Currency currency={totalCollected} noCurrencyColor />
-                      </div>
+                      <PaymentDetail
+                        paymentDetail={item}
+                        totalCollected={totalCollected}
+                        noCurrencyColor
+                      />
                     </div>
                   </Col>
                 </Row>

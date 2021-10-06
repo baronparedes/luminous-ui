@@ -2,7 +2,7 @@ import {render, within} from '@testing-library/react';
 
 import {currencyFormat, roundOff} from '../../../@utils/currencies';
 import {generateFakePropertyAccount} from '../../../@utils/fake-models';
-import {calculateAccount} from '../../../@utils/helpers';
+import {calculateAccount, sum} from '../../../@utils/helpers';
 import {TransactionAttr} from '../../../Api';
 import PrintStatementOfAccount from '../actions/PrintStatementOfAccount';
 import PropertyStatementOfAccount from '../PropertyStatementOfAccount';
@@ -43,6 +43,8 @@ describe('PropertyStatementOfAccount', () => {
       t => t.transactionType === 'charged'
     ) as TransactionAttr[];
 
+    const expectedPaymentDetails = mockedPropertyAccount.paymentDetails;
+
     const {getByText, getByRole, getByTitle} = render(
       <PropertyStatementOfAccount propertyAccount={mockedPropertyAccount} />
     );
@@ -73,6 +75,24 @@ describe('PropertyStatementOfAccount', () => {
 
     for (const expectedHeader of expectedHeaders) {
       expect(getByText(expectedHeader, {selector: 'th'})).toBeInTheDocument();
+    }
+
+    if (expectedPaymentDetails) {
+      for (const item of expectedPaymentDetails) {
+        const container = getByText(item.orNumber).parentElement?.parentElement;
+        const checkDetails =
+          item.paymentType === 'check'
+            ? `${item.checkIssuingBank}${item.checkNumber}${item.checkPostingDate}`
+            : '';
+        const amounts = mockedPropertyAccount.transactions
+          ?.filter(t => t.paymentDetailId === item.id)
+          .map(t => t.amount);
+        const summedAmount = sum(amounts);
+        const amount = currencyFormat(roundOff(summedAmount));
+        expect(container?.textContent).toEqual(
+          `OR#${item.orNumber}received${item.paymentType}with an amount of${amount}${checkDetails}`
+        );
+      }
     }
 
     if (expectedTransactions) {

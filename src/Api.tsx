@@ -608,6 +608,22 @@ export type UsePostCollectionsProps = Omit<UseMutateProps<void, EntityError, voi
 export const usePostCollections = (props: UsePostCollectionsProps) => useMutate<void, EntityError, void, PostCollectionBody, void>("POST", `/api/transaction/postCollections`, props);
 
 
+export type PostTransactionsProps = Omit<MutateProps<void, unknown, void, TransactionAttr[], void>, "path" | "verb">;
+
+export const PostTransactions = (props: PostTransactionsProps) => (
+  <Mutate<void, unknown, void, TransactionAttr[], void>
+    verb="POST"
+    path={`/api/transaction/postTransactions`}
+    
+    {...props}
+  />
+);
+
+export type UsePostTransactionsProps = Omit<UseMutateProps<void, unknown, void, TransactionAttr[], void>, "path" | "verb">;
+
+export const usePostTransactions = (props: UsePostTransactionsProps) => useMutate<void, unknown, void, TransactionAttr[], void>("POST", `/api/transaction/postTransactions`, props);
+
+
 export interface GetAvailablePeriodsPathParams {
   propertyId: number
 }

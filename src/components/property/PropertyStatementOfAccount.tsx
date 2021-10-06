@@ -6,6 +6,7 @@ import {calculateAccount, sum} from '../../@utils/helpers';
 import {PropertyAccount} from '../../Api';
 import {Currency} from '../@ui/Currency';
 import {LabeledCurrency} from '../@ui/LabeledCurrency';
+import PaymentDetail from '../@ui/PaymentDetail';
 import RoundedPanel from '../@ui/RoundedPanel';
 import {Table} from '../@ui/Table';
 import PrintStatementOfAccount from './actions/PrintStatementOfAccount';
@@ -66,9 +67,17 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
           </tbody>
         </Table>
       </RoundedPanel>
-
       <RoundedPanel className="mt-3 text-center">
         <Row style={{fontSize: '1.2em'}}>
+          <Col>
+            <LabeledCurrency
+              label="less payments"
+              currency={collectionBalance}
+              pill
+              noCurrencyColor
+              variant="success"
+            />
+          </Col>
           <Col>
             <LabeledCurrency
               label="previous balance"
@@ -85,15 +94,6 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
               pill
               noCurrencyColor
               variant="danger"
-            />
-          </Col>
-          <Col>
-            <LabeledCurrency
-              label="less payments"
-              currency={collectionBalance}
-              pill
-              noCurrencyColor
-              variant="success"
             />
           </Col>
         </Row>
@@ -113,21 +113,11 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
                   <ListGroup.Item key={i} className="p-2">
                     <Container>
                       <Row>
-                        <Col className="text-right">
-                          <div className="d-inline pr-2">
-                            <span className="text-muted pr-2">OR#</span>
-                            {item.orNumber}
-                          </div>
-                          <div className="d-inline pr-2">
-                            <span className="text-muted pr-2">received</span>
-                            {item.paymentType}
-                          </div>
-                          <div className="d-inline pr-2">
-                            <span className="text-muted pr-2">
-                              with an amount of
-                            </span>
-                            <Currency currency={totalCollected} />
-                          </div>
+                        <Col>
+                          <PaymentDetail
+                            paymentDetail={item}
+                            totalCollected={totalCollected}
+                          />
                         </Col>
                       </Row>
                     </Container>

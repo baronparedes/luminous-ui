@@ -175,8 +175,75 @@ exports[`PaperStatementOfAccount should render 1`] = `
                     <span
                       class="currency"
                     >
-                      1,000
+                      500
                     </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="row"
+            >
+              <div
+                class="p-0 m-0 col"
+              >
+                <div>
+                  <div
+                    class="d-inline pr-2"
+                  >
+                    <span
+                      class="text-muted pr-2"
+                    >
+                      OR#
+                    </span>
+                    1234-1234
+                  </div>
+                  <div
+                    class="d-inline pr-2"
+                  >
+                    <span
+                      class="text-muted pr-2"
+                    >
+                      received
+                    </span>
+                    check
+                  </div>
+                  <div
+                    class="d-inline pr-2"
+                  >
+                    <span
+                      class="text-muted pr-2"
+                    >
+                      with an amount of
+                    </span>
+                    <span
+                      class="currency"
+                    >
+                      300
+                    </span>
+                  </div>
+                  <div
+                    class="text-muted"
+                  >
+                    <small
+                      class="pr-3"
+                    >
+                      <span>
+                        BDO
+                      </span>
+                    </small>
+                    <small
+                      class="pr-3"
+                    >
+                      <span>
+                        111-111-000
+                      </span>
+                    </small>
+                    <small>
+                      <span>
+                        2021-09-09
+                      </span>
+                    </small>
                   </div>
                 </div>
               </div>
@@ -222,7 +289,7 @@ exports[`PaperStatementOfAccount should render 1`] = `
                 <span
                   class="currency"
                 >
-                  1,000
+                  1,800
                 </span>
               </strong>
             </div>
@@ -242,7 +309,7 @@ exports[`PaperStatementOfAccount should render 1`] = `
                 <span
                   class="currency"
                 >
-                  0
+                  800
                 </span>
               </strong>
             </div>

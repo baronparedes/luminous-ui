@@ -44,8 +44,9 @@ export const generateFakePaymentDetail = (
   paymentType?: PaymentType
 ): PaymentDetailAttr => {
   return {
+    id: faker.datatype.number(),
     collectedBy: faker.datatype.number(),
-    orNumber: faker.random.alphaNumeric(),
+    orNumber: faker.random.alphaNumeric(10),
     paymentType: paymentType ?? faker.random.arrayElement(['cash', 'check']),
     checkNumber: faker.random.alphaNumeric(),
     checkIssuingBank: faker.random.words(),
@@ -134,10 +135,17 @@ export function generateFakeTransaction(): TransactionAttr {
 export function generateFakePropertyAccount(
   transactionCount = 2
 ): PropertyAccount {
+  const paymentDetails = [
+    generateFakePaymentDetail(),
+    generateFakePaymentDetail(),
+  ];
   const property = generateFakeProperty();
-  const transactions = generateNumberedSeries(transactionCount).map(() =>
-    generateFakeTransaction()
-  );
+  const transactions = generateNumberedSeries(transactionCount).map(() => {
+    return {
+      ...generateFakeTransaction(),
+      paymentDetailId: faker.random.arrayElement(paymentDetails).id,
+    };
+  });
   const assignedProfiles = [
     generateFakeProfileAttr(),
     generateFakeProfileAttr(),
@@ -148,6 +156,7 @@ export function generateFakePropertyAccount(
     balance: faker.datatype.number(),
     transactions,
     assignedProfiles,
+    paymentDetails,
   };
 }
 

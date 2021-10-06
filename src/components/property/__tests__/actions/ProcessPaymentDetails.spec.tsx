@@ -197,6 +197,7 @@ describe('ProcessPaymentDetails', () => {
           expect(mockOnCollect).toBeCalledWith({
             ...paymentDetail,
             collectedBy: profile.id,
+            id: undefined,
           });
         });
       }
