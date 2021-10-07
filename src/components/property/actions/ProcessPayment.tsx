@@ -155,7 +155,6 @@ const ProcessPayment = ({
         {buttonLabel}
       </Button>
       <ModalContainer
-        centered
         size="lg"
         header={<h5>Process Payment</h5>}
         toggle={toggle}

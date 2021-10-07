@@ -37,7 +37,7 @@ describe('PropertyStatementOfAccount', () => {
       collectionBalance: expectedLessPayments,
     } = calculateAccount(mockedPropertyAccount);
 
-    const expectedHeaders = ['area', 'charge code', 'rate', 'amount'];
+    const expectedHeaders = ['charge code', 'rate', 'amount'];
 
     const expectedTransactions = mockedPropertyAccount.transactions?.filter(
       t => t.transactionType === 'charged'
@@ -106,11 +106,6 @@ describe('PropertyStatementOfAccount', () => {
 
       rows.map((row, i) => {
         const expectedTransaction = expectedTransactions[i] as TransactionAttr;
-        expect(
-          within(row).getByText(
-            mockedPropertyAccount.property?.floorArea as number
-          )
-        ).toBeInTheDocument();
         expect(
           within(row).getByText(expectedTransaction.charge?.code as string)
         ).toBeInTheDocument();

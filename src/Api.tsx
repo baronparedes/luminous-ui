@@ -24,6 +24,25 @@ export interface AuthResult {
   profile: AuthProfile;
 }
 
+export interface CommunityAttr {
+  description: string;
+}
+
+export type ChargeType = "unit" | "percentage" | "amount";
+
+export type PostingType = "monthly" | "manual" | "accrued" | "interest";
+
+export interface ChargeAttr {
+  communityId: number;
+  community?: CommunityAttr;
+  code: string;
+  rate: number;
+  chargeType: ChargeType;
+  postingType: PostingType;
+  thresholdInMonths?: number;
+  priority?: number;
+}
+
 export interface FieldError {
   value: string | null;
   field: string | null;
@@ -85,25 +104,6 @@ export interface ProfileAttr {
   remarks?: string;
 }
 
-export interface CommunityAttr {
-  description: string;
-}
-
-export type ChargeType = "unit" | "percentage" | "amount";
-
-export type PostingType = "monthly" | "manual" | "accrued" | "interest";
-
-export interface ChargeAttr {
-  communityId: number;
-  community?: CommunityAttr;
-  code: string;
-  rate: number;
-  chargeType: ChargeType;
-  postingType: PostingType;
-  thresholdInMonths?: number;
-  priority?: number;
-}
-
 export type TransactionType = "charged" | "collected";
 
 export type PaymentType = "cash" | "check";
@@ -131,6 +131,7 @@ export interface TransactionAttr {
   comments?: string;
   paymentDetailId?: number;
   paymentDetail?: PaymentDetailAttr;
+  rateSnapshot?: number;
 }
 
 export interface PropertyAccount {
@@ -186,6 +187,21 @@ export const Auth = (props: AuthProps) => (
 export type UseAuthProps = Omit<UseMutateProps<AuthResult, unknown, void, void, void>, "path" | "verb">;
 
 export const useAuth = (props: UseAuthProps) => useMutate<AuthResult, unknown, void, void, void>("POST", `/api/auth`, props);
+
+
+export type GetAllChargesProps = Omit<GetProps<ChargeAttr[], unknown, void, void>, "path">;
+
+export const GetAllCharges = (props: GetAllChargesProps) => (
+  <Get<ChargeAttr[], unknown, void, void>
+    path={`/api/charge/getAllCharges`}
+    
+    {...props}
+  />
+);
+
+export type UseGetAllChargesProps = Omit<UseGetProps<ChargeAttr[], unknown, void, void>, "path">;
+
+export const useGetAllCharges = (props: UseGetAllChargesProps) => useGet<ChargeAttr[], unknown, void, void>(`/api/charge/getAllCharges`, props);
 
 
 export interface GetAllProfilesQueryParams {

@@ -17,7 +17,7 @@ type Props = {
 
 const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
   const {year, month} = getCurrentMonthYear();
-  const {property, transactions} = propertyAccount;
+  const {transactions} = propertyAccount;
   const {currentBalance, previousBalance, collectionBalance} =
     calculateAccount(propertyAccount);
   return (
@@ -44,7 +44,7 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
               </Row>
             </>
           }
-          headers={['area', 'charge code', 'rate', 'amount']}
+          headers={['charge code', 'rate', 'amount']}
         >
           <tbody>
             {transactions &&
@@ -53,7 +53,6 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
                 .map((t, i) => {
                   return (
                     <tr key={i}>
-                      <td>{property?.floorArea}</td>
                       <td>{t.charge?.code}</td>
                       <td>{t.charge?.rate}</td>
                       <td>

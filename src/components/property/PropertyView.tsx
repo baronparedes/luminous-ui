@@ -1,4 +1,4 @@
-import {Button, Col, Container, Row} from 'react-bootstrap';
+import {Col, Container, Row} from 'react-bootstrap';
 
 import {roundOff} from '../../@utils/currencies';
 import {useGetPropertyAccount} from '../../Api';
@@ -6,6 +6,7 @@ import {useUrl} from '../../hooks/useUrl';
 import {useRootState} from '../../store';
 import Loading from '../@ui/Loading';
 import RoundedPanel from '../@ui/RoundedPanel';
+import AdjustTransactions from './actions/AdjustTransactions';
 import ProcessPayment from './actions/ProcessPayment';
 import ViewPreviousStatements from './actions/ViewPreviousStatements';
 import PropertyAssignmentCard from './PropertyAssignmentCard';
@@ -48,20 +49,24 @@ export const PropertyView = () => {
           </Col>
           <Col md={3}>
             <RoundedPanel className="mb-2">
-              {me?.type === 'admin' && (
+              {me?.type === 'admin' && propertyAccountData && (
                 <>
-                  {propertyAccountData && (
-                    <ProcessPayment
-                      className="mb-2 w-100"
-                      buttonLabel="process payment"
-                      propertyId={propertyId}
-                      onProcessedPayment={handleOnProcessedPayment}
-                      amount={parseFloat(
-                        roundOff(propertyAccountData.balance).toFixed(2)
-                      )}
-                    />
-                  )}
-                  <Button className="mb-2 w-100">adjustments</Button>
+                  <ProcessPayment
+                    className="mb-2 w-100"
+                    buttonLabel="process payment"
+                    propertyId={propertyId}
+                    onProcessedPayment={handleOnProcessedPayment}
+                    amount={parseFloat(
+                      roundOff(propertyAccountData.balance).toFixed(2)
+                    )}
+                  />
+                  <AdjustTransactions
+                    className="mb-2 w-100"
+                    buttonLabel="adjustments"
+                    currentTransactions={propertyAccountData.transactions?.filter(
+                      t => t.transactionType === 'charged'
+                    )}
+                  />
                 </>
               )}
               <ViewPreviousStatements
