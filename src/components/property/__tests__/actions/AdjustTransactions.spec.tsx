@@ -17,27 +17,26 @@ import AdjustTransactions, {
 
 describe('AdjustTransactions', () => {
   const base = 'http://localhost';
+  const profile = generateFakeProfile();
+  const transactions = [
+    generateFakeTransaction(),
+    generateFakeTransaction(),
+    generateFakeTransaction(),
+    generateFakeTransaction(),
+    generateFakeTransaction(),
+    {
+      ...generateFakeTransaction(),
+      waivedBy: profile.id,
+    },
+  ];
+  const waivableTranasctions = transactions.filter(t => !t.waivedBy);
+  const waivedTranasctions = transactions.filter(t => t.waivedBy);
 
-  async function renderTarget() {
-    const profile = generateFakeProfile();
-    const transactions = [
-      generateFakeTransaction(),
-      generateFakeTransaction(),
-      generateFakeTransaction(),
-      generateFakeTransaction(),
-      generateFakeTransaction(),
-      {
-        ...generateFakeTransaction(),
-        waivedBy: profile.id,
-      },
-    ];
-    const waivableTranasctions = transactions.filter(t => !t.waivedBy);
-    const waivedTranasctions = transactions.filter(t => t.waivedBy);
-
+  async function renderTarget(currentTransactions = transactions) {
     const target = renderWithProviderAndRestful(
       <AdjustTransactions
         buttonLabel="adjust transactions"
-        currentTransactions={transactions}
+        currentTransactions={currentTransactions}
       />,
       base,
       store => store.dispatch(profileActions.signIn({me: profile}))
@@ -52,22 +51,20 @@ describe('AdjustTransactions', () => {
 
     return {
       ...target,
-      waivableTranasctions,
-      waivedTranasctions,
-      transactions,
-      profile,
       saveAdjustmentsButton,
     };
   }
 
+  it('should render no transactions found', async () => {
+    const {getByText} = await renderTarget([]);
+    await waitFor(() =>
+      expect(getByText(/no waivable transactions found/i)).toBeInTheDocument()
+    );
+  });
+
   it('should render transactions', async () => {
-    const {
-      waivableTranasctions,
-      waivedTranasctions,
-      saveAdjustmentsButton,
-      getByText,
-      queryByText,
-    } = await renderTarget();
+    const {saveAdjustmentsButton, getByText, queryByText} =
+      await renderTarget();
 
     for (const expected of waivableTranasctions) {
       expect(getByText(expected.charge?.code as string)).toBeInTheDocument();
@@ -89,8 +86,6 @@ describe('AdjustTransactions', () => {
 
   it('should enable save button when a tranasction is waived and transactions can be saved', async () => {
     const {
-      waivableTranasctions,
-      profile,
       saveAdjustmentsButton,
       getByPlaceholderText,
       getByRole,

@@ -24,87 +24,88 @@ export const PropertyView = () => {
   } = useGetPropertyAccount({
     propertyId,
   });
-  const handleOnProcessedPayment = () => {
+  const handleOnRefresh = () => {
     refetchPropertyAccount();
   };
+
+  if (propertyAccountLoading) {
+    return <Loading />;
+  }
+
   return (
     <>
       <Container>
         <Row>
           <Col>
-            {propertyAccountLoading && <Loading className="mb-2" />}
-            {!propertyAccountLoading && propertyAccountData && (
+            {propertyAccountData && (
               <PropertyDetails propertyAccount={propertyAccountData} />
             )}
           </Col>
         </Row>
         <Row>
           <Col md={9} className="mb-2">
-            {propertyAccountLoading && <Loading className="mb-2" />}
-            {!propertyAccountLoading && propertyAccountData && (
+            {propertyAccountData && (
               <PropertyStatementOfAccount
                 propertyAccount={propertyAccountData}
               />
             )}
           </Col>
           <Col md={3}>
-            <RoundedPanel className="mb-2">
-              {me?.type === 'admin' && propertyAccountData && (
-                <>
-                  <ProcessPayment
-                    className="mb-2 w-100"
-                    buttonLabel="process payment"
-                    propertyId={propertyId}
-                    onProcessedPayment={handleOnProcessedPayment}
-                    amount={parseFloat(
-                      roundOff(propertyAccountData.balance).toFixed(2)
-                    )}
-                  />
-                  <AdjustTransactions
-                    className="mb-2 w-100"
-                    buttonLabel="adjustments"
-                    currentTransactions={propertyAccountData.transactions?.filter(
-                      t => t.transactionType === 'charged'
-                    )}
-                  />
-                </>
-              )}
-              <ViewPreviousStatements
-                className="mb-2 w-100"
-                buttonLabel="view previous statements"
-                disabled={id === undefined}
-                propertyId={Number(id)}
-              />
-            </RoundedPanel>
-            {propertyAccountLoading && <Loading />}
-            <div>
-              {!propertyAccountLoading &&
-                propertyAccountData &&
-                propertyAccountData.assignedProfiles && (
+            {propertyAccountData && (
+              <RoundedPanel className="mb-2">
+                {me?.type === 'admin' && (
                   <>
-                    <div>
-                      {propertyAccountData.assignedProfiles.map(
-                        (profile, i) => {
-                          return (
-                            <PropertyAssignmentCard
-                              key={i}
-                              profileId={Number(profile.id)}
-                              name={profile.name}
-                              username={profile.username}
-                              email={profile.email}
-                              mobileNumber={profile.mobileNumber}
-                            />
-                          );
-                        }
+                    <ProcessPayment
+                      className="mb-2 w-100"
+                      buttonLabel="process payment"
+                      propertyId={propertyId}
+                      onProcessedPayment={handleOnRefresh}
+                      amount={parseFloat(
+                        roundOff(propertyAccountData.balance).toFixed(2)
                       )}
-                    </div>
-                    {propertyAccountData.assignedProfiles.length > 0 && (
-                      <div className="text-muted text-center">
-                        <small>assigned to</small>
-                      </div>
-                    )}
+                    />
+                    <AdjustTransactions
+                      className="mb-2 w-100"
+                      buttonLabel="adjustments"
+                      onSaveAdjustments={handleOnRefresh}
+                      currentTransactions={propertyAccountData.transactions?.filter(
+                        t => t.transactionType === 'charged'
+                      )}
+                    />
                   </>
                 )}
+                <ViewPreviousStatements
+                  className="mb-2 w-100"
+                  buttonLabel="view previous statements"
+                  disabled={id === undefined}
+                  propertyId={Number(id)}
+                />
+              </RoundedPanel>
+            )}
+            <div>
+              {propertyAccountData && propertyAccountData.assignedProfiles && (
+                <>
+                  <div>
+                    {propertyAccountData.assignedProfiles.map((profile, i) => {
+                      return (
+                        <PropertyAssignmentCard
+                          key={i}
+                          profileId={Number(profile.id)}
+                          name={profile.name}
+                          username={profile.username}
+                          email={profile.email}
+                          mobileNumber={profile.mobileNumber}
+                        />
+                      );
+                    })}
+                  </div>
+                  {propertyAccountData.assignedProfiles.length > 0 && (
+                    <div className="text-muted text-center">
+                      <small>assigned to</small>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </Col>
         </Row>

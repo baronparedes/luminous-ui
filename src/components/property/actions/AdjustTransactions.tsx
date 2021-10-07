@@ -10,6 +10,7 @@ import WaivableTransaction from './WaivableTranasction';
 type Props = {
   buttonLabel: React.ReactNode;
   currentTransactions?: TransactionAttr[];
+  onSaveAdjustments?: () => void;
 };
 
 type WaivedTransction = {
@@ -55,6 +56,7 @@ export function toWaivedTransaction(
 const AdjustTransactions = ({
   buttonLabel,
   currentTransactions,
+  onSaveAdjustments,
   ...buttonProps
 }: Props & ButtonProps) => {
   const {me} = useRootState(state => state.profile);
@@ -64,6 +66,10 @@ const AdjustTransactions = ({
   >([]);
 
   const {mutate, loading, error} = usePostTransactions({});
+
+  const waivableTransactions =
+    currentTransactions?.filter(t => !t.waivedBy) ?? [];
+  const hasWaivableTransactions = waivableTransactions.length > 0;
 
   const handleOnTransactionWaived = (
     transaction: TransactionAttr,
@@ -89,11 +95,10 @@ const AdjustTransactions = ({
       for (const i of waivedTransactions) {
         transactionsToBeSaved.push(...i.transactions);
       }
-      mutate(transactionsToBeSaved)
-        .then(() => {
-          setToggle(false);
-        })
-        .catch(e => console.error(e));
+      mutate(transactionsToBeSaved).then(() => {
+        onSaveAdjustments && onSaveAdjustments();
+        setToggle(false);
+      });
     }
   };
 
@@ -108,24 +113,25 @@ const AdjustTransactions = ({
         toggle={toggle}
         onClose={() => setToggle(false)}
       >
-        <ListGroup className="p-3">
-          {currentTransactions &&
-            currentTransactions
-              .filter(t => !t.waivedBy)
-              .map((item, i) => {
-                return (
-                  <ListGroup.Item key={i}>
-                    <WaivableTransaction
-                      disabled={loading}
-                      transaction={item}
-                      onTransactionWaived={handleOnTransactionWaived}
-                      onTransactionWaiveCancelled={
-                        handleOnTransactionWaiveCancelled
-                      }
-                    />
-                  </ListGroup.Item>
-                );
-              })}
+        <ListGroup className="p-2">
+          {hasWaivableTransactions &&
+            waivableTransactions.map((item, i) => {
+              return (
+                <ListGroup.Item key={i}>
+                  <WaivableTransaction
+                    disabled={loading}
+                    transaction={item}
+                    onTransactionWaived={handleOnTransactionWaived}
+                    onTransactionWaiveCancelled={
+                      handleOnTransactionWaiveCancelled
+                    }
+                  />
+                </ListGroup.Item>
+              );
+            })}
+          {!hasWaivableTransactions && (
+            <ListGroup.Item>no waivable transactions found</ListGroup.Item>
+          )}
         </ListGroup>
         {error && (
           <ErrorInfo>unable to save adjustments at this moment</ErrorInfo>
