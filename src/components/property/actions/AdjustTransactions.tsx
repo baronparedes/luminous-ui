@@ -1,13 +1,26 @@
 import {useState} from 'react';
-import {Button, ButtonProps, Container, ListGroup} from 'react-bootstrap';
+import {
+  Button,
+  ButtonProps,
+  Col,
+  Container,
+  ListGroup,
+  Row,
+} from 'react-bootstrap';
 
-import {TransactionAttr, usePostTransactions} from '../../../Api';
+import {
+  TransactionAttr,
+  useGetAllCharges,
+  usePostTransactions,
+} from '../../../Api';
 import {useRootState} from '../../../store';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import ModalContainer from '../../@ui/ModalContainer';
-import WaivableTransaction from './WaivableTranasction';
+import AdjustedTransactions from './AdjustedTransactions';
+import WaivableTransaction from './WaivableTransaction';
 
 type Props = {
+  propertyId: number;
   buttonLabel: React.ReactNode;
   currentTransactions?: TransactionAttr[];
   onSaveAdjustments?: () => void;
@@ -18,20 +31,23 @@ type WaivedTransction = {
   transactions: TransactionAttr[];
 };
 
-export function toWaivedTransaction(
-  transaction: TransactionAttr,
-  comments: string,
-  profileId: number
-) {
+export function sanitizeTransaction(transaction: TransactionAttr) {
   const cleaned = {
     ...transaction,
     charge: undefined,
     paymentDetailId: transaction.paymentDetailId ?? undefined,
     comments: transaction.comments ?? undefined,
-    rateSnapshot: transaction.rateSnapshot
-      ? Number(transaction.rateSnapshot)
-      : undefined,
+    rateSnapshot: transaction.rateSnapshot ?? undefined,
   };
+  return cleaned;
+}
+
+export function toWaivedTransaction(
+  transaction: TransactionAttr,
+  comments: string,
+  profileId: number
+) {
+  const cleaned = sanitizeTransaction(transaction);
   const waived: TransactionAttr = {
     ...cleaned,
     waivedBy: profileId,
@@ -56,6 +72,7 @@ export function toWaivedTransaction(
 const AdjustTransactions = ({
   buttonLabel,
   currentTransactions,
+  propertyId,
   onSaveAdjustments,
   ...buttonProps
 }: Props & ButtonProps) => {
@@ -64,8 +81,16 @@ const AdjustTransactions = ({
   const [waivedTransactions, setWaivedTransactions] = useState<
     WaivedTransction[]
   >([]);
+  const [adjustedTransactions, setAdjustedTransactions] = useState<
+    TransactionAttr[]
+  >([]);
 
   const {mutate, loading, error} = usePostTransactions({});
+  const {data: charges, loading: loadingCharges} = useGetAllCharges({});
+
+  const hasAdjustments =
+    waivedTransactions.length > 0 || adjustedTransactions.length > 0;
+  const disableActions = loading || loadingCharges;
 
   const waivableTransactions =
     currentTransactions?.filter(t => !t.waivedBy) ?? [];
@@ -82,6 +107,20 @@ const AdjustTransactions = ({
     });
   };
 
+  const handleOnTransactionAdjusted = (transaction: TransactionAttr) => {
+    setAdjustedTransactions(state => {
+      const newState = [...state, transaction];
+      return newState;
+    });
+  };
+
+  const handleOnTransactionAdjustedRemoved = (transaction: TransactionAttr) => {
+    setAdjustedTransactions(state => {
+      const newState = state.filter(s => s.chargeId !== transaction.chargeId);
+      return newState;
+    });
+  };
+
   const handleOnTransactionWaiveCancelled = (transaction: TransactionAttr) => {
     setWaivedTransactions(state => {
       const newState = state.filter(s => s.transactionId !== transaction.id);
@@ -94,6 +133,9 @@ const AdjustTransactions = ({
       const transactionsToBeSaved: TransactionAttr[] = [];
       for (const i of waivedTransactions) {
         transactionsToBeSaved.push(...i.transactions);
+      }
+      for (const i of adjustedTransactions) {
+        transactionsToBeSaved.push(sanitizeTransaction(i));
       }
       mutate(transactionsToBeSaved).then(() => {
         onSaveAdjustments && onSaveAdjustments();
@@ -113,32 +155,49 @@ const AdjustTransactions = ({
         toggle={toggle}
         onClose={() => setToggle(false)}
       >
-        <ListGroup className="p-2">
-          {hasWaivableTransactions &&
-            waivableTransactions.map((item, i) => {
-              return (
-                <ListGroup.Item key={i}>
-                  <WaivableTransaction
-                    disabled={loading}
-                    transaction={item}
-                    onTransactionWaived={handleOnTransactionWaived}
-                    onTransactionWaiveCancelled={
-                      handleOnTransactionWaiveCancelled
-                    }
-                  />
-                </ListGroup.Item>
-              );
-            })}
-          {!hasWaivableTransactions && (
-            <ListGroup.Item>no waivable transactions found</ListGroup.Item>
-          )}
-        </ListGroup>
+        <AdjustedTransactions
+          disabled={disableActions}
+          propertyId={propertyId}
+          onTransactionAdjusted={handleOnTransactionAdjusted}
+          onTransactionAdjustedRemoved={handleOnTransactionAdjustedRemoved}
+          adjustedTransactions={adjustedTransactions}
+          charges={charges}
+        />
+        <br />
+        <Container>
+          <Row className="pb-2">
+            <Col>
+              <label>Transactions for waiving</label>
+            </Col>
+          </Row>
+          <ListGroup>
+            {hasWaivableTransactions &&
+              waivableTransactions.map((item, i) => {
+                return (
+                  <ListGroup.Item key={i}>
+                    <WaivableTransaction
+                      disabled={disableActions}
+                      transaction={item}
+                      onTransactionWaived={handleOnTransactionWaived}
+                      onTransactionWaiveCancelled={
+                        handleOnTransactionWaiveCancelled
+                      }
+                    />
+                  </ListGroup.Item>
+                );
+              })}
+            {!hasWaivableTransactions && (
+              <ListGroup.Item>No waivable transactions found</ListGroup.Item>
+            )}
+          </ListGroup>
+        </Container>
+        <hr />
         {error && (
           <ErrorInfo>unable to save adjustments at this moment</ErrorInfo>
         )}
         <Container className="text-right">
           <Button
-            disabled={!(waivedTransactions.length > 0) || loading}
+            disabled={!hasAdjustments || disableActions}
             onClick={handleOnSaveAdjustments}
           >
             Save Adjustments

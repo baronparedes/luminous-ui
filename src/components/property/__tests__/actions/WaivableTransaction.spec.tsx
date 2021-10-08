@@ -3,7 +3,7 @@ import faker from 'faker';
 import {fireEvent, render, waitFor, within} from '@testing-library/react';
 
 import {generateFakeTransaction} from '../../../../@utils/fake-models';
-import WaivableTransaction from '../../actions/WaivableTranasction';
+import WaivableTransaction from '../../actions/WaivableTransaction';
 
 describe('WaivableTransaction', () => {
   it('should render and toggle waive and undo', async () => {

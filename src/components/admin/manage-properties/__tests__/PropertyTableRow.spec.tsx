@@ -5,7 +5,7 @@ import {fireEvent, waitFor, within} from '@testing-library/react';
 import {generateFakeProperty} from '../../../../@utils/fake-models';
 import routes from '../../../../@utils/routes';
 import {renderWithProviderAndRouterAndRestful} from '../../../../@utils/test-renderers';
-import {PropertyAttr} from '../../../../Api';
+import {PropertyAttr, RecordStatus} from '../../../../Api';
 import PropertyTableRow from '../PropertyTableRow';
 
 describe('PropertyTableRow', () => {
@@ -25,6 +25,11 @@ describe('PropertyTableRow', () => {
     );
   }
 
+  function getUpdateStatusLabel(status: RecordStatus) {
+    if (status === 'active') return /mark as inactive/i;
+    return /mark as active/i;
+  }
+
   it.each`
     status        | to
     ${'active'}   | ${'inactive'}
@@ -35,7 +40,7 @@ describe('PropertyTableRow', () => {
     const container = getByText(Number(expected.id))
       .parentElement as HTMLElement;
     const updateStatusButton = within(container).getByLabelText(
-      /update status/i,
+      getUpdateStatusLabel(status),
       {
         selector: 'button',
       }
@@ -74,9 +79,12 @@ describe('PropertyTableRow', () => {
       within(container).getByLabelText(/update$/i, {selector: 'button'})
     ).toBeInTheDocument();
     expect(
-      within(container).getByLabelText(/update status/i, {
-        selector: 'button',
-      })
+      within(container).getByLabelText(
+        getUpdateStatusLabel(mockedProperty.status),
+        {
+          selector: 'button',
+        }
+      )
     ).toBeInTheDocument();
 
     fireEvent.click(within(container).getByText(mockedProperty.code));

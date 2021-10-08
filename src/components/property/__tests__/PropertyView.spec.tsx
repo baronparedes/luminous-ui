@@ -12,6 +12,7 @@ import routes from '../../../@utils/routes';
 import {renderWithProviderAndRouterAndRestful} from '../../../@utils/test-renderers';
 import {ProfileType} from '../../../Api';
 import {profileActions} from '../../../store/reducers/profile.reducer';
+import AdjustTransactions from '../actions/AdjustTransactions';
 import ViewPreviousStatements from '../actions/ViewPreviousStatements';
 import PropertyAssignmentCard from '../PropertyAssignmentCard';
 import PropertyDetails from '../PropertyDetails';
@@ -31,6 +32,8 @@ type PropertyAssignmentCardProps = React.ComponentProps<
 type ViewPreviousStatementsProps = React.ComponentProps<
   typeof ViewPreviousStatements
 >;
+
+type AdjustTransactionsProps = React.ComponentProps<typeof AdjustTransactions>;
 
 jest.mock('../PropertyDetails', () => (props: PropertyDetailsProps) => {
   return <div data-testid="mock-property-details">{JSON.stringify(props)}</div>;
@@ -58,6 +61,14 @@ jest.mock(
   '../actions/ViewPreviousStatements',
   () =>
     ({buttonLabel}: ViewPreviousStatementsProps) => {
+      return <button>{buttonLabel}</button>;
+    }
+);
+
+jest.mock(
+  '../actions/AdjustTransactions',
+  () =>
+    ({buttonLabel}: AdjustTransactionsProps) => {
       return <button>{buttonLabel}</button>;
     }
 );

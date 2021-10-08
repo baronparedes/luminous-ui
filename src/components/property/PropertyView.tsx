@@ -67,6 +67,7 @@ export const PropertyView = () => {
                     <AdjustTransactions
                       className="mb-2 w-100"
                       buttonLabel="adjustments"
+                      propertyId={propertyId}
                       onSaveAdjustments={handleOnRefresh}
                       currentTransactions={propertyAccountData.transactions?.filter(
                         t => t.transactionType === 'charged'

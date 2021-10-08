@@ -100,6 +100,7 @@ export function generateFakePropertyAssignment(): PropertyAssignmentAttr {
 
 export function generateFakeCharge(): ChargeAttr {
   return {
+    id: faker.datatype.number(),
     chargeType: faker.random.arrayElement<ChargeType>([
       'amount',
       'percentage',

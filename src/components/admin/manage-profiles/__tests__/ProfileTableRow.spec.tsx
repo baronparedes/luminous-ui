@@ -4,7 +4,7 @@ import {fireEvent, waitFor, within} from '@testing-library/react';
 
 import {generateFakeProfile} from '../../../../@utils/fake-models';
 import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
-import {AuthProfile} from '../../../../Api';
+import {AuthProfile, RecordStatus} from '../../../../Api';
 import {profileActions} from '../../../../store/reducers/profile.reducer';
 import ProfileTableRow from '../ProfileTableRow';
 
@@ -25,6 +25,11 @@ describe('ProfilesTableRow', () => {
     );
   }
 
+  function getUpdateStatusLabel(status: RecordStatus) {
+    if (status === 'active') return /mark as inactive/i;
+    return /mark as active/i;
+  }
+
   it.each`
     status        | to
     ${'active'}   | ${'inactive'}
@@ -35,7 +40,7 @@ describe('ProfilesTableRow', () => {
     const container = getByText(targetProfile.username)
       .parentElement as HTMLElement;
     const updateStatusButton = within(container).getByLabelText(
-      /update status/i,
+      getUpdateStatusLabel(status),
       {
         selector: 'button',
       }
@@ -83,9 +88,12 @@ describe('ProfilesTableRow', () => {
       within(container).getByLabelText(/update$/i, {selector: 'button'})
     ).toBeInTheDocument();
     expect(
-      within(container).getByLabelText(/update status/i, {
-        selector: 'button',
-      })
+      within(container).getByLabelText(
+        getUpdateStatusLabel(mockedProfile.status),
+        {
+          selector: 'button',
+        }
+      )
     ).toBeInTheDocument();
   });
 });

@@ -54,8 +54,8 @@ const PropertyTableRow: React.FC<{row: PropertyAttr}> = ({row}) => {
           <PropertyUpdateButton value={rowState} onUpdate={handleOnUpdate} />
           {rowState.status === 'active' && (
             <Button
-              aria-label="update status"
-              title="update status"
+              aria-label="mark as inactive"
+              title="mark as inactive"
               variant="danger"
               size="sm"
               onClick={() => toggleStatus('inactive')}
@@ -65,8 +65,8 @@ const PropertyTableRow: React.FC<{row: PropertyAttr}> = ({row}) => {
           )}
           {rowState.status === 'inactive' && (
             <Button
-              aria-label="update status"
-              title="update status"
+              aria-label="mark as active"
+              title="mark as active"
               variant="success"
               size="sm"
               onClick={() => toggleStatus('active')}

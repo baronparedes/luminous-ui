@@ -35,6 +35,9 @@ const ProcessPaymentDetails = ({
       orNumber: '',
       paymentType: 'cash',
       collectedBy: Number(me?.id),
+      checkIssuingBank: '',
+      checkNumber: '',
+      checkPostingDate: '',
     },
   });
   const isCheckPayment = watch('paymentType') === 'check';
@@ -63,8 +66,7 @@ const ProcessPaymentDetails = ({
       </Button>
       <ModalContainer
         backdrop="static"
-        keyboard={false}
-        centered
+        dialogClassName="mt-5"
         header={<h5>Enter Payment Details</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
