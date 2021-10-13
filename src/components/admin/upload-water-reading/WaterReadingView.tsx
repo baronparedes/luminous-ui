@@ -1,0 +1,210 @@
+import {useState} from 'react';
+import {Button, Col, Container, Form, Row} from 'react-bootstrap';
+import {Controller, useForm} from 'react-hook-form';
+import {Prompt} from 'react-router-dom';
+
+import {ApprovedAny} from '../../../@types';
+import {sanitizeTransaction} from '../../../@utils/helpers';
+import {
+  Period,
+  useGetAllCharges,
+  useGetAllProperties,
+  usePostTransactions,
+} from '../../../Api';
+import {useWaterReadingDataTransformer} from '../../../hooks/useWaterReadingDataTransformer';
+import {useWaterReadingFile} from '../../../hooks/useWaterReadingFile';
+import ErrorInfo from '../../@ui/ErrorInfo';
+import Loading from '../../@ui/Loading';
+import ModalContainer from '../../@ui/ModalContainer';
+import RoundedPanel from '../../@ui/RoundedPanel';
+import SelectPeriod from '../../@ui/SelectPeriod';
+import WaterReadingTransactions from './WaterReadingTransactions';
+
+type FormData = {
+  file: ApprovedAny;
+  sheet?: string;
+};
+
+const WaterReadingView = () => {
+  const [toggle, setToggle] = useState(false);
+  const [selectedPeriod, setSelectedPeriod] = useState<Period>();
+  const [selectedFile, setSelectedFile] = useState<FileList>();
+  const [selectedSheet, setSelectedSheet] = useState<string>();
+  const {control, handleSubmit, reset} = useForm<FormData>({
+    defaultValues: {
+      sheet: '',
+    },
+  });
+
+  const {mutate, loading: inProgress} = usePostTransactions({});
+  const {data: charges, loading: loadingCharges} = useGetAllCharges({});
+  const {data: properties, loading: loadingProperties} = useGetAllProperties(
+    {}
+  );
+
+  const {sheets, data} = useWaterReadingFile(
+    selectedFile ? selectedFile[0] : undefined,
+    selectedSheet
+  );
+  const {transactions, parseErrors, error} = useWaterReadingDataTransformer(
+    data,
+    charges,
+    properties,
+    selectedPeriod
+  );
+
+  const onReset = (period?: Period, showModal = false) => {
+    reset();
+    setSelectedFile(undefined);
+    setSelectedSheet(undefined);
+    setSelectedPeriod(period);
+    setToggle(showModal);
+  };
+
+  const onSubmit = (formData: FormData) => {
+    if (confirm('Proceed?')) {
+      setSelectedSheet(formData.sheet);
+      setToggle(false);
+    }
+  };
+
+  const handleOnSelect = (period: Period) => {
+    onReset(period, true);
+  };
+
+  const handleOnSaveTransactions = () => {
+    const confirmMessage = `Upload transactions for the period of ${selectedPeriod?.year}-${selectedPeriod?.month}`;
+    if (confirm(confirmMessage)) {
+      const transactionsToBeSaved = transactions.map(t =>
+        sanitizeTransaction(t)
+      );
+      mutate(transactionsToBeSaved).then(() => onReset());
+    }
+  };
+
+  return (
+    <>
+      <Prompt
+        when={inProgress}
+        message={() =>
+          'Leaving or refreshing the page will interrupt the current process. Proceed?'
+        }
+      />
+      <Container>
+        <RoundedPanel className="p-4">
+          <h5 className="pl-2">Upload water reading for the period of</h5>
+          <SelectPeriod
+            onPeriodSelect={handleOnSelect}
+            buttonLabel="select file"
+            disabled={
+              toggle || loadingCharges || loadingProperties || inProgress
+            }
+          />
+          <ModalContainer
+            toggle={toggle}
+            onClose={() => setToggle(false)}
+            header={<h5>Select a file to upload</h5>}
+          >
+            <Form onSubmit={handleSubmit(onSubmit)}>
+              <Form.Group controlId="form-file-to-upload">
+                <Controller
+                  name="file"
+                  control={control}
+                  render={({field}) => (
+                    <Form.File
+                      {...field}
+                      onChange={(e: ApprovedAny) => {
+                        field.onChange(e);
+                        setSelectedFile(e.currentTarget.files ?? undefined);
+                      }}
+                      accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                      required
+                    />
+                  )}
+                />
+                <Form.Text className="text-muted">
+                  Only formatted water reading file is accepted
+                </Form.Text>
+              </Form.Group>
+              <Form.Group controlId="form-sheet-name">
+                <Controller
+                  name="sheet"
+                  control={control}
+                  render={({field}) => (
+                    <Form.Control
+                      {...field}
+                      required
+                      as="select"
+                      placeholder="sheet name"
+                    >
+                      <option value="">select sheet name to process</option>
+                      {sheets.map((s, i) => {
+                        return (
+                          <option value={s} key={i}>
+                            {s}
+                          </option>
+                        );
+                      })}
+                    </Form.Control>
+                  )}
+                />
+              </Form.Group>
+              <hr />
+              <div className="text-right">
+                <Button type="submit">Process</Button>
+              </div>
+            </Form>
+          </ModalContainer>
+        </RoundedPanel>
+        {inProgress && <Loading className="pt-3" />}
+        {error && (
+          <div className="pt-3">
+            <ErrorInfo>{error}</ErrorInfo>
+          </div>
+        )}
+        {!error && parseErrors.length > 0 && (
+          <>
+            <RoundedPanel className="mt-3 p-3">
+              <h6>No reading found for the following properties</h6>
+              <p>{parseErrors.join(',')}</p>
+            </RoundedPanel>
+          </>
+        )}
+        {!error && transactions.length > 0 && (
+          <>
+            <WaterReadingTransactions
+              transactions={transactions}
+              renderHeaderContent={
+                <>
+                  <Row>
+                    <Col>
+                      <div className="center-content">
+                        <h5 className="m-auto">
+                          Review Transactions to Upload
+                        </h5>
+                        <h5 className="pt-1">
+                          {`${transactions.length} of ${properties?.length} for  the period of ${selectedPeriod?.year}-${selectedPeriod?.month}`}
+                        </h5>
+                      </div>
+                    </Col>
+                    <Col className="text-right">
+                      <Button
+                        disabled={inProgress}
+                        variant="secondary"
+                        onClick={handleOnSaveTransactions}
+                      >
+                        Save Transactions
+                      </Button>
+                    </Col>
+                  </Row>
+                </>
+              }
+            />
+          </>
+        )}
+      </Container>
+    </>
+  );
+};
+
+export default WaterReadingView;
