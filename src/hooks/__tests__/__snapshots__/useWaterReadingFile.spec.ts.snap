@@ -1,0 +1,227 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`useWaterReadingFile should render data from a selected sheet 1`] = `
+Object {
+  "data": Array [
+    Object {
+      "presentReading": 1344,
+      "previousReading": 1340,
+      "rate": 15.98,
+      "unitNumber": "G-101",
+    },
+    Object {
+      "presentReading": 1505,
+      "previousReading": 1503,
+      "rate": 15.98,
+      "unitNumber": "H-114",
+    },
+    Object {
+      "presentReading": 243,
+      "previousReading": 243,
+      "rate": 15.98,
+      "unitNumber": "G-102",
+    },
+    Object {
+      "presentReading": 1280,
+      "previousReading": 1273,
+      "rate": 15.98,
+      "unitNumber": "H-115",
+    },
+    Object {
+      "presentReading": 928,
+      "previousReading": 918,
+      "rate": 15.98,
+      "unitNumber": "G-103",
+    },
+    Object {
+      "presentReading": 685,
+      "previousReading": 685,
+      "rate": 15.98,
+      "unitNumber": "H-116",
+    },
+    Object {
+      "presentReading": 595,
+      "previousReading": 576,
+      "rate": 15.98,
+      "unitNumber": "G-104",
+    },
+    Object {
+      "presentReading": 2623,
+      "previousReading": 2614,
+      "rate": 15.98,
+      "unitNumber": "H-117",
+    },
+    Object {
+      "presentReading": 930,
+      "previousReading": 930,
+      "rate": 15.98,
+      "unitNumber": "G-105",
+    },
+    Object {
+      "presentReading": 2674,
+      "previousReading": 2645,
+      "rate": 15.98,
+      "unitNumber": "H-118",
+    },
+    Object {
+      "presentReading": 894,
+      "previousReading": 864,
+      "rate": 15.98,
+      "unitNumber": "G-106",
+    },
+    Object {
+      "presentReading": 1649,
+      "previousReading": 1641,
+      "rate": 15.98,
+      "unitNumber": "H-119",
+    },
+    Object {
+      "presentReading": 1691,
+      "previousReading": 1676,
+      "rate": 15.98,
+      "unitNumber": "G-107",
+    },
+    Object {
+      "presentReading": 138,
+      "previousReading": 138,
+      "rate": 15.98,
+      "unitNumber": "H-120",
+    },
+    Object {
+      "presentReading": 4100,
+      "previousReading": 4081,
+      "rate": 15.98,
+      "unitNumber": "G-108",
+    },
+    Object {
+      "presentReading": 375,
+      "previousReading": 375,
+      "rate": 15.98,
+      "unitNumber": "H-121",
+    },
+    Object {
+      "presentReading": 846,
+      "previousReading": 843,
+      "rate": 15.98,
+      "unitNumber": "G-109",
+    },
+    Object {
+      "presentReading": 446,
+      "previousReading": 446,
+      "rate": 15.98,
+      "unitNumber": "H-122",
+    },
+    Object {
+      "presentReading": 1999,
+      "previousReading": 1991,
+      "rate": 15.98,
+      "unitNumber": "G-110",
+    },
+    Object {
+      "presentReading": 2669,
+      "previousReading": 2662,
+      "rate": 15.98,
+      "unitNumber": "H-123",
+    },
+    Object {
+      "presentReading": 1884,
+      "previousReading": 1884,
+      "rate": 15.98,
+      "unitNumber": "G-612",
+    },
+    Object {
+      "presentReading": 107,
+      "previousReading": 107,
+      "rate": 15.98,
+      "unitNumber": "G-613",
+    },
+    Object {
+      "presentReading": 2136,
+      "previousReading": 2108,
+      "rate": 15.98,
+      "unitNumber": "G-614",
+    },
+    Object {
+      "presentReading": 1826,
+      "previousReading": 1823,
+      "rate": 15.98,
+      "unitNumber": "G-615",
+    },
+    Object {
+      "presentReading": 277,
+      "previousReading": 277,
+      "rate": 15.98,
+      "unitNumber": "G-616",
+    },
+    Object {
+      "presentReading": 675,
+      "previousReading": 675,
+      "rate": 15.98,
+      "unitNumber": "G-LG01",
+    },
+    Object {
+      "presentReading": 1793,
+      "previousReading": 1786,
+      "rate": 15.98,
+      "unitNumber": "G-LG02",
+    },
+    Object {
+      "presentReading": 1433,
+      "previousReading": 1433,
+      "rate": 15.98,
+      "unitNumber": "G-LG03",
+    },
+    Object {
+      "presentReading": 2989,
+      "previousReading": 2987,
+      "rate": 15.98,
+      "unitNumber": "G-LG04",
+    },
+    Object {
+      "presentReading": 4110,
+      "previousReading": 4088,
+      "rate": 15.98,
+      "unitNumber": "G-LG05",
+    },
+    Object {
+      "presentReading": 1691,
+      "previousReading": 1691,
+      "rate": 15.98,
+      "unitNumber": "G-LG06",
+    },
+    Object {
+      "presentReading": 353,
+      "previousReading": 353,
+      "rate": 15.98,
+      "unitNumber": "G-LG07",
+    },
+    Object {
+      "presentReading": 773,
+      "previousReading": 760,
+      "rate": 15.98,
+      "unitNumber": "G-LG08",
+    },
+    Object {
+      "presentReading": 503,
+      "previousReading": 503,
+      "rate": 15.98,
+      "unitNumber": "G-LG09",
+    },
+    Object {
+      "presentReading": 909,
+      "previousReading": 909,
+      "rate": 15.98,
+      "unitNumber": "G-LG10",
+    },
+    Object {
+      "presentReading": 841,
+      "previousReading": 841,
+      "rate": 15.98,
+      "unitNumber": "G-LG11",
+    },
+  ],
+  "sheets": Array [
+    "Sheet1",
+  ],
+}
+`;

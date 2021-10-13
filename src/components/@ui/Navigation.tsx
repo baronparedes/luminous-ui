@@ -1,5 +1,12 @@
 import {Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
-import {FaCogs, FaHome, FaPrint, FaStream, FaUsers} from 'react-icons/fa';
+import {
+  FaCogs,
+  FaFileUpload,
+  FaHome,
+  FaPrint,
+  FaStream,
+  FaUsers,
+} from 'react-icons/fa';
 import {RiCommunityLine} from 'react-icons/ri';
 import {LinkContainer} from 'react-router-bootstrap';
 import {NavLink} from 'react-router-dom';
@@ -81,6 +88,17 @@ function buildNavigationSections(profileType: ProfileType) {
             <>
               <FaPrint className="mr-1" />
               batch print soa
+            </>
+          ),
+        },
+        divider,
+        {
+          to: routes.ADMIN_UPLOAD_WATER_READING,
+          exact: true,
+          title: (
+            <>
+              <FaFileUpload className="mr-1" />
+              upload water reading
             </>
           ),
         },

@@ -34,7 +34,7 @@ const BatchTransactionView = () => {
       />
       <Container>
         <RoundedPanel className="p-4">
-          <h5 className="pl-2">Select a period</h5>
+          <h5 className="pl-2">Process transactions for the period of</h5>
           <SelectPeriod
             onPeriodSelect={handleOnSelect}
             buttonLabel="process"

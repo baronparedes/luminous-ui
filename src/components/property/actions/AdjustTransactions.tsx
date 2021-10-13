@@ -8,6 +8,7 @@ import {
   Row,
 } from 'react-bootstrap';
 
+import {sanitizeTransaction} from '../../../@utils/helpers';
 import {
   TransactionAttr,
   useGetAllCharges,
@@ -30,17 +31,6 @@ type WaivedTransction = {
   transactionId: number;
   transactions: TransactionAttr[];
 };
-
-export function sanitizeTransaction(transaction: TransactionAttr) {
-  const cleaned = {
-    ...transaction,
-    charge: undefined,
-    paymentDetailId: transaction.paymentDetailId ?? undefined,
-    comments: transaction.comments ?? undefined,
-    rateSnapshot: transaction.rateSnapshot ?? undefined,
-  };
-  return cleaned;
-}
 
 export function toWaivedTransaction(
   transaction: TransactionAttr,

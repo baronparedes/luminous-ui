@@ -58,7 +58,9 @@ const BatchPrintView = () => {
       />
       <Container>
         <RoundedPanel className="p-4">
-          <h5 className="pl-2">Select a period</h5>
+          <h5 className="pl-2">
+            Print Statement of Accounts for the period of
+          </h5>
           <SelectPeriod
             onPeriodSelect={handleOnSelect}
             buttonLabel="render"

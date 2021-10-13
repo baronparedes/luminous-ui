@@ -19,6 +19,7 @@ export const SETTING_KEYS = {
 
 export const DEFAULTS = {
   BILLING_CUTOFF_DAY: 30,
+  WATER_CHARGE_ID: 6,
 };
 
 export const VERBIAGE = {

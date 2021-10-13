@@ -22,10 +22,12 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-to-print": "^2.13.0",
+    "read-excel-file": "^5.2.13",
     "redux-thunk": "^2.3.0",
     "restful-react": "^15.9.0",
     "sanitize-html": "^2.5.1",
     "styled-components": "^5.3.1",
+    "uuid": "^8.3.2",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
@@ -83,6 +85,7 @@
     "@types/react-router-dom": "^5.1.8",
     "@types/sanitize-html": "^2.3.2",
     "@types/styled-components": "^5.1.12",
+    "@types/uuid": "^8.3.1",
     "faker": "^5.5.3",
     "gts": "^3.1.0",
     "history": "^4.10.1",

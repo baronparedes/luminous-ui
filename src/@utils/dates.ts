@@ -1,13 +1,13 @@
 import moment from 'moment';
 
-import {Month} from '../Api';
+import {Month, Period} from '../Api';
 
 export function getCurrentDateFormatted() {
   return formatDate(new Date());
 }
 
-export function formatDate(date: Date) {
-  return moment(date).format('YYYY-MMM-DD');
+export function formatDate(date: Date | string) {
+  return moment(new Date(date)).format('YYYY-MMM-DD');
 }
 
 export function getCurrentDateTimeFormatted(date?: Date) {
@@ -15,7 +15,7 @@ export function getCurrentDateTimeFormatted(date?: Date) {
   return `${formatDate(now)} ${now.toLocaleTimeString()}`;
 }
 
-export function getCurrentMonthYear() {
+export function getCurrentMonthYear(): Period {
   const [year, month] = moment().format('YYYY MMM').split(' ');
   return {
     year: Number(year),
@@ -45,7 +45,7 @@ export function toTransactionPeriod(year: number, month: Month) {
   return new Date(dateString);
 }
 
-export function toTransactionPeriodFromDate(date: Date) {
+export function toTransactionPeriodFromDate(date: Date): Period {
   const [year, month] = moment(date).format('YYYY MMM').split(' ');
   return {
     year: Number(year),

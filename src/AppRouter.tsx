@@ -10,6 +10,7 @@ import BatchTransactionView from './components/admin/batch-transaction/BatchTran
 import ProfilesView from './components/admin/manage-profiles/ProfilesView';
 import PropertiesView from './components/admin/manage-properties/PropertiesView';
 import SettingsView from './components/admin/manage-settings/SettingsView';
+import WaterReadingView from './components/admin/upload-water-reading/WaterReadingView';
 import DashboardView from './components/dashboard/DashboardView';
 import LoginView from './components/profile/LoginView';
 import MyProfileView from './components/profile/MyProfileView';
@@ -74,6 +75,12 @@ const AppRouter: React.FC = () => {
               exact
               onlyFor={['admin']}
               component={BatchPrintView}
+            />
+            <ProtectedRoute
+              path={routes.ADMIN_UPLOAD_WATER_READING}
+              exact
+              onlyFor={['admin']}
+              component={WaterReadingView}
             />
             <Route component={NotFound} />
           </Switch>

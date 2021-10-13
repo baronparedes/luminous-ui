@@ -1,4 +1,4 @@
-import {PropertyAccount} from '../Api';
+import {PropertyAccount, TransactionAttr} from '../Api';
 
 export function generateNumberedSeries(n: number): number[] {
   return Array(n)
@@ -31,4 +31,15 @@ export function calculateAccount(propertyAccount: PropertyAccount) {
     collectionBalance,
     totalAmountDue,
   };
+}
+
+export function sanitizeTransaction(transaction: TransactionAttr) {
+  const cleaned: TransactionAttr = {
+    ...transaction,
+    charge: undefined,
+    paymentDetailId: transaction.paymentDetailId ?? undefined,
+    comments: transaction.comments ?? undefined,
+    rateSnapshot: transaction.rateSnapshot ?? undefined,
+  };
+  return cleaned;
 }

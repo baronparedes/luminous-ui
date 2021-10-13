@@ -11,11 +11,11 @@ import {
   generateFakeProfile,
   generateFakeTransaction,
 } from '../../../../@utils/fake-models';
+import {sanitizeTransaction} from '../../../../@utils/helpers';
 import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
 import {profileActions} from '../../../../store/reducers/profile.reducer';
 import {toTransaction} from '../../actions/AdjustedTransactions';
 import AdjustTransactions, {
-  sanitizeTransaction,
   toWaivedTransaction,
 } from '../../actions/AdjustTransactions';
 
