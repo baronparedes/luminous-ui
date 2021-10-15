@@ -54,7 +54,7 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
                   return (
                     <tr key={i}>
                       <td>{t.charge?.code}</td>
-                      <td>{t.charge?.rate}</td>
+                      <td>{t.rateSnapshot}</td>
                       <td>
                         <strong>
                           <Currency noCurrencyColor currency={t.amount} />

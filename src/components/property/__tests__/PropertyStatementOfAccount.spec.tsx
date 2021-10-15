@@ -110,7 +110,7 @@ describe('PropertyStatementOfAccount', () => {
           within(row).getByText(expectedTransaction.charge?.code as string)
         ).toBeInTheDocument();
         expect(
-          within(row).getByText(expectedTransaction.charge?.rate as number)
+          within(row).getByText(expectedTransaction.rateSnapshot as number)
         ).toBeInTheDocument();
         expect(
           within(row).getByText(

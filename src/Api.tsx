@@ -133,7 +133,7 @@ export interface TransactionAttr {
   paymentDetailId?: number;
   paymentDetail?: PaymentDetailAttr;
   rateSnapshot?: number;
-  batchId?: string;
+  batchId?: string | null;
 }
 
 export interface PropertyAccount {
