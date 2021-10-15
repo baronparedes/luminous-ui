@@ -165,7 +165,7 @@ const WaterReadingView = () => {
               <h6 className="text-muted">
                 No reading found for the following properties
               </h6>
-              <strong>
+              <strong className="text-danger">
                 <p>{parseErrors.join(',')}</p>
               </strong>
             </RoundedPanel>
@@ -177,7 +177,7 @@ const WaterReadingView = () => {
               <h6 className="text-muted">
                 The following properties were not found in the masterlist
               </h6>
-              <strong>
+              <strong className="text-danger">
                 <p>{parseMismatch.join(',')}</p>
               </strong>
             </RoundedPanel>
