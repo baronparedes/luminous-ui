@@ -6,6 +6,51 @@ import {ChargeAttr, Period, PropertyAttr, TransactionAttr} from '../Api';
 import {DEFAULTS} from '../constants';
 import {WaterReadingData} from './useWaterReadingFile';
 
+function toTransaction(
+  data: WaterReadingData,
+  property: PropertyAttr,
+  charge: ChargeAttr,
+  period: Period,
+  batchId: string
+) {
+  const transactionPeriod = toTransactionPeriod(
+    period.year,
+    period.month
+  ).toISOString();
+  const usage = Number(data.presentReading) - Number(data.previousReading);
+  const amount = Number(data.rate) * usage;
+  const chargeComments = {
+    previousReading: data.previousReading,
+    presentReading: data.presentReading,
+    usage,
+  };
+  const transaction: TransactionAttr = {
+    chargeId: Number(charge?.id),
+    propertyId: Number(property.id),
+    amount,
+    transactionPeriod,
+    transactionType: 'charged',
+    rateSnapshot: Number(data.rate),
+    comments: JSON.stringify(chargeComments),
+    charge,
+    property,
+    batchId,
+  };
+
+  return transaction;
+}
+
+function getMismatch(
+  properties: PropertyAttr[] | null,
+  data: WaterReadingData[]
+) {
+  const masterlist = properties?.map(p => p.code) ?? [];
+  const mismatch = data
+    .filter(d => d.unitNumber && !masterlist.includes(d.unitNumber))
+    .map(d => d.unitNumber as string);
+  return mismatch;
+}
+
 export function useWaterReadingDataTransformer(
   data: WaterReadingData[],
   charges?: ChargeAttr[] | null,
@@ -15,6 +60,7 @@ export function useWaterReadingDataTransformer(
   const batchId = uuidv4();
   const [error, setError] = useState<string>();
   const [parseErrors, setParseErrors] = useState<string[]>([]);
+  const [parseMismatch, setParseMismatch] = useState<string[]>([]);
   const [transactions, setTransactions] = useState<TransactionAttr[]>([]);
   const [charge, setCharge] = useState<ChargeAttr>();
 
@@ -37,53 +83,39 @@ export function useWaterReadingDataTransformer(
       const result: TransactionAttr[] = [];
       for (const property of properties) {
         const item = data.find(d => d.unitNumber === property.code);
-        if (item) {
-          const transactionPeriod = toTransactionPeriod(
-            period.year,
-            period.month
-          ).toISOString();
-          const usage =
-            Number(item.presentReading) - Number(item.previousReading);
-          const amount = Number(item.rate) * usage;
-          const chargeComments = {
-            previousReading: item.previousReading,
-            presentReading: item.presentReading,
-            usage,
-          };
-          const transaction: TransactionAttr = {
-            chargeId: Number(charge?.id),
-            propertyId: Number(property.id),
-            amount,
-            transactionPeriod,
-            transactionType: 'charged',
-            rateSnapshot: Number(item.rate),
-            comments: JSON.stringify(chargeComments),
-            charge,
-            property,
-            batchId,
-          };
-          result.push(transaction);
-        } else {
+        if (!item) {
           errors.push(property.code);
+          continue;
         }
+        const transaction = toTransaction(
+          item,
+          property,
+          charge,
+          period,
+          batchId
+        );
+        result.push(transaction);
       }
       setTransactions(result);
       setParseErrors(errors);
+      setParseMismatch(getMismatch(properties, data));
     } else {
       setTransactions([]);
       setParseErrors([]);
+      setParseMismatch([]);
     }
   }, [
     JSON.stringify(properties?.map(p => p.id)),
-    period,
-    charge,
     JSON.stringify(data.map(d => d.unitNumber)),
+    charge,
+    period,
   ]);
 
   return {
     charge,
     transactions,
     parseErrors,
+    parseMismatch,
     error,
   };
 }

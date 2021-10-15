@@ -29,6 +29,7 @@ describe('useWaterReadingDataTransformer', () => {
     {...generateFakeProperty(), code: 'G-100'},
     {...generateFakeProperty(), code: 'G-200'},
     {...generateFakeProperty(), code: 'G-300'},
+    {...generateFakeProperty(), code: 'G-999'},
   ];
 
   it('should return no error when target charge found', () => {
@@ -39,6 +40,7 @@ describe('useWaterReadingDataTransformer', () => {
     expect(target.result.current.error).toEqual(undefined);
     expect(target.result.current.parseErrors).toEqual([]);
     expect(target.result.current.transactions).toEqual([]);
+    expect(target.result.current.parseMismatch).toEqual([]);
   });
 
   it('should return error when target charge is not found', () => {
@@ -55,6 +57,7 @@ describe('useWaterReadingDataTransformer', () => {
       'unable to locate charge for water utility'
     );
     expect(target.result.current.parseErrors).toEqual([]);
+    expect(target.result.current.parseMismatch).toEqual([]);
     expect(target.result.current.transactions).toEqual([]);
   });
 
@@ -72,7 +75,6 @@ describe('useWaterReadingDataTransformer', () => {
     );
 
     expect(target.result.current.error).toEqual(undefined);
-    expect(target.result.current.transactions).toEqual([]);
     expect(target.result.current.parseErrors).toEqual(
       properties.map(p => p.code)
     );
@@ -104,7 +106,10 @@ describe('useWaterReadingDataTransformer', () => {
     );
 
     expect(target.result.current.error).toEqual(undefined);
-    expect(target.result.current.parseErrors).toEqual([]);
+    expect(target.result.current.parseErrors).toEqual(['G-999']);
+    expect(target.result.current.parseMismatch).not.toContain(
+      properties.map(d => d.code)
+    );
     expect(target.result.current.transactions.length).toEqual(3);
 
     for (const actual of target.result.current.transactions) {

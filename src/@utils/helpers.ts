@@ -43,3 +43,15 @@ export function sanitizeTransaction(transaction: TransactionAttr) {
   };
   return cleaned;
 }
+
+export function compareTransaction(a: TransactionAttr, b: TransactionAttr) {
+  const nameA = a.property?.code as string;
+  const nameB = b.property?.code as string;
+  if (nameA < nameB) {
+    return -1;
+  }
+  if (nameA > nameB) {
+    return 1;
+  }
+  return 0;
+}

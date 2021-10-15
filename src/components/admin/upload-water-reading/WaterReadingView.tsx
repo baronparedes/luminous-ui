@@ -46,12 +46,8 @@ const WaterReadingView = () => {
     selectedFile ? selectedFile[0] : undefined,
     selectedSheet
   );
-  const {transactions, parseErrors, error} = useWaterReadingDataTransformer(
-    data,
-    charges,
-    properties,
-    selectedPeriod
-  );
+  const {transactions, parseErrors, parseMismatch, error} =
+    useWaterReadingDataTransformer(data, charges, properties, selectedPeriod);
 
   const onReset = (period?: Period, showModal = false) => {
     reset();
@@ -117,6 +113,7 @@ const WaterReadingView = () => {
                         field.onChange(e);
                         setSelectedFile(e.currentTarget.files ?? undefined);
                       }}
+                      label="select file to upload"
                       accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
                       required
                     />
@@ -137,7 +134,7 @@ const WaterReadingView = () => {
                       as="select"
                       placeholder="sheet name"
                     >
-                      <option value="">select sheet name to process</option>
+                      <option value="">select sheet name</option>
                       {sheets.map((s, i) => {
                         return (
                           <option value={s} key={i}>
@@ -157,7 +154,7 @@ const WaterReadingView = () => {
           </ModalContainer>
         </RoundedPanel>
         {inProgress && <Loading className="pt-3" />}
-        {error && (
+        {!loadingCharges && !loadingProperties && error && (
           <div className="pt-3">
             <ErrorInfo>{error}</ErrorInfo>
           </div>
@@ -165,8 +162,24 @@ const WaterReadingView = () => {
         {!error && parseErrors.length > 0 && (
           <>
             <RoundedPanel className="mt-3 p-3">
-              <h6>No reading found for the following properties</h6>
-              <p>{parseErrors.join(',')}</p>
+              <h6 className="text-muted">
+                No reading found for the following properties
+              </h6>
+              <strong>
+                <p>{parseErrors.join(',')}</p>
+              </strong>
+            </RoundedPanel>
+          </>
+        )}
+        {!error && parseMismatch.length > 0 && (
+          <>
+            <RoundedPanel className="mt-3 p-3">
+              <h6 className="text-muted">
+                The following properties were not found in the masterlist
+              </h6>
+              <strong>
+                <p>{parseMismatch.join(',')}</p>
+              </strong>
             </RoundedPanel>
           </>
         )}

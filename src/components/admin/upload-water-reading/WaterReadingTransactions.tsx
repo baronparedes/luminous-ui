@@ -1,4 +1,5 @@
 import {formatDate} from '../../../@utils/dates';
+import {compareTransaction} from '../../../@utils/helpers';
 import {TransactionAttr} from '../../../Api';
 import {Currency} from '../../@ui/Currency';
 import RoundedPanel from '../../@ui/RoundedPanel';
@@ -24,17 +25,7 @@ const WaterReadingTransactions = ({
             {transactions
               .filter(t => t.transactionType === 'charged')
               .filter(t => t.amount > 0)
-              .sort((a, b) => {
-                const nameA = a.property?.code as string;
-                const nameB = b.property?.code as string;
-                if (nameA < nameB) {
-                  return -1;
-                }
-                if (nameA > nameB) {
-                  return 1;
-                }
-                return 0;
-              })
+              .sort(compareTransaction)
               .map((t, i) => {
                 const reading = JSON.parse(t.comments ?? '');
                 return (

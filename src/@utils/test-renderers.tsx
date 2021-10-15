@@ -127,6 +127,25 @@ export function renderWithProvider(
   };
 }
 
+export function renderWithRestfulAndRouter(
+  ui: React.ReactElement,
+  base: string,
+  setupHistory?: (history: ReturnType<typeof createMemoryHistory>) => void
+) {
+  const {RestfulWrapper} = getRestfulWrapper(base);
+  const {history, RouterWrapper} = getRouterWrapper(setupHistory);
+  const Wrapper: React.FC<ApprovedAny> = props => (
+    <RouterWrapper>
+      <RestfulWrapper>{props.children}</RestfulWrapper>
+    </RouterWrapper>
+  );
+  const target = render(ui, {wrapper: Wrapper});
+  return {
+    ...target,
+    history,
+  };
+}
+
 export function renderWithRestful(ui: React.ReactElement, base: string) {
   const {RestfulWrapper} = getRestfulWrapper(base);
   const target = render(ui, {wrapper: RestfulWrapper});
