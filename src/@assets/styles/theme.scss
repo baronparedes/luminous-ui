@@ -26,19 +26,38 @@ $body-bg: #E9EBEE;
     text-transform: lowercase;
 }
 
-.nav-link {
-    background-color: none;
-    color: $light !important;
-    margin: 0.5em;
-
-    &.active {
-        border-bottom: 3px solid $info;
+.navbar-nav {
+    .nav-link {
+        background-color: none;
+        color: $light !important;
+        margin: 0.5em;
+    
+        &.active {
+            border-bottom: 3px solid $info;
+        }
+    
+        &:hover {
+            background: none;
+            background-image: none;
+            color: $info !important;
+        }
     }
+}
 
-    &:hover {
-        background: none;
-        background-image: none;
-        color: $info !important;
+.nav-tabs {
+    .nav-link {
+        margin: 0.5em;
+        font-weight: bold;
+    
+        &.active {
+            background-color: white !important;
+        }
+    
+        &:hover {
+            background: none;
+            background-image: none;
+            color: $primary !important;
+        }
     }
 }
 

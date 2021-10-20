@@ -127,7 +127,7 @@ const NavigationSection = (props: NavSection) => {
         <NavDropdown title={props.title} id={props.id}>
           {props.navItems.map((nav, i) => {
             if (nav.isDivider) {
-              return <NavDropdown.Divider />;
+              return <NavDropdown.Divider key={i} />;
             }
             return (
               <NavDropdown.Item

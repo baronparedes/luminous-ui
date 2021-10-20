@@ -40,8 +40,8 @@ export interface ChargeAttr {
   rate: number;
   chargeType: ChargeType;
   postingType: PostingType;
-  thresholdInMonths?: number;
-  priority?: number;
+  thresholdInMonths?: number | null;
+  priority?: number | null;
 }
 
 export interface FieldError {
@@ -204,6 +204,22 @@ export const GetAllCharges = (props: GetAllChargesProps) => (
 export type UseGetAllChargesProps = Omit<UseGetProps<ChargeAttr[], unknown, void, void>, "path">;
 
 export const useGetAllCharges = (props: UseGetAllChargesProps) => useGet<ChargeAttr[], unknown, void, void>(`/api/charge/getAllCharges`, props);
+
+
+export type PatchChargesProps = Omit<MutateProps<void, unknown, void, ChargeAttr[], void>, "path" | "verb">;
+
+export const PatchCharges = (props: PatchChargesProps) => (
+  <Mutate<void, unknown, void, ChargeAttr[], void>
+    verb="PATCH"
+    path={`/api/charge/patchCharges`}
+    
+    {...props}
+  />
+);
+
+export type UsePatchChargesProps = Omit<UseMutateProps<void, unknown, void, ChargeAttr[], void>, "path" | "verb">;
+
+export const usePatchCharges = (props: UsePatchChargesProps) => useMutate<void, unknown, void, ChargeAttr[], void>("PATCH", `/api/charge/patchCharges`, props);
 
 
 export interface GetAllProfilesQueryParams {

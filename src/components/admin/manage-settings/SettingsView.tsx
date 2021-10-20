@@ -1,8 +1,9 @@
 import React from 'react';
-import {Col, Container, Row} from 'react-bootstrap';
+import {Col, Container, Row, Tab, TabContainer, Tabs} from 'react-bootstrap';
 
 import RoundedPanel from '../../@ui/RoundedPanel';
 import SettingBillingCutoff from './SettingBillingCutoff';
+import SettingCharges from './SettingCharges';
 import SettingSOA from './SettingSOA';
 
 export const SettingContainer: React.FC<{
@@ -27,8 +28,19 @@ const SettingsView = () => {
   return (
     <>
       <Container>
-        <SettingBillingCutoff />
-        <SettingSOA />
+        <TabContainer>
+          <Tabs defaultActiveKey="charges" className="mb-3">
+            <Tab eventKey="charges" title="Charge Rates">
+              <SettingCharges />
+            </Tab>
+            <Tab eventKey="billing" title="Billing">
+              <SettingBillingCutoff />
+            </Tab>
+            <Tab eventKey="soa-notes" title="SOA Notes">
+              <SettingSOA />
+            </Tab>
+          </Tabs>
+        </TabContainer>
       </Container>
     </>
   );
