@@ -42,6 +42,7 @@ export interface ChargeAttr {
   postingType: PostingType;
   thresholdInMonths?: number | null;
   priority?: number | null;
+  passOn?: boolean | null;
 }
 
 export interface FieldError {

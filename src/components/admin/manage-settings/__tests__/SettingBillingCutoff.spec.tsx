@@ -37,7 +37,9 @@ describe('SettingBillingCutoff', () => {
     });
     fireEvent.click(getByText(/save/i));
     await waitFor(() => expect(getByRole('progressbar')).toBeInTheDocument());
-    await waitFor(() => expect(queryByRole('progressbar')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(queryByRole('progressbar')).not.toBeInTheDocument()
+    );
     await waitFor(() => {
       const actual = store
         .getState()

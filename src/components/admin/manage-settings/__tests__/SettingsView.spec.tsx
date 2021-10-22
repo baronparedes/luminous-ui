@@ -14,11 +14,18 @@ jest.mock('../SettingCharges', () => () => {
   return <div data-testid="mock-setting-charges">Setting Charges</div>;
 });
 
+jest.mock('../SettingExpenseCategory', () => () => {
+  return (
+    <div data-testid="mock-setting-expense-category">Expense Categories</div>
+  );
+});
+
 describe('SettingsView', () => {
   it('should render', () => {
     const {getByTestId} = render(<SettingsView />);
     expect(getByTestId('mock-setting-soa')).toBeInTheDocument();
     expect(getByTestId('mock-setting-billing')).toBeInTheDocument();
     expect(getByTestId('mock-setting-charges')).toBeInTheDocument();
+    expect(getByTestId('mock-setting-expense-category')).toBeInTheDocument();
   });
 });

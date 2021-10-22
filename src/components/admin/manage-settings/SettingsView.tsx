@@ -4,6 +4,7 @@ import {Col, Container, Row, Tab, TabContainer, Tabs} from 'react-bootstrap';
 import RoundedPanel from '../../@ui/RoundedPanel';
 import SettingBillingCutoff from './SettingBillingCutoff';
 import SettingCharges from './SettingCharges';
+import SettingExpenseCategory from './SettingExpenseCategory';
 import SettingSOA from './SettingSOA';
 
 export const SettingContainer: React.FC<{
@@ -38,6 +39,9 @@ const SettingsView = () => {
             </Tab>
             <Tab eventKey="soa-notes" title="SOA Notes">
               <SettingSOA />
+            </Tab>
+            <Tab eventKey="expense-categories" title="Expense Categories">
+              <SettingExpenseCategory />
             </Tab>
           </Tabs>
         </TabContainer>

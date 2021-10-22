@@ -51,9 +51,11 @@ const ProcessAmountInput = ({
     <Form onSubmit={handleSubmit(onFormSubmit)} role="form">
       <Col className={className}>
         <InputGroup className="mb-2">
-          <InputGroup.Text>
-            <FaMoneyBill />
-          </InputGroup.Text>
+          <InputGroup.Prepend>
+            <InputGroup.Text>
+              <FaMoneyBill />
+            </InputGroup.Text>
+          </InputGroup.Prepend>
           <Controller
             name="amount"
             control={control}
@@ -82,21 +84,23 @@ const ProcessAmountInput = ({
               />
             )}
           />
-          {buttonLabel && (
-            <Button size="sm" type="submit">
-              {buttonLabel}
-            </Button>
-          )}
-          {onRemove && (
-            <Button
-              title="remove"
-              size="sm"
-              variant="danger"
-              onClick={() => onRemove(chargeId)}
-            >
-              <FaTimes />
-            </Button>
-          )}
+          <InputGroup.Append>
+            {buttonLabel && (
+              <Button size="sm" type="submit">
+                {buttonLabel}
+              </Button>
+            )}
+            {onRemove && (
+              <Button
+                title="remove"
+                size="sm"
+                variant="danger"
+                onClick={() => onRemove(chargeId)}
+              >
+                <FaTimes />
+              </Button>
+            )}
+          </InputGroup.Append>
           <Form.Control.Feedback type="invalid" className="text-right">
             {formState.errors.amount?.message}
           </Form.Control.Feedback>

@@ -54,9 +54,11 @@ const LoginForm = () => {
             control={control}
             render={({field}) => (
               <InputGroup className="mb-2">
-                <InputGroup.Text>
-                  <FaUserAlt />
-                </InputGroup.Text>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <FaUserAlt />
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <Form.Control
                   {...field}
                   disabled={loading}
@@ -73,9 +75,11 @@ const LoginForm = () => {
             control={control}
             render={({field}) => (
               <InputGroup className="mb-2">
-                <InputGroup.Text>
-                  <FaKey />
-                </InputGroup.Text>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <FaKey />
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <Form.Control
                   {...field}
                   disabled={loading}

@@ -63,7 +63,8 @@ describe('ProcessPayment', () => {
     const computeButton = getByText(/compute/i, {selector: 'button'});
     expect(computeButton).toBeInTheDocument();
 
-    const amountContainer = computeButton.parentElement as HTMLElement;
+    const amountContainer = computeButton.parentElement
+      ?.parentElement as HTMLElement;
     const amountToProcessInput = within(amountContainer).getByPlaceholderText(
       /amount/i
     ) as HTMLInputElement;

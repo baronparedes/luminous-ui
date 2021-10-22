@@ -60,9 +60,11 @@ const ProfileSelect = ({onSelectProfiles}: Props) => {
   return (
     <>
       <InputGroup className="mb-2">
-        <InputGroup.Text>
-          <FaUserAlt />
-        </InputGroup.Text>
+        <InputGroup.Prepend>
+          <InputGroup.Text>
+            <FaUserAlt />
+          </InputGroup.Text>
+        </InputGroup.Prepend>
         <Typeahead
           ref={ref}
           id="search-profile-typeahead"
@@ -75,13 +77,15 @@ const ProfileSelect = ({onSelectProfiles}: Props) => {
           }}
           options={toProfileSelectItems(data)}
         />
-        <Button
-          aria-label="select profile"
-          variant="success"
-          onClick={handleOnSelectProfiles}
-        >
-          <FaPlus />
-        </Button>
+        <InputGroup.Append>
+          <Button
+            aria-label="select profile"
+            variant="success"
+            onClick={handleOnSelectProfiles}
+          >
+            <FaPlus />
+          </Button>
+        </InputGroup.Append>
       </InputGroup>
     </>
   );

@@ -64,9 +64,11 @@ const RegisterForm = () => {
             control={control}
             render={({field}) => (
               <InputGroup className="mb-2">
-                <InputGroup.Text>
-                  <FaTag />
-                </InputGroup.Text>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <FaTag />
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <Form.Control
                   {...field}
                   disabled={loading}
@@ -83,9 +85,11 @@ const RegisterForm = () => {
             control={control}
             render={({field}) => (
               <InputGroup className="mb-2">
-                <InputGroup.Text>
-                  <FaEnvelope />
-                </InputGroup.Text>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <FaEnvelope />
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <Form.Control
                   {...field}
                   disabled={loading}
@@ -103,9 +107,11 @@ const RegisterForm = () => {
             control={control}
             render={({field}) => (
               <InputGroup className="mb-2">
-                <InputGroup.Text>
-                  <FaMobile />
-                </InputGroup.Text>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <FaMobile />
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <Form.Control
                   {...field}
                   disabled={loading}
@@ -121,9 +127,11 @@ const RegisterForm = () => {
             control={control}
             render={({field}) => (
               <InputGroup className="mb-2">
-                <InputGroup.Text>
-                  <FaUserAlt />
-                </InputGroup.Text>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <FaUserAlt />
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <Form.Control
                   {...field}
                   disabled={loading}
@@ -148,9 +156,11 @@ const RegisterForm = () => {
             control={control}
             render={({field}) => (
               <InputGroup className="mb-2">
-                <InputGroup.Text>
-                  <FaKey />
-                </InputGroup.Text>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <FaKey />
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <Form.Control
                   {...field}
                   disabled={loading}
@@ -173,9 +183,11 @@ const RegisterForm = () => {
             }}
             render={({field}) => (
               <InputGroup className="mb-2">
-                <InputGroup.Text>
-                  <FaKey />
-                </InputGroup.Text>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <FaKey />
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <Form.Control
                   {...field}
                   disabled={loading}

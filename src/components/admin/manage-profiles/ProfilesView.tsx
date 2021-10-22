@@ -56,13 +56,15 @@ const ProfilesView = () => {
                     placeholder="search..."
                     onChange={handleOnChange}
                   />
-                  <Button
-                    variant="secondary"
-                    aria-label="search user"
-                    onClick={() => refetch()}
-                  >
-                    <FaSearch />
-                  </Button>
+                  <InputGroup.Append>
+                    <Button
+                      variant="secondary"
+                      aria-label="search user"
+                      onClick={() => refetch()}
+                    >
+                      <FaSearch />
+                    </Button>
+                  </InputGroup.Append>
                 </InputGroup>
               </Col>
             </Row>

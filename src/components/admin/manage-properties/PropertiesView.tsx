@@ -48,13 +48,15 @@ const PropertiesView = () => {
                     placeholder="search..."
                     onChange={handleOnChange}
                   />
-                  <Button
-                    variant="secondary"
-                    aria-label="search property"
-                    onClick={() => refetch()}
-                  >
-                    <FaSearch />
-                  </Button>
+                  <InputGroup.Append>
+                    <Button
+                      variant="secondary"
+                      aria-label="search property"
+                      onClick={() => refetch()}
+                    >
+                      <FaSearch />
+                    </Button>
+                  </InputGroup.Append>
                   <PropertyCreateButton
                     onCreate={() => {
                       refetch();
