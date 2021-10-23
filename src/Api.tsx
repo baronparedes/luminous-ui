@@ -45,6 +45,11 @@ export interface ChargeAttr {
   passOn?: boolean | null;
 }
 
+export interface ChargeCollected {
+  charge: ChargeAttr;
+  amount: number;
+}
+
 export interface FieldError {
   value: string | null;
   field: string | null;
@@ -205,6 +210,21 @@ export const GetAllCharges = (props: GetAllChargesProps) => (
 export type UseGetAllChargesProps = Omit<UseGetProps<ChargeAttr[], unknown, void, void>, "path">;
 
 export const useGetAllCharges = (props: UseGetAllChargesProps) => useGet<ChargeAttr[], unknown, void, void>(`/api/charge/getAllCharges`, props);
+
+
+export type GetAllCollectedChargesProps = Omit<GetProps<ChargeCollected[], unknown, void, void>, "path">;
+
+export const GetAllCollectedCharges = (props: GetAllCollectedChargesProps) => (
+  <Get<ChargeCollected[], unknown, void, void>
+    path={`/api/charge/getAllCollectedCharges`}
+    
+    {...props}
+  />
+);
+
+export type UseGetAllCollectedChargesProps = Omit<UseGetProps<ChargeCollected[], unknown, void, void>, "path">;
+
+export const useGetAllCollectedCharges = (props: UseGetAllCollectedChargesProps) => useGet<ChargeCollected[], unknown, void, void>(`/api/charge/getAllCollectedCharges`, props);
 
 
 export type PatchChargesProps = Omit<MutateProps<void, unknown, void, ChargeAttr[], void>, "path" | "verb">;

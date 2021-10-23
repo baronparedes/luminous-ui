@@ -12,9 +12,10 @@ import PropertiesView from './components/admin/manage-properties/PropertiesView'
 import SettingsView from './components/admin/manage-settings/SettingsView';
 import WaterReadingView from './components/admin/upload-water-reading/WaterReadingView';
 import DashboardView from './components/dashboard/DashboardView';
+import PurchaseRequestsView from './components/expense/PurchaseRequestsView';
 import LoginView from './components/profile/LoginView';
 import MyProfileView from './components/profile/MyProfileView';
-import {PropertyView} from './components/property/PropertyView';
+import PropertyView from './components/property/PropertyView';
 import {useInitSettings} from './hooks/useInitSettings';
 import {useRootState} from './store';
 
@@ -45,6 +46,12 @@ const AppRouter: React.FC = () => {
               exact
               onlyFor={['admin', 'stakeholder']}
               component={DashboardView}
+            />
+            <ProtectedRoute
+              path={routes.EXPENSE_REQUESTS}
+              exact
+              onlyFor={['admin', 'stakeholder']}
+              component={PurchaseRequestsView}
             />
             <ProtectedRoute
               path={routes.ADMIN_PROFILES}

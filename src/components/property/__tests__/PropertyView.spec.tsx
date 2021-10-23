@@ -17,7 +17,7 @@ import ViewPreviousStatements from '../actions/ViewPreviousStatements';
 import PropertyAssignmentCard from '../PropertyAssignmentCard';
 import PropertyDetails from '../PropertyDetails';
 import PropertyStatementOfAccount from '../PropertyStatementOfAccount';
-import {PropertyView} from '../PropertyView';
+import PropertyView from '../PropertyView';
 
 type PropertyDetailsProps = React.ComponentProps<typeof PropertyDetails>;
 

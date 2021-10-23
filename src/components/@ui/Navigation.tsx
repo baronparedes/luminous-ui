@@ -1,5 +1,6 @@
 import {Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import {
+  FaBook,
   FaCogs,
   FaFileUpload,
   FaHome,
@@ -41,6 +42,25 @@ function buildNavigationSections(profileType: ProfileType) {
       title: 'dashboard',
       to: routes.DASHBOARD,
       exact: true,
+    });
+
+    sections.push({
+      id: 'expense-nav-section',
+      title: 'expense',
+      to: routes.EXPENSE,
+      exact: true,
+      navItems: [
+        {
+          to: routes.EXPENSE_REQUESTS,
+          exact: true,
+          title: (
+            <>
+              <FaBook className="mr-1" />
+              requests
+            </>
+          ),
+        },
+      ],
     });
   }
 

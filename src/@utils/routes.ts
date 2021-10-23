@@ -3,6 +3,8 @@ const routes = {
   LOGIN: '/login',
   DASHBOARD: '/dashboard',
   PROPERTY: (id?: string | number) => `/property/${id}`,
+  EXPENSE: '/expense',
+  EXPENSE_REQUESTS: '/expense/requests',
   ADMIN: '/admin',
   ADMIN_PROFILES: '/admin/profiles',
   ADMIN_PROPERTIES: '/admin/properties',

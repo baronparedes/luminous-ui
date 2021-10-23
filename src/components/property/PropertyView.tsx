@@ -13,7 +13,7 @@ import PropertyAssignmentCard from './PropertyAssignmentCard';
 import PropertyDetails from './PropertyDetails';
 import PropertyStatementOfAccount from './PropertyStatementOfAccount';
 
-export const PropertyView = () => {
+const PropertyView = () => {
   const {me} = useRootState(state => state.profile);
   const {id} = useUrl();
   const propertyId = Number(id);
@@ -114,3 +114,5 @@ export const PropertyView = () => {
     </>
   );
 };
+
+export default PropertyView;
