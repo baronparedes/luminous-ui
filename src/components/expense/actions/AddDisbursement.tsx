@@ -3,75 +3,106 @@ import {Button, Col, Container, Form, InputGroup, Row} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
 import {
   FaCalendar,
+  FaMoneyBill,
   FaMoneyBillWave,
   FaMoneyCheck,
+  FaPlus,
   FaReceipt,
 } from 'react-icons/fa';
 import {RiBankFill} from 'react-icons/ri';
 
-import {PaymentDetailAttr} from '../../../Api';
+import {DisbursementAttr} from '../../../Api';
 import {useRootState} from '../../../store';
-import {Currency} from '../../@ui/Currency';
 import ModalContainer from '../../@ui/ModalContainer';
-import {requiredIf} from '../../@validation';
+import {
+  decimalPatternRule,
+  requiredIf,
+  validateGreaterThanZero,
+} from '../../@validation';
 
 type Props = {
-  onCollect?: (data: PaymentDetailAttr) => void;
   disabled?: boolean;
-  totalCollected: number;
-  totalChange?: number;
+  maxValue?: number;
+  onDisburse?: (data: DisbursementAttr) => void;
 };
 
-const ProcessPaymentDetails = ({
-  onCollect,
-  disabled,
-  totalCollected,
-  totalChange,
-}: Props) => {
+const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
   const {me} = useRootState(state => state.profile);
   const [toggle, setToggle] = useState(false);
-  const {handleSubmit, control, watch} = useForm<PaymentDetailAttr>({
-    defaultValues: {
-      orNumber: '',
-      paymentType: 'cash',
-      collectedBy: Number(me?.id),
-      checkIssuingBank: '',
-      checkNumber: '',
-      checkPostingDate: '',
-    },
-  });
+  const defaultValues: DisbursementAttr = {
+    details: '',
+    paymentType: 'cash',
+    releasedBy: Number(me?.id),
+    checkIssuingBank: '',
+    checkNumber: '',
+    checkPostingDate: '',
+    amount: maxValue ?? 0,
+  };
+  const {handleSubmit, control, watch, formState, reset} =
+    useForm<DisbursementAttr>({
+      defaultValues,
+    });
+
   const isCheckPayment = watch('paymentType') === 'check';
-  const onSubmit = (formData: PaymentDetailAttr) => {
-    const forCashPayment: PaymentDetailAttr = {
-      orNumber: formData.orNumber,
-      collectedBy: formData.collectedBy,
-      paymentType: 'cash',
-    };
-    const form = isCheckPayment ? formData : forCashPayment;
-    if (confirm('Proceed?')) {
-      setToggle(false);
-      onCollect && onCollect(form);
-    }
+
+  const onSubmit = (formData: DisbursementAttr) => {
+    onDisburse && onDisburse(formData);
+    setToggle(false);
   };
 
   return (
     <>
       <Button
+        size="sm"
         disabled={disabled}
-        className="w-25"
-        onClick={() => setToggle(true)}
+        title="add disbursement"
+        onClick={() => {
+          setToggle(true);
+          reset(defaultValues);
+        }}
       >
-        enter payment details
+        <FaPlus />
       </Button>
       <ModalContainer
         backdrop="static"
         dialogClassName="mt-5"
-        header={<h5>Enter Payment Details</h5>}
+        header={<h5>Add Disbursements</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >
         <Container className="p-3">
           <Form onSubmit={handleSubmit(onSubmit)} role="form">
+            <Row>
+              <InputGroup className="mb-2">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <FaMoneyBill />
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <Controller
+                  name="amount"
+                  control={control}
+                  rules={{
+                    pattern: decimalPatternRule,
+                    validate: validateGreaterThanZero,
+                  }}
+                  render={({field}) => (
+                    <Form.Control
+                      {...field}
+                      type="number"
+                      max={maxValue}
+                      required
+                      step="any"
+                      placeholder="amount to pay"
+                      isInvalid={formState.errors.amount !== undefined}
+                    />
+                  )}
+                />
+                <Form.Control.Feedback type="invalid" className="text-right">
+                  {formState.errors.amount?.message}
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Row>
             <Row>
               <InputGroup className="mb-2">
                 <InputGroup.Text>
@@ -100,13 +131,15 @@ const ProcessPaymentDetails = ({
                   <FaReceipt />
                 </InputGroup.Text>
                 <Controller
-                  name="orNumber"
+                  name="details"
                   control={control}
                   render={({field}) => (
                     <Form.Control
                       {...field}
+                      as="textarea"
+                      rows={3}
                       required
-                      placeholder="official receipt"
+                      placeholder="details"
                     />
                   )}
                 />
@@ -186,27 +219,10 @@ const ProcessPaymentDetails = ({
                 </Row>
               </>
             )}
-            <hr />
             <Row>
-              <Col className="pb-2 text-left">
-                <div>
-                  <span className="pr-2">total</span>
-                  <strong style={{fontSize: '1.2em'}}>
-                    <Currency currency={totalCollected} />
-                  </strong>
-                </div>
-                {totalChange !== undefined && totalChange > 0 && (
-                  <div>
-                    <span className="pr-2">change</span>
-                    <strong style={{fontSize: '1.2em'}}>
-                      <Currency currency={totalChange} noCurrencyColor />
-                    </strong>
-                  </div>
-                )}
-              </Col>
-              <Col className="text-right" xs={12} sm={6}>
-                <Button className="w-100" type="submit">
-                  collect
+              <Col className="text-right p-0">
+                <Button className="w-25" type="submit">
+                  disburse
                 </Button>
               </Col>
             </Row>
@@ -217,4 +233,4 @@ const ProcessPaymentDetails = ({
   );
 };
 
-export default ProcessPaymentDetails;
+export default AddDisbursement;

@@ -17,6 +17,12 @@ import {SETTING_KEYS} from '../../../constants';
 import {useRootState} from '../../../store';
 import {settingActions} from '../../../store/reducers/setting.reducer';
 import Loading from '../../@ui/Loading';
+import {
+  validateNoLeadingSpaces,
+  validateNotEmpty,
+  validateNoTrailingSpaces,
+  validateUnique,
+} from '../../@validation';
 import {SettingContainer} from './SettingsView';
 
 type FormData = {
@@ -80,11 +86,12 @@ const SettingExpenseCategory = () => {
                       <InputGroup className="mb-2">
                         <Controller
                           rules={{
-                            validate: value =>
-                              !categories
-                                .map(c => c.toLowerCase())
-                                .includes(value.toLowerCase()) ||
-                              'should be unique',
+                            validate: {
+                              validateNotEmpty,
+                              validateNoLeadingSpaces,
+                              validateNoTrailingSpaces,
+                              validateUnique: validateUnique(categories),
+                            },
                           }}
                           control={control}
                           name="category"

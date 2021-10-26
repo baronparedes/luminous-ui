@@ -28,6 +28,22 @@ export const validateGreaterThanZero: Validate<number | undefined | null> =
 export const validateNotEqualToZero: Validate<number | undefined> = value =>
   Number(value) !== 0 || 'should not be 0';
 
+export const validateNoLeadingSpaces: Validate<string | undefined> = value =>
+  value?.trimStart() === value || 'should not have leading spaces';
+
+export const validateNoTrailingSpaces: Validate<string | undefined> = value =>
+  value?.trimEnd() === value || 'should not have trailing spaces';
+
+export const validateNotEmpty: Validate<string | undefined> = value =>
+  value?.trim() !== '' || 'should not be empty';
+
+export const validateUnique = (values: string[]) => {
+  const validate: Validate<string | undefined> = value =>
+    !values.map(v => v.toLowerCase()).includes(value?.toLowerCase() ?? '') ||
+    'should be unique';
+  return validate;
+};
+
 export const requiredIf = (condition: boolean) => {
   const rule = (value: string | undefined) => {
     if (!value && condition) return 'should be required';

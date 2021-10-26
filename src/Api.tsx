@@ -182,6 +182,7 @@ export interface DisbursementAttr {
   checkNumber?: string;
   checkPostingDate?: string;
   checkIssuingBank?: string;
+  amount: number;
 }
 
 export interface PurchaseOrderAttr {
@@ -194,7 +195,8 @@ export interface PurchaseOrderAttr {
   approvedBy?: string | null;
   comments?: string | null;
   expenses?: ExpenseAttr[];
-  disbursement?: DisbursementAttr[];
+  disbursements?: DisbursementAttr[];
+  requestedByProfile?: ProfileAttr;
 }
 
 export interface CreatePurchaseRequest {
@@ -205,7 +207,7 @@ export interface CreatePurchaseRequest {
 }
 
 export interface ApprovePurchaseRequest {
-  disbursement: DisbursementAttr[];
+  disbursements: DisbursementAttr[];
   codes: string[];
   purchaseOrderId: number;
 }

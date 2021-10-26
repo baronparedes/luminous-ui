@@ -37,6 +37,31 @@ describe('SettingExpenseCategory', () => {
     expect(getByTitle(/create new expense category/i)).toBeInTheDocument();
   });
 
+  it.each`
+    description          | expectedErrorLabel                    | invalidValue
+    ${'empty string'}    | ${/should not be empty/i}             | ${' '}
+    ${'leading spaces'}  | ${/should not have leading spaces/i}  | ${'    Leading Spaces'}
+    ${'trailing spaces'} | ${/should not have trailing spaces/i} | ${'Trailing Spaces   '}
+  `(
+    'should not accept invalid values [$description]',
+    async ({invalidValue, expectedErrorLabel}) => {
+      const {getByText, getByPlaceholderText, getByTitle, queryAllByTitle} =
+        renderWithProviderAndRestful(<SettingExpenseCategory />, base);
+
+      const input = getByPlaceholderText(
+        /expense category/i
+      ) as HTMLInputElement;
+      const addNewExpenseButton = getByTitle(/create new expense category/i);
+
+      userEvent.type(input, invalidValue);
+      userEvent.click(addNewExpenseButton);
+      await waitFor(() =>
+        expect(getByText(expectedErrorLabel)).toBeInTheDocument()
+      );
+      await waitFor(() => expect(queryAllByTitle(/remove/i)).toHaveLength(0));
+    }
+  );
+
   it('should not add duplicate values and should be required', async () => {
     const expectedCategory = faker.random.words(2);
 

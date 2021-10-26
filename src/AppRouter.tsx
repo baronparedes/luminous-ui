@@ -12,7 +12,8 @@ import PropertiesView from './components/admin/manage-properties/PropertiesView'
 import SettingsView from './components/admin/manage-settings/SettingsView';
 import WaterReadingView from './components/admin/upload-water-reading/WaterReadingView';
 import DashboardView from './components/dashboard/DashboardView';
-import PurchaseRequestsView from './components/expense/PurchaseRequestsView';
+import ExpenseView from './components/expense/ExpenseView';
+import PurchaseOrderView from './components/expense/PurchaseOrderView';
 import LoginView from './components/profile/LoginView';
 import MyProfileView from './components/profile/MyProfileView';
 import PropertyView from './components/property/PropertyView';
@@ -37,6 +38,11 @@ const AppRouter: React.FC = () => {
               component={PropertyView}
             />
             <ProtectedRoute
+              onlyFor={['admin', 'stakeholder']}
+              path={routes.PURCHASE_ORDER(':id')}
+              component={PurchaseOrderView}
+            />
+            <ProtectedRoute
               path={routes.ROOT}
               exact
               component={MyProfileView}
@@ -51,7 +57,7 @@ const AppRouter: React.FC = () => {
               path={routes.EXPENSE_REQUESTS}
               exact
               onlyFor={['admin', 'stakeholder']}
-              component={PurchaseRequestsView}
+              component={ExpenseView}
             />
             <ProtectedRoute
               path={routes.ADMIN_PROFILES}

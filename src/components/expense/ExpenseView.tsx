@@ -3,8 +3,9 @@ import {Badge, Button, Col, Container, Row} from 'react-bootstrap';
 import {useAvailableBalance} from '../../hooks/useAvailableBalance';
 import {Currency} from '../@ui/Currency';
 import RoundedPanel from '../@ui/RoundedPanel';
+import PurchaseOrderList from './PurchaseOrderList';
 
-const PurchaseRequestsView = () => {
+const ExpenseView = () => {
   const {data} = useAvailableBalance();
 
   return (
@@ -33,9 +34,10 @@ const PurchaseRequestsView = () => {
             </Col>
           </Row>
         </RoundedPanel>
+        <PurchaseOrderList status="pending" />
       </Container>
     </>
   );
 };
 
-export default PurchaseRequestsView;
+export default ExpenseView;

@@ -5,6 +5,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {TransactionAttr} from '../../../Api';
 import {Currency} from '../../@ui/Currency';
 import ModalContainer from '../../@ui/ModalContainer';
+import {validateNotEmpty} from '../../@validation';
 
 type Props = {
   onTransactionWaived?: (
@@ -40,7 +41,7 @@ const WaivableTransaction = ({
   const defaultValues: FormData = {
     comments: '',
   };
-  const {handleSubmit, control} = useForm<FormData>({
+  const {handleSubmit, control, formState} = useForm<FormData>({
     defaultValues,
   });
 
@@ -90,6 +91,9 @@ const WaivableTransaction = ({
                     <Controller
                       name="comments"
                       control={control}
+                      rules={{
+                        validate: validateNotEmpty,
+                      }}
                       render={({field}) => (
                         <Form.Control
                           {...field}
@@ -97,9 +101,16 @@ const WaivableTransaction = ({
                           rows={5}
                           required
                           placeholder="comments"
+                          isInvalid={formState.errors.comments !== undefined}
                         />
                       )}
                     />
+                    <Form.Control.Feedback
+                      type="invalid"
+                      className="text-right"
+                    >
+                      {formState.errors.comments?.message}
+                    </Form.Control.Feedback>
                   </Form.Group>
                   <div className="text-right">
                     <Button variant="danger" type="submit">
