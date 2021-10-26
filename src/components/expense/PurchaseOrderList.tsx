@@ -10,7 +10,7 @@ type Props = {
   status: RequestStatus;
 };
 
-const PendingPurchaseOrders = ({status}: Props) => {
+const PurchaseOrderList = ({status}: Props) => {
   const {data, error, loading} = useGetAllPurchaseOrderByStatus({
     status,
   });
@@ -42,7 +42,7 @@ const PendingPurchaseOrders = ({status}: Props) => {
             <tbody>
               {data.map(row => {
                 return (
-                  <tr>
+                  <tr key={Number(row.id)}>
                     <td>
                       <Link
                         className="text-underline"
@@ -66,4 +66,4 @@ const PendingPurchaseOrders = ({status}: Props) => {
   );
 };
 
-export default PendingPurchaseOrders;
+export default PurchaseOrderList;

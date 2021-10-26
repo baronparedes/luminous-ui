@@ -27,6 +27,12 @@ $body-bg: #E9EBEE;
 }
 
 .navbar-nav {
+    .nav-item.active.dropdown {
+        .dropdown-toggle:first-child {
+            border-bottom: 3px solid $info;
+        }
+    }
+
     .nav-link {
         background-color: none;
         color: $light !important;
