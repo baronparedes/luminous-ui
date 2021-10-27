@@ -3,6 +3,7 @@ import {Button, ButtonProps, Form} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
 
 import {useRejectPurchaseOrder} from '../../../Api';
+import {useRootState} from '../../../store';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import ModalContainer from '../../@ui/ModalContainer';
 import {validateNotEmpty} from '../../@validation';
@@ -23,6 +24,7 @@ const RejectPurchaseOrder = ({
   onRejectPurchaseOrder,
   ...buttonProps
 }: Props & ButtonProps) => {
+  const {me} = useRootState(state => state.profile);
   const [toggle, setToggle] = useState(false);
   const {handleSubmit, control, formState} = useForm<FormData>({
     defaultValues: {
@@ -36,6 +38,7 @@ const RejectPurchaseOrder = ({
       mutate({
         comments: formData.comments,
         id: purchaseOrderId,
+        rejectedBy: Number(me?.id),
       }).then(() => {
         setToggle(false);
         onRejectPurchaseOrder && onRejectPurchaseOrder();

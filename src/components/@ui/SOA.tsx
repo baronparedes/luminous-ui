@@ -1,8 +1,8 @@
 import {Col, Container, Row} from 'react-bootstrap';
 import styled from 'styled-components';
 
-import {calculateAccount, sum} from '../../@utils/helpers';
-import {Month, ProfileAttr, PropertyAccount, SettingAttr} from '../../Api';
+import {calculateAccount, getNames, sum} from '../../@utils/helpers';
+import {Month, PropertyAccount, SettingAttr} from '../../Api';
 import {Currency} from './Currency';
 import Markup from './Markup';
 import {PageSection} from './PaperPdf';
@@ -11,11 +11,6 @@ import PaymentDetail from './PaymentDetail';
 const Label = styled('div')`
   font-size: 1.5em;
 `;
-
-function getNames(profiles?: ProfileAttr[]) {
-  const assignedTo = (profiles && profiles.map(a => a.name)) ?? [];
-  return assignedTo;
-}
 
 type Props = {
   hasPageBreak?: boolean;
@@ -45,7 +40,7 @@ const SOA = ({hasPageBreak, propertyAccount, month, year, notes}: Props) => {
         </Label>
         <Label>
           <strong>Unit owner: </strong>
-          {getNames(propertyAccount.assignedProfiles).sort().join(', ')}
+          {getNames(propertyAccount.assignedProfiles)}
         </Label>
         <small>
           <Label>

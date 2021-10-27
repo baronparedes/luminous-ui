@@ -34,7 +34,7 @@ const ExpenseView = () => {
             </Col>
           </Row>
         </RoundedPanel>
-        <PurchaseOrderList status="pending" />
+        <PurchaseOrderList />
       </Container>
     </>
   );

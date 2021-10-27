@@ -1,4 +1,4 @@
-import {PropertyAccount, TransactionAttr} from '../Api';
+import {ProfileAttr, PropertyAccount, TransactionAttr} from '../Api';
 
 export function generateNumberedSeries(n: number): number[] {
   return Array(n)
@@ -54,4 +54,9 @@ export function compareTransaction(a: TransactionAttr, b: TransactionAttr) {
     return 1;
   }
   return 0;
+}
+
+export function getNames(profiles?: ProfileAttr[]) {
+  const assignedTo = (profiles && profiles.map(a => a.name)) ?? [];
+  return assignedTo.sort().join(', ');
 }

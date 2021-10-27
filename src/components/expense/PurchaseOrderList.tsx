@@ -1,3 +1,5 @@
+import {useState} from 'react';
+import {Button, ButtonGroup, Col, Row} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 
 import routes from '../../@utils/routes';
@@ -6,14 +8,18 @@ import ErrorInfo from '../@ui/ErrorInfo';
 import RoundedPanel from '../@ui/RoundedPanel';
 import {Table} from '../@ui/Table';
 
-type Props = {
-  status: RequestStatus;
-};
-
-const PurchaseOrderList = ({status}: Props) => {
+const PurchaseOrderList = () => {
+  const [selectedStatus, setSelectedStatus] =
+    useState<RequestStatus>('pending');
   const {data, error, loading} = useGetAllPurchaseOrderByStatus({
-    status,
+    status: selectedStatus,
   });
+
+  const handleOnStatusChange = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setSelectedStatus(
+      e.currentTarget.textContent?.toLowerCase() as RequestStatus
+    );
+  };
 
   return (
     <>
@@ -36,7 +42,44 @@ const PurchaseOrderList = ({status}: Props) => {
               )}
             </>
           }
-          renderHeaderContent={<h4>Purchase Requests</h4>}
+          renderHeaderContent={
+            <>
+              <Row>
+                <Col className="mb-2">
+                  <div className="center-content">
+                    <h5 className="m-auto">
+                      Purchase Request ({selectedStatus})
+                    </h5>
+                  </div>
+                </Col>
+                <Col className="text-right" md={4} sm={12}>
+                  <ButtonGroup className="w-100">
+                    <Button
+                      onClick={handleOnStatusChange}
+                      variant="info"
+                      disabled={selectedStatus === 'pending'}
+                    >
+                      Pending
+                    </Button>
+                    <Button
+                      onClick={handleOnStatusChange}
+                      variant="success"
+                      disabled={selectedStatus === 'approved'}
+                    >
+                      Approved
+                    </Button>
+                    <Button
+                      onClick={handleOnStatusChange}
+                      variant="danger"
+                      disabled={selectedStatus === 'rejected'}
+                    >
+                      Rejected
+                    </Button>
+                  </ButtonGroup>
+                </Col>
+              </Row>
+            </>
+          }
         >
           {data && !loading && !error && (
             <tbody>

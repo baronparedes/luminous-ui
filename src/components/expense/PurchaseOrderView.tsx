@@ -1,4 +1,4 @@
-import {Button, Col, Container, Row} from 'react-bootstrap';
+import {Col, Container, Row} from 'react-bootstrap';
 
 import {useGetPurchaseOrder} from '../../Api';
 import {useUrl} from '../../hooks/useUrl';
@@ -6,6 +6,7 @@ import {useRootState} from '../../store';
 import Loading from '../@ui/Loading';
 import RoundedPanel from '../@ui/RoundedPanel';
 import ApprovePurchaseOrder from './actions/ApprovePurchaseOrder';
+import NotifyApprovers from './actions/NotifyApprovers';
 import RejectPurchaseOrder from './actions/RejectPurchaseOrder';
 import PurchaseOrderDetails from './PurchaseOrderDetails';
 import PurchaseOrderDisbursements from './PurchaseOrderDisbursements';
@@ -58,7 +59,11 @@ const PurchaseOrderView = () => {
                   purchaseOrderId={Number(data.id)}
                   onRejectPurchaseOrder={() => refetch()}
                 />
-                <Button className="mb-2 w-100">Notify Approvers</Button>
+                <NotifyApprovers
+                  className="mb-2 w-100"
+                  buttonLabel="notify approvers"
+                  purchaseOrderId={Number(data.id)}
+                />
               </RoundedPanel>
             </Col>
           )}

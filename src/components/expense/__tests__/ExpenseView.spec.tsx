@@ -8,7 +8,11 @@ import ExpenseView from '../ExpenseView';
 
 jest.mock('../../../hooks/useAvailableBalance');
 
-describe('PurchaseRequestsView', () => {
+jest.mock('../PurchaseOrderList', () => () => {
+  return <div data-testid="mock-purchase-order-list">Purchase Order List</div>;
+});
+
+describe('ExpenseView', () => {
   const useAvailableBalanceMock = useAvailableBalance as jest.MockedFunction<
     typeof useAvailableBalance
   >;
@@ -22,10 +26,11 @@ describe('PurchaseRequestsView', () => {
       error: null,
     });
 
-    const {getByText} = render(<ExpenseView />);
+    const {getByText, getByTestId} = render(<ExpenseView />);
 
     expect(getByText(/available funds/i)).toBeInTheDocument();
     expect(getByText(/create new request/i)).toBeInTheDocument();
     expect(getByText(currencyFormat(expectedAmount))).toBeInTheDocument();
+    expect(getByTestId('mock-purchase-order-list')).toBeInTheDocument();
   });
 });

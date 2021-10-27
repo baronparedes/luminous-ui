@@ -193,10 +193,13 @@ export interface PurchaseOrderAttr {
   requestedBy: number;
   requestedDate: string;
   approvedBy?: string | null;
+  rejectedBy?: number;
   comments?: string | null;
   expenses?: ExpenseAttr[];
   disbursements?: DisbursementAttr[];
   requestedByProfile?: ProfileAttr;
+  rejectedByProfile?: ProfileAttr;
+  approverProfiles?: ProfileAttr[];
 }
 
 export interface CreatePurchaseRequest {
@@ -213,6 +216,7 @@ export interface ApprovePurchaseRequest {
 }
 
 export interface RejectPurchaseRequest {
+  rejectedBy: number;
   comments: string;
   id: number;
 }
