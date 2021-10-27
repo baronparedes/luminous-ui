@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 
 import routes from '../../@utils/routes';
 import {RequestStatus, useGetAllPurchaseOrderByStatus} from '../../Api';
+import {Currency} from '../@ui/Currency';
 import ErrorInfo from '../@ui/ErrorInfo';
 import RoundedPanel from '../@ui/RoundedPanel';
 import {Table} from '../@ui/Table';
@@ -97,7 +98,9 @@ const PurchaseOrderList = () => {
                     <td>{row.description}</td>
                     <td>{row.requestedByProfile?.name}</td>
                     <td>{row.requestedDate}</td>
-                    <td>{row.totalCost}</td>
+                    <td>
+                      <Currency noCurrencyColor currency={row.totalCost} />
+                    </td>
                   </tr>
                 );
               })}
