@@ -50,6 +50,11 @@ export interface ChargeCollected {
   amount: number;
 }
 
+export interface DisbursementBreakdownView {
+  amount: number;
+  code: string;
+}
+
 export interface FieldError {
   value: string | null;
   field: string | null;
@@ -302,6 +307,21 @@ export const PatchCharges = (props: PatchChargesProps) => (
 export type UsePatchChargesProps = Omit<UseMutateProps<void, unknown, void, ChargeAttr[], void>, "path" | "verb">;
 
 export const usePatchCharges = (props: UsePatchChargesProps) => useMutate<void, unknown, void, ChargeAttr[], void>("PATCH", `/api/charge/patchCharges`, props);
+
+
+export type GetDisbursementBreakdownProps = Omit<GetProps<DisbursementBreakdownView[], unknown, void, void>, "path">;
+
+export const GetDisbursementBreakdown = (props: GetDisbursementBreakdownProps) => (
+  <Get<DisbursementBreakdownView[], unknown, void, void>
+    path={`/api/disbursement/getDisbursementBreakdown`}
+    
+    {...props}
+  />
+);
+
+export type UseGetDisbursementBreakdownProps = Omit<UseGetProps<DisbursementBreakdownView[], unknown, void, void>, "path">;
+
+export const useGetDisbursementBreakdown = (props: UseGetDisbursementBreakdownProps) => useGet<DisbursementBreakdownView[], unknown, void, void>(`/api/disbursement/getDisbursementBreakdown`, props);
 
 
 export interface GetAllProfilesQueryParams {

@@ -3,7 +3,8 @@ import nock from 'nock';
 
 import {generateFakeCharge} from '../../@utils/fake-models';
 import {renderHookWithProviderAndRestful} from '../../@utils/test-renderers';
-import {ChargeCollected} from '../../Api';
+import {ChargeCollected, DisbursementBreakdownView} from '../../Api';
+import {DEFAULTS} from '../../constants';
 import {useAvailableBalance} from '../useAvailableBalance';
 
 describe('useAvailableBalance', () => {
@@ -22,9 +23,20 @@ describe('useAvailableBalance', () => {
       },
     ];
 
+    const disbursements: DisbursementBreakdownView[] = [
+      {
+        code: DEFAULTS.COMMUNITY_EXPENSE,
+        amount: faker.datatype.number(),
+      },
+    ];
+
     nock(base)
       .get('/api/charge/getAllCollectedCharges')
       .reply(200, collectedCharges);
+
+    nock(base)
+      .get('/api/disbursement/getDisbursementBreakdown')
+      .reply(200, disbursements);
 
     const {waitForNextUpdate, result} = renderHookWithProviderAndRestful(
       () => useAvailableBalance(),
