@@ -46,8 +46,8 @@ const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
   const isCheckPayment = watch('paymentType') === 'check';
 
   const onSubmit = (formData: DisbursementAttr) => {
-    onDisburse && onDisburse(formData);
     setToggle(false);
+    onDisburse && onDisburse(formData);
   };
 
   return (
@@ -93,7 +93,7 @@ const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
                       max={maxValue}
                       required
                       step="any"
-                      placeholder="amount to pay"
+                      placeholder="amount to release"
                       isInvalid={formState.errors.amount !== undefined}
                     />
                   )}

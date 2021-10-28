@@ -6,8 +6,8 @@ export function getCurrentDateFormatted() {
   return formatDate(new Date());
 }
 
-export function formatDate(date: Date | string) {
-  return moment(new Date(date)).format('YYYY-MMM-DD');
+export function formatDate(date: Date | string, format = 'YYYY-MMM-DD') {
+  return moment(new Date(date)).format(format);
 }
 
 export function getCurrentDateTimeFormatted(date?: Date) {

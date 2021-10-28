@@ -56,7 +56,13 @@ const ApprovePurchaseOrder = ({
       codes,
       purchaseOrderId,
       disbursements: disbursements.map(d => {
-        const sanitized: DisbursementAttr = {
+        const forCashPayment: DisbursementAttr = {
+          details: d.details,
+          releasedBy: d.releasedBy,
+          amount: d.amount,
+          paymentType: 'cash',
+        };
+        const forCheckPayment: DisbursementAttr = {
           amount: d.amount,
           details: d.details,
           paymentType: d.paymentType,
@@ -67,6 +73,8 @@ const ApprovePurchaseOrder = ({
             ? new Date(d.checkPostingDate).toISOString()
             : undefined,
         };
+        const sanitized =
+          d.paymentType === 'cash' ? forCashPayment : forCheckPayment;
         return sanitized;
       }),
     };
@@ -110,6 +118,7 @@ const ApprovePurchaseOrder = ({
                     <ListGroupItem key={i}>
                       <strong>{code}</strong>
                       <Button
+                        title="remove code"
                         variant="danger"
                         className="float-right"
                         size="sm"
@@ -152,6 +161,7 @@ const ApprovePurchaseOrder = ({
                           </Col>
                           <Col md={1}>
                             <Button
+                              title="remove disbursement"
                               variant="danger"
                               className="float-right"
                               size="sm"
