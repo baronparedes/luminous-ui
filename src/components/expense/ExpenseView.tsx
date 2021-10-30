@@ -1,8 +1,9 @@
-import {Badge, Button, Col, Container, Row} from 'react-bootstrap';
+import {Badge, Col, Container, Row} from 'react-bootstrap';
 
 import {useAvailableBalance} from '../../hooks/useAvailableBalance';
 import {Currency} from '../@ui/Currency';
 import RoundedPanel from '../@ui/RoundedPanel';
+import CreatePurchaseOrder from './actions/CreatePurchaseOrder';
 import PurchaseOrderList from './PurchaseOrderList';
 
 const ExpenseView = () => {
@@ -28,9 +29,11 @@ const ExpenseView = () => {
               </div>
             </Col>
             <Col className="text-right">
-              <Button variant="primary" className="w-100">
-                create new Request
-              </Button>
+              <CreatePurchaseOrder
+                variant="primary"
+                className="w-100"
+                buttonLabel="create new request"
+              />
             </Col>
           </Row>
         </RoundedPanel>

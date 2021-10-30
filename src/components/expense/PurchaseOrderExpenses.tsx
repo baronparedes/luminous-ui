@@ -1,5 +1,4 @@
-import {Button, Col, Row} from 'react-bootstrap';
-import {FaPrint} from 'react-icons/fa';
+import {Col, Row} from 'react-bootstrap';
 
 import {ExpenseAttr} from '../../Api';
 import {Currency} from '../@ui/Currency';
@@ -22,11 +21,6 @@ const PurchaseOrderExpenses = ({expenses}: Props) => {
                   <div className="center-content">
                     <h5 className="m-auto">Expenses</h5>
                   </div>
-                </Col>
-                <Col className="text-right">
-                  <Button variant="secondary">
-                    <FaPrint title="print purchase order" />
-                  </Button>
                 </Col>
               </Row>
             </>

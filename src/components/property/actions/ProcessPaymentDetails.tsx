@@ -13,7 +13,7 @@ import {PaymentDetailAttr} from '../../../Api';
 import {useRootState} from '../../../store';
 import {Currency} from '../../@ui/Currency';
 import ModalContainer from '../../@ui/ModalContainer';
-import {requiredIf} from '../../@validation';
+import {requiredIf, validateNotEmpty} from '../../@validation';
 
 type Props = {
   onCollect?: (data: PaymentDetailAttr) => void;
@@ -30,7 +30,7 @@ const ProcessPaymentDetails = ({
 }: Props) => {
   const {me} = useRootState(state => state.profile);
   const [toggle, setToggle] = useState(false);
-  const {handleSubmit, control, watch} = useForm<PaymentDetailAttr>({
+  const {handleSubmit, control, watch, formState} = useForm<PaymentDetailAttr>({
     defaultValues: {
       orNumber: '',
       paymentType: 'cash',
@@ -102,14 +102,23 @@ const ProcessPaymentDetails = ({
                 <Controller
                   name="orNumber"
                   control={control}
+                  rules={{
+                    validate: {
+                      validateNotEmpty,
+                    },
+                  }}
                   render={({field}) => (
                     <Form.Control
                       {...field}
                       required
                       placeholder="official receipt"
+                      isInvalid={formState.errors.orNumber !== undefined}
                     />
                   )}
                 />
+                <Form.Control.Feedback type="invalid" className="text-right">
+                  {formState.errors.orNumber?.message}
+                </Form.Control.Feedback>
               </InputGroup>
             </Row>
             {watch('paymentType') === 'check' && (
@@ -132,9 +141,16 @@ const ProcessPaymentDetails = ({
                           {...field}
                           required={isCheckPayment}
                           placeholder="check number"
+                          isInvalid={formState.errors.checkNumber !== undefined}
                         />
                       )}
                     />
+                    <Form.Control.Feedback
+                      type="invalid"
+                      className="text-right"
+                    >
+                      {formState.errors.checkNumber?.message}
+                    </Form.Control.Feedback>
                   </InputGroup>
                 </Row>
                 <Row>
@@ -156,9 +172,18 @@ const ProcessPaymentDetails = ({
                           required={isCheckPayment}
                           type="date"
                           placeholder="check posting date"
+                          isInvalid={
+                            formState.errors.checkPostingDate !== undefined
+                          }
                         />
                       )}
                     />
+                    <Form.Control.Feedback
+                      type="invalid"
+                      className="text-right"
+                    >
+                      {formState.errors.checkPostingDate?.message}
+                    </Form.Control.Feedback>
                   </InputGroup>
                 </Row>
                 <Row>
@@ -179,9 +204,18 @@ const ProcessPaymentDetails = ({
                           {...field}
                           required={isCheckPayment}
                           placeholder="check issuing bank"
+                          isInvalid={
+                            formState.errors.checkIssuingBank !== undefined
+                          }
                         />
                       )}
                     />
+                    <Form.Control.Feedback
+                      type="invalid"
+                      className="text-right"
+                    >
+                      {formState.errors.checkIssuingBank?.message}
+                    </Form.Control.Feedback>
                   </InputGroup>
                 </Row>
               </>

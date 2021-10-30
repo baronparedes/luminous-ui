@@ -46,7 +46,10 @@ export const validateUnique = (values: string[]) => {
 
 export const requiredIf = (condition: boolean) => {
   const rule = (value: string | undefined) => {
-    if (!value && condition) return 'should be required';
+    if (condition) {
+      if (!value) return 'should be required';
+      if (value.trim() === '') return 'should not be empty';
+    }
     return true;
   };
   return rule;

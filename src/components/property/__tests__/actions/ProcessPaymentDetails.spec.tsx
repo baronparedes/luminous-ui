@@ -1,6 +1,7 @@
 import faker from 'faker';
 
 import {fireEvent, waitFor} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import {
   generateFakePaymentDetail,
@@ -209,15 +210,15 @@ describe('ProcessPaymentDetails', () => {
   );
 
   it.each`
-    field                    | paymentType
-    ${/official receipt/i}   | ${'cash'}
-    ${/official receipt/i}   | ${'check'}
-    ${/check number/i}       | ${'check'}
-    ${/check posting date/i} | ${'check'}
-    ${/check issuing bank/i} | ${'check'}
+    field                    | skipEmptyCheck | paymentType
+    ${/official receipt/i}   | ${false}       | ${'cash'}
+    ${/official receipt/i}   | ${false}       | ${'check'}
+    ${/check number/i}       | ${false}       | ${'check'}
+    ${/check posting date/i} | ${true}        | ${'check'}
+    ${/check issuing bank/i} | ${false}       | ${'check'}
   `(
     'should require $field input when payment type is $paymentType',
-    async ({field, paymentType}) => {
+    async ({field, paymentType, skipEmptyCheck}) => {
       const profile = generateFakeProfile();
       const paymentDetail = generateFakePaymentDetail(paymentType);
       const {getByPlaceholderText, getByRole, getByText} =
@@ -229,17 +230,17 @@ describe('ProcessPaymentDetails', () => {
           profile
         );
 
-      fireEvent.change(getByPlaceholderText(field), {
-        target: {value: ''},
-      });
-
-      await waitFor(() =>
-        expect((getByRole('form') as HTMLFormElement).checkValidity()).toBe(
-          false
-        )
-      );
-      fireEvent.click(getByText(/collect/i, {selector: 'button'}));
+      userEvent.clear(getByPlaceholderText(field));
+      userEvent.click(getByText(/collect/i, {selector: 'button'}));
       await waitFor(() => expect(getByRole('dialog')).toBeInTheDocument());
+
+      if (!skipEmptyCheck) {
+        userEvent.type(getByPlaceholderText(field), ' ');
+        userEvent.click(getByText(/collect/i, {selector: 'button'}));
+        await waitFor(() =>
+          expect(getByText(/should not be empty/i)).toBeInTheDocument()
+        );
+      }
     }
   );
 });

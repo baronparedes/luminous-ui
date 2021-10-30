@@ -170,17 +170,17 @@ describe('AddDisbursement', () => {
   );
 
   it.each`
-    field                    | paymentType
-    ${/details/i}            | ${'cash'}
-    ${/amount to release/i}  | ${'cash'}
-    ${/details/i}            | ${'check'}
-    ${/amount to release/i}  | ${'check'}
-    ${/check number/i}       | ${'check'}
-    ${/check posting date/i} | ${'check'}
-    ${/check issuing bank/i} | ${'check'}
+    field                    | skipEmptyCheck | paymentType
+    ${/details/i}            | ${false}       | ${'cash'}
+    ${/details/i}            | ${false}       | ${'check'}
+    ${/check number/i}       | ${false}       | ${'check'}
+    ${/check posting date/i} | ${true}        | ${'check'}
+    ${/check issuing bank/i} | ${false}       | ${'check'}
+    ${/amount to release/i}  | ${true}        | ${'cash'}
+    ${/amount to release/i}  | ${true}        | ${'check'}
   `(
-    'should require $field input when payment type is $paymentType',
-    async ({field, paymentType}) => {
+    'should require $field input or not be empty when payment type is $paymentType',
+    async ({field, paymentType, skipEmptyCheck}) => {
       const mockedDisbursement: DisbursementAttr = {
         ...generateFakeDisbursement(),
         paymentType,
@@ -191,13 +191,17 @@ describe('AddDisbursement', () => {
       await fillupDisbursement(mockedDisbursement);
 
       userEvent.clear(getByPlaceholderText(field));
-      await waitFor(() =>
-        expect((getByRole('form') as HTMLFormElement).checkValidity()).toBe(
-          false
-        )
-      );
-
       userEvent.click(getByText(/disburse/i, {selector: 'button'}));
+      await waitFor(() => expect(getByRole('dialog')).toBeInTheDocument());
+
+      if (!skipEmptyCheck) {
+        userEvent.type(getByPlaceholderText(field), ' ');
+        userEvent.click(getByText(/disburse/i, {selector: 'button'}));
+        await waitFor(() =>
+          expect(getByText(/should not be empty/i)).toBeInTheDocument()
+        );
+      }
+
       await waitFor(() => expect(getByRole('dialog')).toBeInTheDocument());
     }
   );

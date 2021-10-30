@@ -7,7 +7,7 @@ export function getCurrentDateFormatted() {
 }
 
 export function formatDate(date: Date | string, format = 'YYYY-MMM-DD') {
-  return moment(new Date(date)).format(format);
+  return moment(date).format(format);
 }
 
 export function getCurrentDateTimeFormatted(date?: Date) {

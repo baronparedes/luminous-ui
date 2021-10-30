@@ -18,6 +18,7 @@ import {
   decimalPatternRule,
   requiredIf,
   validateGreaterThanZero,
+  validateNotEmpty,
 } from '../../@validation';
 
 type Props = {
@@ -133,6 +134,11 @@ const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
                 <Controller
                   name="details"
                   control={control}
+                  rules={{
+                    validate: {
+                      validateNotEmpty,
+                    },
+                  }}
                   render={({field}) => (
                     <Form.Control
                       {...field}
@@ -140,9 +146,13 @@ const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
                       rows={3}
                       required
                       placeholder="details"
+                      isInvalid={formState.errors.details !== undefined}
                     />
                   )}
                 />
+                <Form.Control.Feedback type="invalid" className="text-right">
+                  {formState.errors.details?.message}
+                </Form.Control.Feedback>
               </InputGroup>
             </Row>
             {watch('paymentType') === 'check' && (
@@ -165,9 +175,16 @@ const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
                           {...field}
                           required={isCheckPayment}
                           placeholder="check number"
+                          isInvalid={formState.errors.checkNumber !== undefined}
                         />
                       )}
                     />
+                    <Form.Control.Feedback
+                      type="invalid"
+                      className="text-right"
+                    >
+                      {formState.errors.checkNumber?.message}
+                    </Form.Control.Feedback>
                   </InputGroup>
                 </Row>
                 <Row>
@@ -189,9 +206,18 @@ const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
                           required={isCheckPayment}
                           type="date"
                           placeholder="check posting date"
+                          isInvalid={
+                            formState.errors.checkPostingDate !== undefined
+                          }
                         />
                       )}
                     />
+                    <Form.Control.Feedback
+                      type="invalid"
+                      className="text-right"
+                    >
+                      {formState.errors.checkPostingDate?.message}
+                    </Form.Control.Feedback>
                   </InputGroup>
                 </Row>
                 <Row>
@@ -212,9 +238,18 @@ const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
                           {...field}
                           required={isCheckPayment}
                           placeholder="check issuing bank"
+                          isInvalid={
+                            formState.errors.checkIssuingBank !== undefined
+                          }
                         />
                       )}
                     />
+                    <Form.Control.Feedback
+                      type="invalid"
+                      className="text-right"
+                    >
+                      {formState.errors.checkIssuingBank?.message}
+                    </Form.Control.Feedback>
                   </InputGroup>
                 </Row>
               </>
