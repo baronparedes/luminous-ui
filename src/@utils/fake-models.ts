@@ -182,7 +182,6 @@ export const generateFakeExpense = (): ExpenseAttr => {
     quantity,
     unitCost,
     totalCost: quantity * unitCost,
-    purchaseOrderId: faker.datatype.number(),
   };
 };
 

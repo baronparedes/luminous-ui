@@ -33,6 +33,7 @@ const ExpenseView = () => {
                 variant="primary"
                 className="w-100"
                 buttonLabel="create new request"
+                onCreatePurchaseOrder={() => window.location.reload()}
               />
             </Col>
           </Row>
