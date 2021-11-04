@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {Button, ButtonProps} from 'react-bootstrap';
-import {FaCheck} from 'react-icons/fa';
+import {FaCheck, FaSpinner} from 'react-icons/fa';
 
 import {useNotifyApprovers} from '../../../Api';
 
@@ -30,6 +30,7 @@ const NotifyApprovers = ({
       >
         {buttonLabel}
         {notified && <FaCheck className="ml-2" />}
+        {loading && <FaSpinner className="fa-spin ml-2" />}
       </Button>
     </>
   );
