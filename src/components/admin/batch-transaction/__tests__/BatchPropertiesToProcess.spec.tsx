@@ -17,21 +17,25 @@ describe('BatchPropertiesToProcess', () => {
       {...generateFakeProperty(), code: 'P222'},
     ];
 
-    //TODO: Fix error warnings
     nock(base)
-      .post('/api/transaction/postMonthlyCharges', {
-        propertyId: Number(mockProperties[0].id),
-        year: currentPeriod.year,
-        month: currentPeriod.month,
+      .post('/api/transaction/postMonthlyCharges', body => {
+        expect(body).toEqual({
+          propertyId: Number(mockProperties[0].id),
+          year: currentPeriod.year,
+          month: currentPeriod.month,
+        });
+        return true;
       })
       .reply(200);
 
-    //TODO: Fix error warnings
     nock(base)
-      .post('/api/transaction/postMonthlyCharges', {
-        propertyId: Number(mockProperties[1].id),
-        year: currentPeriod.year,
-        month: currentPeriod.month,
+      .post('/api/transaction/postMonthlyCharges', body => {
+        expect(body).toEqual({
+          propertyId: Number(mockProperties[1].id),
+          year: currentPeriod.year,
+          month: currentPeriod.month,
+        });
+        return true;
       })
       .reply(200);
 
