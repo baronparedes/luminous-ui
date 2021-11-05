@@ -26,10 +26,12 @@ const ForgotPasswordForm = ({onForgotPassword}: Props) => {
   const onSubmit = (formData: FormData) => {
     mutate({
       ...formData,
-    }).then(() => {
-      reset();
-      onForgotPassword && onForgotPassword();
-    });
+    })
+      .then(() => {
+        reset();
+        onForgotPassword && onForgotPassword();
+      })
+      .catch(() => {});
   };
   return (
     <>
