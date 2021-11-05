@@ -8,8 +8,8 @@ import routes from '../../@utils/routes';
 import {RegisterProfile, useRegister} from '../../Api';
 import {useRootState} from '../../store';
 import {profileActions} from '../../store/reducers/profile.reducer';
+import ButtonLoading from '../@ui/ButtonLoading';
 import ErrorInfo from '../@ui/ErrorInfo';
-import Loading from '../@ui/Loading';
 import {getFieldErrorsFromRequest} from '../@validation';
 
 type FormData = RegisterProfile & {confirmPassword: string};
@@ -210,19 +210,15 @@ const RegisterForm = () => {
           </Col>
         )}
         <Col className="text-center mb-2">
-          <Button
+          <ButtonLoading
             variant="primary"
             type="submit"
             disabled={loading}
+            loading={loading}
             className="w-100"
           >
-            {loading && (
-              <div className="float-left mb-2">
-                <Loading size={12} />
-              </div>
-            )}
             Register
-          </Button>
+          </ButtonLoading>
         </Col>
         <Col className="text-center pb-3">
           <Button

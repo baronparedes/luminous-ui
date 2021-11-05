@@ -1,50 +1,33 @@
 import {Col, Form, InputGroup} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
-import {FaKey, FaUserAlt} from 'react-icons/fa';
-import {useDispatch} from 'react-redux';
-import {Redirect} from 'react-router-dom';
+import {FaEnvelope, FaUserAlt} from 'react-icons/fa';
 
-import routes from '../../@utils/routes';
-import {useAuth} from '../../Api';
-import {useRootState} from '../../store';
-import {profileActions} from '../../store/reducers/profile.reducer';
 import ButtonLoading from '../@ui/ButtonLoading';
 import ErrorInfo from '../@ui/ErrorInfo';
 
 type FormData = {
   username: string;
-  password: string;
+  email: string;
 };
 
-const LoginForm = () => {
-  const dispatch = useDispatch();
-  const {token} = useRootState(state => state.profile);
-  const {mutate, loading, error} = useAuth({});
-  const {handleSubmit, control} = useForm<FormData>({
+type Props = {
+  onForgotPassword?: () => void;
+};
+
+const ForgotPasswordForm = ({onForgotPassword}: Props) => {
+  const {handleSubmit, control, reset} = useForm<FormData>({
     defaultValues: {
-      password: '',
+      email: '',
       username: '',
     },
   });
   const onSubmit = (formData: FormData) => {
-    const bearer = `${formData.username}:${formData.password}`;
-    const credentials = Buffer.from(bearer).toString('base64');
-    mutate(undefined, {headers: {Authorization: `Basic ${credentials}`}})
-      .then(data => {
-        if (data) {
-          dispatch(
-            profileActions.signIn({
-              me: data.profile,
-              token: data.token,
-            })
-          );
-        }
-      })
-      .catch(() => {});
+    console.log(formData);
+    onForgotPassword && onForgotPassword();
+    reset();
   };
-  if (token) {
-    return <Redirect to={routes.ROOT} />;
-  }
+  const loading = false;
+  const error = false;
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)} role="form">
@@ -71,21 +54,21 @@ const LoginForm = () => {
         </Col>
         <Col>
           <Controller
-            name="password"
+            name="email"
             control={control}
             render={({field}) => (
               <InputGroup className="mb-2">
                 <InputGroup.Prepend>
                   <InputGroup.Text>
-                    <FaKey />
+                    <FaEnvelope />
                   </InputGroup.Text>
                 </InputGroup.Prepend>
                 <Form.Control
                   {...field}
                   disabled={loading}
                   required
-                  type="password"
-                  placeholder="password"
+                  type="email"
+                  placeholder="email"
                 />
               </InputGroup>
             )}
@@ -93,7 +76,7 @@ const LoginForm = () => {
         </Col>
         {error && (
           <Col>
-            <ErrorInfo>unable to login</ErrorInfo>
+            <ErrorInfo>unable to reset password</ErrorInfo>
           </Col>
         )}
         <Col className="text-center pb-3">
@@ -101,10 +84,10 @@ const LoginForm = () => {
             variant="primary"
             type="submit"
             disabled={loading}
-            className="w-100"
             loading={loading}
+            className="w-100"
           >
-            Sign In
+            reset password
           </ButtonLoading>
         </Col>
       </Form>
@@ -112,4 +95,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default ForgotPasswordForm;

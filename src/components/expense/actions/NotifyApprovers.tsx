@@ -1,8 +1,8 @@
 import {useState} from 'react';
-import {Button, ButtonProps} from 'react-bootstrap';
-import {FaCheck, FaSpinner} from 'react-icons/fa';
+import {ButtonProps} from 'react-bootstrap';
 
 import {useNotifyApprovers} from '../../../Api';
+import ButtonLoading from '../../@ui/ButtonLoading';
 
 type Props = {
   purchaseOrderId: number;
@@ -23,15 +23,15 @@ const NotifyApprovers = ({
 
   return (
     <>
-      <Button
+      <ButtonLoading
         {...buttonProps}
         onClick={handleOnClick}
         disabled={loading || notified}
+        loading={loading}
+        checked={notified}
       >
         {buttonLabel}
-        {notified && <FaCheck className="ml-2" />}
-        {loading && <FaSpinner className="fa-spin ml-2" />}
-      </Button>
+      </ButtonLoading>
     </>
   );
 };
