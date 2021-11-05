@@ -3,8 +3,8 @@ import {Controller, useForm} from 'react-hook-form';
 
 import {PropertyAttr} from '../../../Api';
 import {RECORD_STATUS} from '../../../constants';
+import ButtonLoading from '../../@ui/ButtonLoading';
 import ErrorInfo from '../../@ui/ErrorInfo';
-import Loading from '../../@ui/Loading';
 import {decimalPatternRule, validateGreaterThanZero} from '../../@validation';
 
 type Props = {
@@ -129,14 +129,14 @@ const PropertyForm = ({value, onSubmit, loading, error}: Props) => {
             </Col>
           )}
           <Col className="text-right mb-2">
-            <Button variant="primary" type="submit" disabled={loading}>
-              {loading && (
-                <div className="float-left mb-2">
-                  <Loading size={12} />
-                </div>
-              )}
+            <ButtonLoading
+              variant="primary"
+              type="submit"
+              disabled={loading}
+              loading={loading}
+            >
               {value ? 'Update' : 'Create'}
-            </Button>
+            </ButtonLoading>
             <Button
               variant="info"
               disabled={loading}

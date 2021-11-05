@@ -6,8 +6,8 @@ import styled from 'styled-components';
 
 import {AuthProfile, UpdateProfile, useUpdateProfile} from '../../../Api';
 import {PROFILE_TYPE, RECORD_STATUS} from '../../../constants';
+import ButtonLoading from '../../@ui/ButtonLoading';
 import ErrorInfo from '../../@ui/ErrorInfo';
-import Loading from '../../@ui/Loading';
 import ModalContainer from '../../@ui/ModalContainer';
 
 const UpdateFormContainer = styled(Container)`
@@ -198,14 +198,14 @@ const ProfileUpdateButton: React.FC<{
               </Col>
             )}
             <Col className="text-right mb-2">
-              <Button variant="primary" type="submit" disabled={loading}>
-                {loading && (
-                  <div className="float-left mb-2">
-                    <Loading size={12} />
-                  </div>
-                )}
+              <ButtonLoading
+                variant="primary"
+                type="submit"
+                disabled={loading}
+                loading={loading}
+              >
                 Update
-              </Button>
+              </ButtonLoading>
               <Button
                 variant="info"
                 disabled={loading}

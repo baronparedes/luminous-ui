@@ -1,12 +1,12 @@
-import {Button, Col, Form, InputGroup} from 'react-bootstrap';
+import {Col, Form, InputGroup} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
 import {FaEnvelope, FaMobile, FaStickyNote, FaTag} from 'react-icons/fa';
 import {useDispatch} from 'react-redux';
 
 import {AuthProfile, UpdateProfile, useUpdateProfile} from '../../Api';
 import {profileActions} from '../../store/reducers/profile.reducer';
+import ButtonLoading from '../@ui/ButtonLoading';
 import ErrorInfo from '../@ui/ErrorInfo';
-import Loading from '../@ui/Loading';
 
 type BasicDetailsFormData = {
   name: string;
@@ -142,19 +142,15 @@ const UpdateBasicDetailsForm: React.FC<{
         </Col>
       )}
       <Col className="text-center mb-2">
-        <Button
+        <ButtonLoading
           variant="primary"
           type="submit"
           disabled={loading}
+          loading={loading}
           className="w-100"
         >
-          {loading && (
-            <div className="float-left mb-2">
-              <Loading size={12} />
-            </div>
-          )}
           Update
-        </Button>
+        </ButtonLoading>
       </Col>
     </Form>
   );

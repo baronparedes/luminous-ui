@@ -2,6 +2,7 @@ import {Col, Form, InputGroup} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
 import {FaEnvelope, FaUserAlt} from 'react-icons/fa';
 
+import {useResetPassword} from '../../Api';
 import ButtonLoading from '../@ui/ButtonLoading';
 import ErrorInfo from '../@ui/ErrorInfo';
 
@@ -21,13 +22,15 @@ const ForgotPasswordForm = ({onForgotPassword}: Props) => {
       username: '',
     },
   });
+  const {mutate, loading, error} = useResetPassword({});
   const onSubmit = (formData: FormData) => {
-    console.log(formData);
-    onForgotPassword && onForgotPassword();
-    reset();
+    mutate({
+      ...formData,
+    }).then(() => {
+      reset();
+      onForgotPassword && onForgotPassword();
+    });
   };
-  const loading = false;
-  const error = false;
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)} role="form">

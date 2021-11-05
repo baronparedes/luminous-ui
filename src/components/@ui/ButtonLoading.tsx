@@ -1,7 +1,5 @@
 import {Button, ButtonProps} from 'react-bootstrap';
-import {FaCheck} from 'react-icons/fa';
-
-import Loading from './Loading';
+import {FaCheck, FaSpinner} from 'react-icons/fa';
 
 type Props = {
   loading?: boolean;
@@ -19,11 +17,7 @@ const ButtonLoading: React.FC<Props & ButtonProps> = ({
       <Button {...buttonProps}>
         {children}
         {checked && <FaCheck className="ml-2" />}
-        {loading && (
-          <div className="ml-2">
-            <Loading />
-          </div>
-        )}
+        {loading && <FaSpinner className="ml-2 fa-spin" role="progressbar" />}
       </Button>
     </>
   );

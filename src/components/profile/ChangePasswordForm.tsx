@@ -1,10 +1,10 @@
-import {Button, Col, Form, InputGroup} from 'react-bootstrap';
+import {Col, Form, InputGroup} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
 import {FaKey} from 'react-icons/fa';
 
 import {useChangePassword} from '../../Api';
+import ButtonLoading from '../@ui/ButtonLoading';
 import ErrorInfo from '../@ui/ErrorInfo';
-import Loading from '../@ui/Loading';
 
 type ChangePasswordFormData = {
   currentPassword: string;
@@ -117,19 +117,15 @@ const ChangePasswordForm: React.FC<{id: number; onUpdate?: () => void}> = ({
         </Col>
       )}
       <Col className="text-center mb-2">
-        <Button
+        <ButtonLoading
           variant="primary"
           type="submit"
           disabled={loading}
           className="w-100"
+          loading={loading}
         >
-          {loading && (
-            <div className="float-left mb-2">
-              <Loading size={12} />
-            </div>
-          )}
           Change Password
-        </Button>
+        </ButtonLoading>
       </Col>
     </Form>
   );

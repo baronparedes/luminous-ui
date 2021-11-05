@@ -443,6 +443,27 @@ export type UseChangePasswordProps = Omit<UseMutateProps<void, unknown, void, Ch
 export const useChangePassword = ({id, ...props}: UseChangePasswordProps) => useMutate<void, unknown, void, ChangePasswordRequestBody, ChangePasswordPathParams>("PATCH", (paramsInPath: ChangePasswordPathParams) => `/api/profile/changePassword/${paramsInPath.id}`, {  pathParams: { id }, ...props });
 
 
+export interface ResetPasswordRequestBody {
+  email: string;
+  username: string;
+}
+
+export type ResetPasswordProps = Omit<MutateProps<void, unknown, void, ResetPasswordRequestBody, void>, "path" | "verb">;
+
+export const ResetPassword = (props: ResetPasswordProps) => (
+  <Mutate<void, unknown, void, ResetPasswordRequestBody, void>
+    verb="POST"
+    path={`/api/profile/resetPassword`}
+    
+    {...props}
+  />
+);
+
+export type UseResetPasswordProps = Omit<UseMutateProps<void, unknown, void, ResetPasswordRequestBody, void>, "path" | "verb">;
+
+export const useResetPassword = (props: UseResetPasswordProps) => useMutate<void, unknown, void, ResetPasswordRequestBody, void>("POST", `/api/profile/resetPassword`, props);
+
+
 export interface GetPropertyAccountsByProfilePathParams {
   profileId: number
 }
