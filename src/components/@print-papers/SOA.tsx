@@ -3,10 +3,10 @@ import styled from 'styled-components';
 
 import {calculateAccount, getNames, sum} from '../../@utils/helpers';
 import {Month, PropertyAccount, SettingAttr} from '../../Api';
-import {Currency} from './Currency';
-import Markup from './Markup';
+import {Currency} from '../@ui/Currency';
+import Markup from '../@ui/Markup';
+import PaymentDetail from '../@ui/PaymentDetail';
 import {PageSection} from './PaperPdf';
-import PaymentDetail from './PaymentDetail';
 
 const Label = styled('div')`
   font-size: 1.5em;

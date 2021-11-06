@@ -1,4 +1,5 @@
 import {Col, Container, Row} from 'react-bootstrap';
+import {FaPrint} from 'react-icons/fa';
 
 import {useGetPurchaseOrder} from '../../Api';
 import {useUrl} from '../../hooks/useUrl';
@@ -7,6 +8,7 @@ import Loading from '../@ui/Loading';
 import RoundedPanel from '../@ui/RoundedPanel';
 import ApprovePurchaseOrder from './actions/ApprovePurchaseOrder';
 import NotifyApprovers from './actions/NotifyApprovers';
+import PrintPurchaseOrder from './actions/PrintPurchaseOrder';
 import RejectPurchaseOrder from './actions/RejectPurchaseOrder';
 import PurchaseOrderDetails from './PurchaseOrderDetails';
 import PurchaseOrderDisbursements from './PurchaseOrderDisbursements';
@@ -34,7 +36,16 @@ const PurchaseOrderView = () => {
           <Col>
             {data && (
               <>
-                <PurchaseOrderExpenses expenses={data.expenses} />
+                <PurchaseOrderExpenses
+                  expenses={data.expenses}
+                  appendHeaderContent={
+                    <PrintPurchaseOrder
+                      purchaseOrder={data}
+                      variant="secondary"
+                      buttonLabel={<FaPrint title="print purchase order" />}
+                    />
+                  }
+                />
                 <PurchaseOrderDisbursements
                   disbursements={data.disbursements}
                 />

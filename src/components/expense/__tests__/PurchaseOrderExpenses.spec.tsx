@@ -15,9 +15,14 @@ describe('PurchaseOrderExpenses', () => {
     ];
 
     const mockedExpenses = [generateFakeExpense(), generateFakeExpense()];
-    const {getByText} = render(
-      <PurchaseOrderExpenses expenses={mockedExpenses} />
+    const {getByText, getByTestId} = render(
+      <PurchaseOrderExpenses
+        expenses={mockedExpenses}
+        appendHeaderContent={<div data-testid="mock-header-content" />}
+      />
     );
+
+    expect(getByTestId('mock-header-content')).toBeInTheDocument();
 
     for (const expectedHeader of expectedHeaders) {
       expect(getByText(expectedHeader, {selector: 'th'})).toBeInTheDocument();

@@ -6,12 +6,12 @@ import {fireEvent, waitFor} from '@testing-library/react';
 import {getCurrentMonthYear} from '../../../../@utils/dates';
 import {generateFakePropertyAccount} from '../../../../@utils/fake-models';
 import {renderWithProviderAndRouterAndRestful} from '../../../../@utils/test-renderers';
-import SOA from '../../../@ui/SOA';
+import SOA from '../../../@print-papers/SOA';
 import BatchPrintView from '../BatchPrintView';
 
 type SOAProps = React.ComponentProps<typeof SOA>;
 
-jest.mock('../../../@ui/SOA', () => (props: SOAProps) => {
+jest.mock('../../../@print-papers/SOA', () => (props: SOAProps) => {
   return (
     <>
       <div data-testid={`mock-period-soa-${props.propertyAccount?.propertyId}`}>

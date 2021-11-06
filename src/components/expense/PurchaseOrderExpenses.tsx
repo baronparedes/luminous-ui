@@ -7,9 +7,10 @@ import {Table} from '../@ui/Table';
 
 type Props = {
   expenses?: ExpenseAttr[];
+  appendHeaderContent?: React.ReactNode;
 };
 
-const PurchaseOrderExpenses = ({expenses}: Props) => {
+const PurchaseOrderExpenses = ({expenses, appendHeaderContent}: Props) => {
   return (
     <>
       <RoundedPanel>
@@ -22,6 +23,9 @@ const PurchaseOrderExpenses = ({expenses}: Props) => {
                     <h5 className="m-auto">Expenses</h5>
                   </div>
                 </Col>
+                {appendHeaderContent && (
+                  <Col className="text-right">{appendHeaderContent}</Col>
+                )}
               </Row>
             </>
           }

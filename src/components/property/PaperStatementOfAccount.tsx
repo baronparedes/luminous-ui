@@ -2,8 +2,8 @@ import React from 'react';
 
 import {SETTING_KEYS} from '../../constants';
 import {useRootState} from '../../store';
-import {PrintPaper} from '../@ui/PaperPdf';
-import SOA from '../@ui/SOA';
+import {PrintPaper} from '../@print-papers/PaperPdf';
+import SOA from '../@print-papers/SOA';
 
 type Props = React.ComponentProps<typeof SOA>;
 

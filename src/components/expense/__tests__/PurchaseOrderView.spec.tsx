@@ -58,7 +58,8 @@ jest.mock(
   () => (props: PurchaseOrderExpensesProps) => {
     return (
       <div data-testid="mock-purchase-order-expenses">
-        {JSON.stringify(props)}
+        {JSON.stringify(props.expenses)}
+        <div>{props.appendHeaderContent}</div>
       </div>
     );
   }
@@ -69,7 +70,7 @@ jest.mock(
   () => (props: PurchaseOrderDisbursementsProps) => {
     return (
       <div data-testid="mock-purchase-order-disbursements">
-        {JSON.stringify(props)}
+        {JSON.stringify(props.disbursements)}
       </div>
     );
   }
@@ -127,6 +128,7 @@ describe('PurchaseOrderView', () => {
         history.push(routes.PURCHASE_ORDER(purchaseOrderId));
       }
     );
+
     await waitFor(() => {
       expect(target.history.location.pathname).toEqual(
         routes.PURCHASE_ORDER(purchaseOrderId)
@@ -143,11 +145,12 @@ describe('PurchaseOrderView', () => {
       ).toBeInTheDocument()
     );
 
-    await waitFor(() =>
+    await waitFor(() => {
       expect(
         target.getByTestId('mock-purchase-order-expenses')
-      ).toBeInTheDocument()
-    );
+      ).toBeInTheDocument();
+      expect(target.getByTitle(/print purchase order/i)).toBeInTheDocument();
+    });
 
     await waitFor(() =>
       expect(
