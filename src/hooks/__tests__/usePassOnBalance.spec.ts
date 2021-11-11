@@ -6,30 +6,36 @@ import {waitFor} from '@testing-library/react';
 import {generateFakeCharge} from '../../@utils/fake-models';
 import {renderHookWithProviderAndRestful} from '../../@utils/test-renderers';
 import {ChargeCollected, DisbursementBreakdownView} from '../../Api';
-import {DEFAULTS} from '../../constants';
-import {useCommunityBalance} from '../useCommunityBalance';
+import {usePassOnBalance} from '../usePassOnBalance';
 
-describe('useCommunityBalance', () => {
+describe('usePassOnBalance', () => {
   const base = 'http://localhost';
 
-  it('should render available community balance', async () => {
+  it('should render available pass on balance', async () => {
     const collected = faker.datatype.number();
     const disbursed = faker.datatype.number();
     const expectedBalance = collected - disbursed;
+    const expectedChargeCode = faker.random.alphaNumeric(6);
+    const expectedChargeId = faker.datatype.number();
     const collectedCharges: ChargeCollected[] = [
       {
-        charge: {...generateFakeCharge(), passOn: true},
-        amount: faker.datatype.number(),
+        charge: {
+          ...generateFakeCharge(),
+          passOn: true,
+          id: expectedChargeId,
+          code: expectedChargeCode,
+        },
+        amount: collected,
       },
       {
         charge: {...generateFakeCharge(), passOn: false},
-        amount: collected,
+        amount: faker.datatype.number(),
       },
     ];
 
     const disbursements: DisbursementBreakdownView[] = [
       {
-        code: DEFAULTS.COMMUNITY_EXPENSE,
+        code: expectedChargeCode,
         amount: disbursed,
       },
     ];
@@ -43,10 +49,16 @@ describe('useCommunityBalance', () => {
       .reply(200, disbursements);
 
     const {result} = renderHookWithProviderAndRestful(
-      () => useCommunityBalance(),
+      () => usePassOnBalance(),
       base
     );
 
-    await waitFor(() => expect(result.current.data).toEqual(expectedBalance));
+    await waitFor(() =>
+      expect(result.current.data[0]).toEqual({
+        balance: expectedBalance,
+        chargeId: expectedChargeId,
+        code: expectedChargeCode,
+      })
+    );
   });
 });

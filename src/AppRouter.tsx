@@ -12,6 +12,7 @@ import PropertiesView from './components/admin/manage-properties/PropertiesView'
 import SettingsView from './components/admin/manage-settings/SettingsView';
 import WaterReadingView from './components/admin/upload-water-reading/WaterReadingView';
 import DashboardView from './components/dashboard/DashboardView';
+import DisbursementView from './components/expense/DisbursementView';
 import ExpenseView from './components/expense/ExpenseView';
 import PurchaseOrderView from './components/expense/PurchaseOrderView';
 import LoginView from './components/profile/LoginView';
@@ -58,6 +59,12 @@ const AppRouter: React.FC = () => {
               exact
               onlyFor={['admin', 'stakeholder']}
               component={ExpenseView}
+            />
+            <ProtectedRoute
+              path={routes.EXPENSE_DISBURSEMENTS}
+              exact
+              onlyFor={['admin', 'stakeholder']}
+              component={DisbursementView}
             />
             <ProtectedRoute
               path={routes.ADMIN_PROFILES}

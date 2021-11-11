@@ -13,10 +13,6 @@ export function useCommunityBalance() {
     useGetDisbursementBreakdown({});
 
   useEffect(() => {
-    if (!charges && !disbursements) {
-      setAvailableBalance(undefined);
-    }
-
     const chargesAmounts = charges
       ?.filter(d => !d.charge.passOn)
       .map(d => d.amount);
