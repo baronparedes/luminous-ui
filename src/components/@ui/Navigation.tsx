@@ -4,6 +4,7 @@ import {
   FaCogs,
   FaFileUpload,
   FaHome,
+  FaMoneyCheckAlt,
   FaPrint,
   FaStream,
   FaUsers,
@@ -57,6 +58,16 @@ function buildNavigationSections(profileType: ProfileType) {
             <>
               <FaBook className="mr-1" />
               requests
+            </>
+          ),
+        },
+        {
+          to: routes.EXPENSE_DISBURSEMENTS,
+          exact: true,
+          title: (
+            <>
+              <FaMoneyCheckAlt className="mr-1" />
+              disbursements
             </>
           ),
         },

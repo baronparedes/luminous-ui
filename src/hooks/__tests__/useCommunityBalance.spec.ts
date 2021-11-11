@@ -5,9 +5,9 @@ import {generateFakeCharge} from '../../@utils/fake-models';
 import {renderHookWithProviderAndRestful} from '../../@utils/test-renderers';
 import {ChargeCollected, DisbursementBreakdownView} from '../../Api';
 import {DEFAULTS} from '../../constants';
-import {useAvailableBalance} from '../useAvailableBalance';
+import {useCommunityBalance} from '../useCommunityBalance';
 
-describe('useAvailableBalance', () => {
+describe('useCommunityBalance', () => {
   const base = 'http://localhost';
 
   it('should render available balance', async () => {
@@ -39,7 +39,7 @@ describe('useAvailableBalance', () => {
       .reply(200, disbursements);
 
     const {waitForNextUpdate, result} = renderHookWithProviderAndRestful(
-      () => useAvailableBalance(),
+      () => useCommunityBalance(),
       base
     );
 

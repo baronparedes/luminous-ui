@@ -3,10 +3,10 @@ import faker from 'faker';
 import {render} from '@testing-library/react';
 
 import {currencyFormat} from '../../../@utils/currencies';
-import {useAvailableBalance} from '../../../hooks/useAvailableBalance';
+import {useCommunityBalance} from '../../../hooks/useCommunityBalance';
 import ExpenseView from '../ExpenseView';
 
-jest.mock('../../../hooks/useAvailableBalance');
+jest.mock('../../../hooks/useCommunityBalance');
 
 jest.mock('../PurchaseOrderList', () => () => {
   return <div data-testid="mock-purchase-order-list" />;
@@ -17,14 +17,14 @@ jest.mock('../actions/CreatePurchaseOrder', () => () => {
 });
 
 describe('ExpenseView', () => {
-  const useAvailableBalanceMock = useAvailableBalance as jest.MockedFunction<
-    typeof useAvailableBalance
+  const useCommunityBalanceMock = useCommunityBalance as jest.MockedFunction<
+    typeof useCommunityBalance
   >;
 
   it('should render', async () => {
     const expectedAmount = faker.datatype.number();
 
-    useAvailableBalanceMock.mockReturnValue({
+    useCommunityBalanceMock.mockReturnValue({
       data: expectedAmount,
       loading: false,
     });

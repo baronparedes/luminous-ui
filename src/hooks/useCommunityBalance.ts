@@ -2,8 +2,9 @@ import {useEffect, useState} from 'react';
 
 import {sum} from '../@utils/helpers';
 import {useGetAllCollectedCharges, useGetDisbursementBreakdown} from '../Api';
+import {DEFAULTS} from '../constants';
 
-export function useAvailableBalance() {
+export function useCommunityBalance() {
   const [availableBalance, setAvailableBalance] = useState<number>();
   const {data: charges, loading: loadingCharges} = useGetAllCollectedCharges(
     {}
@@ -21,7 +22,7 @@ export function useAvailableBalance() {
       .map(d => d.amount);
 
     const disbursementAmounts = disbursements
-      ?.filter(d => d.code === 'COMMUNITY EXPENSE')
+      ?.filter(d => d.code === DEFAULTS.COMMUNITY_EXPENSE)
       .map(d => d.amount);
 
     setAvailableBalance(sum(chargesAmounts) - sum(disbursementAmounts));

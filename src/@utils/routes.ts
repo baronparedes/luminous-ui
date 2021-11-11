@@ -6,6 +6,7 @@ const routes = {
   PURCHASE_ORDER: (id?: string | number) => `/purchase-order/${id}`,
   EXPENSE: '/expense',
   EXPENSE_REQUESTS: '/expense/requests',
+  EXPENSE_DISBURSEMENTS: '/expense/disbursements',
   ADMIN: '/admin',
   ADMIN_PROFILES: '/admin/profiles',
   ADMIN_PROPERTIES: '/admin/properties',

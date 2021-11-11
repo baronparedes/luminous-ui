@@ -87,7 +87,7 @@ const PurchaseOrderList = () => {
               {data.map(row => {
                 return (
                   <tr key={Number(row.id)}>
-                    <td>
+                    <td style={{minWidth: '90px'}}>
                       <Link
                         className="text-underline"
                         to={routes.PURCHASE_ORDER(row.id)}

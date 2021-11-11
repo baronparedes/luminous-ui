@@ -1,13 +1,13 @@
 import {Badge, Col, Container, Row} from 'react-bootstrap';
 
-import {useAvailableBalance} from '../../hooks/useAvailableBalance';
+import {useCommunityBalance} from '../../hooks/useCommunityBalance';
 import {Currency} from '../@ui/Currency';
 import RoundedPanel from '../@ui/RoundedPanel';
 import CreatePurchaseOrder from './actions/CreatePurchaseOrder';
 import PurchaseOrderList from './PurchaseOrderList';
 
 const ExpenseView = () => {
-  const {data} = useAvailableBalance();
+  const {data} = useCommunityBalance();
 
   return (
     <>
