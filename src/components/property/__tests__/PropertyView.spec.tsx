@@ -13,6 +13,7 @@ import {renderWithProviderAndRouterAndRestful} from '../../../@utils/test-render
 import {ProfileType} from '../../../Api';
 import {profileActions} from '../../../store/reducers/profile.reducer';
 import AdjustTransactions from '../actions/AdjustTransactions';
+import ViewPaymentHistory from '../actions/ViewPaymentHistory';
 import ViewPreviousStatements from '../actions/ViewPreviousStatements';
 import PropertyAssignmentCard from '../PropertyAssignmentCard';
 import PropertyDetails from '../PropertyDetails';
@@ -32,6 +33,8 @@ type PropertyAssignmentCardProps = React.ComponentProps<
 type ViewPreviousStatementsProps = React.ComponentProps<
   typeof ViewPreviousStatements
 >;
+
+type ViewPaymentHistoryProps = React.ComponentProps<typeof ViewPaymentHistory>;
 
 type AdjustTransactionsProps = React.ComponentProps<typeof AdjustTransactions>;
 
@@ -61,6 +64,14 @@ jest.mock(
   '../actions/ViewPreviousStatements',
   () =>
     ({buttonLabel}: ViewPreviousStatementsProps) => {
+      return <button>{buttonLabel}</button>;
+    }
+);
+
+jest.mock(
+  '../actions/ViewPaymentHistory',
+  () =>
+    ({buttonLabel}: ViewPaymentHistoryProps) => {
       return <button>{buttonLabel}</button>;
     }
 );
@@ -119,6 +130,7 @@ describe('PropertyView', () => {
     });
 
     expect(target.getByText(/view previous statements/i)).toBeInTheDocument();
+    expect(target.getByText(/view payment history/i)).toBeInTheDocument();
 
     return {
       ...target,

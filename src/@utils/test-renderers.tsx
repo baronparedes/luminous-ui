@@ -12,7 +12,16 @@ import {createStore} from '../store';
 
 export function getRestfulWrapper(base: string) {
   const RestfulWrapper: React.FC = ({children}) => {
-    return <RestfulProvider base={base}>{children}</RestfulProvider>;
+    return (
+      <RestfulProvider
+        base={base}
+        onError={err => {
+          console.error(err);
+        }}
+      >
+        {children}
+      </RestfulProvider>
+    );
   };
   return {
     base,

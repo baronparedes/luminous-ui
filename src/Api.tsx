@@ -165,6 +165,18 @@ export interface PropertyAssignmentAttr {
   property?: PropertyAttr;
 }
 
+export interface PaymentHistoryView {
+  collectedBy: string;
+  checkIssuingBank?: string;
+  checkPostingDate?: string;
+  checkNumber?: string;
+  paymentType: PaymentType;
+  orNumber: string;
+  code: string;
+  transactionPeriod: string;
+  amount: number;
+}
+
 export type RequestStatus = "approved" | "rejected" | "pending";
 
 export interface ExpenseAttr {
@@ -681,6 +693,26 @@ export const UpdatePropertyAssignments = ({id, ...props}: UpdatePropertyAssignme
 export type UseUpdatePropertyAssignmentsProps = Omit<UseMutateProps<void, unknown, void, number[], UpdatePropertyAssignmentsPathParams>, "path" | "verb"> & UpdatePropertyAssignmentsPathParams;
 
 export const useUpdatePropertyAssignments = ({id, ...props}: UseUpdatePropertyAssignmentsProps) => useMutate<void, unknown, void, number[], UpdatePropertyAssignmentsPathParams>("PATCH", (paramsInPath: UpdatePropertyAssignmentsPathParams) => `/api/property/updatePropertyAssignments/${paramsInPath.id}`, {  pathParams: { id }, ...props });
+
+
+export interface GetPaymentHistoryPathParams {
+  propertyId: number;
+  year: number
+}
+
+export type GetPaymentHistoryProps = Omit<GetProps<PaymentHistoryView[], unknown, void, GetPaymentHistoryPathParams>, "path"> & GetPaymentHistoryPathParams;
+
+export const GetPaymentHistory = ({propertyId, year, ...props}: GetPaymentHistoryProps) => (
+  <Get<PaymentHistoryView[], unknown, void, GetPaymentHistoryPathParams>
+    path={`/api/property/getPaymentHistory/${propertyId}/${year}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetPaymentHistoryProps = Omit<UseGetProps<PaymentHistoryView[], unknown, void, GetPaymentHistoryPathParams>, "path"> & GetPaymentHistoryPathParams;
+
+export const useGetPaymentHistory = ({propertyId, year, ...props}: UseGetPaymentHistoryProps) => useGet<PaymentHistoryView[], unknown, void, GetPaymentHistoryPathParams>((paramsInPath: GetPaymentHistoryPathParams) => `/api/property/getPaymentHistory/${paramsInPath.propertyId}/${paramsInPath.year}`, {  pathParams: { propertyId, year }, ...props });
 
 
 export interface GetPurchaseOrderPathParams {

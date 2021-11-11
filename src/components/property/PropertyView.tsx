@@ -8,6 +8,7 @@ import Loading from '../@ui/Loading';
 import RoundedPanel from '../@ui/RoundedPanel';
 import AdjustTransactions from './actions/AdjustTransactions';
 import ProcessPayment from './actions/ProcessPayment';
+import ViewPaymentHistory from './actions/ViewPaymentHistory';
 import ViewPreviousStatements from './actions/ViewPreviousStatements';
 import PropertyAssignmentCard from './PropertyAssignmentCard';
 import PropertyDetails from './PropertyDetails';
@@ -78,6 +79,12 @@ const PropertyView = () => {
                 <ViewPreviousStatements
                   className="mb-2 w-100"
                   buttonLabel="view previous statements"
+                  disabled={id === undefined}
+                  propertyId={Number(id)}
+                />
+                <ViewPaymentHistory
+                  className="mb-2 w-100"
+                  buttonLabel="view payment history"
                   disabled={id === undefined}
                   propertyId={Number(id)}
                 />

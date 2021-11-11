@@ -9,6 +9,7 @@ import {
   DisbursementAttr,
   ExpenseAttr,
   PaymentDetailAttr,
+  PaymentHistoryView,
   PaymentType,
   PostingType,
   ProfileAttr,
@@ -23,6 +24,7 @@ import {
   TransactionAttr,
   TransactionType,
 } from '../Api';
+import {formatDate} from './dates';
 import {generateNumberedSeries} from './helpers';
 
 export function generateFakeProfileAttr(type?: ProfileType): ProfileAttr {
@@ -213,5 +215,19 @@ export const generateFakeDisbursement = (): DisbursementAttr => {
     checkIssuingBank: faker.random.words(),
     checkPostingDate: faker.datatype.datetime().toISOString(),
     releasedBy: faker.datatype.number(),
+  };
+};
+
+export const generateFakePaymentHistory = (): PaymentHistoryView => {
+  return {
+    amount: Number(faker.finance.amount()),
+    code: faker.random.alphaNumeric(6),
+    collectedBy: faker.name.firstName() + ' ' + faker.name.lastName(),
+    orNumber: faker.random.alphaNumeric(6),
+    paymentType: faker.random.arrayElement<PaymentType>(['cash', 'check']),
+    transactionPeriod: formatDate(faker.date.recent(), 'YYYY-MM-DD'),
+    checkIssuingBank: faker.company.companyName(),
+    checkNumber: faker.finance.account(),
+    checkPostingDate: faker.date.recent().toISOString(),
   };
 };
