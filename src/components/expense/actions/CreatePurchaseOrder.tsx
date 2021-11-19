@@ -19,6 +19,7 @@ import {
   usePostPurchaseOrder,
 } from '../../../Api';
 import {useRootState} from '../../../store';
+import ButtonLoading from '../../@ui/ButtonLoading';
 import {Currency} from '../../@ui/Currency';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import ModalContainer from '../../@ui/ModalContainer';
@@ -98,13 +99,14 @@ const CreatePurchaseOrder = ({
                 </h5>
               </Col>
               <Col className="text-right" md={3} sm={12}>
-                <Button
+                <ButtonLoading
                   className="w-100"
                   type="submit"
                   disabled={hasNoExpense || loading}
+                  loading={loading}
                 >
                   Save
-                </Button>
+                </ButtonLoading>
               </Col>
             </Row>
             <Row>

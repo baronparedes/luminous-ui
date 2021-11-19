@@ -121,13 +121,15 @@ const ProcessPaymentDetails = ({
                 </Form.Control.Feedback>
               </InputGroup>
             </Row>
-            {watch('paymentType') === 'check' && (
+            {isCheckPayment && (
               <>
                 <Row>
                   <InputGroup className="mb-2">
-                    <InputGroup.Text>
-                      <FaMoneyCheck />
-                    </InputGroup.Text>
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>
+                        <FaMoneyCheck />
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
                     <Controller
                       rules={{
                         validate: {
@@ -155,9 +157,11 @@ const ProcessPaymentDetails = ({
                 </Row>
                 <Row>
                   <InputGroup className="mb-2">
-                    <InputGroup.Text>
-                      <FaCalendar />
-                    </InputGroup.Text>
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>
+                        <FaCalendar />
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
                     <Controller
                       rules={{
                         validate: {
@@ -188,9 +192,11 @@ const ProcessPaymentDetails = ({
                 </Row>
                 <Row>
                   <InputGroup className="mb-2">
-                    <InputGroup.Text>
-                      <RiBankFill />
-                    </InputGroup.Text>
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>
+                        <RiBankFill />
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
                     <Controller
                       rules={{
                         validate: {

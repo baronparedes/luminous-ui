@@ -83,9 +83,11 @@ const AddExpense = ({onAddExpense, ...buttonProps}: Props & ButtonProps) => {
           <Form onSubmit={handleSubmit(onSubmit)} role="form">
             <Row>
               <InputGroup className="mb-2">
-                <InputGroup.Text>
-                  <BiDetail />
-                </InputGroup.Text>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <BiDetail />
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <Controller
                   name="description"
                   control={control}

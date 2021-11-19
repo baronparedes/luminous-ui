@@ -11,7 +11,7 @@ import {usePassOnBalance} from '../usePassOnBalance';
 describe('usePassOnBalance', () => {
   const base = 'http://localhost';
 
-  it('should render available pass on balance', async () => {
+  it('should render available charge balance', async () => {
     const collected = faker.datatype.number();
     const disbursed = faker.datatype.number();
     const expectedBalance = collected - disbursed;
@@ -21,15 +21,11 @@ describe('usePassOnBalance', () => {
       {
         charge: {
           ...generateFakeCharge(),
-          passOn: true,
           id: expectedChargeId,
           code: expectedChargeCode,
+          passOn: true,
         },
         amount: collected,
-      },
-      {
-        charge: {...generateFakeCharge(), passOn: false},
-        amount: faker.datatype.number(),
       },
     ];
 

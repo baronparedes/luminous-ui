@@ -1,8 +1,7 @@
-import {Badge, Button, Col, Container, Row} from 'react-bootstrap';
+import {Container, Tab, TabContainer, Tabs} from 'react-bootstrap';
 
 import {usePassOnBalance} from '../../hooks/usePassOnBalance';
-import {Currency} from '../@ui/Currency';
-import RoundedPanel from '../@ui/RoundedPanel';
+import ChargeDisbursement from './ChargeDisbursement';
 
 const DisbursementView = () => {
   const {data} = usePassOnBalance();
@@ -10,33 +9,25 @@ const DisbursementView = () => {
   return (
     <>
       <Container>
-        <RoundedPanel className="p-4">
-          <Row>
-            <Col sm={12} md={9}>
-              <Row>
-                {data.map(d => {
-                  return (
-                    <Col key={d.chargeId} className="text-center">
-                      <h5>
-                        <Badge pill variant="primary">
-                          {d.code}
-                        </Badge>
-                      </h5>
-                      {data && (
-                        <h4>
-                          <Currency currency={d.balance} />
-                        </h4>
-                      )}
-                    </Col>
-                  );
-                })}
-              </Row>
-            </Col>
-            <Col className="text-right">
-              <Button>New Disbursement</Button>
-            </Col>
-          </Row>
-        </RoundedPanel>
+        <TabContainer>
+          <Tabs className="mb-3">
+            <Tab eventKey={0} title="COMMUNITY EXPENSE">
+              Comm Expense
+            </Tab>
+            {data &&
+              data.map(d => {
+                return (
+                  <Tab
+                    eventKey={Number(d.chargeId)}
+                    key={d.chargeId}
+                    title={d.code}
+                  >
+                    <ChargeDisbursement {...d} />
+                  </Tab>
+                );
+              })}
+          </Tabs>
+        </TabContainer>
       </Container>
     </>
   );

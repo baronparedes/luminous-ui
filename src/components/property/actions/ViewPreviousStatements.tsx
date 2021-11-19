@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Button,
-  ButtonProps,
-  Container,
-  Form,
-  InputGroup,
-  ListGroup,
-} from 'react-bootstrap';
+import {Button, ButtonProps, Container, ListGroup} from 'react-bootstrap';
 import {useReactToPrint} from 'react-to-print';
 
 import {ApprovedAny} from '../../../@types';
@@ -20,6 +13,7 @@ import {
 import {VERBIAGE} from '../../../constants';
 import Loading from '../../@ui/Loading';
 import ModalContainer from '../../@ui/ModalContainer';
+import SelectYear from '../../@ui/SelectYear';
 import PaperStatementOfAccount from '../PaperStatementOfAccount';
 
 type Props = {
@@ -64,9 +58,6 @@ const ViewPreviousStatements = ({
       return `${d.year}${d.month}` !== `${year}${month}`;
     }) ?? [];
 
-  const handleSelectYear = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedYear(Number(e.target.value));
-  };
   const handleSelectPeriod = (period: Period) => {
     if (JSON.stringify(selectedPeriod) === JSON.stringify(period)) {
       handlePrint && handlePrint();
@@ -99,27 +90,12 @@ const ViewPreviousStatements = ({
         {!loading && data && (
           <div className="m-2 pb-3">
             <Container className="m-0 p-0 pb-3">
-              <InputGroup>
-                <Form.Label htmlFor="selectedYear" column sm={3}>
-                  select year
-                </Form.Label>
-                <Form.Control
-                  size="lg"
-                  as="select"
-                  id="selectedYear"
-                  name="selectedYear"
-                  onChange={handleSelectYear}
-                  value={selectedYear}
-                >
-                  {availableYears.map((s, i) => {
-                    return (
-                      <option key={i} value={s}>
-                        {s}
-                      </option>
-                    );
-                  })}
-                </Form.Control>
-              </InputGroup>
+              <SelectYear
+                availableYears={availableYears}
+                value={selectedYear}
+                onSelectYear={setSelectedYear}
+                size="lg"
+              />
             </Container>
             <ListGroup>
               {periods

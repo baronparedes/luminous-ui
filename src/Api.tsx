@@ -55,6 +55,36 @@ export interface DisbursementBreakdownView {
   code: string;
 }
 
+export type PaymentType = "cash" | "check";
+
+export interface ProfileAttr {
+  id?: number;
+  name: string;
+  username: string;
+  password: string;
+  email: string;
+  mobileNumber?: string;
+  type: ProfileType;
+  status: RecordStatus;
+  scopes?: string;
+  remarks?: string;
+}
+
+export interface DisbursementAttr {
+  id?: number;
+  purchaseOrderId?: number;
+  chargeId?: number;
+  releasedBy: number;
+  paymentType: PaymentType;
+  details: string;
+  checkNumber?: string;
+  checkPostingDate?: string;
+  checkIssuingBank?: string;
+  amount: number;
+  releasedByProfile?: ProfileAttr;
+  charge?: ChargeAttr;
+}
+
 export interface FieldError {
   value: string | null;
   field: string | null;
@@ -103,22 +133,7 @@ export interface PropertyAttr {
   status: RecordStatus;
 }
 
-export interface ProfileAttr {
-  id?: number;
-  name: string;
-  username: string;
-  password: string;
-  email: string;
-  mobileNumber?: string;
-  type: ProfileType;
-  status: RecordStatus;
-  scopes?: string;
-  remarks?: string;
-}
-
 export type TransactionType = "charged" | "collected";
-
-export type PaymentType = "cash" | "check";
 
 export interface PaymentDetailAttr {
   id?: number;
@@ -187,19 +202,6 @@ export interface ExpenseAttr {
   unitCost: number;
   totalCost: number;
   waivedBy?: number;
-}
-
-export interface DisbursementAttr {
-  id?: number;
-  purchaseOrderId?: number;
-  chargeId?: number;
-  releasedBy: number;
-  paymentType: PaymentType;
-  details: string;
-  checkNumber?: string;
-  checkPostingDate?: string;
-  checkIssuingBank?: string;
-  amount: number;
 }
 
 export interface PurchaseOrderAttr {
@@ -334,6 +336,45 @@ export const GetDisbursementBreakdown = (props: GetDisbursementBreakdownProps) =
 export type UseGetDisbursementBreakdownProps = Omit<UseGetProps<DisbursementBreakdownView[], unknown, void, void>, "path">;
 
 export const useGetDisbursementBreakdown = (props: UseGetDisbursementBreakdownProps) => useGet<DisbursementBreakdownView[], unknown, void, void>(`/api/disbursement/getDisbursementBreakdown`, props);
+
+
+export interface GetAllDisbursementsQueryParams {
+  year?: number;
+}
+
+export interface GetAllDisbursementsPathParams {
+  chargeId: number
+}
+
+export type GetAllDisbursementsProps = Omit<GetProps<DisbursementAttr[], unknown, GetAllDisbursementsQueryParams, GetAllDisbursementsPathParams>, "path"> & GetAllDisbursementsPathParams;
+
+export const GetAllDisbursements = ({chargeId, ...props}: GetAllDisbursementsProps) => (
+  <Get<DisbursementAttr[], unknown, GetAllDisbursementsQueryParams, GetAllDisbursementsPathParams>
+    path={`/api/disbursement/getAllDisbursements/${chargeId}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetAllDisbursementsProps = Omit<UseGetProps<DisbursementAttr[], unknown, GetAllDisbursementsQueryParams, GetAllDisbursementsPathParams>, "path"> & GetAllDisbursementsPathParams;
+
+export const useGetAllDisbursements = ({chargeId, ...props}: UseGetAllDisbursementsProps) => useGet<DisbursementAttr[], unknown, GetAllDisbursementsQueryParams, GetAllDisbursementsPathParams>((paramsInPath: GetAllDisbursementsPathParams) => `/api/disbursement/getAllDisbursements/${paramsInPath.chargeId}`, {  pathParams: { chargeId }, ...props });
+
+
+export type PostChargeDisbursementProps = Omit<MutateProps<void, unknown, void, DisbursementAttr, void>, "path" | "verb">;
+
+export const PostChargeDisbursement = (props: PostChargeDisbursementProps) => (
+  <Mutate<void, unknown, void, DisbursementAttr, void>
+    verb="POST"
+    path={`/api/disbursement/postChargeDisbursement`}
+    
+    {...props}
+  />
+);
+
+export type UsePostChargeDisbursementProps = Omit<UseMutateProps<void, unknown, void, DisbursementAttr, void>, "path" | "verb">;
+
+export const usePostChargeDisbursement = (props: UsePostChargeDisbursementProps) => useMutate<void, unknown, void, DisbursementAttr, void>("POST", `/api/disbursement/postChargeDisbursement`, props);
 
 
 export interface GetAllProfilesQueryParams {

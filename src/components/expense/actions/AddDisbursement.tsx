@@ -91,7 +91,6 @@ const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
                     <Form.Control
                       {...field}
                       type="number"
-                      max={maxValue}
                       required
                       step="any"
                       placeholder="amount to release"
@@ -106,9 +105,11 @@ const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
             </Row>
             <Row>
               <InputGroup className="mb-2">
-                <InputGroup.Text>
-                  <FaMoneyBillWave />
-                </InputGroup.Text>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <FaMoneyBillWave />
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <Controller
                   name="paymentType"
                   control={control}
@@ -128,9 +129,11 @@ const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
             </Row>
             <Row>
               <InputGroup className="mb-2">
-                <InputGroup.Text>
-                  <FaReceipt />
-                </InputGroup.Text>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <FaReceipt />
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <Controller
                   name="details"
                   control={control}
@@ -155,13 +158,15 @@ const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
                 </Form.Control.Feedback>
               </InputGroup>
             </Row>
-            {watch('paymentType') === 'check' && (
+            {isCheckPayment && (
               <>
                 <Row>
                   <InputGroup className="mb-2">
-                    <InputGroup.Text>
-                      <FaMoneyCheck />
-                    </InputGroup.Text>
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>
+                        <FaMoneyCheck />
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
                     <Controller
                       rules={{
                         validate: {
@@ -189,9 +194,11 @@ const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
                 </Row>
                 <Row>
                   <InputGroup className="mb-2">
-                    <InputGroup.Text>
-                      <FaCalendar />
-                    </InputGroup.Text>
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>
+                        <FaCalendar />
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
                     <Controller
                       rules={{
                         validate: {
@@ -222,9 +229,11 @@ const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
                 </Row>
                 <Row>
                   <InputGroup className="mb-2">
-                    <InputGroup.Text>
-                      <RiBankFill />
-                    </InputGroup.Text>
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>
+                        <RiBankFill />
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
                     <Controller
                       rules={{
                         validate: {

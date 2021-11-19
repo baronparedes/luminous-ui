@@ -1,11 +1,9 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {
   Button,
   ButtonProps,
   Col,
   Container,
-  Form,
-  InputGroup,
   ListGroup,
   Row,
 } from 'react-bootstrap';
@@ -19,6 +17,7 @@ import {PaymentDetailAttr, useGetPaymentHistory} from '../../../Api';
 import Loading from '../../@ui/Loading';
 import ModalContainer from '../../@ui/ModalContainer';
 import PaymentDetail from '../../@ui/PaymentDetail';
+import SelectYear from '../../@ui/SelectYear';
 
 type Props = {
   propertyId: number;
@@ -31,7 +30,7 @@ const ViewPaymentHistory = ({
   ...buttonProps
 }: Props & ButtonProps) => {
   const {year} = getCurrentMonthYear();
-  const years = getPastYears(3);
+  const years = getPastYears(3).sort().reverse();
 
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [toggle, setToggle] = useState(false);
@@ -40,10 +39,6 @@ const ViewPaymentHistory = ({
     propertyId,
     year: selectedYear,
   });
-
-  const handleSelectYear = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedYear(Number(e.target.value));
-  };
 
   const availablePeriods = data
     ? [...new Set(data.map(f => f.transactionPeriod))]
@@ -62,30 +57,12 @@ const ViewPaymentHistory = ({
       >
         <div className="m-2 pb-3">
           <Container className="m-0 p-0 pb-3">
-            <InputGroup>
-              <Form.Label htmlFor="selectedYear" column sm={3}>
-                select year
-              </Form.Label>
-              <Form.Control
-                size="lg"
-                as="select"
-                id="selectedYear"
-                name="selectedYear"
-                onChange={handleSelectYear}
-                value={selectedYear}
-              >
-                {years
-                  .sort()
-                  .reverse()
-                  .map((s, i) => {
-                    return (
-                      <option key={i} value={s}>
-                        {s}
-                      </option>
-                    );
-                  })}
-              </Form.Control>
-            </InputGroup>
+            <SelectYear
+              availableYears={years}
+              value={selectedYear}
+              onSelectYear={setSelectedYear}
+              size="lg"
+            />
           </Container>
           {loading && <Loading />}
           {!loading && data && (
@@ -113,25 +90,29 @@ const ViewPaymentHistory = ({
                   });
                 return (
                   <ListGroup.Item key={i}>
-                    <Row>
-                      <Col>
-                        {items.map((item, j) => {
-                          return (
-                            <div className="mb-2" key={j}>
-                              <PaymentDetail
-                                paymentDetail={item.paymentDetail}
-                                totalCollected={item.totalCollected}
-                              />
-                            </div>
-                          );
-                        })}
-                      </Col>
-                      <Col md={2} sm={12}>
-                        <div className="float-right">
-                          <h5>{month}</h5>
-                        </div>
-                      </Col>
-                    </Row>
+                    <Container className="p-0 m-0">
+                      <Row>
+                        <Col md={2} sm={12}>
+                          <div>
+                            <h5>{month}</h5>
+                          </div>
+                        </Col>
+                        <Col>
+                          <ListGroup>
+                            {items.map((item, j) => {
+                              return (
+                                <ListGroup.Item key={j}>
+                                  <PaymentDetail
+                                    paymentDetail={item.paymentDetail}
+                                    totalCollected={item.totalCollected}
+                                  />
+                                </ListGroup.Item>
+                              );
+                            })}
+                          </ListGroup>
+                        </Col>
+                      </Row>
+                    </Container>
                   </ListGroup.Item>
                 );
               })}

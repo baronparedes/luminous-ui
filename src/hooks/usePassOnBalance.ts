@@ -11,9 +11,11 @@ type ChargeBalance = {
 
 export function usePassOnBalance() {
   const [availableBalance, setAvailableBalance] = useState<ChargeBalance[]>([]);
-  const {data: charges, loading: loadingCharges} = useGetAllCollectedCharges(
-    {}
-  );
+  const {
+    data: charges,
+    loading: loadingCharges,
+    refetch,
+  } = useGetAllCollectedCharges({});
   const {data: disbursements, loading: loadingDisbursement} =
     useGetDisbursementBreakdown({});
 
@@ -38,5 +40,6 @@ export function usePassOnBalance() {
   return {
     data: availableBalance,
     loading: loadingCharges || loadingDisbursement,
+    refetch,
   };
 }
