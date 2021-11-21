@@ -4,37 +4,177 @@ import nock from 'nock';
 import {waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
-import {SETTING_KEYS} from '../../../../constants';
-import {settingActions} from '../../../../store/reducers/setting.reducer';
+import {generateFakeCategory} from '../../../../@utils/fake-models';
+import {renderWithRestful} from '../../../../@utils/test-renderers';
+import {DEFAULTS} from '../../../../constants';
 import SettingExpenseCategory from '../SettingExpenseCategory';
 
 describe('SettingExpenseCategory', () => {
   const base = 'http://localhost';
+  const expectedCategories = [generateFakeCategory(), generateFakeCategory()];
 
-  it('should render', () => {
-    const expectedCategory = faker.random.words(2);
-    const {getByText, getByPlaceholderText, getByTitle} =
-      renderWithProviderAndRestful(<SettingExpenseCategory />, base, store =>
-        store.dispatch(
-          settingActions.updateSetting({
-            key: SETTING_KEYS.EXPENSE_CATEGORY,
-            value: JSON.stringify([expectedCategory]),
-          })
-        )
-      );
+  beforeEach(() => {
+    nock(base)
+      .get('/api/setting/getAllCategories')
+      .reply(200, expectedCategories);
+  });
 
-    const categoryContainer = getByText(expectedCategory)
-      .parentElement as HTMLElement;
-    expect(
-      within(categoryContainer).getByText(expectedCategory)
-    ).toBeInTheDocument();
-    expect(within(categoryContainer).getByTitle(/remove/)).toBeInTheDocument();
+  it('should render', async () => {
+    const {getByText} = renderWithRestful(<SettingExpenseCategory />, base);
 
     expect(getByText(/expense categories/i)).toBeInTheDocument();
     expect(getByText(/save/i)).toBeInTheDocument();
-    expect(getByPlaceholderText(/expense category/i)).toBeInTheDocument();
-    expect(getByTitle(/create new expense category/i)).toBeInTheDocument();
+    expect(getByText(/new category/i)).toBeInTheDocument();
+
+    await waitFor(() => {
+      for (const expected of expectedCategories) {
+        const tab = getByText(expected.description, {selector: 'a'});
+        expect(tab).toBeInTheDocument();
+      }
+    });
+  });
+
+  it('should switch between tabs', async () => {
+    const {getByText, getByRole} = renderWithRestful(
+      <SettingExpenseCategory />,
+      base
+    );
+
+    await waitFor(() => {
+      for (const expected of expectedCategories) {
+        const tab = getByText(expected.description, {selector: 'a'});
+        expect(tab).toBeInTheDocument();
+      }
+    });
+
+    for (const expected of expectedCategories) {
+      const tab = getByText(expected.description, {selector: 'a'});
+      userEvent.click(tab);
+
+      const container = getByRole('tabpanel');
+      await waitFor(() => {
+        expect(
+          within(container).getByPlaceholderText(/description/i)
+        ).toHaveValue(expected.description);
+      });
+
+      expect(
+        within(container).getByPlaceholderText(/enter sub category/i)
+      ).toBeInTheDocument();
+      expect(
+        within(container).getByTitle(/create new sub category/i)
+      ).toBeInTheDocument();
+
+      const subCategories = JSON.parse(expected.subCategories);
+      for (const expectedSubCat of subCategories) {
+        const subCategoryContainer = getByText(expectedSubCat)
+          .parentElement as HTMLElement;
+        expect(
+          within(subCategoryContainer).getByText(expectedSubCat)
+        ).toBeInTheDocument();
+        expect(
+          within(subCategoryContainer).getByTitle(/remove/)
+        ).toBeInTheDocument();
+      }
+    }
+  });
+
+  it('should disable save button when category description is invalid', async () => {
+    const {getByRole, getByText} = renderWithRestful(
+      <SettingExpenseCategory />,
+      base
+    );
+    await waitFor(() => expect(getByRole('tabpanel')).toBeInTheDocument());
+
+    userEvent.clear(
+      within(getByRole('tabpanel')).getByPlaceholderText(/description/i)
+    );
+    await waitFor(() =>
+      expect(getByText(/save/i, {selector: 'button'})).toBeDisabled()
+    );
+  });
+
+  it('should save categories', async () => {
+    nock(base)
+      .get('/api/setting/getAllCategories')
+      .reply(200, expectedCategories);
+
+    nock(base)
+      .patch('/api/setting/updateCategories', body => {
+        expect(body).toEqual([...expectedCategories]);
+        return true;
+      })
+      .reply(200);
+
+    const {queryByRole, getByText} = renderWithRestful(
+      <SettingExpenseCategory />,
+      base
+    );
+    await waitFor(() =>
+      expect(queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+
+    userEvent.click(getByText(/save/i));
+    await waitFor(() =>
+      expect(queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+  });
+
+  it('should add a new category', async () => {
+    const newCategory = faker.random.words(2);
+    const newExpectedCategories = [
+      ...expectedCategories,
+      {
+        id: faker.datatype.number(),
+        communityId: DEFAULTS.COMMUNITY_ID,
+        description: newCategory,
+        subCategories: '[]',
+      },
+    ];
+
+    nock(base)
+      .get('/api/setting/getAllCategories')
+      .reply(200, newExpectedCategories);
+
+    nock(base)
+      .patch('/api/setting/updateCategories', body => {
+        expect(body).toEqual([
+          ...expectedCategories,
+          {
+            communityId: DEFAULTS.COMMUNITY_ID,
+            description: newCategory,
+            subCategories: '[]',
+          },
+        ]);
+        return true;
+      })
+      .reply(200);
+
+    const {getByText, getByRole, queryByRole} = renderWithRestful(
+      <SettingExpenseCategory />,
+      base
+    );
+    await waitFor(() =>
+      expect(queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+
+    userEvent.click(getByText(/new category/i));
+    await waitFor(() => expect(getByRole('dialog')).toBeInTheDocument());
+
+    const dialogContainer = getByRole('dialog');
+    userEvent.type(
+      within(dialogContainer).getByPlaceholderText(/enter a new category/i),
+      newCategory
+    );
+    userEvent.click(within(dialogContainer).getByText(/save/i));
+
+    await waitFor(() => expect(queryByRole('dialog')).not.toBeInTheDocument());
+    await waitFor(() => {
+      for (const expected of newExpectedCategories) {
+        const tab = getByText(expected.description, {selector: 'a'});
+        expect(tab).toBeInTheDocument();
+      }
+    });
   });
 
   it.each`
@@ -45,103 +185,94 @@ describe('SettingExpenseCategory', () => {
   `(
     'should not accept invalid values [$description]',
     async ({invalidValue, expectedErrorLabel}) => {
-      const {getByText, getByPlaceholderText, getByTitle, queryAllByTitle} =
-        renderWithProviderAndRestful(<SettingExpenseCategory />, base);
+      const {getByText, getByRole, queryByRole} = renderWithRestful(
+        <SettingExpenseCategory />,
+        base
+      );
 
-      const input = getByPlaceholderText(
-        /expense category/i
+      await waitFor(() =>
+        expect(queryByRole('progressbar')).not.toBeInTheDocument()
+      );
+
+      await waitFor(() => {
+        for (const expected of expectedCategories) {
+          const tab = getByText(expected.description, {selector: 'a'});
+          expect(tab).toBeInTheDocument();
+        }
+      });
+
+      const tabContainer = getByRole('tabpanel');
+      const input = within(tabContainer).getByPlaceholderText(
+        /enter sub category/i
       ) as HTMLInputElement;
-      const addNewExpenseButton = getByTitle(/create new expense category/i);
+      const addNewExpenseButton = within(tabContainer).getByTitle(
+        /create new sub category/i
+      );
 
       userEvent.type(input, invalidValue);
       userEvent.click(addNewExpenseButton);
       await waitFor(() =>
-        expect(getByText(expectedErrorLabel)).toBeInTheDocument()
+        expect(
+          within(tabContainer).getByText(expectedErrorLabel)
+        ).toBeInTheDocument()
       );
-      await waitFor(() => expect(queryAllByTitle(/remove/i)).toHaveLength(0));
+      await waitFor(() =>
+        expect(within(tabContainer).queryAllByTitle(/remove/i)).toHaveLength(2)
+      );
     }
   );
 
   it('should not add duplicate values and should be required', async () => {
     const expectedCategory = faker.random.words(2);
 
-    const {
-      getByText,
-      getByPlaceholderText,
-      getByTitle,
-      getByRole,
-      queryAllByTitle,
-    } = renderWithProviderAndRestful(<SettingExpenseCategory />, base);
+    const {getByRole, getByText, queryByRole} = renderWithRestful(
+      <SettingExpenseCategory />,
+      base
+    );
 
-    const form = getByRole('form') as HTMLFormElement;
-    const input = getByPlaceholderText(/expense category/i) as HTMLInputElement;
-    const addNewExpenseButton = getByTitle(/create new expense category/i);
+    await waitFor(() =>
+      expect(queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+
+    await waitFor(() => {
+      for (const expected of expectedCategories) {
+        const tab = getByText(expected.description, {selector: 'a'});
+        expect(tab).toBeInTheDocument();
+      }
+    });
+
+    const tabContainer = getByRole('tabpanel');
+
+    const form = within(tabContainer).getByRole('form') as HTMLFormElement;
+    const input = within(tabContainer).getByPlaceholderText(
+      /enter sub category/i
+    ) as HTMLInputElement;
+    const addNewExpenseButton = within(tabContainer).getByTitle(
+      /create new sub category/i
+    );
 
     userEvent.type(input, expectedCategory);
     userEvent.click(addNewExpenseButton);
     await waitFor(() => expect(form.checkValidity()).toBeTruthy());
-    await waitFor(() => expect(queryAllByTitle(/remove/i)).toHaveLength(1));
+    await waitFor(() =>
+      expect(within(tabContainer).queryAllByTitle(/remove/i)).toHaveLength(3)
+    );
 
     userEvent.type(input, expectedCategory);
     userEvent.click(addNewExpenseButton);
     await waitFor(() =>
-      expect(getByText(/should be unique/i)).toBeInTheDocument()
+      expect(
+        within(tabContainer).getByText(/should be unique/i)
+      ).toBeInTheDocument()
     );
-    await waitFor(() => expect(queryAllByTitle(/remove/i)).toHaveLength(1));
+    await waitFor(() =>
+      expect(within(tabContainer).queryAllByTitle(/remove/i)).toHaveLength(3)
+    );
 
     userEvent.clear(input);
     userEvent.click(addNewExpenseButton);
-    await waitFor(() => expect(queryAllByTitle(/remove/i)).toHaveLength(1));
-  });
-
-  it('should add and save expense categories', async () => {
-    const expectedCategories = [faker.random.words(2), faker.random.words(2)];
-    const expectedKey = SETTING_KEYS.EXPENSE_CATEGORY;
-
-    nock(base)
-      .patch('/api/setting/updateSettingValue', {
-        key: expectedKey,
-        value: JSON.stringify(expectedCategories),
-      })
-      .reply(200);
-
-    const {
-      store,
-      getByText,
-      getByPlaceholderText,
-      getByTitle,
-      getByRole,
-      queryByRole,
-    } = renderWithProviderAndRestful(<SettingExpenseCategory />, base);
-
-    const input = getByPlaceholderText(/expense category/i) as HTMLInputElement;
-    const addNewExpenseButton = getByTitle(/create new expense category/i);
-    const saveButton = getByText(/save/i);
-
-    for (const expected of expectedCategories) {
-      userEvent.type(input, expected);
-      userEvent.click(addNewExpenseButton);
-
-      await waitFor(() => expect(input.value).toEqual(''));
-
-      const categoryContainer = getByText(expected)
-        .parentElement as HTMLElement;
-      expect(within(categoryContainer).getByText(expected)).toBeInTheDocument();
-      expect(
-        within(categoryContainer).getByTitle(/remove/)
-      ).toBeInTheDocument();
-    }
-
-    userEvent.click(saveButton);
-    await waitFor(() => expect(getByRole('progressbar')).toBeInTheDocument());
     await waitFor(() =>
-      expect(queryByRole('progressbar')).not.toBeInTheDocument()
+      expect(within(tabContainer).queryAllByTitle(/remove/i)).toHaveLength(3)
     );
-    await waitFor(() => {
-      const actual = store
-        .getState()
-        .setting.values.find(s => s.key === expectedKey)?.value;
-      expect(actual).toEqual(JSON.stringify(expectedCategories));
-    });
   });
 });

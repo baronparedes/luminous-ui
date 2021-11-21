@@ -4,6 +4,7 @@ import moment from 'moment';
 import {
   AuthProfile,
   AuthResult,
+  CategoryAttr,
   ChargeAttr,
   ChargeType,
   DisbursementAttr,
@@ -179,6 +180,7 @@ export const generateFakeExpense = (): ExpenseAttr => {
   const quantity = faker.datatype.number({min: 2, max: 10});
   const unitCost = faker.datatype.number();
   return {
+    categoryId: faker.datatype.number(),
     category: faker.random.words(2),
     description: faker.random.words(10),
     quantity,
@@ -229,5 +231,14 @@ export const generateFakePaymentHistory = (): PaymentHistoryView => {
     checkIssuingBank: faker.company.companyName(),
     checkNumber: faker.finance.account(),
     checkPostingDate: faker.date.recent().toISOString(),
+  };
+};
+
+export const generateFakeCategory = (): CategoryAttr => {
+  return {
+    id: faker.datatype.number(),
+    communityId: faker.datatype.number(),
+    description: faker.random.word(),
+    subCategories: JSON.stringify([faker.random.words(), faker.random.words()]),
   };
 };

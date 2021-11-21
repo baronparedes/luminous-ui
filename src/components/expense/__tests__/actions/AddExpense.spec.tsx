@@ -11,7 +11,7 @@ import {SETTING_KEYS} from '../../../../constants';
 import {settingActions} from '../../../../store/reducers/setting.reducer';
 import AddExpense from '../../actions/AddExpense';
 
-describe('AddExpense', () => {
+describe.skip('AddExpense', () => {
   const expectedCategories = [faker.random.words(2), faker.random.words(2)];
 
   async function renderTarget(onAddExpense?: (data: ExpenseAttr) => void) {

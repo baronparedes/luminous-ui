@@ -196,6 +196,7 @@ export type RequestStatus = "approved" | "rejected" | "pending";
 
 export interface ExpenseAttr {
   purchaseOrderId?: number;
+  categoryId: number;
   category: string;
   description: string;
   quantity: number;
@@ -243,6 +244,13 @@ export interface RejectPurchaseRequest {
 export interface SettingAttr {
   key: string;
   value: string;
+}
+
+export interface CategoryAttr {
+  subCategories: string;
+  description: string;
+  communityId: number;
+  id?: number;
 }
 
 export interface PostTransactionBody {
@@ -910,6 +918,37 @@ export const UpdateSettingValue = (props: UpdateSettingValueProps) => (
 export type UseUpdateSettingValueProps = Omit<UseMutateProps<void, unknown, void, SettingAttr, void>, "path" | "verb">;
 
 export const useUpdateSettingValue = (props: UseUpdateSettingValueProps) => useMutate<void, unknown, void, SettingAttr, void>("PATCH", `/api/setting/updateSettingValue`, props);
+
+
+export type GetAllCategoriesProps = Omit<GetProps<CategoryAttr[], unknown, void, void>, "path">;
+
+export const GetAllCategories = (props: GetAllCategoriesProps) => (
+  <Get<CategoryAttr[], unknown, void, void>
+    path={`/api/setting/getAllCategories`}
+    
+    {...props}
+  />
+);
+
+export type UseGetAllCategoriesProps = Omit<UseGetProps<CategoryAttr[], unknown, void, void>, "path">;
+
+export const useGetAllCategories = (props: UseGetAllCategoriesProps) => useGet<CategoryAttr[], unknown, void, void>(`/api/setting/getAllCategories`, props);
+
+
+export type UpdateCategoriesProps = Omit<MutateProps<void, unknown, void, CategoryAttr[], void>, "path" | "verb">;
+
+export const UpdateCategories = (props: UpdateCategoriesProps) => (
+  <Mutate<void, unknown, void, CategoryAttr[], void>
+    verb="PATCH"
+    path={`/api/setting/updateCategories`}
+    
+    {...props}
+  />
+);
+
+export type UseUpdateCategoriesProps = Omit<UseMutateProps<void, unknown, void, CategoryAttr[], void>, "path" | "verb">;
+
+export const useUpdateCategories = (props: UseUpdateCategoriesProps) => useMutate<void, unknown, void, CategoryAttr[], void>("PATCH", `/api/setting/updateCategories`, props);
 
 
 export type PostMonthlyChargesProps = Omit<MutateProps<void, ApiError, void, PostTransactionBody, void>, "path" | "verb">;
