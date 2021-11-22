@@ -29,7 +29,8 @@ jobs:
       with:
         azcliversion: 2.0.72
         inlineScript: |
-            az storage blob upload-batch --subscription ${{ secrets.AZURE_SUBSCRIPTION }} --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} -d '$web' -s ./artifact
+            az set account -s ${{ secrets.AZURE_SUBSCRIPTION }} |
+            az storage blob upload-batch --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} -d '$web' -s ./artifact
     
     - name: Azure logout
       run: |
