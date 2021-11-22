@@ -9,21 +9,23 @@ import {
   generateFakeDisbursement,
   generateFakeProfile,
 } from '../../../../@utils/fake-models';
-import {renderWithProviderAndRouterAndRestful} from '../../../../@utils/test-renderers';
+import {
+  renderWithProviderAndRouterAndRestful,
+} from '../../../../@utils/test-renderers';
 import {DisbursementAttr} from '../../../../Api';
 import {profileActions} from '../../../../store/reducers/profile.reducer';
-import ApprovePurchaseOrder from '../../actions/ApprovePurchaseOrder';
+import ApproveVoucher from '../../actions/ApproveVoucher';
 
-describe('ApprovePurchaseOrder', () => {
+describe('ApproveVoucher', () => {
   const base = 'http://localhost';
-  const purchaseOrderId = faker.datatype.number();
+  const voucherId = faker.datatype.number();
   const expectedTotalCost = faker.datatype.number();
   const mockedProfile = generateFakeProfile();
 
   async function renderTarget() {
     const target = renderWithProviderAndRouterAndRestful(
-      <ApprovePurchaseOrder
-        purchaseOrderId={purchaseOrderId}
+      <ApproveVoucher
+        voucherId={voucherId}
         buttonLabel={'toggle'}
         totalCost={expectedTotalCost}
       />,
@@ -34,9 +36,7 @@ describe('ApprovePurchaseOrder', () => {
     userEvent.click(target.getByText(/toggle/i));
     await waitFor(() => expect(target.getByRole('dialog')).toBeInTheDocument());
 
-    expect(
-      target.getByText(`Approve PO-${purchaseOrderId}`)
-    ).toBeInTheDocument();
+    expect(target.getByText(`Approve V-${voucherId}`)).toBeInTheDocument();
 
     expect(target.getByText(/^approval codes$/i)).toBeInTheDocument();
     expect(target.getByPlaceholderText(/code/i)).toBeInTheDocument();
@@ -224,7 +224,7 @@ describe('ApprovePurchaseOrder', () => {
     await waitFor(() => expect(getByText(/^approve$/i)).toBeDisabled());
   });
 
-  it('should approve purchase order when disbursements and approval codes are completed', async () => {
+  it('should approve voucher when disbursements and approval codes are completed', async () => {
     const [code1, code2, code3] = [
       faker.random.alphaNumeric(6),
       faker.random.alphaNumeric(6),
@@ -240,7 +240,7 @@ describe('ApprovePurchaseOrder', () => {
 
     const expectedRequest = {
       codes: [code1, code2, code3],
-      purchaseOrderId,
+      voucherId,
       disbursements: [
         {
           details: expectedDisbursement.details,
@@ -252,7 +252,7 @@ describe('ApprovePurchaseOrder', () => {
     };
 
     nock(base)
-      .post('/api/purchase-order/approvePurchaseOrder', actualRequest => {
+      .post('/api/voucher/approveVoucher', actualRequest => {
         expect(actualRequest).toEqual(expectedRequest);
         return true;
       })

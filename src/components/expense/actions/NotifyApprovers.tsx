@@ -5,17 +5,17 @@ import {useNotifyApprovers} from '../../../Api';
 import ButtonLoading from '../../@ui/ButtonLoading';
 
 type Props = {
-  purchaseOrderId: number;
+  voucherId: number;
   buttonLabel: string;
 };
 
 const NotifyApprovers = ({
-  purchaseOrderId,
+  voucherId,
   buttonLabel,
   ...buttonProps
 }: Props & ButtonProps) => {
   const [notified, setNotified] = useState(false);
-  const {mutate, loading} = useNotifyApprovers({id: purchaseOrderId});
+  const {mutate, loading} = useNotifyApprovers({id: voucherId});
 
   const handleOnClick = () => {
     mutate().then(() => setNotified(true));

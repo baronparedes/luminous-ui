@@ -1,20 +1,20 @@
 import {Col, Row} from 'react-bootstrap';
 
-import {PurchaseOrderAttr} from '../../Api';
+import {VoucherAttr} from '../../Api';
 import {LabeledCurrency} from '../@ui/LabeledCurrency';
 import RoundedPanel from '../@ui/RoundedPanel';
-import PurchaseOrderCard from './PurchaseOrderCard';
+import VoucherCard from './VoucherCard';
 
 type Props = {
-  purchaseOrder: PurchaseOrderAttr;
+  voucher: VoucherAttr;
 };
 
-const PurchaseOrderDetails = ({purchaseOrder}: Props) => {
+const VoucherDetails = ({voucher}: Props) => {
   return (
     <RoundedPanel className="p-4 mb-3">
       <Row>
         <Col md={8}>
-          <PurchaseOrderCard purchaseOrder={purchaseOrder} />
+          <VoucherCard voucher={voucher} />
         </Col>
         <Col md={4}>
           <LabeledCurrency
@@ -23,7 +23,7 @@ const PurchaseOrderDetails = ({purchaseOrder}: Props) => {
             variant="primary"
             className="text-right"
             noCurrencyColor
-            currency={purchaseOrder.totalCost}
+            currency={voucher.totalCost}
           />
         </Col>
       </Row>
@@ -31,4 +31,4 @@ const PurchaseOrderDetails = ({purchaseOrder}: Props) => {
   );
 };
 
-export default PurchaseOrderDetails;
+export default VoucherDetails;

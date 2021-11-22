@@ -8,7 +8,7 @@ type Props = {
   disbursements?: DisbursementAttr[];
 };
 
-const PurchaseOrderDisbursements = ({disbursements}: Props) => {
+const VoucherDisbursements = ({disbursements}: Props) => {
   return (
     <>
       {disbursements && disbursements.length > 0 && (
@@ -34,4 +34,4 @@ const PurchaseOrderDisbursements = ({disbursements}: Props) => {
   );
 };
 
-export default PurchaseOrderDisbursements;
+export default VoucherDisbursements;

@@ -8,12 +8,12 @@ import ExpenseView from '../ExpenseView';
 
 jest.mock('../../../hooks/useCommunityBalance');
 
-jest.mock('../PurchaseOrderList', () => () => {
-  return <div data-testid="mock-purchase-order-list" />;
+jest.mock('../VoucherList', () => () => {
+  return <div data-testid="mock-voucher-list" />;
 });
 
-jest.mock('../actions/CreatePurchaseOrder', () => () => {
-  return <div data-testid="mock-create-purchase-order" />;
+jest.mock('../actions/CreateVoucher', () => () => {
+  return <div data-testid="mock-create-voucher" />;
 });
 
 describe('ExpenseView', () => {
@@ -33,7 +33,7 @@ describe('ExpenseView', () => {
 
     expect(getByText(/available funds/i)).toBeInTheDocument();
     expect(getByText(currencyFormat(expectedAmount))).toBeInTheDocument();
-    expect(getByTestId('mock-purchase-order-list')).toBeInTheDocument();
-    expect(getByTestId('mock-create-purchase-order')).toBeInTheDocument();
+    expect(getByTestId('mock-voucher-list')).toBeInTheDocument();
+    expect(getByTestId('mock-create-voucher')).toBeInTheDocument();
   });
 });

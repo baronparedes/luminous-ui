@@ -3,25 +3,25 @@ import {Button, ButtonProps} from 'react-bootstrap';
 import {useReactToPrint} from 'react-to-print';
 
 import {ApprovedAny} from '../../../@types';
-import {PurchaseOrderAttr} from '../../../Api';
+import {VoucherAttr} from '../../../Api';
 import {PrintPaper} from '../../@print-papers/PaperPdf';
-import PurchaseOrder from '../../@print-papers/PurchaseOrder';
+import Voucher from '../../@print-papers/Voucher';
 
 type Props = {
   buttonLabel: React.ReactNode;
-  purchaseOrder: PurchaseOrderAttr | null;
+  voucher: VoucherAttr | null;
 };
 
-const PrintPurchaseOrder = ({
+const PrintVoucher = ({
   buttonLabel,
-  purchaseOrder,
+  voucher,
   ...buttonProps
 }: Props & ButtonProps) => {
   const printPaperRef = React.createRef<ApprovedAny>();
   const handlePrint = useReactToPrint({
     bodyClass: 'print-body',
     content: () => printPaperRef.current,
-    documentTitle: `PO-${purchaseOrder?.id}`,
+    documentTitle: `V-${voucher?.id}`,
   });
 
   return (
@@ -36,11 +36,11 @@ const PrintPurchaseOrder = ({
       </Button>
       <div className="d-none">
         <PrintPaper ref={printPaperRef}>
-          <PurchaseOrder purchaseOrder={purchaseOrder} />
+          <Voucher voucher={voucher} />
         </PrintPaper>
       </div>
     </>
   );
 };
 
-export default PrintPurchaseOrder;
+export default PrintVoucher;

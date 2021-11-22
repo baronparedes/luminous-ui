@@ -14,9 +14,9 @@ import {v4 as uuidv4} from 'uuid';
 import {sum} from '../../../@utils/helpers';
 import {
   ApiError,
-  ApprovePurchaseRequest,
+  ApproveVoucher as ApproveVoucherAttr,
   DisbursementAttr,
-  useApprovePurchaseOrder,
+  useApproveVoucher,
 } from '../../../Api';
 import {Currency} from '../../@ui/Currency';
 import DisbursementDetail from '../../@ui/DisbursementDetail';
@@ -26,35 +26,35 @@ import AddDisbursement from './AddDisbursement';
 import InputApprovalCodes from './InputApprovalCodes';
 
 type Props = {
-  purchaseOrderId: number;
+  voucherId: number;
   totalCost: number;
   buttonLabel: React.ReactNode;
-  onApprovePurchaseOrder?: () => void;
+  onApproveVoucher?: () => void;
 };
 
 type NewDisbursement = DisbursementAttr & {
   guid: string;
 };
 
-const ApprovePurchaseOrder = ({
+const ApproveVoucher = ({
   buttonLabel,
-  purchaseOrderId,
+  voucherId,
   totalCost,
-  onApprovePurchaseOrder,
+  onApproveVoucher,
   ...buttonProps
 }: Props & ButtonProps) => {
   const [disbursements, setDisbursements] = useState<NewDisbursement[]>([]);
   const [toggle, setToggle] = useState(false);
   const [codes, setCodes] = useState<string[]>([]);
-  const {mutate, loading, error} = useApprovePurchaseOrder({});
+  const {mutate, loading, error} = useApproveVoucher({});
 
   const remainingCost = totalCost - sum(disbursements.map(d => d.amount));
   const canApprove = codes.length >= 3 && remainingCost === 0;
 
   const handleOnApprove = () => {
-    const data: ApprovePurchaseRequest = {
+    const data: ApproveVoucherAttr = {
       codes,
-      purchaseOrderId,
+      voucherId,
       disbursements: disbursements.map(d => {
         const forCashPayment: DisbursementAttr = {
           details: d.details,
@@ -82,7 +82,7 @@ const ApprovePurchaseOrder = ({
     if (confirm('Proceed?')) {
       mutate(data).then(() => {
         setToggle(false);
-        onApprovePurchaseOrder && onApprovePurchaseOrder();
+        onApproveVoucher && onApproveVoucher();
       });
     }
   };
@@ -98,7 +98,7 @@ const ApprovePurchaseOrder = ({
       </Button>
       <ModalContainer
         size="lg"
-        header={<h5>Approve PO-{purchaseOrderId}</h5>}
+        header={<h5>Approve V-{voucherId}</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >
@@ -210,4 +210,4 @@ const ApprovePurchaseOrder = ({
   );
 };
 
-export default ApprovePurchaseOrder;
+export default ApproveVoucher;

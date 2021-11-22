@@ -4,7 +4,7 @@ import {render} from '@testing-library/react';
 
 import {generateFakeDisbursement} from '../../../@utils/fake-models';
 import DisbursementDetail from '../../@ui/DisbursementDetail';
-import PurchaseOrderDisbursements from '../PurchaseOrderDisbursements';
+import VoucherDisbursements from '../VoucherDisbursements';
 
 type DisbursementDetailProps = React.ComponentProps<typeof DisbursementDetail>;
 
@@ -16,14 +16,14 @@ jest.mock(
     }
 );
 
-describe('PurchaseOrderDisbursements', () => {
+describe('VoucherDisbursements', () => {
   it('should render', () => {
     const mockedDisbursements = [
       generateFakeDisbursement(),
       generateFakeDisbursement(),
     ];
     const {getByText} = render(
-      <PurchaseOrderDisbursements disbursements={mockedDisbursements} />
+      <VoucherDisbursements disbursements={mockedDisbursements} />
     );
     for (const expected of mockedDisbursements) {
       expect(getByText(Number(expected.id).toString())).toBeInTheDocument();

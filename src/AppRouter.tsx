@@ -14,7 +14,7 @@ import WaterReadingView from './components/admin/upload-water-reading/WaterReadi
 import DashboardView from './components/dashboard/DashboardView';
 import DisbursementView from './components/expense/DisbursementView';
 import ExpenseView from './components/expense/ExpenseView';
-import PurchaseOrderView from './components/expense/PurchaseOrderView';
+import VoucherView from './components/expense/VoucherView';
 import LoginView from './components/profile/LoginView';
 import MyProfileView from './components/profile/MyProfileView';
 import PropertyView from './components/property/PropertyView';
@@ -41,7 +41,7 @@ const AppRouter: React.FC = () => {
             <ProtectedRoute
               onlyFor={['admin', 'stakeholder']}
               path={routes.PURCHASE_ORDER(':id')}
-              component={PurchaseOrderView}
+              component={VoucherView}
             />
             <ProtectedRoute
               path={routes.ROOT}

@@ -7,50 +7,44 @@ import userEvent from '@testing-library/user-event';
 import {generateFakeProfile} from '../../../../@utils/fake-models';
 import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
 import {profileActions} from '../../../../store/reducers/profile.reducer';
-import RejectPurchaseOrder from '../../actions/RejectPurchaseOrder';
+import RejectVoucher from '../../actions/RejectVoucher';
 
-describe('RejectPurchaseOrder', () => {
+describe('RejectVoucher', () => {
   const base = 'http://localhost';
-  const purchaseOrderId = faker.datatype.number();
+  const voucherId = faker.datatype.number();
 
   it('should render and toggle modal', async () => {
     const {getByText, getByRole, getByPlaceholderText} =
       renderWithProviderAndRestful(
-        <RejectPurchaseOrder
-          purchaseOrderId={purchaseOrderId}
-          buttonLabel={'toggle'}
-        />,
+        <RejectVoucher voucherId={voucherId} buttonLabel={'toggle'} />,
         base
       );
 
     userEvent.click(getByText(/toggle/i));
     await waitFor(() => expect(getByRole('dialog')).toBeInTheDocument());
 
-    expect(getByText(`Reject PO-${purchaseOrderId}`)).toBeInTheDocument();
+    expect(getByText(`Reject V-${voucherId}`)).toBeInTheDocument();
     expect(getByPlaceholderText(/comments/i)).toBeInTheDocument();
     expect(getByText(/reject$/i, {selector: 'button'})).toBeInTheDocument();
   });
 
-  it('should reject purchase order', async () => {
+  it('should reject voucher', async () => {
     const mockedProfile = generateFakeProfile();
     const expectedComments = faker.random.words(10);
 
     window.confirm = jest.fn().mockImplementation(() => true);
 
     nock(base)
-      .post('/api/purchase-order/rejectPurchaseOrder', {
+      .post('/api/voucher/rejectVoucher', {
         comments: expectedComments,
-        id: purchaseOrderId,
+        id: voucherId,
         rejectedBy: Number(mockedProfile?.id),
       })
       .reply(200);
 
     const {getByText, getByRole, getByPlaceholderText, queryByRole} =
       renderWithProviderAndRestful(
-        <RejectPurchaseOrder
-          purchaseOrderId={purchaseOrderId}
-          buttonLabel={'toggle'}
-        />,
+        <RejectVoucher voucherId={voucherId} buttonLabel={'toggle'} />,
         base,
         store => {
           store.dispatch(profileActions.signIn({me: mockedProfile}));
@@ -77,10 +71,7 @@ describe('RejectPurchaseOrder', () => {
 
       const {getByRole, getByText, getByPlaceholderText} =
         renderWithProviderAndRestful(
-          <RejectPurchaseOrder
-            purchaseOrderId={purchaseOrderId}
-            buttonLabel={'toggle'}
-          />,
+          <RejectVoucher voucherId={voucherId} buttonLabel={'toggle'} />,
           base
         );
 

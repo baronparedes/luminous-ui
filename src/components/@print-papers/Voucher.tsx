@@ -2,7 +2,7 @@ import {Col, Container, Row} from 'react-bootstrap';
 import styled from 'styled-components';
 
 import {getNames} from '../../@utils/helpers';
-import {PurchaseOrderAttr} from '../../Api';
+import {VoucherAttr} from '../../Api';
 import {Currency} from '../@ui/Currency';
 import DisbursementDetail from '../@ui/DisbursementDetail';
 import {PageSection} from './PaperPdf';
@@ -12,13 +12,13 @@ const Label = styled('div')`
 `;
 
 type Props = {
-  purchaseOrder: PurchaseOrderAttr | null;
+  voucher: VoucherAttr | null;
 };
 
-const PurchaseOrder = ({purchaseOrder}: Props) => {
-  if (!purchaseOrder) return null;
+const Voucher = ({voucher}: Props) => {
+  if (!voucher) return null;
 
-  const {expenses, disbursements} = purchaseOrder;
+  const {expenses, disbursements} = voucher;
 
   return (
     <PageSection>
@@ -30,50 +30,47 @@ const PurchaseOrder = ({purchaseOrder}: Props) => {
       </PageSection>
       <PageSection className="pt-3">
         <Label className="pb-2">
-          <strong>PO-{purchaseOrder.id}</strong>
+          <strong>V-{voucher.id}</strong>
         </Label>
         <Label>
           <small>
             <strong>Purpose of the request: </strong>
           </small>
-          <p>{purchaseOrder.description}</p>
+          <p>{voucher.description}</p>
         </Label>
         <small>
           <Label>
             <strong>Requested on: </strong>
-            {purchaseOrder.requestedDate}
+            {voucher.requestedDate}
           </Label>
         </small>
         <small>
           <Label>
             <strong>Requested by: </strong>
-            {purchaseOrder.requestedByProfile?.name}
+            {voucher.requestedByProfile?.name}
           </Label>
         </small>
         <small>
           <Label>
             <strong>Status: </strong>
-            {purchaseOrder.status.toUpperCase()}
+            {voucher.status.toUpperCase()}
           </Label>
         </small>
-        {purchaseOrder.status === 'approved' &&
-          purchaseOrder.approverProfiles &&
-          purchaseOrder.approverProfiles.length > 0 && (
+        {voucher.status === 'approved' &&
+          voucher.approverProfiles &&
+          voucher.approverProfiles.length > 0 && (
             <span className="ml-2">
-              by {getNames(purchaseOrder.approverProfiles)}
+              by {getNames(voucher.approverProfiles)}
             </span>
           )}
-        {purchaseOrder.status === 'rejected' &&
-          purchaseOrder.rejectedByProfile && (
-            <span className="ml-2">
-              by {purchaseOrder.rejectedByProfile?.name}
-            </span>
-          )}
-        {purchaseOrder.comments && (
+        {voucher.status === 'rejected' && voucher.rejectedByProfile && (
+          <span className="ml-2">by {voucher.rejectedByProfile?.name}</span>
+        )}
+        {voucher.comments && (
           <small>
             <Label>
               <strong>Comments: </strong>
-              {purchaseOrder?.comments}
+              {voucher?.comments}
             </Label>
           </small>
         )}
@@ -85,7 +82,7 @@ const PurchaseOrder = ({purchaseOrder}: Props) => {
           <Currency
             className="ml-2"
             noCurrencyColor
-            currency={purchaseOrder.totalCost}
+            currency={voucher.totalCost}
           />
         </h3>
         <hr />
@@ -162,4 +159,4 @@ const PurchaseOrder = ({purchaseOrder}: Props) => {
   );
 };
 
-export default PurchaseOrder;
+export default Voucher;

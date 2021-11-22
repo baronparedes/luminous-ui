@@ -2,26 +2,26 @@ import {useState} from 'react';
 import {Button, ButtonProps, Form} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
 
-import {useRejectPurchaseOrder} from '../../../Api';
+import {useRejectVoucher} from '../../../Api';
 import {useRootState} from '../../../store';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import ModalContainer from '../../@ui/ModalContainer';
 import {validateNotEmpty} from '../../@validation';
 
 type Props = {
-  purchaseOrderId: number;
+  voucherId: number;
   buttonLabel: React.ReactNode;
-  onRejectPurchaseOrder?: () => void;
+  onRejectVoucher?: () => void;
 };
 
 type FormData = {
   comments: string;
 };
 
-const RejectPurchaseOrder = ({
+const RejectVoucher = ({
   buttonLabel,
-  purchaseOrderId,
-  onRejectPurchaseOrder,
+  voucherId,
+  onRejectVoucher,
   ...buttonProps
 }: Props & ButtonProps) => {
   const {me} = useRootState(state => state.profile);
@@ -31,17 +31,17 @@ const RejectPurchaseOrder = ({
       comments: '',
     },
   });
-  const {mutate, loading, error} = useRejectPurchaseOrder({});
+  const {mutate, loading, error} = useRejectVoucher({});
 
   const onSubmit = (formData: FormData) => {
     if (confirm('Proceed?')) {
       mutate({
         comments: formData.comments,
-        id: purchaseOrderId,
+        id: voucherId,
         rejectedBy: Number(me?.id),
       }).then(() => {
         setToggle(false);
-        onRejectPurchaseOrder && onRejectPurchaseOrder();
+        onRejectVoucher && onRejectVoucher();
       });
     }
   };
@@ -52,7 +52,7 @@ const RejectPurchaseOrder = ({
         {buttonLabel}
       </Button>
       <ModalContainer
-        header={<h5>Reject PO-{purchaseOrderId}</h5>}
+        header={<h5>Reject V-{voucherId}</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >
@@ -91,4 +91,4 @@ const RejectPurchaseOrder = ({
   );
 };
 
-export default RejectPurchaseOrder;
+export default RejectVoucher;

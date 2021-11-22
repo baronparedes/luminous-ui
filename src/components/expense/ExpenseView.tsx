@@ -3,8 +3,8 @@ import {Badge, Col, Container, Row} from 'react-bootstrap';
 import {useCommunityBalance} from '../../hooks/useCommunityBalance';
 import {Currency} from '../@ui/Currency';
 import RoundedPanel from '../@ui/RoundedPanel';
-import CreatePurchaseOrder from './actions/CreatePurchaseOrder';
-import PurchaseOrderList from './PurchaseOrderList';
+import CreateVoucher from './actions/CreateVoucher';
+import VoucherList from './VoucherList';
 
 const ExpenseView = () => {
   const {data} = useCommunityBalance();
@@ -29,16 +29,16 @@ const ExpenseView = () => {
               </div>
             </Col>
             <Col className="text-right">
-              <CreatePurchaseOrder
+              <CreateVoucher
                 variant="primary"
                 className="w-100"
                 buttonLabel="create new request"
-                onCreatePurchaseOrder={() => window.location.reload()}
+                onCreateVoucher={() => window.location.reload()}
               />
             </Col>
           </Row>
         </RoundedPanel>
-        <PurchaseOrderList />
+        <VoucherList />
       </Container>
     </>
   );

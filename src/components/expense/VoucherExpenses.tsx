@@ -10,7 +10,7 @@ type Props = {
   appendHeaderContent?: React.ReactNode;
 };
 
-const PurchaseOrderExpenses = ({expenses, appendHeaderContent}: Props) => {
+const VoucherExpenses = ({expenses, appendHeaderContent}: Props) => {
   return (
     <>
       <RoundedPanel>
@@ -65,4 +65,4 @@ const PurchaseOrderExpenses = ({expenses, appendHeaderContent}: Props) => {
   );
 };
 
-export default PurchaseOrderExpenses;
+export default VoucherExpenses;

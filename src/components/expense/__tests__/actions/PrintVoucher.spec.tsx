@@ -5,14 +5,14 @@ import userEvent from '@testing-library/user-event';
 
 import {
   generateFakeDisbursement,
-  generateFakePurchaseOrder,
+  generateFakeVoucher,
 } from '../../../../@utils/fake-models';
-import {PurchaseOrderAttr} from '../../../../Api';
-import PrintPurchaseOrder from '../../actions/PrintPurchaseOrder';
+import {VoucherAttr} from '../../../../Api';
+import PrintVoucher from '../../actions/PrintVoucher';
 
-describe('PrintPurchaseOrder', () => {
-  const mockedPurchaseOrder: PurchaseOrderAttr = {
-    ...generateFakePurchaseOrder(),
+describe('PrintVoucher', () => {
+  const mockedVoucher: VoucherAttr = {
+    ...generateFakeVoucher(),
     disbursements: [generateFakeDisbursement()],
   };
 
@@ -22,10 +22,7 @@ describe('PrintPurchaseOrder', () => {
     mocked.mockImplementation(() => handlePrintFn);
 
     const {getByText} = render(
-      <PrintPurchaseOrder
-        buttonLabel="print"
-        purchaseOrder={mockedPurchaseOrder}
-      />
+      <PrintVoucher buttonLabel="print" voucher={mockedVoucher} />
     );
 
     const button = getByText(/print/i, {selector: 'button'});

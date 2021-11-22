@@ -14,9 +14,9 @@ import {FaTimes} from 'react-icons/fa';
 import {sum} from '../../../@utils/helpers';
 import {
   ApiError,
-  CreatePurchaseRequest,
+  CreateVoucher as CreateVoucherAttr,
   ExpenseAttr,
-  usePostPurchaseOrder,
+  usePostVoucher,
 } from '../../../Api';
 import {useRootState} from '../../../store';
 import ButtonLoading from '../../@ui/ButtonLoading';
@@ -28,18 +28,18 @@ import AddExpense from './AddExpense';
 
 type Props = {
   buttonLabel: React.ReactNode;
-  onCreatePurchaseOrder?: (id: number) => void;
+  onCreateVoucher?: (id: number) => void;
 };
 
-const CreatePurchaseOrder = ({
+const CreateVoucher = ({
   buttonLabel,
-  onCreatePurchaseOrder,
+  onCreateVoucher,
   ...buttonProps
 }: Props & ButtonProps) => {
   const {me} = useRootState(state => state.profile);
   const [toggle, setToggle] = useState(false);
   const {handleSubmit, control, formState, getValues} =
-    useForm<CreatePurchaseRequest>({
+    useForm<CreateVoucherAttr>({
       defaultValues: {
         description: '',
         expenses: [],
@@ -51,7 +51,7 @@ const CreatePurchaseOrder = ({
     name: 'expenses',
   });
 
-  const {mutate, loading, error} = usePostPurchaseOrder({});
+  const {mutate, loading, error} = usePostVoucher({});
 
   const totalCost = sum(getValues('expenses').map(e => e.totalCost));
   const hasNoExpense = getValues('expenses').length === 0;
@@ -60,16 +60,16 @@ const CreatePurchaseOrder = ({
     append(expense);
   };
 
-  const onSubmit = (formData: CreatePurchaseRequest) => {
+  const onSubmit = (formData: CreateVoucherAttr) => {
     if (!confirm('Proceed?')) return;
 
-    const data: CreatePurchaseRequest = {
+    const data: CreateVoucherAttr = {
       ...formData,
       requestedDate: new Date().toISOString(),
     };
     mutate(data).then(id => {
       setToggle(false);
-      onCreatePurchaseOrder && onCreatePurchaseOrder(id);
+      onCreateVoucher && onCreateVoucher(id);
     });
   };
 
@@ -81,7 +81,7 @@ const CreatePurchaseOrder = ({
       <ModalContainer
         backdrop="static"
         size="lg"
-        header={<h5>Create New Purchase Order</h5>}
+        header={<h5>Create New Voucher</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >
@@ -229,4 +229,4 @@ const CreatePurchaseOrder = ({
   );
 };
 
-export default CreatePurchaseOrder;
+export default CreateVoucher;

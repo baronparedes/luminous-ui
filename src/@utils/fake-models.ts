@@ -18,12 +18,12 @@ import {
   PropertyAccount,
   PropertyAssignmentAttr,
   PropertyAttr,
-  PurchaseOrderAttr,
   RecordStatus,
   RequestStatus,
   SettingAttr,
   TransactionAttr,
   TransactionType,
+  VoucherAttr,
 } from '../Api';
 import {formatDate} from './dates';
 import {generateNumberedSeries} from './helpers';
@@ -189,7 +189,7 @@ export const generateFakeExpense = (): ExpenseAttr => {
   };
 };
 
-export const generateFakePurchaseOrder = (): PurchaseOrderAttr => {
+export const generateFakeVoucher = (): VoucherAttr => {
   return {
     id: faker.datatype.number(),
     description: faker.random.words(2),

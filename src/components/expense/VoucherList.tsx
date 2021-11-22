@@ -3,16 +3,16 @@ import {Button, ButtonGroup, Col, Row} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 
 import routes from '../../@utils/routes';
-import {RequestStatus, useGetAllPurchaseOrderByStatus} from '../../Api';
+import {RequestStatus, useGetAllVoucherByStatus} from '../../Api';
 import {Currency} from '../@ui/Currency';
 import ErrorInfo from '../@ui/ErrorInfo';
 import RoundedPanel from '../@ui/RoundedPanel';
 import {Table} from '../@ui/Table';
 
-const PurchaseOrderList = () => {
+const VoucherList = () => {
   const [selectedStatus, setSelectedStatus] =
     useState<RequestStatus>('pending');
-  const {data, error, loading} = useGetAllPurchaseOrderByStatus({
+  const {data, error, loading} = useGetAllVoucherByStatus({
     status: selectedStatus,
   });
 
@@ -48,9 +48,7 @@ const PurchaseOrderList = () => {
               <Row>
                 <Col className="mb-2">
                   <div className="center-content">
-                    <h5 className="m-auto">
-                      Purchase Request ({selectedStatus})
-                    </h5>
+                    <h5 className="m-auto">Voucher ({selectedStatus})</h5>
                   </div>
                 </Col>
                 <Col className="text-right" md={4} sm={12}>
@@ -92,7 +90,7 @@ const PurchaseOrderList = () => {
                         className="text-underline"
                         to={routes.PURCHASE_ORDER(row.id)}
                       >
-                        PO-{row.id}
+                        V-{row.id}
                       </Link>
                     </td>
                     <td>{row.description}</td>
@@ -112,4 +110,4 @@ const PurchaseOrderList = () => {
   );
 };
 
-export default PurchaseOrderList;
+export default VoucherList;

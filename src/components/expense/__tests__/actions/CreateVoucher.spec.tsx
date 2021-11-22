@@ -11,10 +11,10 @@ import {
   generateFakeProfile,
 } from '../../../../@utils/fake-models';
 import {renderWithProviderAndRouterAndRestful} from '../../../../@utils/test-renderers';
-import {CreatePurchaseRequest} from '../../../../Api';
+import {CreateVoucher as CreateVoucherAttr} from '../../../../Api';
 import {profileActions} from '../../../../store/reducers/profile.reducer';
 import AddExpense from '../../actions/AddExpense';
-import CreatePurchaseOrder from '../../actions/CreatePurchaseOrder';
+import CreateVoucher from '../../actions/CreateVoucher';
 
 type AddExpenseProps = React.ComponentProps<typeof AddExpense>;
 
@@ -37,15 +37,15 @@ jest.mock(
     }
 );
 
-describe('CreatePurchaseOrder', () => {
+describe('CreateVoucher', () => {
   const base = 'http://localhost';
   const mockedProfile = generateFakeProfile();
 
-  async function renderTarget(onCreatePurchaseOrder?: (id: number) => void) {
+  async function renderTarget(onCreateVoucher?: (id: number) => void) {
     const target = renderWithProviderAndRouterAndRestful(
-      <CreatePurchaseOrder
+      <CreateVoucher
         buttonLabel={'toggle'}
-        onCreatePurchaseOrder={onCreatePurchaseOrder}
+        onCreateVoucher={onCreateVoucher}
       />,
       base,
       store => store.dispatch(profileActions.signIn({me: mockedProfile}))
@@ -61,7 +61,7 @@ describe('CreatePurchaseOrder', () => {
     const totalCostContainer = target.getByText(/^total cost$/i).parentElement
       ?.parentElement as HTMLElement;
 
-    expect(target.getByText(/create new purchase order/i)).toBeInTheDocument();
+    expect(target.getByText(/create new voucher/i)).toBeInTheDocument();
 
     expect(target.getByText(/^total cost$/i)).toBeInTheDocument();
     expect(descriptionInput).toBeInTheDocument();
@@ -86,12 +86,12 @@ describe('CreatePurchaseOrder', () => {
     await renderTarget();
   });
 
-  it('should render and create a new purchase order', async () => {
+  it('should render and create a new voucher', async () => {
     window.confirm = jest.fn().mockImplementation(() => true);
 
-    const mockOnCreatePurchaseOrder = jest.fn();
-    const purchaseOrderId = faker.datatype.number();
-    const expectedBody: CreatePurchaseRequest = {
+    const mockOnCreateVoucher = jest.fn();
+    const voucherId = faker.datatype.number();
+    const expectedBody: CreateVoucherAttr = {
       description: faker.random.words(2),
       requestedBy: Number(mockedProfile.id),
       requestedDate: new Date().toISOString(),
@@ -99,7 +99,7 @@ describe('CreatePurchaseOrder', () => {
     };
 
     nock(base)
-      .post('/api/purchase-order/postPurchaseOrder', body => {
+      .post('/api/voucher/postVoucher', body => {
         expect(new Date(body.requestedDate).toDateString()).toEqual(
           new Date(expectedBody.requestedDate).toDateString()
         );
@@ -109,10 +109,10 @@ describe('CreatePurchaseOrder', () => {
         });
         return true;
       })
-      .reply(200, purchaseOrderId as ApprovedAny);
+      .reply(200, voucherId as ApprovedAny);
 
     const {addExpenseButton, descriptionInput, saveButton, queryByRole} =
-      await renderTarget(mockOnCreatePurchaseOrder);
+      await renderTarget(mockOnCreateVoucher);
 
     userEvent.type(descriptionInput, expectedBody.description);
     userEvent.click(addExpenseButton);
@@ -120,8 +120,8 @@ describe('CreatePurchaseOrder', () => {
 
     await waitFor(() => expect(window.confirm).toHaveBeenCalled());
     await waitFor(() => {
-      expect(mockOnCreatePurchaseOrder).toHaveBeenCalled();
-      expect(mockOnCreatePurchaseOrder).toHaveBeenCalledWith(purchaseOrderId);
+      expect(mockOnCreateVoucher).toHaveBeenCalled();
+      expect(mockOnCreateVoucher).toHaveBeenCalledWith(voucherId);
     });
     await waitFor(() => expect(queryByRole('dialog')).not.toBeInTheDocument());
   });
