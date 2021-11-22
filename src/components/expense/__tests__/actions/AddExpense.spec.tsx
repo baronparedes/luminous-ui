@@ -11,7 +11,7 @@ import {SETTING_KEYS} from '../../../../constants';
 import {settingActions} from '../../../../store/reducers/setting.reducer';
 import AddExpense from '../../actions/AddExpense';
 
-describe.skip('AddExpense', () => {
+describe('AddExpense', () => {
   const expectedCategories = [faker.random.words(2), faker.random.words(2)];
 
   async function renderTarget(onAddExpense?: (data: ExpenseAttr) => void) {
@@ -78,7 +78,7 @@ describe.skip('AddExpense', () => {
     };
   }
 
-  it('should render and fill up and submit form', async () => {
+  it.skip('should render and fill up and submit form', async () => {
     const mockedExpense: ExpenseAttr = {
       ...generateFakeExpense(),
       category: faker.random.arrayElement(expectedCategories),
