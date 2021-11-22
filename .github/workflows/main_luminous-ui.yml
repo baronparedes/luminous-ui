@@ -23,20 +23,13 @@ jobs:
       uses: azure/login@v1
       with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          
-    - name: Set Azure Subscription
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 2.0.72
-        inlineScript: |
-            az account set -s ${{ secrets.AZURE_SUBSCRIPTION }}
     
     - name: Upload to Azure blob storage
       uses: azure/CLI@v1
       with:
         azcliversion: 2.0.72
         inlineScript: |
-            az storage blob upload-batch --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} -d '$web' -s ./artifact
+            az storage blob upload-batch --subscription ${{ secrets.AZURE_SUBSCRIPTION }} --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} -d '$web' -s ./artifact
     
     - name: Azure logout
       run: |
