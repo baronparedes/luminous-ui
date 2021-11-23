@@ -5,9 +5,7 @@ import userEvent from '@testing-library/user-event';
 
 import {currencyFormat} from '../../../@utils/currencies';
 import {generateFakeVoucher} from '../../../@utils/fake-models';
-import {
-  renderWithProviderAndRouterAndRestful,
-} from '../../../@utils/test-renderers';
+import {renderWithProviderAndRouterAndRestful} from '../../../@utils/test-renderers';
 import {VoucherAttr} from '../../../Api';
 import VoucherList from '../VoucherList';
 
