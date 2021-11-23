@@ -5,7 +5,7 @@ import {waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import {generateFakeCategory} from '../../../../@utils/fake-models';
-import {renderWithRestful} from '../../../../@utils/test-renderers';
+import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
 import {DEFAULTS} from '../../../../constants';
 import SettingExpenseCategory from '../SettingExpenseCategory';
 
@@ -20,7 +20,10 @@ describe('SettingExpenseCategory', () => {
   });
 
   it('should render', async () => {
-    const {getByText} = renderWithRestful(<SettingExpenseCategory />, base);
+    const {getByText} = renderWithProviderAndRestful(
+      <SettingExpenseCategory />,
+      base
+    );
 
     expect(getByText(/expense categories/i)).toBeInTheDocument();
     expect(getByText(/save/i)).toBeInTheDocument();
@@ -35,7 +38,7 @@ describe('SettingExpenseCategory', () => {
   });
 
   it('should switch between tabs', async () => {
-    const {getByText, getByRole} = renderWithRestful(
+    const {getByText, getByRole} = renderWithProviderAndRestful(
       <SettingExpenseCategory />,
       base
     );
@@ -80,7 +83,7 @@ describe('SettingExpenseCategory', () => {
   });
 
   it('should disable save button when category description is invalid', async () => {
-    const {getByRole, getByText} = renderWithRestful(
+    const {getByRole, getByText} = renderWithProviderAndRestful(
       <SettingExpenseCategory />,
       base
     );
@@ -106,7 +109,7 @@ describe('SettingExpenseCategory', () => {
       })
       .reply(200);
 
-    const {queryByRole, getByText} = renderWithRestful(
+    const {queryByRole, getByText, store} = renderWithProviderAndRestful(
       <SettingExpenseCategory />,
       base
     );
@@ -117,6 +120,12 @@ describe('SettingExpenseCategory', () => {
     userEvent.click(getByText(/save/i));
     await waitFor(() =>
       expect(queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+
+    await waitFor(() =>
+      expect(store.getState().setting.categories).toEqual([
+        ...expectedCategories,
+      ])
     );
   });
 
@@ -150,7 +159,7 @@ describe('SettingExpenseCategory', () => {
       })
       .reply(200);
 
-    const {getByText, getByRole, queryByRole} = renderWithRestful(
+    const {getByText, getByRole, queryByRole} = renderWithProviderAndRestful(
       <SettingExpenseCategory />,
       base
     );
@@ -185,7 +194,7 @@ describe('SettingExpenseCategory', () => {
   `(
     'should not accept invalid values [$description]',
     async ({invalidValue, expectedErrorLabel}) => {
-      const {getByText, getByRole, queryByRole} = renderWithRestful(
+      const {getByText, getByRole, queryByRole} = renderWithProviderAndRestful(
         <SettingExpenseCategory />,
         base
       );
@@ -225,7 +234,7 @@ describe('SettingExpenseCategory', () => {
   it('should not add duplicate values and should be required', async () => {
     const expectedCategory = faker.random.words(2);
 
-    const {getByRole, getByText, queryByRole} = renderWithRestful(
+    const {getByRole, getByText, queryByRole} = renderWithProviderAndRestful(
       <SettingExpenseCategory />,
       base
     );

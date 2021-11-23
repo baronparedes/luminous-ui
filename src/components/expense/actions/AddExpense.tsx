@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
   Button,
   ButtonProps,
@@ -12,8 +12,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {BiDetail} from 'react-icons/bi';
 import {FaArchive, FaPlus, FaTag} from 'react-icons/fa';
 
-import {ExpenseAttr} from '../../../Api';
-import {SETTING_KEYS} from '../../../constants';
+import {CategoryAttr, ExpenseAttr} from '../../../Api';
 import {useRootState} from '../../../store';
 import {Currency} from '../../@ui/Currency';
 import ModalContainer from '../../@ui/ModalContainer';
@@ -27,7 +26,7 @@ type Props = {
   onAddExpense?: (data: ExpenseAttr) => void;
 };
 
-function parseSavedCategories(value?: string): string[] {
+function parseSubCategories(value?: string): string[] {
   try {
     if (value) {
       const parsed = JSON.parse(value);
@@ -42,15 +41,19 @@ function parseSavedCategories(value?: string): string[] {
 }
 
 const AddExpense = ({onAddExpense, ...buttonProps}: Props & ButtonProps) => {
-  const savedCategories = useRootState(state =>
-    state.setting.values.find(v => v.key === SETTING_KEYS.EXPENSE_CATEGORY)
-  );
+  const [selectedCategory, setSelectedCategory] = useState<CategoryAttr>();
+  const savedCategories = useRootState(state => state.setting.categories);
   const [toggle, setToggle] = useState(false);
-  const {handleSubmit, control, formState, reset, watch} =
+  const {handleSubmit, control, formState, reset, watch, setValue} =
     useForm<ExpenseAttr>();
   const onSubmit = (formData: ExpenseAttr) => {
     const sanitized: ExpenseAttr = {
       ...formData,
+      categoryId: Number(formData.categoryId),
+      category:
+        formData.category.trim() === ''
+          ? selectedCategory?.description ?? ''
+          : formData.category,
       quantity: Number(formData.quantity),
       unitCost: Number(formData.unitCost),
       totalCost: Number(formData.quantity) * Number(formData.unitCost),
@@ -60,6 +63,14 @@ const AddExpense = ({onAddExpense, ...buttonProps}: Props & ButtonProps) => {
   };
 
   const totalCost = watch('quantity') * watch('unitCost');
+  const subCategories = parseSubCategories(selectedCategory?.subCategories);
+
+  useEffect(() => {
+    const newSelectedCategory = savedCategories.find(
+      c => c.id === Number(watch('categoryId'))
+    );
+    setSelectedCategory(newSelectedCategory);
+  }, [watch('categoryId')]);
 
   return (
     <>
@@ -118,7 +129,7 @@ const AddExpense = ({onAddExpense, ...buttonProps}: Props & ButtonProps) => {
                   <FaArchive />
                 </InputGroup.Text>
                 <Controller
-                  name="category"
+                  name="categoryId"
                   control={control}
                   render={({field}) => (
                     <Form.Control
@@ -126,14 +137,20 @@ const AddExpense = ({onAddExpense, ...buttonProps}: Props & ButtonProps) => {
                       as="select"
                       placeholder="category"
                       required
+                      onChange={e => {
+                        field.onChange(e);
+                        setValue('category', '');
+                      }}
                     >
-                      <option value="">Choose a category</option>
-                      {parseSavedCategories(savedCategories?.value)
-                        .sort()
+                      <option value={undefined}>Choose a category</option>
+                      {[...savedCategories]
+                        .sort((a, b) =>
+                          a.description.localeCompare(b.description)
+                        )
                         .map((category, i) => {
                           return (
-                            <option key={i} value={category}>
-                              {category}
+                            <option key={i} value={Number(category.id)}>
+                              {category.description}
                             </option>
                           );
                         })}
@@ -142,6 +159,36 @@ const AddExpense = ({onAddExpense, ...buttonProps}: Props & ButtonProps) => {
                 />
               </InputGroup>
             </Row>
+            {subCategories.length > 0 && (
+              <Row>
+                <InputGroup className="mb-2">
+                  <InputGroup.Text>
+                    <FaArchive />
+                  </InputGroup.Text>
+                  <Controller
+                    name="category"
+                    control={control}
+                    render={({field}) => (
+                      <Form.Control
+                        {...field}
+                        as="select"
+                        placeholder="sub category"
+                        required
+                      >
+                        <option value="">Choose a sub category</option>
+                        {subCategories.map((subCategory, i) => {
+                          return (
+                            <option key={i} value={subCategory}>
+                              {subCategory}
+                            </option>
+                          );
+                        })}
+                      </Form.Control>
+                    )}
+                  />
+                </InputGroup>
+              </Row>
+            )}
             <Row>
               <InputGroup className="mb-2">
                 <InputGroup.Prepend>

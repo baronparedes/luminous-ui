@@ -13,6 +13,7 @@ import {
 } from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
 import {FaPlus, FaTimes} from 'react-icons/fa';
+import {useDispatch} from 'react-redux';
 
 import {
   CategoryAttr,
@@ -20,7 +21,9 @@ import {
   useUpdateCategories,
 } from '../../../Api';
 import {DEFAULTS} from '../../../constants';
+import {settingActions} from '../../../store/reducers/setting.reducer';
 import ButtonLoading from '../../@ui/ButtonLoading';
+import ErrorInfo from '../../@ui/ErrorInfo';
 import Loading from '../../@ui/Loading';
 import ModalContainer from '../../@ui/ModalContainer';
 import {
@@ -208,7 +211,7 @@ const NewExpenseCategory = ({
   onNewExpenseCategory,
 }: NewExpenseCategoryProps) => {
   const [toggle, setToggle] = useState(false);
-  const {mutate, loading: savingCategories} = useUpdateCategories({});
+  const {mutate, loading: savingCategories, error} = useUpdateCategories({});
   const {handleSubmit, formState, control, reset} = useForm<{
     description: string;
   }>({
@@ -250,6 +253,11 @@ const NewExpenseCategory = ({
               rules={{
                 validate: {
                   validateNotEmpty,
+                  validateNoLeadingSpaces,
+                  validateNoTrailingSpaces,
+                  validateUnique: validateUnique(
+                    categories.map(c => c.description)
+                  ),
                 },
               }}
               control={control}
@@ -267,6 +275,11 @@ const NewExpenseCategory = ({
               {formState.errors.description?.message}
             </Form.Control.Feedback>
           </InputGroup>
+          {error && (
+            <div>
+              <ErrorInfo>unable to add a new category</ErrorInfo>
+            </div>
+          )}
           <div className="text-right">
             <ButtonLoading
               type="submit"
@@ -283,6 +296,7 @@ const NewExpenseCategory = ({
 };
 
 const SettingExpenseCategory = () => {
+  const dispatch = useDispatch();
   const [categoryErrors, setCategoryErrors] = useState<number[]>([]);
   const [categories, setCategories] = useState<CategoryAttr[] | null>(null);
   const {data, loading, refetch} = useGetAllCategories({});
@@ -320,6 +334,7 @@ const SettingExpenseCategory = () => {
 
   useEffect(() => {
     setCategories(data);
+    dispatch(settingActions.updateCategories(data ?? []));
   }, [data]);
 
   return (

@@ -1,9 +1,10 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {SettingAttr} from '../../Api';
+import {CategoryAttr, SettingAttr} from '../../Api';
 
 export type SettingState = {
   values: SettingAttr[];
+  categories: CategoryAttr[];
 };
 
 export type UpdateSettingPayload = {
@@ -11,7 +12,7 @@ export type UpdateSettingPayload = {
   value: string;
 };
 
-const initialState: SettingState = {values: []};
+const initialState: SettingState = {values: [], categories: []};
 
 export const settingSlice = createSlice({
   name: 'setting',
@@ -26,6 +27,9 @@ export const settingSlice = createSlice({
         key: action.payload.key,
         value: action.payload.value,
       });
+    },
+    updateCategories: (state, action: PayloadAction<CategoryAttr[]>) => {
+      state.categories = action.payload;
     },
   },
 });
