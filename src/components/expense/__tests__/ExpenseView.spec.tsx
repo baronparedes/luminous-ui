@@ -8,11 +8,11 @@ import ExpenseView from '../ExpenseView';
 
 jest.mock('../../../hooks/useCommunityBalance');
 
-jest.mock('../VoucherList', () => () => {
+jest.mock('../../voucher/VoucherList', () => () => {
   return <div data-testid="mock-voucher-list" />;
 });
 
-jest.mock('../actions/CreateVoucher', () => () => {
+jest.mock('../../voucher/actions/CreateVoucher', () => () => {
   return <div data-testid="mock-create-voucher" />;
 });
 

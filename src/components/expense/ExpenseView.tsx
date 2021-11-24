@@ -3,8 +3,8 @@ import {Badge, Col, Container, Row} from 'react-bootstrap';
 import {useCommunityBalance} from '../../hooks/useCommunityBalance';
 import {Currency} from '../@ui/Currency';
 import RoundedPanel from '../@ui/RoundedPanel';
-import CreateVoucher from './actions/CreateVoucher';
-import VoucherList from './VoucherList';
+import CreateVoucher from '../voucher/actions/CreateVoucher';
+import VoucherList from '../voucher/VoucherList';
 
 const ExpenseView = () => {
   const {data} = useCommunityBalance();

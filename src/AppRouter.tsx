@@ -14,10 +14,10 @@ import WaterReadingView from './components/admin/upload-water-reading/WaterReadi
 import DashboardView from './components/dashboard/DashboardView';
 import DisbursementView from './components/expense/DisbursementView';
 import ExpenseView from './components/expense/ExpenseView';
-import VoucherView from './components/expense/VoucherView';
 import LoginView from './components/profile/LoginView';
 import MyProfileView from './components/profile/MyProfileView';
 import PropertyView from './components/property/PropertyView';
+import VoucherView from './components/voucher/VoucherView';
 import {useInitSettings} from './hooks/useInitSettings';
 import {useRootState} from './store';
 
