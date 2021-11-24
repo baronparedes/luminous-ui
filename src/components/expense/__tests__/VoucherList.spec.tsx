@@ -1,3 +1,4 @@
+import faker from 'faker';
 import nock from 'nock';
 
 import {waitFor, within} from '@testing-library/react';
@@ -11,20 +12,21 @@ import VoucherList from '../VoucherList';
 
 describe('VoucherList', () => {
   const base = 'http://localhost';
+  const chargeId = faker.datatype.number();
 
   const mockedVouchersPending: VoucherAttr[] = [
-    {...generateFakeVoucher(), status: 'pending'},
-    {...generateFakeVoucher(), status: 'pending'},
+    {...generateFakeVoucher(), status: 'pending', chargeId},
+    {...generateFakeVoucher(), status: 'pending', chargeId},
   ];
 
   const mockedVouchersApproved: VoucherAttr[] = [
-    {...generateFakeVoucher(), status: 'approved'},
-    {...generateFakeVoucher(), status: 'approved'},
+    {...generateFakeVoucher(), status: 'approved', chargeId},
+    {...generateFakeVoucher(), status: 'approved', chargeId},
   ];
 
   const mockedVouchersRejected: VoucherAttr[] = [
-    {...generateFakeVoucher(), status: 'rejected'},
-    {...generateFakeVoucher(), status: 'rejected'},
+    {...generateFakeVoucher(), status: 'rejected', chargeId},
+    {...generateFakeVoucher(), status: 'rejected', chargeId},
   ];
 
   function assertVouchers(
@@ -63,10 +65,13 @@ describe('VoucherList', () => {
 
   it('should render and fetch pending vouchers by default', async () => {
     nock(base)
-      .get('/api/voucher/getAllVoucherByStatus/pending')
+      .get(`/api/voucher/getAllVouchersByChargeAndStatus/${chargeId}/pending`)
       .reply(200, mockedVouchersPending);
 
-    const target = renderWithProviderAndRouterAndRestful(<VoucherList />, base);
+    const target = renderWithProviderAndRouterAndRestful(
+      <VoucherList chargeId={chargeId} />,
+      base
+    );
 
     const {getByText} = target;
 
@@ -87,14 +92,17 @@ describe('VoucherList', () => {
 
   it('should render and fetch approved vouchers', async () => {
     nock(base)
-      .get('/api/voucher/getAllVoucherByStatus/pending')
+      .get(`/api/voucher/getAllVouchersByChargeAndStatus/${chargeId}/pending`)
       .reply(200, mockedVouchersPending);
 
     nock(base)
-      .get('/api/voucher/getAllVoucherByStatus/approved')
+      .get(`/api/voucher/getAllVouchersByChargeAndStatus/${chargeId}/approved`)
       .reply(200, mockedVouchersApproved);
 
-    const target = renderWithProviderAndRouterAndRestful(<VoucherList />, base);
+    const target = renderWithProviderAndRouterAndRestful(
+      <VoucherList chargeId={chargeId} />,
+      base
+    );
 
     const {getByText} = target;
 
@@ -117,14 +125,17 @@ describe('VoucherList', () => {
 
   it('should render and fetch rejected vouchers', async () => {
     nock(base)
-      .get('/api/voucher/getAllVoucherByStatus/pending')
+      .get(`/api/voucher/getAllVouchersByChargeAndStatus/${chargeId}/pending`)
       .reply(200, mockedVouchersPending);
 
     nock(base)
-      .get('/api/voucher/getAllVoucherByStatus/rejected')
+      .get(`/api/voucher/getAllVouchersByChargeAndStatus/${chargeId}/rejected`)
       .reply(200, mockedVouchersRejected);
 
-    const target = renderWithProviderAndRouterAndRestful(<VoucherList />, base);
+    const target = renderWithProviderAndRouterAndRestful(
+      <VoucherList chargeId={chargeId} />,
+      base
+    );
 
     const {getByText} = target;
 

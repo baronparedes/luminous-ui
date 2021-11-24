@@ -92,19 +92,19 @@ describe('VoucherView', () => {
       .reply(200, mockedVoucher);
 
     const target = renderWithProviderAndRouterAndRestful(
-      <Route path={routes.PURCHASE_ORDER(':id')} component={VoucherView} />,
+      <Route path={routes.VOUCHER(':id')} component={VoucherView} />,
       base,
       store => {
         store.dispatch(profileActions.signIn({me: mockedProfile}));
       },
       history => {
-        history.push(routes.PURCHASE_ORDER(voucherId));
+        history.push(routes.VOUCHER(voucherId));
       }
     );
 
     await waitFor(() => {
       expect(target.history.location.pathname).toEqual(
-        routes.PURCHASE_ORDER(voucherId)
+        routes.VOUCHER(voucherId)
       );
     });
 

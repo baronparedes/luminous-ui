@@ -33,12 +33,13 @@ const ExpenseView = () => {
                 variant="primary"
                 className="w-100"
                 buttonLabel="create new request"
+                chargeId={1}
                 onCreateVoucher={() => window.location.reload()}
               />
             </Col>
           </Row>
         </RoundedPanel>
-        <VoucherList />
+        <VoucherList chargeId={1} />
       </Container>
     </>
   );

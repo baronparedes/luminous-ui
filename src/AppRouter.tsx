@@ -40,7 +40,7 @@ const AppRouter: React.FC = () => {
             />
             <ProtectedRoute
               onlyFor={['admin', 'stakeholder']}
-              path={routes.PURCHASE_ORDER(':id')}
+              path={routes.VOUCHER(':id')}
               component={VoucherView}
             />
             <ProtectedRoute

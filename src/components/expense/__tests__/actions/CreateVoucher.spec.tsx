@@ -40,10 +40,12 @@ jest.mock(
 describe('CreateVoucher', () => {
   const base = 'http://localhost';
   const mockedProfile = generateFakeProfile();
+  const chargeId = faker.datatype.number();
 
   async function renderTarget(onCreateVoucher?: (id: number) => void) {
     const target = renderWithProviderAndRouterAndRestful(
       <CreateVoucher
+        chargeId={chargeId}
         buttonLabel={'toggle'}
         onCreateVoucher={onCreateVoucher}
       />,
@@ -96,6 +98,7 @@ describe('CreateVoucher', () => {
       requestedBy: Number(mockedProfile.id),
       requestedDate: new Date().toISOString(),
       expenses: [mockedExpense],
+      chargeId,
     };
 
     nock(base)

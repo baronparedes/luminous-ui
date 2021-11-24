@@ -27,6 +27,7 @@ import {validateNotEmpty} from '../../@validation';
 import AddExpense from './AddExpense';
 
 type Props = {
+  chargeId: number;
   buttonLabel: React.ReactNode;
   onCreateVoucher?: (id: number) => void;
 };
@@ -34,6 +35,7 @@ type Props = {
 const CreateVoucher = ({
   buttonLabel,
   onCreateVoucher,
+  chargeId,
   ...buttonProps
 }: Props & ButtonProps) => {
   const {me} = useRootState(state => state.profile);
@@ -41,9 +43,11 @@ const CreateVoucher = ({
   const {handleSubmit, control, formState, getValues} =
     useForm<CreateVoucherAttr>({
       defaultValues: {
+        chargeId,
         description: '',
         expenses: [],
         requestedBy: Number(me?.id),
+        requestedDate: new Date().toISOString(),
       },
     });
   const {append, remove} = useFieldArray({
@@ -62,12 +66,7 @@ const CreateVoucher = ({
 
   const onSubmit = (formData: CreateVoucherAttr) => {
     if (!confirm('Proceed?')) return;
-
-    const data: CreateVoucherAttr = {
-      ...formData,
-      requestedDate: new Date().toISOString(),
-    };
-    mutate(data).then(id => {
+    mutate(formData).then(id => {
       setToggle(false);
       onCreateVoucher && onCreateVoucher(id);
     });

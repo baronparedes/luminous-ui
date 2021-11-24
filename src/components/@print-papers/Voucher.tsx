@@ -25,7 +25,7 @@ const Voucher = ({voucher}: Props) => {
       <PageSection>
         <div className="text-center">
           <h1 className="brand">Luminous</h1>
-          <h4>PURCHASE ORDER</h4>
+          <h4>VOUCHER</h4>
         </div>
       </PageSection>
       <PageSection className="pt-3">

@@ -3,7 +3,7 @@ const routes = {
   LOGIN: '/login',
   DASHBOARD: '/dashboard',
   PROPERTY: (id?: string | number) => `/property/${id}`,
-  PURCHASE_ORDER: (id?: string | number) => `/voucher/${id}`,
+  VOUCHER: (id?: string | number) => `/voucher/${id}`,
   EXPENSE: '/expense',
   EXPENSE_REQUESTS: '/expense/requests',
   EXPENSE_DISBURSEMENTS: '/expense/disbursements',

@@ -235,6 +235,7 @@ export interface ExpenseAttr {
 
 export interface VoucherAttr {
   id?: number;
+  chargeId: number;
   description: string;
   totalCost: number;
   status: RequestStatus;
@@ -252,6 +253,7 @@ export interface VoucherAttr {
 
 export interface CreateVoucher {
   expenses: ExpenseAttr[];
+  chargeId: number;
   requestedDate: string;
   requestedBy: number;
   description: string;
@@ -956,23 +958,24 @@ export type UseGetVoucherProps = Omit<UseGetProps<VoucherAttr, unknown, void, Ge
 export const useGetVoucher = ({id, ...props}: UseGetVoucherProps) => useGet<VoucherAttr, unknown, void, GetVoucherPathParams>((paramsInPath: GetVoucherPathParams) => `/api/voucher/getVoucher/${paramsInPath.id}`, {  pathParams: { id }, ...props });
 
 
-export interface GetAllVoucherByStatusPathParams {
+export interface GetAllVouchersByChargeAndStatusPathParams {
+  chargeId: number;
   status: RequestStatus
 }
 
-export type GetAllVoucherByStatusProps = Omit<GetProps<VoucherAttr[], unknown, void, GetAllVoucherByStatusPathParams>, "path"> & GetAllVoucherByStatusPathParams;
+export type GetAllVouchersByChargeAndStatusProps = Omit<GetProps<VoucherAttr[], unknown, void, GetAllVouchersByChargeAndStatusPathParams>, "path"> & GetAllVouchersByChargeAndStatusPathParams;
 
-export const GetAllVoucherByStatus = ({status, ...props}: GetAllVoucherByStatusProps) => (
-  <Get<VoucherAttr[], unknown, void, GetAllVoucherByStatusPathParams>
-    path={`/api/voucher/getAllVoucherByStatus/${status}`}
+export const GetAllVouchersByChargeAndStatus = ({chargeId, status, ...props}: GetAllVouchersByChargeAndStatusProps) => (
+  <Get<VoucherAttr[], unknown, void, GetAllVouchersByChargeAndStatusPathParams>
+    path={`/api/voucher/getAllVouchersByChargeAndStatus/${chargeId}/${status}`}
     
     {...props}
   />
 );
 
-export type UseGetAllVoucherByStatusProps = Omit<UseGetProps<VoucherAttr[], unknown, void, GetAllVoucherByStatusPathParams>, "path"> & GetAllVoucherByStatusPathParams;
+export type UseGetAllVouchersByChargeAndStatusProps = Omit<UseGetProps<VoucherAttr[], unknown, void, GetAllVouchersByChargeAndStatusPathParams>, "path"> & GetAllVouchersByChargeAndStatusPathParams;
 
-export const useGetAllVoucherByStatus = ({status, ...props}: UseGetAllVoucherByStatusProps) => useGet<VoucherAttr[], unknown, void, GetAllVoucherByStatusPathParams>((paramsInPath: GetAllVoucherByStatusPathParams) => `/api/voucher/getAllVoucherByStatus/${paramsInPath.status}`, {  pathParams: { status }, ...props });
+export const useGetAllVouchersByChargeAndStatus = ({chargeId, status, ...props}: UseGetAllVouchersByChargeAndStatusProps) => useGet<VoucherAttr[], unknown, void, GetAllVouchersByChargeAndStatusPathParams>((paramsInPath: GetAllVouchersByChargeAndStatusPathParams) => `/api/voucher/getAllVouchersByChargeAndStatus/${paramsInPath.chargeId}/${paramsInPath.status}`, {  pathParams: { chargeId, status }, ...props });
 
 
 export type PostVoucherProps = Omit<MutateProps<number, unknown, void, CreateVoucher, void>, "path" | "verb">;

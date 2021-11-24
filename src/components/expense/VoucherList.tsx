@@ -3,16 +3,21 @@ import {Button, ButtonGroup, Col, Row} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 
 import routes from '../../@utils/routes';
-import {RequestStatus, useGetAllVoucherByStatus} from '../../Api';
+import {RequestStatus, useGetAllVouchersByChargeAndStatus} from '../../Api';
 import {Currency} from '../@ui/Currency';
 import ErrorInfo from '../@ui/ErrorInfo';
 import RoundedPanel from '../@ui/RoundedPanel';
 import {Table} from '../@ui/Table';
 
-const VoucherList = () => {
+type Props = {
+  chargeId: number;
+};
+
+const VoucherList = ({chargeId}: Props) => {
   const [selectedStatus, setSelectedStatus] =
     useState<RequestStatus>('pending');
-  const {data, error, loading} = useGetAllVoucherByStatus({
+  const {data, error, loading} = useGetAllVouchersByChargeAndStatus({
+    chargeId,
     status: selectedStatus,
   });
 
@@ -88,7 +93,7 @@ const VoucherList = () => {
                     <td style={{minWidth: '90px'}}>
                       <Link
                         className="text-underline"
-                        to={routes.PURCHASE_ORDER(row.id)}
+                        to={routes.VOUCHER(row.id)}
                       >
                         V-{row.id}
                       </Link>
