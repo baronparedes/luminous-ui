@@ -249,6 +249,7 @@ export interface VoucherAttr {
   requestedByProfile?: ProfileAttr;
   rejectedByProfile?: ProfileAttr;
   approverProfiles?: ProfileAttr[];
+  charge?: ChargeAttr;
 }
 
 export interface CreateVoucher {

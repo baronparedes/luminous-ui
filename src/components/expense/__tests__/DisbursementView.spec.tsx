@@ -3,14 +3,14 @@ import faker from 'faker';
 import {render} from '@testing-library/react';
 
 import {currencyFormat} from '../../../@utils/currencies';
-import {usePassOnBalance} from '../../../hooks/usePassOnBalance';
+import {useChargeBalance} from '../../../hooks/useChargeBalance';
 import DisbursementView from '../DisbursementView';
 
-jest.mock('../../../hooks/usePassOnBalance');
+jest.mock('../../../hooks/useChargeBalance');
 
 describe.skip('DisbursementView', () => {
-  const usePassOnBalanceMock = usePassOnBalance as jest.MockedFunction<
-    typeof usePassOnBalance
+  const useChargeBalanceMock = useChargeBalance as jest.MockedFunction<
+    typeof useChargeBalance
   >;
 
   it('should render', async () => {
@@ -27,8 +27,9 @@ describe.skip('DisbursementView', () => {
       passOn: faker.datatype.boolean(),
     };
 
-    usePassOnBalanceMock.mockReturnValue({
-      data: [expectedChargeBalance1, expectedChargeBalance2],
+    useChargeBalanceMock.mockReturnValue({
+      availableBalances: [expectedChargeBalance1, expectedChargeBalance2],
+      availableCommunityBalance: {chargeId: 1, code: '', balance: 0},
       loading: false,
       refetch: jest.fn(),
     });

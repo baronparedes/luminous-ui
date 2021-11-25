@@ -18,6 +18,13 @@ const STATUS_VARIANT = {
 const Vouchercard = ({voucher}: Props) => {
   return (
     <>
+      {voucher.charge && (
+        <div className="mb-3 text-muted">
+          <small>
+            <strong>{voucher.charge?.code}</strong>
+          </small>
+        </div>
+      )}
       <Link className="text-underline" to={routes.VOUCHER(voucher.id)}>
         <h4>V-{voucher.id}</h4>
       </Link>

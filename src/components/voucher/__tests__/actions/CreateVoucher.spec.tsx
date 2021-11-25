@@ -10,7 +10,7 @@ import {
   generateFakeExpense,
   generateFakeProfile,
 } from '../../../../@utils/fake-models';
-import {renderWithProviderAndRouterAndRestful} from '../../../../@utils/test-renderers';
+import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
 import {CreateVoucher as CreateVoucherAttr} from '../../../../Api';
 import {profileActions} from '../../../../store/reducers/profile.reducer';
 import AddExpense from '../../actions/AddExpense';
@@ -41,11 +41,13 @@ describe('CreateVoucher', () => {
   const base = 'http://localhost';
   const mockedProfile = generateFakeProfile();
   const chargeId = faker.datatype.number();
+  const chargeCode = faker.random.word();
 
   async function renderTarget(onCreateVoucher?: (id: number) => void) {
-    const target = renderWithProviderAndRouterAndRestful(
+    const target = renderWithProviderAndRestful(
       <CreateVoucher
         chargeId={chargeId}
+        chargeCode={chargeCode}
         buttonLabel={'toggle'}
         onCreateVoucher={onCreateVoucher}
       />,
@@ -63,7 +65,9 @@ describe('CreateVoucher', () => {
     const totalCostContainer = target.getByText(/^total cost$/i).parentElement
       ?.parentElement as HTMLElement;
 
-    expect(target.getByText(/create new voucher/i)).toBeInTheDocument();
+    expect(
+      target.getByText(`Create New Voucher for ${chargeCode}`)
+    ).toBeInTheDocument();
 
     expect(target.getByText(/^total cost$/i)).toBeInTheDocument();
     expect(descriptionInput).toBeInTheDocument();

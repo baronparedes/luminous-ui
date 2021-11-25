@@ -1,5 +1,7 @@
 import nock from 'nock';
 
+import {waitFor} from '@testing-library/react';
+
 import {
   generateFakeCategory,
   generateFakeSetting,
@@ -17,15 +19,14 @@ describe('useInitSettings', () => {
     nock(base).get('/api/setting/getAll').reply(200, settings);
     nock(base).get('/api/setting/getAllCategories').reply(200, categories);
 
-    const {waitForNextUpdate, store} = renderHookWithProviderAndRestful(
+    const {store} = renderHookWithProviderAndRestful(
       () => useInitSettings(),
       base
     );
 
-    await waitForNextUpdate();
-    expect(store.getState().setting.values).toEqual(settings);
-
-    await waitForNextUpdate();
-    expect(store.getState().setting.categories).toEqual(categories);
+    await waitFor(() => {
+      expect(store.getState().setting.values).toEqual(settings);
+      expect(store.getState().setting.categories).toEqual(categories);
+    });
   });
 });

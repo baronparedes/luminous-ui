@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 
 import {sum} from '../@utils/helpers';
 import {useGetAllCollectedCharges, useGetDisbursementBreakdown} from '../Api';
+import {DEFAULTS} from '../constants';
 
 type ChargeBalance = {
   chargeId: number;
@@ -9,8 +10,16 @@ type ChargeBalance = {
   balance: number;
 };
 
-export function usePassOnBalance() {
-  const [availableBalance, setAvailableBalance] = useState<ChargeBalance[]>([]);
+export function useChargeBalance() {
+  const [availableBalances, setAvailableBalances] = useState<ChargeBalance[]>(
+    []
+  );
+  const [availableCommunityBalance, setAvailableCommunityBalance] =
+    useState<ChargeBalance>({
+      chargeId: DEFAULTS.COMMUNITY_CHARGE_ID,
+      code: DEFAULTS.COMMUNITY_EXPENSE,
+      balance: 0,
+    });
   const {
     data: charges,
     loading: loadingCharges,
@@ -34,11 +43,28 @@ export function usePassOnBalance() {
         return result;
       });
 
-    setAvailableBalance(chargeBalances ?? []);
+    setAvailableBalances(chargeBalances ?? []);
+  }, [charges, disbursements]);
+
+  useEffect(() => {
+    const chargesAmounts = charges
+      ?.filter(d => !d.charge.passOn)
+      .map(d => d.amount);
+    const disbursementAmounts = disbursements
+      ?.filter(d => d.code === DEFAULTS.COMMUNITY_EXPENSE)
+      .map(d => d.amount);
+    const communityBalance = sum(chargesAmounts) - sum(disbursementAmounts);
+    setAvailableCommunityBalance(state => {
+      return {
+        ...state,
+        balance: communityBalance,
+      };
+    });
   }, [charges, disbursements]);
 
   return {
-    data: availableBalance,
+    availableBalances,
+    availableCommunityBalance,
     loading: loadingCharges || loadingDisbursement,
     refetch,
   };

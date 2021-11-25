@@ -1,28 +1,28 @@
 import {Container, Tab, TabContainer, Tabs} from 'react-bootstrap';
 
-import {usePassOnBalance} from '../../hooks/usePassOnBalance';
+import {useChargeBalance} from '../../hooks/useChargeBalance';
 import ChargeDisbursement from './ChargeDisbursement';
 
 const DisbursementView = () => {
-  const {data} = usePassOnBalance();
+  const {availableBalances, availableCommunityBalance} = useChargeBalance();
 
   return (
     <>
       <Container>
         <TabContainer>
           <Tabs className="mb-3">
-            <Tab eventKey={0} title="COMMUNITY EXPENSE">
-              Comm Expense
+            <Tab eventKey={0} title={availableCommunityBalance.code}>
+              <ChargeDisbursement {...availableCommunityBalance} />
             </Tab>
-            {data &&
-              data.map(d => {
+            {availableBalances &&
+              availableBalances.map(chargeBalance => {
                 return (
                   <Tab
-                    eventKey={Number(d.chargeId)}
-                    key={d.chargeId}
-                    title={d.code}
+                    eventKey={Number(chargeBalance.chargeId)}
+                    key={chargeBalance.chargeId}
+                    title={chargeBalance.code}
                   >
-                    <ChargeDisbursement {...d} />
+                    <ChargeDisbursement {...chargeBalance} />
                   </Tab>
                 );
               })}
