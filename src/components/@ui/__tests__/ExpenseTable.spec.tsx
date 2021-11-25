@@ -2,9 +2,9 @@ import {render, within} from '@testing-library/react';
 
 import {currencyFormat} from '../../../@utils/currencies';
 import {generateFakeExpense} from '../../../@utils/fake-models';
-import VoucherExpenses from '../VoucherExpenses';
+import ExpenseTable from '../ExpenseTable';
 
-describe('VoucherExpenses', () => {
+describe('ExpenseTable', () => {
   it('should render', () => {
     const expectedHeaders = [
       'category',
@@ -16,7 +16,7 @@ describe('VoucherExpenses', () => {
 
     const mockedExpenses = [generateFakeExpense(), generateFakeExpense()];
     const {getByText, getByTestId} = render(
-      <VoucherExpenses
+      <ExpenseTable
         expenses={mockedExpenses}
         appendHeaderContent={<div data-testid="mock-header-content" />}
       />

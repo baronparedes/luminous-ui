@@ -4,6 +4,7 @@ const routes = {
   DASHBOARD: '/dashboard',
   PROPERTY: (id?: string | number) => `/property/${id}`,
   VOUCHER: (id?: string | number) => `/voucher/${id}`,
+  PURCHASE_REQUEST: (id?: string | number) => `/purchase-request/${id}`,
   EXPENSE: '/expense',
   EXPENSE_REQUESTS: '/expense/requests',
   EXPENSE_DISBURSEMENTS: '/expense/disbursements',

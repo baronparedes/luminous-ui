@@ -6,39 +6,45 @@ import {waitFor} from '@testing-library/react';
 
 import {
   generateFakeProfile,
-  generateFakeVoucher,
+  generateFakePurchaseRequest,
 } from '../../../@utils/fake-models';
 import routes from '../../../@utils/routes';
 import {renderWithProviderAndRouterAndRestful} from '../../../@utils/test-renderers';
-import {ProfileType, RequestStatus, VoucherAttr} from '../../../Api';
+import {ProfileType, PurchaseRequestAttr, RequestStatus} from '../../../Api';
 import {profileActions} from '../../../store/reducers/profile.reducer';
-import DisbursementList from '../../@ui/DisbursementList';
 import ExpenseTable from '../../@ui/ExpenseTable';
-import ApproveVoucher from '../actions/ApproveVoucher';
+import ApprovePurchaseRequest from '../actions/ApprovePurchaseRequest';
 import NotifyApprovers from '../actions/NotifyApprovers';
-import RejectVoucher from '../actions/RejectVoucher';
-import VoucherDetails from '../VoucherDetails';
-import VoucherView from '../VoucherView';
+import RejectPurchaseRequest from '../actions/RejectPurchaseRequest';
+import PurchaseRequestDetails from '../PurchaseRequestDetails';
+import PurchaseRequestView from '../PurchaseRequestView';
 
-type VoucherDetailsProps = React.ComponentProps<typeof VoucherDetails>;
+type PurchaseRequestDetailsProps = React.ComponentProps<
+  typeof PurchaseRequestDetails
+>;
 
 type ExpenseTableProps = React.ComponentProps<typeof ExpenseTable>;
 
-type DisbursementListProps = React.ComponentProps<typeof DisbursementList>;
+type ApprovePurchaseRequestProps = React.ComponentProps<
+  typeof ApprovePurchaseRequest
+>;
 
-type ApproveVoucherProps = React.ComponentProps<typeof ApproveVoucher>;
-
-type RejectVoucherProps = React.ComponentProps<typeof RejectVoucher>;
+type RejectPurchaseRequestProps = React.ComponentProps<
+  typeof RejectPurchaseRequest
+>;
 
 type NotifyApproversProps = React.ComponentProps<typeof NotifyApprovers>;
 
-jest.mock('../VoucherDetails', () => (props: VoucherDetailsProps) => {
-  return <div data-testid="mock-voucher-details">{JSON.stringify(props)}</div>;
-});
+jest.mock(
+  '../PurchaseRequestDetails',
+  () => (props: PurchaseRequestDetailsProps) => {
+    return <div data-testid="mock-pr-details">{JSON.stringify(props)}</div>;
+  }
+);
 
 jest.mock('../../@ui/ExpenseTable', () => (props: ExpenseTableProps) => {
   return (
-    <div data-testid="mock-voucher-expenses">
+    <div data-testid="mock-pr-expenses">
       {JSON.stringify(props.expenses)}
       <div>{props.appendHeaderContent}</div>
     </div>
@@ -46,29 +52,24 @@ jest.mock('../../@ui/ExpenseTable', () => (props: ExpenseTableProps) => {
 });
 
 jest.mock(
-  '../../@ui/DisbursementList',
-  () => (props: DisbursementListProps) => {
-    return (
-      <div data-testid="mock-voucher-disbursements">
-        {JSON.stringify(props.disbursements)}
-      </div>
-    );
+  '../actions/ApprovePurchaseRequest',
+  () => (props: ApprovePurchaseRequestProps) => {
+    return <div data-testid="mock-approve">{JSON.stringify(props)}</div>;
   }
 );
 
-jest.mock('../actions/ApproveVoucher', () => (props: ApproveVoucherProps) => {
-  return <div data-testid="mock-approve">{JSON.stringify(props)}</div>;
-});
-
-jest.mock('../actions/RejectVoucher', () => (props: RejectVoucherProps) => {
-  return <div data-testid="mock-reject">{JSON.stringify(props)}</div>;
-});
+jest.mock(
+  '../actions/RejectPurchaseRequest',
+  () => (props: RejectPurchaseRequestProps) => {
+    return <div data-testid="mock-reject">{JSON.stringify(props)}</div>;
+  }
+);
 
 jest.mock('../actions/NotifyApprovers', () => (props: NotifyApproversProps) => {
   return <div data-testid="mock-notify">{JSON.stringify(props)}</div>;
 });
 
-describe('VoucherView', () => {
+describe('PurchaseRequestView', () => {
   const base = 'http://localhost';
 
   async function renderTarget(opts?: {
@@ -77,32 +78,32 @@ describe('VoucherView', () => {
   }) {
     const type: ProfileType = opts?.isAdmin ? 'admin' : 'unit owner';
     const status: RequestStatus = opts?.status ?? 'pending';
-    const voucherId = faker.datatype.number();
+    const purchaseRequestId = faker.datatype.number();
     const mockedProfile = generateFakeProfile(type);
-    const mockedVoucher: VoucherAttr = {
-      ...generateFakeVoucher(),
-      id: voucherId,
+    const mockedPurchaseRequest: PurchaseRequestAttr = {
+      ...generateFakePurchaseRequest(),
+      id: purchaseRequestId,
       status,
     };
 
     nock(base)
-      .get(`/api/voucher/getVoucher/${voucherId}`)
-      .reply(200, mockedVoucher);
+      .get(`/api/purchase-request/getPurchaseRequest/${purchaseRequestId}`)
+      .reply(200, mockedPurchaseRequest);
 
     const target = renderWithProviderAndRouterAndRestful(
-      <Route path={routes.VOUCHER(':id')} component={VoucherView} />,
+      <Route path={routes.VOUCHER(':id')} component={PurchaseRequestView} />,
       base,
       store => {
         store.dispatch(profileActions.signIn({me: mockedProfile}));
       },
       history => {
-        history.push(routes.VOUCHER(voucherId));
+        history.push(routes.VOUCHER(purchaseRequestId));
       }
     );
 
     await waitFor(() => {
       expect(target.history.location.pathname).toEqual(
-        routes.VOUCHER(voucherId)
+        routes.VOUCHER(purchaseRequestId)
       );
     });
 
@@ -111,19 +112,13 @@ describe('VoucherView', () => {
     });
 
     await waitFor(() =>
-      expect(target.getByTestId('mock-voucher-details')).toBeInTheDocument()
+      expect(target.getByTestId('mock-pr-details')).toBeInTheDocument()
     );
 
     await waitFor(() => {
-      expect(target.getByTestId('mock-voucher-expenses')).toBeInTheDocument();
-      expect(target.getByTitle(/print voucher/i)).toBeInTheDocument();
+      expect(target.getByTestId('mock-pr-expenses')).toBeInTheDocument();
+      expect(target.getByTitle(/print purchase request/i)).toBeInTheDocument();
     });
-
-    await waitFor(() =>
-      expect(
-        target.getByTestId('mock-voucher-disbursements')
-      ).toBeInTheDocument()
-    );
 
     return {
       ...target,

@@ -15,7 +15,7 @@ const STATUS_VARIANT = {
   approved: 'success',
 };
 
-const Vouchercard = ({voucher}: Props) => {
+const VoucherCard = ({voucher}: Props) => {
   return (
     <>
       {voucher.charge && (
@@ -65,4 +65,4 @@ const Vouchercard = ({voucher}: Props) => {
   );
 };
 
-export default Vouchercard;
+export default VoucherCard;

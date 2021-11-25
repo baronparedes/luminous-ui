@@ -11,15 +11,15 @@ import {
 } from 'react-icons/fa';
 import {RiBankFill} from 'react-icons/ri';
 
-import {DisbursementAttr} from '../../../Api';
-import {useRootState} from '../../../store';
-import ModalContainer from '../../@ui/ModalContainer';
+import {DisbursementAttr} from '../../Api';
+import {useRootState} from '../../store';
 import {
   decimalPatternRule,
   requiredIf,
   validateGreaterThanZero,
   validateNotEmpty,
-} from '../../@validation';
+} from '../@validation';
+import ModalContainer from './ModalContainer';
 
 type Props = {
   disabled?: boolean;

@@ -1,14 +1,14 @@
 import {Col, Container, ListGroup, Row} from 'react-bootstrap';
 
 import {DisbursementAttr} from '../../Api';
-import DisbursementDetail from '../@ui/DisbursementDetail';
-import RoundedPanel from '../@ui/RoundedPanel';
+import DisbursementDetail from './DisbursementDetail';
+import RoundedPanel from './RoundedPanel';
 
 type Props = {
   disbursements?: DisbursementAttr[];
 };
 
-const VoucherDisbursements = ({disbursements}: Props) => {
+const DisbursementList = ({disbursements}: Props) => {
   return (
     <>
       {disbursements && disbursements.length > 0 && (
@@ -34,4 +34,4 @@ const VoucherDisbursements = ({disbursements}: Props) => {
   );
 };
 
-export default VoucherDisbursements;
+export default DisbursementList;

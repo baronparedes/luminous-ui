@@ -11,14 +11,19 @@ describe('NotifyApprovers', () => {
   const base = 'http://localhost';
 
   it('should notify approvers once', async () => {
-    const voucherId = faker.datatype.number();
+    const purchaseRequestId = faker.datatype.number();
     const {getByText} = renderWithRestful(
-      <NotifyApprovers voucherId={voucherId} buttonLabel="notify" />,
+      <NotifyApprovers
+        purchaseRequestId={purchaseRequestId}
+        buttonLabel="notify"
+      />,
       base
     );
 
     nock(base)
-      .post(`/api/voucher/notifyVoucherApprovers/${voucherId}`)
+      .post(
+        `/api/purchase-request/notifyPurchaseRequestApprovers/${purchaseRequestId}`
+      )
       .reply(200);
 
     const input = getByText(/notify/i);

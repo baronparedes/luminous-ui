@@ -18,6 +18,7 @@ import {
   PropertyAccount,
   PropertyAssignmentAttr,
   PropertyAttr,
+  PurchaseRequestAttr,
   RecordStatus,
   RequestStatus,
   SettingAttr,
@@ -190,6 +191,25 @@ export const generateFakeExpense = (): ExpenseAttr => {
 };
 
 export const generateFakeVoucher = (): VoucherAttr => {
+  return {
+    id: faker.datatype.number(),
+    description: faker.random.words(2),
+    requestedBy: faker.datatype.number(),
+    requestedByProfile: generateFakeProfileAttr(),
+    requestedDate: faker.datatype.datetime().toISOString(),
+    status: faker.random.arrayElement<RequestStatus>([
+      'approved',
+      'pending',
+      'rejected',
+    ]),
+    totalCost: faker.datatype.number(),
+    comments: faker.random.words(10),
+    chargeId: faker.datatype.number(),
+    expenses: [generateFakeExpense(), generateFakeExpense()],
+  };
+};
+
+export const generateFakePurchaseRequest = (): PurchaseRequestAttr => {
   return {
     id: faker.datatype.number(),
     description: faker.random.words(2),

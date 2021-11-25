@@ -3,15 +3,15 @@ import faker from 'faker';
 import {waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import {currencyFormat} from '../../../../@utils/currencies';
+import {currencyFormat} from '../../../@utils/currencies';
 import {
   generateFakeCategory,
   generateFakeExpense,
-} from '../../../../@utils/fake-models';
-import {renderWithProvider} from '../../../../@utils/test-renderers';
-import {ExpenseAttr} from '../../../../Api';
-import {settingActions} from '../../../../store/reducers/setting.reducer';
-import AddExpense from '../../actions/AddExpense';
+} from '../../../@utils/fake-models';
+import {renderWithProvider} from '../../../@utils/test-renderers';
+import {ExpenseAttr} from '../../../Api';
+import {settingActions} from '../../../store/reducers/setting.reducer';
+import AddExpense from '../AddExpense';
 
 describe('AddExpense', () => {
   const expectedCategories = [generateFakeCategory(), generateFakeCategory()];

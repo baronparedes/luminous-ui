@@ -1,0 +1,63 @@
+import {useState} from 'react';
+import {Badge, Col, Container, Row} from 'react-bootstrap';
+
+import {
+  RequestStatus,
+  useGetAllPurchaseRequestsByChargeAndStatus,
+} from '../../Api';
+import {useChargeBalance} from '../../hooks/useChargeBalance';
+import {Currency} from '../@ui/Currency';
+import RoundedPanel from '../@ui/RoundedPanel';
+import CreatePurchaseRequest from '../purchase-request/actions/CreatePurchaseRequest';
+import PurchaseRequestList from '../purchase-request/PurchaseRequestList';
+
+const RequestView = () => {
+  const {availableCommunityBalance} = useChargeBalance();
+  const [selectedStatus, setSelectedStatus] =
+    useState<RequestStatus>('pending');
+  const {data, loading, refetch} = useGetAllPurchaseRequestsByChargeAndStatus({
+    chargeId: availableCommunityBalance.chargeId,
+    status: selectedStatus,
+  });
+  return (
+    <>
+      <Container>
+        <>
+          <RoundedPanel className="p-4">
+            <Row>
+              <Col sm={12} md={9}>
+                <div>
+                  <h4>
+                    <Badge pill variant="primary">
+                      {availableCommunityBalance.code}
+                    </Badge>
+                  </h4>
+                  <h3>
+                    <Currency currency={availableCommunityBalance.balance} />
+                  </h3>
+                </div>
+              </Col>
+              <Col className="text-right">
+                <CreatePurchaseRequest
+                  variant="primary"
+                  className="w-100"
+                  buttonLabel="create new request"
+                  chargeId={availableCommunityBalance.chargeId}
+                  onCreate={() => refetch()}
+                />
+              </Col>
+            </Row>
+          </RoundedPanel>
+          <PurchaseRequestList
+            purchaseRequests={data}
+            loading={loading}
+            onSelectedStatusChange={setSelectedStatus}
+            selectedStatus={selectedStatus}
+          />
+        </>
+      </Container>
+    </>
+  );
+};
+
+export default RequestView;

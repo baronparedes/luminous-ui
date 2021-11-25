@@ -3,7 +3,7 @@ import faker from 'faker';
 import {render, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import InputApprovalCodes from '../../actions/InputApprovalCodes';
+import InputApprovalCodes from '../InputApprovalCodes';
 
 describe('InputApprovalCodes', () => {
   it('should render and add approval code', async () => {

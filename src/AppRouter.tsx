@@ -13,10 +13,11 @@ import SettingsView from './components/admin/manage-settings/SettingsView';
 import WaterReadingView from './components/admin/upload-water-reading/WaterReadingView';
 import DashboardView from './components/dashboard/DashboardView';
 import DisbursementView from './components/expense/DisbursementView';
-import ExpenseView from './components/expense/ExpenseView';
+import RequestView from './components/expense/RequestView';
 import LoginView from './components/profile/LoginView';
 import MyProfileView from './components/profile/MyProfileView';
 import PropertyView from './components/property/PropertyView';
+import PurchaseRequestView from './components/purchase-request/PurchaseRequestView';
 import VoucherView from './components/voucher/VoucherView';
 import {useInitSettings} from './hooks/useInitSettings';
 import {useRootState} from './store';
@@ -44,6 +45,11 @@ const AppRouter: React.FC = () => {
               component={VoucherView}
             />
             <ProtectedRoute
+              onlyFor={['admin', 'stakeholder']}
+              path={routes.PURCHASE_REQUEST(':id')}
+              component={PurchaseRequestView}
+            />
+            <ProtectedRoute
               path={routes.ROOT}
               exact
               component={MyProfileView}
@@ -58,7 +64,7 @@ const AppRouter: React.FC = () => {
               path={routes.EXPENSE_REQUESTS}
               exact
               onlyFor={['admin', 'stakeholder']}
-              component={ExpenseView}
+              component={RequestView}
             />
             <ProtectedRoute
               path={routes.EXPENSE_DISBURSEMENTS}

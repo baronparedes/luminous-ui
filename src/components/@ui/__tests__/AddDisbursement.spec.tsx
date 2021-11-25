@@ -3,15 +3,15 @@ import faker from 'faker';
 import {waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import {formatDate} from '../../../../@utils/dates';
+import {formatDate} from '../../../@utils/dates';
 import {
   generateFakeDisbursement,
   generateFakeProfile,
-} from '../../../../@utils/fake-models';
-import {renderWithProvider} from '../../../../@utils/test-renderers';
-import {DisbursementAttr, PaymentType} from '../../../../Api';
-import {profileActions} from '../../../../store/reducers/profile.reducer';
-import AddDisbursement from '../../actions/AddDisbursement';
+} from '../../../@utils/fake-models';
+import {renderWithProvider} from '../../../@utils/test-renderers';
+import {DisbursementAttr, PaymentType} from '../../../Api';
+import {profileActions} from '../../../store/reducers/profile.reducer';
+import AddDisbursement from '../AddDisbursement';
 
 describe('AddDisbursement', () => {
   const expectedTotalCost = faker.datatype.number();

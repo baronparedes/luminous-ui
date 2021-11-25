@@ -1,25 +1,24 @@
 import {Col, Container, Row} from 'react-bootstrap';
 import {FaPrint} from 'react-icons/fa';
 
-import {useGetVoucher} from '../../Api';
+import {useGetPurchaseRequest} from '../../Api';
 import {useUrl} from '../../hooks/useUrl';
 import {useRootState} from '../../store';
-import DisbursementList from '../@ui/DisbursementList';
 import ExpenseTable from '../@ui/ExpenseTable';
 import Loading from '../@ui/Loading';
 import RoundedPanel from '../@ui/RoundedPanel';
-import ApproveVoucher from './actions/ApproveVoucher';
+import ApprovePurchaseRequest from './actions/ApprovePurchaseRequest';
 import NotifyApprovers from './actions/NotifyApprovers';
-import PrintVoucher from './actions/PrintVoucher';
-import RejectVoucher from './actions/RejectVoucher';
-import VoucherDetails from './VoucherDetails';
+import PrintPurchaseRequest from './actions/PrintPurchaseRequest';
+import RejectPurchaseRequest from './actions/RejectPurchaseRequest';
+import PurchaseRequestDetails from './PurchaseRequestDetails';
 
-const VoucherView = () => {
+const PurchaseRequestView = () => {
   const {me} = useRootState(state => state.profile);
   const {id} = useUrl();
-  const voucherId = Number(id);
-  const {data, loading, refetch} = useGetVoucher({
-    id: voucherId,
+  const purchaseRequestId = Number(id);
+  const {data, loading, refetch} = useGetPurchaseRequest({
+    id: purchaseRequestId,
   });
 
   if (loading) {
@@ -30,7 +29,7 @@ const VoucherView = () => {
     <>
       <Container>
         <Row>
-          <Col>{data && <VoucherDetails voucher={data} />}</Col>
+          <Col>{data && <PurchaseRequestDetails purchaseRequest={data} />}</Col>
         </Row>
         <Row>
           <Col>
@@ -39,39 +38,37 @@ const VoucherView = () => {
                 <ExpenseTable
                   expenses={data.expenses}
                   appendHeaderContent={
-                    <PrintVoucher
-                      voucher={data}
+                    <PrintPurchaseRequest
+                      purchaseRequest={data}
                       variant="secondary"
-                      buttonLabel={<FaPrint title="print voucher" />}
+                      buttonLabel={<FaPrint title="print purchase request" />}
                     />
                   }
                 />
-                <DisbursementList disbursements={data.disbursements} />
               </>
             )}
           </Col>
           {data && data.status === 'pending' && me?.type === 'admin' && (
             <Col md={3}>
               <RoundedPanel className="mb-2">
-                <ApproveVoucher
+                <ApprovePurchaseRequest
                   className="mb-2 w-100"
                   variant="success"
                   buttonLabel="approve"
-                  voucherId={Number(data.id)}
-                  totalCost={data.totalCost}
-                  onApproveVoucher={() => refetch()}
+                  purchaseRequestId={purchaseRequestId}
+                  onApprove={() => refetch()}
                 />
-                <RejectVoucher
+                <RejectPurchaseRequest
                   className="mb-2 w-100"
                   variant="danger"
                   buttonLabel="reject"
-                  voucherId={Number(data.id)}
-                  onRejectVoucher={() => refetch()}
+                  purchaseRequestId={purchaseRequestId}
+                  onReject={() => refetch()}
                 />
                 <NotifyApprovers
                   className="mb-2 w-100"
                   buttonLabel="notify approvers"
-                  voucherId={Number(data.id)}
+                  purchaseRequestId={purchaseRequestId}
                 />
               </RoundedPanel>
             </Col>
@@ -82,4 +79,4 @@ const VoucherView = () => {
   );
 };
 
-export default VoucherView;
+export default PurchaseRequestView;

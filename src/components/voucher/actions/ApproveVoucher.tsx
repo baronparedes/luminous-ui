@@ -18,11 +18,11 @@ import {
   DisbursementAttr,
   useApproveVoucher,
 } from '../../../Api';
+import AddDisbursement from '../../@ui/AddDisbursement';
 import {Currency} from '../../@ui/Currency';
 import DisbursementDetail from '../../@ui/DisbursementDetail';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import ModalContainer from '../../@ui/ModalContainer';
-import AddDisbursement from './AddDisbursement';
 import InputApprovalCodes from './InputApprovalCodes';
 
 type Props = {

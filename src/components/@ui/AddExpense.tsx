@@ -12,15 +12,15 @@ import {Controller, useForm} from 'react-hook-form';
 import {BiDetail} from 'react-icons/bi';
 import {FaArchive, FaPlus, FaTag} from 'react-icons/fa';
 
-import {CategoryAttr, ExpenseAttr} from '../../../Api';
-import {useRootState} from '../../../store';
-import {Currency} from '../../@ui/Currency';
-import ModalContainer from '../../@ui/ModalContainer';
+import {CategoryAttr, ExpenseAttr} from '../../Api';
+import {useRootState} from '../../store';
 import {
   decimalPatternRule,
   validateGreaterThanZero,
   validateNotEmpty,
-} from '../../@validation';
+} from '../@validation';
+import {Currency} from './Currency';
+import ModalContainer from './ModalContainer';
 
 type Props = {
   onAddExpense?: (data: ExpenseAttr) => void;

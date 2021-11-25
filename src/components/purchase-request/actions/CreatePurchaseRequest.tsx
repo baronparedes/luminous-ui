@@ -16,7 +16,7 @@ import {
   ApiError,
   CreateVoucherOrOrder,
   ExpenseAttr,
-  usePostVoucher,
+  usePostPurchaseRequest,
 } from '../../../Api';
 import {useRootState} from '../../../store';
 import AddExpense from '../../@ui/AddExpense';
@@ -28,16 +28,14 @@ import {validateNotEmpty} from '../../@validation';
 
 type Props = {
   chargeId: number;
-  chargeCode: string;
   buttonLabel: React.ReactNode;
-  onCreateVoucher?: (id: number) => void;
+  onCreate?: (id: number) => void;
 };
 
-const CreateVoucher = ({
+const CreatePurchaseRequest = ({
   buttonLabel,
-  onCreateVoucher,
+  onCreate,
   chargeId,
-  chargeCode,
   ...buttonProps
 }: Props & ButtonProps) => {
   const {me} = useRootState(state => state.profile);
@@ -57,7 +55,7 @@ const CreateVoucher = ({
     name: 'expenses',
   });
 
-  const {mutate, loading, error} = usePostVoucher({});
+  const {mutate, loading, error} = usePostPurchaseRequest({});
 
   const totalCost = sum(getValues('expenses').map(e => e.totalCost));
   const hasNoExpense = getValues('expenses').length === 0;
@@ -70,7 +68,7 @@ const CreateVoucher = ({
     if (!confirm('Proceed?')) return;
     mutate(formData).then(id => {
       setToggle(false);
-      onCreateVoucher && onCreateVoucher(id);
+      onCreate && onCreate(id);
     });
   };
 
@@ -82,7 +80,7 @@ const CreateVoucher = ({
       <ModalContainer
         backdrop="static"
         size="lg"
-        header={<h5>Create New Voucher for {chargeCode}</h5>}
+        header={<h5>Create New Purchase Request</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >
@@ -230,4 +228,4 @@ const CreateVoucher = ({
   );
 };
 
-export default CreateVoucher;
+export default CreatePurchaseRequest;
