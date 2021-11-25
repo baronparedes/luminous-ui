@@ -25,7 +25,7 @@ const ViewPreviousStatements = ({
   propertyId,
   buttonLabel,
   ...buttonProps
-}: Props & ButtonProps) => {
+}: Props & Omit<ButtonProps, 'property'>) => {
   const {year, month} = getCurrentMonthYear();
 
   const [selectedYear, setSelectedYear] = useState<number>(year);

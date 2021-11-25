@@ -82,7 +82,7 @@ const PropertyView = () => {
                       className="mb-2 w-100"
                       buttonLabel="view previous statements"
                       disabled={id === undefined}
-                      property={propertyAccountData.property}
+                      propertyId={propertyId}
                     />
                     <ViewPaymentHistory
                       className="mb-2 w-100"
