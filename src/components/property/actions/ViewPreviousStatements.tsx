@@ -47,7 +47,10 @@ const ViewPreviousStatements = ({
     bodyClass: 'print-body',
     content: () => printPaperRef.current,
     documentTitle: selectedPeriod
-      ? VERBIAGE.SOA.DOC_TITLE(propertyAccount?.property?.code, selectedPeriod)
+      ? VERBIAGE.FILE_NAMES.SOA_DOC_TITLE(
+          propertyAccount?.property?.code,
+          selectedPeriod
+        )
       : 'SOA',
   });
 

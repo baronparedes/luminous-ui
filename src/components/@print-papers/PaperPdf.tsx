@@ -28,6 +28,21 @@ type PageSectionProps = {
   className?: string;
 };
 
+export function PageHeader({
+  children,
+  title,
+}: PropsWithChildren<{title: string}>) {
+  return (
+    <PageSection>
+      <div className="text-center">
+        <h1 className="brand">Luminous</h1>
+        <h4>{title}</h4>
+        {children}
+      </div>
+    </PageSection>
+  );
+}
+
 export function PageSection({
   children,
   hasPageBreak,

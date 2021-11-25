@@ -1,18 +1,33 @@
-import faker from 'faker';
 import nock from 'nock';
 
 import {waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import {getCurrentMonthYear} from '../../../../@utils/dates';
-import {generateFakePaymentHistory} from '../../../../@utils/fake-models';
+import {
+  generateFakePaymentHistory,
+  generateFakeProperty,
+} from '../../../../@utils/fake-models';
 import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
 import {PaymentHistoryView} from '../../../../Api';
+import PrintPaymentHistory from '../../actions/PrintPaymentHistory';
 import ViewPaymentHistory from '../../actions/ViewPaymentHistory';
+
+type PrintPaymentHistoryProps = React.ComponentProps<
+  typeof PrintPaymentHistory
+>;
+
+jest.mock(
+  '../../actions/PrintPaymentHistory',
+  () => (props: PrintPaymentHistoryProps) => {
+    return <div data-testid="mock-print-details">{props.property.code}</div>;
+  }
+);
 
 describe('ViewPaymentHistory', () => {
   const base = 'http://localhost';
-  const propertyId = faker.datatype.number();
+  const property = generateFakeProperty();
+  const propertyId = Number(property.id);
   const {year} = getCurrentMonthYear();
   const previousYear = year - 1;
   const twoYearsAgo = year - 2;
@@ -29,7 +44,7 @@ describe('ViewPaymentHistory', () => {
       .reply(200, paymentHistoryData);
 
     const target = renderWithProviderAndRestful(
-      <ViewPaymentHistory buttonLabel="toggle" propertyId={propertyId} />,
+      <ViewPaymentHistory buttonLabel="toggle" property={property} />,
       base
     );
 
@@ -53,6 +68,7 @@ describe('ViewPaymentHistory', () => {
       expect(selectYearInput.options[0].value).toEqual(year.toString());
       expect(selectYearInput.options[1].value).toEqual(previousYear.toString());
       expect(selectYearInput.options[2].value).toEqual(twoYearsAgo.toString());
+      expect(target.getByTestId('mock-print-details')).toBeInTheDocument();
     });
 
     return {

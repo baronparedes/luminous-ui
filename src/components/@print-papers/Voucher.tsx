@@ -5,7 +5,7 @@ import {getNames} from '../../@utils/helpers';
 import {VoucherAttr} from '../../Api';
 import {Currency} from '../@ui/Currency';
 import DisbursementDetail from '../@ui/DisbursementDetail';
-import {PageSection} from './PaperPdf';
+import {PageHeader, PageSection} from './PaperPdf';
 
 const Label = styled('div')`
   font-size: 1.5em;
@@ -22,19 +22,15 @@ const Voucher = ({voucher}: Props) => {
 
   return (
     <PageSection>
-      <PageSection>
-        <div className="text-center">
-          <h1 className="brand">Luminous</h1>
-          <h4>VOUCHER</h4>
-          {voucher.charge && (
-            <div className="mb-3 text-muted">
-              <small>
-                <strong>{voucher.charge?.code}</strong>
-              </small>
-            </div>
-          )}
-        </div>
-      </PageSection>
+      <PageHeader title="VOUCHER">
+        {voucher.charge && (
+          <div className="mb-3 text-muted">
+            <small>
+              <strong>{voucher.charge?.code}</strong>
+            </small>
+          </div>
+        )}
+      </PageHeader>
       <PageSection className="pt-3">
         <Label className="pb-2">
           <strong>V-{voucher.id}</strong>

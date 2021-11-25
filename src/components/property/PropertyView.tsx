@@ -76,18 +76,22 @@ const PropertyView = () => {
                     />
                   </>
                 )}
-                <ViewPreviousStatements
-                  className="mb-2 w-100"
-                  buttonLabel="view previous statements"
-                  disabled={id === undefined}
-                  propertyId={Number(id)}
-                />
-                <ViewPaymentHistory
-                  className="mb-2 w-100"
-                  buttonLabel="view payment history"
-                  disabled={id === undefined}
-                  propertyId={Number(id)}
-                />
+                {propertyAccountData.property && (
+                  <>
+                    <ViewPreviousStatements
+                      className="mb-2 w-100"
+                      buttonLabel="view previous statements"
+                      disabled={id === undefined}
+                      property={propertyAccountData.property}
+                    />
+                    <ViewPaymentHistory
+                      className="mb-2 w-100"
+                      buttonLabel="view payment history"
+                      disabled={id === undefined}
+                      property={propertyAccountData.property}
+                    />
+                  </>
+                )}
               </RoundedPanel>
             )}
             <div>

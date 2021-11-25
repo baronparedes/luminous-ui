@@ -4,33 +4,31 @@ import {useReactToPrint} from 'react-to-print';
 
 import {ApprovedAny} from '../../../@types';
 import {VERBIAGE} from '../../../constants';
-import PaperStatementOfAccount from '../PaperStatementOfAccount';
+import PaperPaymentHistory from '../PaperPaymentHistory';
 
 type Props = {
   buttonLabel: React.ReactNode;
 };
 
-type PaperStatementOfAccountProps = React.ComponentProps<
-  typeof PaperStatementOfAccount
+type PaperPaymentHistoryProps = React.ComponentProps<
+  typeof PaperPaymentHistory
 >;
 
-const PrintStatementOfAccount = ({
+const PrintPaymentHistory = ({
   buttonLabel,
-  propertyAccount,
-  month,
+  property,
+  paymentHistory,
+  availablePeriods,
   year,
   ...buttonProps
-}: Props & PaperStatementOfAccountProps & ButtonProps) => {
+}: Props & PaperPaymentHistoryProps & Omit<ButtonProps, 'property'>) => {
   const printPaperRef = React.createRef<ApprovedAny>();
   const handlePrint = useReactToPrint({
     bodyClass: 'print-body',
     content: () => printPaperRef.current,
-    documentTitle: VERBIAGE.FILE_NAMES.SOA_DOC_TITLE(
-      propertyAccount?.property?.code,
-      {
-        year,
-        month,
-      }
+    documentTitle: VERBIAGE.FILE_NAMES.PAYMENT_HISTORY_DOC_TITLE(
+      property?.code,
+      year
     ),
   });
 
@@ -44,14 +42,15 @@ const PrintStatementOfAccount = ({
       >
         {buttonLabel}
       </Button>
-      <PaperStatementOfAccount
+      <PaperPaymentHistory
         ref={printPaperRef}
-        propertyAccount={propertyAccount}
-        month={month}
+        property={property}
+        paymentHistory={paymentHistory}
+        availablePeriods={availablePeriods}
         year={year}
       />
     </>
   );
 };
 
-export default PrintStatementOfAccount;
+export default PrintPaymentHistory;

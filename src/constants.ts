@@ -26,8 +26,12 @@ export const DEFAULTS = {
 };
 
 export const VERBIAGE = {
-  SOA: {
-    DOC_TITLE: (propertyCode: string | undefined, period: Period) =>
+  FILE_NAMES: {
+    SOA_DOC_TITLE: (propertyCode: string | undefined, period: Period) =>
       `${propertyCode ?? 'Unit'} - SOA - ${period.year} ${period.month}`,
+    PAYMENT_HISTORY_DOC_TITLE: (
+      propertyCode: string | undefined,
+      year: number
+    ) => `${propertyCode ?? 'Unit'} - Payment History - ${year}`,
   },
 };

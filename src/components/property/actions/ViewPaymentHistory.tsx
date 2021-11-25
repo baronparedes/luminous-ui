@@ -7,28 +7,35 @@ import {
   ListGroup,
   Row,
 } from 'react-bootstrap';
+import {FaPrint} from 'react-icons/fa';
 
 import {
   getCurrentMonthYear,
   getPastYears,
   toTransactionPeriodFromDate,
 } from '../../../@utils/dates';
-import {PaymentDetailAttr, useGetPaymentHistory} from '../../../Api';
+import {
+  PaymentDetailAttr,
+  PropertyAttr,
+  useGetPaymentHistory,
+} from '../../../Api';
 import Loading from '../../@ui/Loading';
 import ModalContainer from '../../@ui/ModalContainer';
 import PaymentDetail from '../../@ui/PaymentDetail';
 import SelectYear from '../../@ui/SelectYear';
+import PrintPaymentHistory from './PrintPaymentHistory';
 
 type Props = {
-  propertyId: number;
+  property: PropertyAttr;
   buttonLabel: string;
 };
 
 const ViewPaymentHistory = ({
-  propertyId,
+  property,
   buttonLabel,
   ...buttonProps
-}: Props & ButtonProps) => {
+}: Props & Omit<ButtonProps, 'property'>) => {
+  const propertyId = Number(property?.id);
   const {year} = getCurrentMonthYear();
   const years = getPastYears(3).sort().reverse();
 
@@ -66,57 +73,70 @@ const ViewPaymentHistory = ({
           </Container>
           {loading && <Loading />}
           {!loading && data && (
-            <ListGroup>
-              {availablePeriods.length === 0 && (
-                <ListGroup.Item className="text-center text-muted">
-                  No items to display
-                </ListGroup.Item>
+            <>
+              {availablePeriods.length > 0 && (
+                <div className="text-right mb-3">
+                  <PrintPaymentHistory
+                    availablePeriods={availablePeriods}
+                    year={year}
+                    property={property}
+                    paymentHistory={data}
+                    buttonLabel={<FaPrint />}
+                  />
+                </div>
               )}
-              {availablePeriods.sort().map((p, i) => {
-                const {month} = toTransactionPeriodFromDate(new Date(p));
-                const items = data
-                  .filter(d => d.transactionPeriod === p)
-                  .map(d => {
-                    const totalCollected = d.amount;
-                    const paymentDetail: PaymentDetailAttr = {
-                      ...d,
-                      orNumber: d.orNumber,
-                      collectedBy: 0,
-                    };
-                    return {
-                      paymentDetail,
-                      totalCollected,
-                    };
-                  });
-                return (
-                  <ListGroup.Item key={i}>
-                    <Container className="p-0 m-0">
-                      <Row>
-                        <Col md={2} sm={12}>
-                          <div>
-                            <h5>{month}</h5>
-                          </div>
-                        </Col>
-                        <Col>
-                          <ListGroup>
-                            {items.map((item, j) => {
-                              return (
-                                <ListGroup.Item key={j}>
-                                  <PaymentDetail
-                                    paymentDetail={item.paymentDetail}
-                                    totalCollected={item.totalCollected}
-                                  />
-                                </ListGroup.Item>
-                              );
-                            })}
-                          </ListGroup>
-                        </Col>
-                      </Row>
-                    </Container>
+              <ListGroup>
+                {availablePeriods.length === 0 && (
+                  <ListGroup.Item className="text-center text-muted">
+                    No items to display
                   </ListGroup.Item>
-                );
-              })}
-            </ListGroup>
+                )}
+                {availablePeriods.sort().map((p, i) => {
+                  const {month} = toTransactionPeriodFromDate(new Date(p));
+                  const items = data
+                    .filter(d => d.transactionPeriod === p)
+                    .map(d => {
+                      const totalCollected = d.amount;
+                      const paymentDetail: PaymentDetailAttr = {
+                        ...d,
+                        orNumber: d.orNumber,
+                        collectedBy: 0,
+                      };
+                      return {
+                        paymentDetail,
+                        totalCollected,
+                      };
+                    });
+                  return (
+                    <ListGroup.Item key={i}>
+                      <Container className="p-0 m-0">
+                        <Row>
+                          <Col md={2} sm={12}>
+                            <div>
+                              <h5>{month}</h5>
+                            </div>
+                          </Col>
+                          <Col>
+                            <ListGroup>
+                              {items.map((item, j) => {
+                                return (
+                                  <ListGroup.Item key={j}>
+                                    <PaymentDetail
+                                      paymentDetail={item.paymentDetail}
+                                      totalCollected={item.totalCollected}
+                                    />
+                                  </ListGroup.Item>
+                                );
+                              })}
+                            </ListGroup>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </ListGroup.Item>
+                  );
+                })}
+              </ListGroup>
+            </>
           )}
         </div>
       </ModalContainer>

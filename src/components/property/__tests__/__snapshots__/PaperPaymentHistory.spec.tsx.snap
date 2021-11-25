@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PaperPaymentHistory should render 1`] = `
+<DocumentFragment>
+  <div
+    class="d-none"
+  >
+    <div>
+      <div
+        class="sc-bdfBQB dxnWgn"
+      >
+        <div
+          class="sc-bdfBQB dxnWgn"
+        >
+          <div
+            class="text-center"
+          >
+            <h1
+              class="brand"
+            >
+              Luminous
+            </h1>
+            <h4>
+              PAYMENT HISTORY
+            </h4>
+          </div>
+        </div>
+        <div
+          class="sc-bdfBQB dxnWgn pt-3"
+        >
+          <div
+            class="sc-gsTEea bjzFuM"
+          >
+            <strong>
+              Unit Number: 
+            </strong>
+            G-111
+          </div>
+          <small>
+            <div
+              class="sc-gsTEea bjzFuM"
+            >
+              <strong>
+                Address: 
+              </strong>
+              Pasig City Philippines
+            </div>
+          </small>
+          <small>
+            <div
+              class="sc-gsTEea bjzFuM"
+            >
+              <strong>
+                Floor area: 
+              </strong>
+              33.1
+            </div>
+          </small>
+          <hr />
+        </div>
+        <div
+          class="sc-bdfBQB dxnWgn pt-3"
+        >
+          <div
+            class="sc-gsTEea bjzFuM"
+          >
+            <strong>
+              Payment History for: 
+            </strong>
+            2022
+          </div>
+          <hr />
+        </div>
+        <div
+          class="sc-bdfBQB dxnWgn"
+        >
+          <div
+            class="list-group"
+          >
+            <div
+              class="list-group-item"
+            >
+              <div
+                class="container"
+              >
+                <div>
+                  <h5>
+                    DATE
+                  </h5>
+                </div>
+              </div>
+            </div>
+            <div
+              class="list-group-item"
+            >
+              <div
+                class="container"
+              >
+                <div>
+                  <h5>
+                    DATE
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

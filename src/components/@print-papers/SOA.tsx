@@ -6,7 +6,7 @@ import {Month, PropertyAccount, SettingAttr} from '../../Api';
 import {Currency} from '../@ui/Currency';
 import Markup from '../@ui/Markup';
 import PaymentDetail from '../@ui/PaymentDetail';
-import {PageSection} from './PaperPdf';
+import {PageHeader, PageSection} from './PaperPdf';
 
 const Label = styled('div')`
   font-size: 1.5em;
@@ -27,12 +27,7 @@ const SOA = ({hasPageBreak, propertyAccount, month, year, notes}: Props) => {
   const {transactions, property, balance, paymentDetails} = propertyAccount;
   return (
     <PageSection hasPageBreak={hasPageBreak}>
-      <PageSection>
-        <div className="text-center">
-          <h1 className="brand">Luminous</h1>
-          <h4>STATEMENT OF ACCOUNT</h4>
-        </div>
-      </PageSection>
+      <PageHeader title="STATEMENT OF ACCOUNT" />
       <PageSection className="pt-3">
         <Label>
           <strong>Unit Number: </strong>
