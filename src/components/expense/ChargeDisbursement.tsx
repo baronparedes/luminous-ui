@@ -40,7 +40,7 @@ const ChargeDisbursement = ({chargeId, code, balance}: Props) => {
             <CreateVoucher
               variant="primary"
               className="w-100"
-              buttonLabel="create new request"
+              buttonLabel="create new voucher"
               chargeId={chargeId}
               chargeCode={code}
               onCreateVoucher={() => refetch()}

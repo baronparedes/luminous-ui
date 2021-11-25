@@ -14,7 +14,7 @@ import {v4 as uuidv4} from 'uuid';
 import {sum} from '../../../@utils/helpers';
 import {
   ApiError,
-  ApproveVoucher as ApproveVoucherAttr,
+  ApproveVoucherOrOrder,
   DisbursementAttr,
   useApproveVoucher,
 } from '../../../Api';
@@ -52,7 +52,7 @@ const ApproveVoucher = ({
   const canApprove = codes.length >= 3 && remainingCost === 0;
 
   const handleOnApprove = () => {
-    const data: ApproveVoucherAttr = {
+    const data: ApproveVoucherOrOrder = {
       codes,
       voucherId,
       disbursements: disbursements.map(d => {

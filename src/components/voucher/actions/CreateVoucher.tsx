@@ -14,7 +14,7 @@ import {FaTimes} from 'react-icons/fa';
 import {sum} from '../../../@utils/helpers';
 import {
   ApiError,
-  CreateVoucher as CreateVoucherAttr,
+  CreateVoucherOrOrder,
   ExpenseAttr,
   usePostVoucher,
 } from '../../../Api';
@@ -43,7 +43,7 @@ const CreateVoucher = ({
   const {me} = useRootState(state => state.profile);
   const [toggle, setToggle] = useState(false);
   const {handleSubmit, control, formState, getValues} =
-    useForm<CreateVoucherAttr>({
+    useForm<CreateVoucherOrOrder>({
       defaultValues: {
         chargeId,
         description: '',
@@ -66,7 +66,7 @@ const CreateVoucher = ({
     append(expense);
   };
 
-  const onSubmit = (formData: CreateVoucherAttr) => {
+  const onSubmit = (formData: CreateVoucherOrOrder) => {
     if (!confirm('Proceed?')) return;
     mutate(formData).then(id => {
       setToggle(false);

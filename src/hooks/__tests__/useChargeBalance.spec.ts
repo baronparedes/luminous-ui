@@ -34,6 +34,7 @@ describe('useChargeBalance', () => {
       {
         code: expectedChargeCode,
         amount: disbursed,
+        passOn: true,
       },
     ];
 
@@ -57,6 +58,7 @@ describe('useChargeBalance', () => {
         chargeId: expectedChargeId,
         code: expectedChargeCode,
       });
+      expect(result.current.availableCommunityBalance.balance).toEqual(0);
     });
   });
 
@@ -65,10 +67,6 @@ describe('useChargeBalance', () => {
     const disbursed = faker.datatype.number();
     const expectedBalance = collected - disbursed;
     const collectedCharges: ChargeCollected[] = [
-      {
-        charge: {...generateFakeCharge(), passOn: true},
-        amount: faker.datatype.number(),
-      },
       {
         charge: {...generateFakeCharge(), passOn: false},
         amount: collected,
@@ -95,12 +93,13 @@ describe('useChargeBalance', () => {
       base
     );
 
-    await waitFor(() =>
+    await waitFor(() => {
       expect(result.current.availableCommunityBalance).toEqual({
         chargeId: DEFAULTS.COMMUNITY_CHARGE_ID,
         code: DEFAULTS.COMMUNITY_EXPENSE,
         balance: expectedBalance,
-      })
-    );
+      });
+      expect(result.current.availableBalances).toHaveLength(0);
+    });
   });
 });

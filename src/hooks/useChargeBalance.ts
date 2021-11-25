@@ -51,7 +51,7 @@ export function useChargeBalance() {
       ?.filter(d => !d.charge.passOn)
       .map(d => d.amount);
     const disbursementAmounts = disbursements
-      ?.filter(d => d.code === DEFAULTS.COMMUNITY_EXPENSE)
+      ?.filter(d => !d.passOn)
       .map(d => d.amount);
     const communityBalance = sum(chargesAmounts) - sum(disbursementAmounts);
     setAvailableCommunityBalance(state => {

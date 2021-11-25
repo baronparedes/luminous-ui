@@ -11,7 +11,7 @@ import {
   generateFakeProfile,
 } from '../../../../@utils/fake-models';
 import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
-import {CreateVoucher as CreateVoucherAttr} from '../../../../Api';
+import {CreateVoucherOrOrder} from '../../../../Api';
 import {profileActions} from '../../../../store/reducers/profile.reducer';
 import AddExpense from '../../actions/AddExpense';
 import CreateVoucher from '../../actions/CreateVoucher';
@@ -97,7 +97,7 @@ describe('CreateVoucher', () => {
 
     const mockOnCreateVoucher = jest.fn();
     const voucherId = faker.datatype.number();
-    const expectedBody: CreateVoucherAttr = {
+    const expectedBody: CreateVoucherOrOrder = {
       description: faker.random.words(2),
       requestedBy: Number(mockedProfile.id),
       requestedDate: new Date().toISOString(),
