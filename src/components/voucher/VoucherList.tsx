@@ -1,32 +1,29 @@
-import {useState} from 'react';
 import {Button, ButtonGroup, Col, Row} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 
 import routes from '../../@utils/routes';
-import {RequestStatus, useGetAllVouchersByChargeAndStatus} from '../../Api';
+import {RequestStatus, VoucherAttr} from '../../Api';
 import {Currency} from '../@ui/Currency';
-import ErrorInfo from '../@ui/ErrorInfo';
 import RoundedPanel from '../@ui/RoundedPanel';
 import {Table} from '../@ui/Table';
 
 type Props = {
-  chargeId: number;
+  onSelectedStatusChange?: (status: RequestStatus) => void;
+  loading?: boolean;
+  vouchers: VoucherAttr[] | null;
+  selectedStatus: RequestStatus;
 };
 
-const VoucherList = ({chargeId}: Props) => {
-  const [selectedStatus, setSelectedStatus] =
-    useState<RequestStatus>('pending');
-  const {data, error, loading} = useGetAllVouchersByChargeAndStatus({
-    chargeId,
-    status: selectedStatus,
-  });
-
+const VoucherList = ({
+  onSelectedStatusChange,
+  loading,
+  vouchers,
+  selectedStatus,
+}: Props) => {
   const handleOnStatusChange = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setSelectedStatus(
-      e.currentTarget.textContent?.toLowerCase() as RequestStatus
-    );
+    const status = e.currentTarget.textContent?.toLowerCase() as RequestStatus;
+    onSelectedStatusChange && onSelectedStatusChange(status);
   };
-
   return (
     <>
       <RoundedPanel className="mt-3 p-0">
@@ -39,21 +36,12 @@ const VoucherList = ({chargeId}: Props) => {
             'requested date',
             'total cost',
           ]}
-          renderFooterContent={
-            <>
-              {error && (
-                <div className="m-2 pb-2">
-                  <ErrorInfo>{error.message}</ErrorInfo>
-                </div>
-              )}
-            </>
-          }
           renderHeaderContent={
             <>
               <Row>
                 <Col className="mb-2">
                   <div className="center-content">
-                    <h5 className="m-auto">Voucher ({selectedStatus})</h5>
+                    <h5 className="m-auto">Vouchers ({selectedStatus})</h5>
                   </div>
                 </Col>
                 <Col className="text-right" md={4} sm={12}>
@@ -85,9 +73,9 @@ const VoucherList = ({chargeId}: Props) => {
             </>
           }
         >
-          {data && !loading && !error && (
+          {vouchers && !loading && (
             <tbody>
-              {data.map(row => {
+              {vouchers.map(row => {
                 return (
                   <tr key={Number(row.id)}>
                     <td style={{minWidth: '90px'}}>

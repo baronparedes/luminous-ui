@@ -28,6 +28,7 @@ import AddExpense from './AddExpense';
 
 type Props = {
   chargeId: number;
+  chargeCode: string;
   buttonLabel: React.ReactNode;
   onCreateVoucher?: (id: number) => void;
 };
@@ -36,6 +37,7 @@ const CreateVoucher = ({
   buttonLabel,
   onCreateVoucher,
   chargeId,
+  chargeCode,
   ...buttonProps
 }: Props & ButtonProps) => {
   const {me} = useRootState(state => state.profile);
@@ -80,7 +82,7 @@ const CreateVoucher = ({
       <ModalContainer
         backdrop="static"
         size="lg"
-        header={<h5>Create New Voucher</h5>}
+        header={<h5>Create New Voucher for {chargeCode}</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >

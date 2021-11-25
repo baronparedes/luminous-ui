@@ -16,7 +16,7 @@ jest.mock('../../voucher/actions/CreateVoucher', () => () => {
   return <div data-testid="mock-create-voucher" />;
 });
 
-describe('ExpenseView', () => {
+describe.skip('ExpenseView', () => {
   const useCommunityBalanceMock = useCommunityBalance as jest.MockedFunction<
     typeof useCommunityBalance
   >;
