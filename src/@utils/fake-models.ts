@@ -114,7 +114,7 @@ export function generateFakeCharge(): ChargeAttr {
       'percentage',
       'unit',
     ]),
-    code: faker.random.words(),
+    code: faker.random.words(2),
     communityId: faker.datatype.number(),
     postingType: faker.random.arrayElement<PostingType>([
       'accrued',

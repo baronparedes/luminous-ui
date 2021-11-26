@@ -1,12 +1,13 @@
 import {Col, Container, Row} from 'react-bootstrap';
 
 import {roundOff} from '../../@utils/currencies';
-import {useGetPropertyAccount} from '../../Api';
+import {useGetAllCharges, useGetPropertyAccount} from '../../Api';
 import {useUrl} from '../../hooks/useUrl';
 import {useRootState} from '../../store';
 import Loading from '../@ui/Loading';
 import RoundedPanel from '../@ui/RoundedPanel';
 import AdjustTransactions from './actions/AdjustTransactions';
+import ProcessManualPayment from './actions/ProcessManualPayment';
 import ProcessPayment from './actions/ProcessPayment';
 import ViewPaymentHistory from './actions/ViewPaymentHistory';
 import ViewPreviousStatements from './actions/ViewPreviousStatements';
@@ -25,11 +26,12 @@ const PropertyView = () => {
   } = useGetPropertyAccount({
     propertyId,
   });
+  const {data: charges, loading: loadingCharges} = useGetAllCharges({});
   const handleOnRefresh = () => {
     refetchPropertyAccount();
   };
 
-  if (propertyAccountLoading) {
+  if (propertyAccountLoading || loadingCharges) {
     return <Loading />;
   }
 
@@ -65,11 +67,19 @@ const PropertyView = () => {
                         roundOff(propertyAccountData.balance).toFixed(2)
                       )}
                     />
+                    <ProcessManualPayment
+                      className="mb-2 w-100"
+                      buttonLabel="manual payments"
+                      propertyId={propertyId}
+                      charges={charges}
+                      onProcessedPayment={handleOnRefresh}
+                    />
                     <AdjustTransactions
                       className="mb-2 w-100"
                       buttonLabel="adjustments"
                       propertyId={propertyId}
                       onSaveAdjustments={handleOnRefresh}
+                      charges={charges}
                       currentTransactions={propertyAccountData.transactions?.filter(
                         t => t.transactionType === 'charged'
                       )}

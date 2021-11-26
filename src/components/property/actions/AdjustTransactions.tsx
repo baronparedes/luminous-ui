@@ -9,11 +9,7 @@ import {
 } from 'react-bootstrap';
 
 import {sanitizeTransaction} from '../../../@utils/helpers';
-import {
-  TransactionAttr,
-  useGetAllCharges,
-  usePostTransactions,
-} from '../../../Api';
+import {ChargeAttr, TransactionAttr, usePostTransactions} from '../../../Api';
 import {useRootState} from '../../../store';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import ModalContainer from '../../@ui/ModalContainer';
@@ -25,6 +21,7 @@ type Props = {
   buttonLabel: React.ReactNode;
   currentTransactions?: TransactionAttr[];
   onSaveAdjustments?: () => void;
+  charges?: ChargeAttr[] | null;
 };
 
 type WaivedTransction = {
@@ -63,6 +60,7 @@ const AdjustTransactions = ({
   buttonLabel,
   currentTransactions,
   propertyId,
+  charges,
   onSaveAdjustments,
   ...buttonProps
 }: Props & ButtonProps) => {
@@ -76,11 +74,10 @@ const AdjustTransactions = ({
   >([]);
 
   const {mutate, loading, error} = usePostTransactions({});
-  const {data: charges, loading: loadingCharges} = useGetAllCharges({});
 
   const hasAdjustments =
     waivedTransactions.length > 0 || adjustedTransactions.length > 0;
-  const disableActions = loading || loadingCharges;
+  const disableActions = loading;
 
   const waivableTransactions =
     currentTransactions?.filter(t => !t.waivedBy) ?? [];

@@ -39,10 +39,9 @@ describe('AdjustTransactions', () => {
   const waivedTranasctions = transactions.filter(t => t.waivedBy);
 
   async function renderTarget(currentTransactions = transactions) {
-    nock(base).get('/api/charge/getAllCharges').reply(200, [expectedCharge]);
-
     const target = renderWithProviderAndRestful(
       <AdjustTransactions
+        charges={[expectedCharge]}
         propertyId={propertyId}
         buttonLabel="adjust transactions"
         currentTransactions={currentTransactions}

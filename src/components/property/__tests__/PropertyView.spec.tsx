@@ -5,6 +5,7 @@ import {Route} from 'react-router-dom';
 import {waitFor} from '@testing-library/react';
 
 import {
+  generateFakeCharge,
   generateFakeProfile,
   generateFakePropertyAccount,
 } from '../../../@utils/fake-models';
@@ -92,10 +93,13 @@ describe('PropertyView', () => {
     const propertyId = faker.datatype.number();
     const mockedProfile = generateFakeProfile(type);
     const mockedPropertyAccount = generateFakePropertyAccount();
+    const mockedCharge = generateFakeCharge();
 
     nock(base)
       .get(`/api/property-account/getPropertyAccount/${propertyId}`)
       .reply(200, mockedPropertyAccount);
+
+    nock(base).get('/api/charge/getAllCharges').reply(200, [mockedCharge]);
 
     const target = renderWithProviderAndRouterAndRestful(
       <Route path={routes.PROPERTY(':id')} component={PropertyView} />,
