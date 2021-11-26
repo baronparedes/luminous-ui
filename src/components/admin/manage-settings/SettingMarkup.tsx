@@ -12,7 +12,6 @@ import {useDispatch} from 'react-redux';
 import sanitize from 'sanitize-html';
 
 import {useUpdateSettingValue} from '../../../Api';
-import {SETTING_KEYS} from '../../../constants';
 import {useRootState} from '../../../store';
 import {settingActions} from '../../../store/reducers/setting.reducer';
 import Loading from '../../@ui/Loading';
@@ -27,20 +26,25 @@ function contentFromMarkup(markup: string) {
   return state;
 }
 
-const SettingSOA = () => {
+type Props = {
+  settingKey: string;
+  heading: string;
+};
+
+const SettingMarkup = ({settingKey, heading}: Props) => {
   const dispatch = useDispatch();
   const notes = useRootState(state =>
-    state.setting.values.find(v => v.key === SETTING_KEYS.SOA_NOTES)
+    state.setting.values.find(v => v.key === settingKey)
   );
   const [header, setHeader] = useState(() => EditorState.createEmpty());
   const {mutate, loading} = useUpdateSettingValue({});
   const handleSave = () => {
     const rawContentState = convertToRaw(header.getCurrentContent());
     const markup = sanitize(draftToHtml(rawContentState));
-    mutate({key: SETTING_KEYS.SOA_NOTES, value: markup}).then(() => {
+    mutate({key: settingKey, value: markup}).then(() => {
       dispatch(
         settingActions.updateSetting({
-          key: SETTING_KEYS.SOA_NOTES,
+          key: settingKey,
           value: markup,
         })
       );
@@ -56,7 +60,7 @@ const SettingSOA = () => {
   return (
     <>
       <SettingContainer
-        heading="Statement of Account"
+        heading={heading}
         renderRightContent={
           <Button disabled={loading} onClick={() => handleSave()}>
             Save
@@ -72,7 +76,7 @@ const SettingSOA = () => {
                 <Editor
                   editorState={header}
                   onEditorStateChange={setHeader}
-                  placeholder="Enter statement of account notes"
+                  placeholder="enter notes"
                 />
               )}
             </Col>
@@ -83,4 +87,4 @@ const SettingSOA = () => {
   );
 };
 
-export default SettingSOA;
+export default SettingMarkup;

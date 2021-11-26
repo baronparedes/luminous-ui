@@ -2,9 +2,10 @@ import {Col, Container, Row} from 'react-bootstrap';
 import styled from 'styled-components';
 
 import {getNames} from '../../@utils/helpers';
-import {VoucherAttr} from '../../Api';
+import {SettingAttr, VoucherAttr} from '../../Api';
 import {Currency} from '../@ui/Currency';
 import DisbursementDetail from '../@ui/DisbursementDetail';
+import Markup from '../@ui/Markup';
 import {PageHeader, PageSection} from './PaperPdf';
 
 const Label = styled('div')`
@@ -13,9 +14,10 @@ const Label = styled('div')`
 
 type Props = {
   voucher: VoucherAttr | null;
+  notes?: SettingAttr;
 };
 
-const Voucher = ({voucher}: Props) => {
+const Voucher = ({voucher, notes}: Props) => {
   if (!voucher) return null;
 
   const {expenses, disbursements} = voucher;
@@ -155,7 +157,12 @@ const Voucher = ({voucher}: Props) => {
               );
             })}
           </Container>
+        </PageSection>
+      )}
+      {notes && notes.value !== '' && (
+        <PageSection className="pt-3">
           <hr />
+          <Markup value={notes.value} />
         </PageSection>
       )}
     </PageSection>

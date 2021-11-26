@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
 import {getNames} from '../../@utils/helpers';
-import {PurchaseRequestAttr} from '../../Api';
+import {PurchaseRequestAttr, SettingAttr} from '../../Api';
 import {Currency} from '../@ui/Currency';
+import Markup from '../@ui/Markup';
 import {PageHeader, PageSection} from './PaperPdf';
 
 const Label = styled('div')`
@@ -11,9 +12,10 @@ const Label = styled('div')`
 
 type Props = {
   purchaseRequest: PurchaseRequestAttr | null;
+  notes?: SettingAttr;
 };
 
-const PurchaseRequest = ({purchaseRequest}: Props) => {
+const PurchaseRequest = ({purchaseRequest, notes}: Props) => {
   if (!purchaseRequest) return null;
 
   const {expenses} = purchaseRequest;
@@ -125,8 +127,13 @@ const PurchaseRequest = ({purchaseRequest}: Props) => {
               })}
           </tbody>
         </table>
-        <hr />
       </PageSection>
+      {notes && notes.value !== '' && (
+        <PageSection className="pt-3">
+          <hr />
+          <Markup value={notes.value} />
+        </PageSection>
+      )}
     </PageSection>
   );
 };

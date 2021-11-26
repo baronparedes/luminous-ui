@@ -2,8 +2,8 @@ import {render} from '@testing-library/react';
 
 import SettingsView from '../SettingsView';
 
-jest.mock('../SettingSOA', () => () => {
-  return <div data-testid="mock-setting-soa">Setting SOA</div>;
+jest.mock('../SettingMarkup', () => () => {
+  return <div data-testid="mock-setting-markup" />;
 });
 
 jest.mock('../SettingBillingCutoff', () => () => {
@@ -22,8 +22,8 @@ jest.mock('../SettingExpenseCategory', () => () => {
 
 describe('SettingsView', () => {
   it('should render', () => {
-    const {getByTestId} = render(<SettingsView />);
-    expect(getByTestId('mock-setting-soa')).toBeInTheDocument();
+    const {getByTestId, getAllByTestId} = render(<SettingsView />);
+    expect(getAllByTestId('mock-setting-markup')).toHaveLength(2);
     expect(getByTestId('mock-setting-billing')).toBeInTheDocument();
     expect(getByTestId('mock-setting-charges')).toBeInTheDocument();
     expect(getByTestId('mock-setting-expense-category')).toBeInTheDocument();

@@ -14,6 +14,7 @@ export const PROFILE_TYPE: ProfileType[] = [
 
 export const SETTING_KEYS = {
   SOA_NOTES: 'SOA_NOTES',
+  PR_NOTES: 'PR_NOTES',
   BILLING_CUTOFF_DAY: 'BILLING_CUTOFF_DAY',
 };
 

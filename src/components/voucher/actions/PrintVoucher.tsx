@@ -4,6 +4,8 @@ import {useReactToPrint} from 'react-to-print';
 
 import {ApprovedAny} from '../../../@types';
 import {VoucherAttr} from '../../../Api';
+import {SETTING_KEYS} from '../../../constants';
+import {useRootState} from '../../../store';
 import {PrintPaper} from '../../@print-papers/PaperPdf';
 import Voucher from '../../@print-papers/Voucher';
 
@@ -17,6 +19,9 @@ const PrintVoucher = ({
   voucher,
   ...buttonProps
 }: Props & ButtonProps) => {
+  const notes = useRootState(state =>
+    state.setting.values.find(v => v.key === SETTING_KEYS.PR_NOTES)
+  );
   const printPaperRef = React.createRef<ApprovedAny>();
   const handlePrint = useReactToPrint({
     bodyClass: 'print-body',
@@ -36,7 +41,7 @@ const PrintVoucher = ({
       </Button>
       <div className="d-none">
         <PrintPaper ref={printPaperRef}>
-          <Voucher voucher={voucher} />
+          <Voucher voucher={voucher} notes={notes} />
         </PrintPaper>
       </div>
     </>

@@ -1,11 +1,12 @@
 import React from 'react';
 import {Col, Container, Row, Tab, TabContainer, Tabs} from 'react-bootstrap';
 
+import {SETTING_KEYS} from '../../../constants';
 import RoundedPanel from '../../@ui/RoundedPanel';
 import SettingBillingCutoff from './SettingBillingCutoff';
 import SettingCharges from './SettingCharges';
 import SettingExpenseCategory from './SettingExpenseCategory';
-import SettingSOA from './SettingSOA';
+import SettingMarkup from './SettingMarkup';
 
 export const SettingContainer: React.FC<{
   heading: string;
@@ -38,7 +39,16 @@ const SettingsView = () => {
               <SettingBillingCutoff />
             </Tab>
             <Tab eventKey="soa-notes" title="SOA Notes">
-              <SettingSOA />
+              <SettingMarkup
+                settingKey={SETTING_KEYS.SOA_NOTES}
+                heading="Statement of Account"
+              />
+            </Tab>
+            <Tab eventKey="pr-notes" title="PR Notes">
+              <SettingMarkup
+                settingKey={SETTING_KEYS.PR_NOTES}
+                heading="Purchase Request"
+              />
             </Tab>
             <Tab eventKey="expense-categories" title="Expense Categories">
               <SettingExpenseCategory />

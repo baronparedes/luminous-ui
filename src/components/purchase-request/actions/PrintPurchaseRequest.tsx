@@ -4,6 +4,8 @@ import {useReactToPrint} from 'react-to-print';
 
 import {ApprovedAny} from '../../../@types';
 import {PurchaseRequestAttr} from '../../../Api';
+import {SETTING_KEYS} from '../../../constants';
+import {useRootState} from '../../../store';
 import {PrintPaper} from '../../@print-papers/PaperPdf';
 import PurchaseRequest from '../../@print-papers/PurchaseRequest';
 
@@ -17,6 +19,9 @@ const PrintPurchaseRequest = ({
   purchaseRequest,
   ...buttonProps
 }: Props & ButtonProps) => {
+  const notes = useRootState(state =>
+    state.setting.values.find(v => v.key === SETTING_KEYS.PR_NOTES)
+  );
   const printPaperRef = React.createRef<ApprovedAny>();
   const handlePrint = useReactToPrint({
     bodyClass: 'print-body',
@@ -36,7 +41,7 @@ const PrintPurchaseRequest = ({
       </Button>
       <div className="d-none">
         <PrintPaper ref={printPaperRef}>
-          <PurchaseRequest purchaseRequest={purchaseRequest} />
+          <PurchaseRequest purchaseRequest={purchaseRequest} notes={notes} />
         </PrintPaper>
       </div>
     </>
