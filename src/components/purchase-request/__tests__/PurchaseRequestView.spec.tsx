@@ -91,19 +91,22 @@ describe('PurchaseRequestView', () => {
       .reply(200, mockedPurchaseRequest);
 
     const target = renderWithProviderAndRouterAndRestful(
-      <Route path={routes.VOUCHER(':id')} component={PurchaseRequestView} />,
+      <Route
+        path={routes.PURCHASE_REQUEST(':id')}
+        component={PurchaseRequestView}
+      />,
       base,
       store => {
         store.dispatch(profileActions.signIn({me: mockedProfile}));
       },
       history => {
-        history.push(routes.VOUCHER(purchaseRequestId));
+        history.push(routes.PURCHASE_REQUEST(purchaseRequestId));
       }
     );
 
     await waitFor(() => {
       expect(target.history.location.pathname).toEqual(
-        routes.VOUCHER(purchaseRequestId)
+        routes.PURCHASE_REQUEST(purchaseRequestId)
       );
     });
 

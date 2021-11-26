@@ -30,15 +30,16 @@ const ProcessPaymentDetails = ({
 }: Props) => {
   const {me} = useRootState(state => state.profile);
   const [toggle, setToggle] = useState(false);
+  const defaultValues: PaymentDetailAttr = {
+    orNumber: '',
+    paymentType: 'cash',
+    collectedBy: Number(me?.id),
+    checkIssuingBank: '',
+    checkNumber: '',
+    checkPostingDate: '',
+  };
   const {handleSubmit, control, watch, formState} = useForm<PaymentDetailAttr>({
-    defaultValues: {
-      orNumber: '',
-      paymentType: 'cash',
-      collectedBy: Number(me?.id),
-      checkIssuingBank: '',
-      checkNumber: '',
-      checkPostingDate: '',
-    },
+    defaultValues,
   });
   const isCheckPayment = watch('paymentType') === 'check';
   const onSubmit = (formData: PaymentDetailAttr) => {
@@ -59,7 +60,9 @@ const ProcessPaymentDetails = ({
       <Button
         disabled={disabled}
         className="w-25"
-        onClick={() => setToggle(true)}
+        onClick={() => {
+          setToggle(true);
+        }}
       >
         enter payment details
       </Button>
@@ -74,9 +77,11 @@ const ProcessPaymentDetails = ({
           <Form onSubmit={handleSubmit(onSubmit)} role="form">
             <Row>
               <InputGroup className="mb-2">
-                <InputGroup.Text>
-                  <FaMoneyBillWave />
-                </InputGroup.Text>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <FaMoneyBillWave />
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <Controller
                   name="paymentType"
                   control={control}
@@ -96,9 +101,11 @@ const ProcessPaymentDetails = ({
             </Row>
             <Row>
               <InputGroup className="mb-2">
-                <InputGroup.Text>
-                  <FaReceipt />
-                </InputGroup.Text>
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    <FaReceipt />
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
                 <Controller
                   name="orNumber"
                   control={control}

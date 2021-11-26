@@ -142,6 +142,7 @@ const ApproveVoucher = ({
             <Col sm={3} xs={3} className="text-right">
               {remainingCost > 0 && (
                 <AddDisbursement
+                  key={new Date().getUTCMilliseconds()}
                   maxValue={remainingCost}
                   onDisburse={handleOnDisburse}
                 />

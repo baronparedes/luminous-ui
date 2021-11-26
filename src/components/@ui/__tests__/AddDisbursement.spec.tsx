@@ -3,7 +3,6 @@ import faker from 'faker';
 import {waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import {formatDate} from '../../../@utils/dates';
 import {
   generateFakeDisbursement,
   generateFakeProfile,
@@ -160,10 +159,7 @@ describe('AddDisbursement', () => {
           ...mockedDisbursement,
           id: undefined,
           amount: mockedDisbursement.amount.toString(),
-          checkPostingDate: formatDate(
-            mockedDisbursement.checkPostingDate as string,
-            'YYYY-MM-DD'
-          ),
+          checkPostingDate: mockedDisbursement.checkPostingDate?.substr(0, 10),
         });
       }
     }

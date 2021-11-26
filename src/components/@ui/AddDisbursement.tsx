@@ -30,22 +30,18 @@ type Props = {
 const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
   const {me} = useRootState(state => state.profile);
   const [toggle, setToggle] = useState(false);
-  const defaultValues: DisbursementAttr = {
-    details: '',
-    paymentType: 'cash',
-    releasedBy: Number(me?.id),
-    checkIssuingBank: '',
-    checkNumber: '',
-    checkPostingDate: '',
-    amount: maxValue ?? 0,
-  };
-  const {handleSubmit, control, watch, formState, reset} =
-    useForm<DisbursementAttr>({
-      defaultValues,
-    });
-
+  const {handleSubmit, control, watch, formState} = useForm<DisbursementAttr>({
+    defaultValues: {
+      details: '',
+      paymentType: 'cash',
+      releasedBy: Number(me?.id),
+      checkIssuingBank: '',
+      checkNumber: '',
+      checkPostingDate: '',
+      amount: maxValue ?? 0,
+    },
+  });
   const isCheckPayment = watch('paymentType') === 'check';
-
   const onSubmit = (formData: DisbursementAttr) => {
     setToggle(false);
     onDisburse && onDisburse(formData);
@@ -59,7 +55,6 @@ const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
         title="add disbursement"
         onClick={() => {
           setToggle(true);
-          reset(defaultValues);
         }}
       >
         <FaPlus />
@@ -95,6 +90,7 @@ const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
                       step="any"
                       placeholder="amount to release"
                       isInvalid={formState.errors.amount !== undefined}
+                      max={maxValue}
                     />
                   )}
                 />

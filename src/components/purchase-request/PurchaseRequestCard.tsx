@@ -18,7 +18,10 @@ const STATUS_VARIANT = {
 const PurchaseRequestCard = ({purchaseRequest}: Props) => {
   return (
     <>
-      <Link className="text-underline" to={routes.VOUCHER(purchaseRequest.id)}>
+      <Link
+        className="text-underline"
+        to={routes.PURCHASE_REQUEST(purchaseRequest.id)}
+      >
         <h4>PR-{purchaseRequest.id}</h4>
       </Link>
       <div>
