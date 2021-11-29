@@ -2,13 +2,15 @@ import {useState} from 'react';
 import {Badge, Col, Container, Row} from 'react-bootstrap';
 
 import {
+  CreateVoucherOrOrder,
   RequestStatus,
   useGetAllPurchaseRequestsByChargeAndStatus,
+  usePostPurchaseRequest,
 } from '../../Api';
 import {useChargeBalance} from '../../hooks/useChargeBalance';
 import {Currency} from '../@ui/Currency';
 import RoundedPanel from '../@ui/RoundedPanel';
-import CreatePurchaseRequest from '../purchase-request/actions/CreatePurchaseRequest';
+import ManagePurchaseRequest from '../purchase-request/actions/ManagePurchaseRequest';
 import PurchaseRequestList from '../purchase-request/PurchaseRequestList';
 
 const RequestView = () => {
@@ -19,6 +21,13 @@ const RequestView = () => {
     chargeId: availableCommunityBalance.chargeId,
     status: selectedStatus,
   });
+  const {mutate, loading: creatingPurchaseRequest} = usePostPurchaseRequest({});
+
+  const handleOnCreatePurchaseRequest = (data: CreateVoucherOrOrder) => {
+    mutate(data).then(() => {
+      refetch();
+    });
+  };
   return (
     <>
       <Container>
@@ -38,12 +47,14 @@ const RequestView = () => {
                 </div>
               </Col>
               <Col className="text-right">
-                <CreatePurchaseRequest
+                <ManagePurchaseRequest
                   variant="primary"
                   className="w-100"
                   buttonLabel="create new request"
                   chargeId={availableCommunityBalance.chargeId}
-                  onCreate={() => refetch()}
+                  onSave={handleOnCreatePurchaseRequest}
+                  title={'Create New Purchase Request'}
+                  loading={creatingPurchaseRequest}
                 />
               </Col>
             </Row>

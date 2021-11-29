@@ -1,5 +1,4 @@
 import faker from 'faker';
-import nock from 'nock';
 
 import {waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -10,11 +9,11 @@ import {
   generateFakeExpense,
   generateFakeProfile,
 } from '../../../../@utils/fake-models';
-import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
+import {renderWithProvider} from '../../../../@utils/test-renderers';
 import {CreateVoucherOrOrder} from '../../../../Api';
 import {profileActions} from '../../../../store/reducers/profile.reducer';
 import AddExpense from '../../../@ui/AddExpense';
-import CreatePurchaseRequest from '../../actions/CreatePurchaseRequest';
+import ManagePurchaseRequest from '../../actions/ManagePurchaseRequest';
 
 type AddExpenseProps = React.ComponentProps<typeof AddExpense>;
 
@@ -37,19 +36,19 @@ jest.mock(
     }
 );
 
-describe('CreatePurchaseRequest', () => {
-  const base = 'http://localhost';
+describe('ManagePurchaseRequest', () => {
   const mockedProfile = generateFakeProfile();
   const chargeId = faker.datatype.number();
+  const fakeTitle = faker.random.words();
 
-  async function renderTarget(onCreatePurchaseRequest?: (id: number) => void) {
-    const target = renderWithProviderAndRestful(
-      <CreatePurchaseRequest
+  async function renderTarget(onSave?: (data: CreateVoucherOrOrder) => void) {
+    const target = renderWithProvider(
+      <ManagePurchaseRequest
         chargeId={chargeId}
         buttonLabel={'toggle'}
-        onCreate={onCreatePurchaseRequest}
+        onSave={onSave}
+        title={fakeTitle}
       />,
-      base,
       store => store.dispatch(profileActions.signIn({me: mockedProfile}))
     );
 
@@ -63,7 +62,7 @@ describe('CreatePurchaseRequest', () => {
     const totalCostContainer = target.getByText(/^total cost$/i).parentElement
       ?.parentElement as HTMLElement;
 
-    expect(target.getByText('Create New Purchase Request')).toBeInTheDocument();
+    expect(target.getByText(fakeTitle)).toBeInTheDocument();
 
     expect(target.getByText(/^total cost$/i)).toBeInTheDocument();
     expect(descriptionInput).toBeInTheDocument();
@@ -92,7 +91,6 @@ describe('CreatePurchaseRequest', () => {
     window.confirm = jest.fn().mockImplementation(() => true);
 
     const mockOnCreatePurchaseRequest = jest.fn();
-    const purchaseRequestId = faker.datatype.number();
     const expectedBody: CreateVoucherOrOrder = {
       description: faker.random.words(2),
       requestedBy: Number(mockedProfile.id),
@@ -100,19 +98,6 @@ describe('CreatePurchaseRequest', () => {
       expenses: [mockedExpense],
       chargeId,
     };
-
-    nock(base)
-      .post('/api/purchase-request/postPurchaseRequest', body => {
-        expect(new Date(body.requestedDate).toDateString()).toEqual(
-          new Date(expectedBody.requestedDate).toDateString()
-        );
-        expect({...body, requestedDate: undefined}).toEqual({
-          ...expectedBody,
-          requestedDate: undefined,
-        });
-        return true;
-      })
-      .reply(200, purchaseRequestId as ApprovedAny);
 
     const {addExpenseButton, descriptionInput, saveButton, queryByRole} =
       await renderTarget(mockOnCreatePurchaseRequest);
@@ -125,7 +110,12 @@ describe('CreatePurchaseRequest', () => {
     await waitFor(() => {
       expect(mockOnCreatePurchaseRequest).toHaveBeenCalled();
       expect(mockOnCreatePurchaseRequest).toHaveBeenCalledWith(
-        purchaseRequestId
+        expect.objectContaining({
+          description: expectedBody.description,
+          requestedBy: expectedBody.requestedBy,
+          expenses: expectedBody.expenses,
+          chargeId,
+        })
       );
     });
     await waitFor(() => expect(queryByRole('dialog')).not.toBeInTheDocument());

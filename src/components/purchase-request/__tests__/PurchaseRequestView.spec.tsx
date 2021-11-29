@@ -3,6 +3,7 @@ import nock from 'nock';
 import {Route} from 'react-router-dom';
 
 import {waitFor} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import {
   generateFakeProfile,
@@ -14,6 +15,7 @@ import {ProfileType, PurchaseRequestAttr, RequestStatus} from '../../../Api';
 import {profileActions} from '../../../store/reducers/profile.reducer';
 import ExpenseTable from '../../@ui/ExpenseTable';
 import ApprovePurchaseRequest from '../actions/ApprovePurchaseRequest';
+import ManagePurchaseRequest from '../actions/ManagePurchaseRequest';
 import NotifyApprovers from '../actions/NotifyApprovers';
 import RejectPurchaseRequest from '../actions/RejectPurchaseRequest';
 import PurchaseRequestDetails from '../PurchaseRequestDetails';
@@ -34,6 +36,10 @@ type RejectPurchaseRequestProps = React.ComponentProps<
 >;
 
 type NotifyApproversProps = React.ComponentProps<typeof NotifyApprovers>;
+
+type ManagePurchaseRequestProps = React.ComponentProps<
+  typeof ManagePurchaseRequest
+>;
 
 jest.mock(
   '../PurchaseRequestDetails',
@@ -68,6 +74,36 @@ jest.mock(
 jest.mock('../actions/NotifyApprovers', () => (props: NotifyApproversProps) => {
   return <div data-testid="mock-notify">{JSON.stringify(props)}</div>;
 });
+
+jest.mock(
+  '../actions/ManagePurchaseRequest',
+  () => (props: ManagePurchaseRequestProps) => {
+    return (
+      <div
+        data-testid="mock-modify-pr"
+        onClick={() =>
+          props.onSave &&
+          props.onSave({
+            chargeId: 1,
+            description: 'mocked-description',
+            requestedBy: 1,
+            requestedDate: 'mocked-request-date',
+            expenses: [
+              {
+                category: 'mocked-category',
+                categoryId: 1,
+                description: 'mocked-e-description',
+                quantity: 1,
+                totalCost: 1,
+                unitCost: 1,
+              },
+            ],
+          })
+        }
+      ></div>
+    );
+  }
+);
 
 describe('PurchaseRequestView', () => {
   const base = 'http://localhost';
@@ -139,6 +175,9 @@ describe('PurchaseRequestView', () => {
     );
     await waitFor(() => expect(getByTestId('mock-reject')).toBeInTheDocument());
     await waitFor(() => expect(getByTestId('mock-notify')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(getByTestId('mock-modify-pr')).toBeInTheDocument()
+    );
   });
 
   it('should render and hide actions', async () => {
@@ -158,5 +197,40 @@ describe('PurchaseRequestView', () => {
     await waitFor(() =>
       expect(queryByTestId('mock-notify')).not.toBeInTheDocument()
     );
+  });
+
+  it('should modify purchase request', async () => {
+    const {getByTestId} = await renderTarget({
+      status: 'pending',
+      isAdmin: true,
+    });
+
+    nock(base)
+      .post('/api/purchase-request/postPurchaseRequest', body => {
+        expect(body).toEqual({
+          chargeId: 1,
+          description: 'mocked-description',
+          requestedBy: 1,
+          requestedDate: 'mocked-request-date',
+          expenses: [
+            {
+              category: 'mocked-category',
+              categoryId: 1,
+              description: 'mocked-e-description',
+              quantity: 1,
+              totalCost: 1,
+              unitCost: 1,
+            },
+          ],
+        });
+        return true;
+      })
+      .reply(200);
+
+    await waitFor(() =>
+      expect(getByTestId('mock-modify-pr')).toBeInTheDocument()
+    );
+
+    userEvent.click(getByTestId('mock-modify-pr'));
   });
 });

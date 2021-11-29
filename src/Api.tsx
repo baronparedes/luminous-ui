@@ -848,6 +848,26 @@ export type UsePostPurchaseRequestProps = Omit<UseMutateProps<number, unknown, v
 export const usePostPurchaseRequest = (props: UsePostPurchaseRequestProps) => useMutate<number, unknown, void, CreateVoucherOrOrder, void>("POST", `/api/purchase-request/postPurchaseRequest`, props);
 
 
+export interface UpdatePurchaseRequestPathParams {
+  id: number
+}
+
+export type UpdatePurchaseRequestProps = Omit<MutateProps<void, unknown, void, CreateVoucherOrOrder, UpdatePurchaseRequestPathParams>, "path" | "verb"> & UpdatePurchaseRequestPathParams;
+
+export const UpdatePurchaseRequest = ({id, ...props}: UpdatePurchaseRequestProps) => (
+  <Mutate<void, unknown, void, CreateVoucherOrOrder, UpdatePurchaseRequestPathParams>
+    verb="PATCH"
+    path={`/api/purchase-request/updatePurchaseRequest/${id}`}
+    
+    {...props}
+  />
+);
+
+export type UseUpdatePurchaseRequestProps = Omit<UseMutateProps<void, unknown, void, CreateVoucherOrOrder, UpdatePurchaseRequestPathParams>, "path" | "verb"> & UpdatePurchaseRequestPathParams;
+
+export const useUpdatePurchaseRequest = ({id, ...props}: UseUpdatePurchaseRequestProps) => useMutate<void, unknown, void, CreateVoucherOrOrder, UpdatePurchaseRequestPathParams>("PATCH", (paramsInPath: UpdatePurchaseRequestPathParams) => `/api/purchase-request/updatePurchaseRequest/${paramsInPath.id}`, {  pathParams: { id }, ...props });
+
+
 export type ApprovePurchaseRequestProps = Omit<MutateProps<void, unknown, void, ApproveVoucherOrOrder, void>, "path" | "verb">;
 
 export const ApprovePurchaseRequest = (props: ApprovePurchaseRequestProps) => (

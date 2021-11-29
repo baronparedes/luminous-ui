@@ -12,37 +12,37 @@ import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {FaTimes} from 'react-icons/fa';
 
 import {sum} from '../../../@utils/helpers';
-import {
-  ApiError,
-  CreateVoucherOrOrder,
-  ExpenseAttr,
-  usePostPurchaseRequest,
-} from '../../../Api';
+import {CreateVoucherOrOrder, ExpenseAttr} from '../../../Api';
 import {useRootState} from '../../../store';
 import AddExpense from '../../@ui/AddExpense';
 import ButtonLoading from '../../@ui/ButtonLoading';
 import {Currency} from '../../@ui/Currency';
-import ErrorInfo from '../../@ui/ErrorInfo';
 import ModalContainer from '../../@ui/ModalContainer';
 import {validateNotEmpty} from '../../@validation';
 
 type Props = {
   chargeId: number;
   buttonLabel: React.ReactNode;
-  onCreate?: (id: number) => void;
+  onSave?: (request: CreateVoucherOrOrder) => void;
+  title: string;
+  loading?: boolean;
+  defaultValues?: CreateVoucherOrOrder;
 };
 
-const CreatePurchaseRequest = ({
+const ManagePurchaseRequest = ({
   buttonLabel,
-  onCreate,
   chargeId,
+  title,
+  loading,
+  defaultValues,
+  onSave,
   ...buttonProps
 }: Props & ButtonProps) => {
   const {me} = useRootState(state => state.profile);
   const [toggle, setToggle] = useState(false);
   const {handleSubmit, control, formState, getValues} =
     useForm<CreateVoucherOrOrder>({
-      defaultValues: {
+      defaultValues: defaultValues ?? {
         chargeId,
         description: '',
         expenses: [],
@@ -50,12 +50,11 @@ const CreatePurchaseRequest = ({
         requestedDate: new Date().toISOString(),
       },
     });
+
   const {append, remove} = useFieldArray({
     control,
     name: 'expenses',
   });
-
-  const {mutate, loading, error} = usePostPurchaseRequest({});
 
   const totalCost = sum(getValues('expenses').map(e => e.totalCost));
   const hasNoExpense = getValues('expenses').length === 0;
@@ -66,10 +65,8 @@ const CreatePurchaseRequest = ({
 
   const onSubmit = (formData: CreateVoucherOrOrder) => {
     if (!confirm('Proceed?')) return;
-    mutate(formData).then(id => {
-      setToggle(false);
-      onCreate && onCreate(id);
-    });
+    onSave && onSave(formData);
+    setToggle(false);
   };
 
   return (
@@ -80,7 +77,7 @@ const CreatePurchaseRequest = ({
       <ModalContainer
         backdrop="static"
         size="lg"
-        header={<h5>Create New Purchase Request</h5>}
+        header={<h5>{title}</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >
@@ -101,7 +98,7 @@ const CreatePurchaseRequest = ({
                 <ButtonLoading
                   className="w-100"
                   type="submit"
-                  disabled={hasNoExpense || loading}
+                  disabled={hasNoExpense || loading || !formState.isDirty}
                   loading={loading}
                 >
                   Save
@@ -214,13 +211,6 @@ const CreatePurchaseRequest = ({
                 </ListGroup>
               </Col>
             </Row>
-            {error && error.data && (
-              <Row className="mt-3">
-                <Col>
-                  <ErrorInfo>{(error.data as ApiError).message}</ErrorInfo>
-                </Col>
-              </Row>
-            )}
           </Container>
         </Container>
       </ModalContainer>
@@ -228,4 +218,4 @@ const CreatePurchaseRequest = ({
   );
 };
 
-export default CreatePurchaseRequest;
+export default ManagePurchaseRequest;
