@@ -3,24 +3,24 @@ import faker from 'faker';
 import {waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import {ApprovedAny} from '../../../../@types';
-import {currencyFormat} from '../../../../@utils/currencies';
+import {ApprovedAny} from '../../../@types';
+import {currencyFormat} from '../../../@utils/currencies';
 import {
   generateFakeExpense,
   generateFakeProfile,
-} from '../../../../@utils/fake-models';
-import {renderWithProvider} from '../../../../@utils/test-renderers';
-import {CreateVoucherOrOrder} from '../../../../Api';
-import {profileActions} from '../../../../store/reducers/profile.reducer';
-import AddExpense from '../../../@ui/AddExpense';
-import ManagePurchaseRequest from '../../actions/ManagePurchaseRequest';
+} from '../../../@utils/fake-models';
+import {renderWithProvider} from '../../../@utils/test-renderers';
+import {CreateVoucherOrOrder} from '../../../Api';
+import {profileActions} from '../../../store/reducers/profile.reducer';
+import AddExpense from '../AddExpense';
+import ManageVoucherOrOrder from '../ManageVoucherOrOrder';
 
 type AddExpenseProps = React.ComponentProps<typeof AddExpense>;
 
 const mockedExpense = generateFakeExpense();
 
 jest.mock(
-  '../../../@ui/AddExpense',
+  '../AddExpense',
   () =>
     ({onAddExpense, ...buttonProps}: AddExpenseProps) => {
       const onClick = () => {
@@ -36,14 +36,14 @@ jest.mock(
     }
 );
 
-describe('ManagePurchaseRequest', () => {
+describe('ManageVoucherOrOrder', () => {
   const mockedProfile = generateFakeProfile();
   const chargeId = faker.datatype.number();
   const fakeTitle = faker.random.words();
 
   async function renderTarget(onSave?: (data: CreateVoucherOrOrder) => void) {
     const target = renderWithProvider(
-      <ManagePurchaseRequest
+      <ManageVoucherOrOrder
         chargeId={chargeId}
         buttonLabel={'toggle'}
         onSave={onSave}

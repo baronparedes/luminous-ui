@@ -9,8 +9,8 @@ import {
 } from '../../Api';
 import {useChargeBalance} from '../../hooks/useChargeBalance';
 import {Currency} from '../@ui/Currency';
+import ManageVoucherOrOrder from '../@ui/ManageVoucherOrOrder';
 import RoundedPanel from '../@ui/RoundedPanel';
-import ManagePurchaseRequest from '../purchase-request/actions/ManagePurchaseRequest';
 import PurchaseRequestList from '../purchase-request/PurchaseRequestList';
 
 const RequestView = () => {
@@ -47,7 +47,7 @@ const RequestView = () => {
                 </div>
               </Col>
               <Col className="text-right">
-                <ManagePurchaseRequest
+                <ManageVoucherOrOrder
                   variant="primary"
                   className="w-100"
                   buttonLabel="create new request"

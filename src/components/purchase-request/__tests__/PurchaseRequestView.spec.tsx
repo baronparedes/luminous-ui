@@ -14,8 +14,8 @@ import {renderWithProviderAndRouterAndRestful} from '../../../@utils/test-render
 import {ProfileType, PurchaseRequestAttr, RequestStatus} from '../../../Api';
 import {profileActions} from '../../../store/reducers/profile.reducer';
 import ExpenseTable from '../../@ui/ExpenseTable';
+import ManageVoucherOrOrder from '../../@ui/ManageVoucherOrOrder';
 import ApprovePurchaseRequest from '../actions/ApprovePurchaseRequest';
-import ManagePurchaseRequest from '../actions/ManagePurchaseRequest';
 import NotifyApprovers from '../actions/NotifyApprovers';
 import RejectPurchaseRequest from '../actions/RejectPurchaseRequest';
 import PurchaseRequestDetails from '../PurchaseRequestDetails';
@@ -37,8 +37,8 @@ type RejectPurchaseRequestProps = React.ComponentProps<
 
 type NotifyApproversProps = React.ComponentProps<typeof NotifyApprovers>;
 
-type ManagePurchaseRequestProps = React.ComponentProps<
-  typeof ManagePurchaseRequest
+type ManageVoucherOrOrderProps = React.ComponentProps<
+  typeof ManageVoucherOrOrder
 >;
 
 jest.mock(
@@ -76,8 +76,8 @@ jest.mock('../actions/NotifyApprovers', () => (props: NotifyApproversProps) => {
 });
 
 jest.mock(
-  '../actions/ManagePurchaseRequest',
-  () => (props: ManagePurchaseRequestProps) => {
+  '../../@ui/ManageVoucherOrOrder',
+  () => (props: ManageVoucherOrOrderProps) => {
     return (
       <div
         data-testid="mock-modify-pr"

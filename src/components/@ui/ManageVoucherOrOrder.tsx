@@ -11,40 +11,38 @@ import {
 import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {FaTimes} from 'react-icons/fa';
 
-import {sum} from '../../../@utils/helpers';
-import {
-  ApiError,
-  CreateVoucherOrOrder,
-  ExpenseAttr,
-  usePostVoucher,
-} from '../../../Api';
-import {useRootState} from '../../../store';
-import AddExpense from '../../@ui/AddExpense';
-import ButtonLoading from '../../@ui/ButtonLoading';
-import {Currency} from '../../@ui/Currency';
-import ErrorInfo from '../../@ui/ErrorInfo';
-import ModalContainer from '../../@ui/ModalContainer';
-import {validateNotEmpty} from '../../@validation';
+import {sum} from '../../@utils/helpers';
+import {CreateVoucherOrOrder, ExpenseAttr} from '../../Api';
+import {useRootState} from '../../store';
+import {validateNotEmpty} from '../@validation';
+import AddExpense from './AddExpense';
+import ButtonLoading from './ButtonLoading';
+import {Currency} from './Currency';
+import ModalContainer from './ModalContainer';
 
 type Props = {
   chargeId: number;
-  chargeCode: string;
   buttonLabel: React.ReactNode;
-  onCreateVoucher?: (id: number) => void;
+  onSave?: (request: CreateVoucherOrOrder) => void;
+  title: string;
+  loading?: boolean;
+  defaultValues?: CreateVoucherOrOrder;
 };
 
-const CreateVoucher = ({
+const ManageVoucherOrOrder = ({
   buttonLabel,
-  onCreateVoucher,
   chargeId,
-  chargeCode,
+  title,
+  loading,
+  defaultValues,
+  onSave,
   ...buttonProps
 }: Props & ButtonProps) => {
   const {me} = useRootState(state => state.profile);
   const [toggle, setToggle] = useState(false);
   const {handleSubmit, control, formState, getValues} =
     useForm<CreateVoucherOrOrder>({
-      defaultValues: {
+      defaultValues: defaultValues ?? {
         chargeId,
         description: '',
         expenses: [],
@@ -52,12 +50,11 @@ const CreateVoucher = ({
         requestedDate: new Date().toISOString(),
       },
     });
+
   const {append, remove} = useFieldArray({
     control,
     name: 'expenses',
   });
-
-  const {mutate, loading, error} = usePostVoucher({});
 
   const totalCost = sum(getValues('expenses').map(e => e.totalCost));
   const hasNoExpense = getValues('expenses').length === 0;
@@ -68,10 +65,8 @@ const CreateVoucher = ({
 
   const onSubmit = (formData: CreateVoucherOrOrder) => {
     if (!confirm('Proceed?')) return;
-    mutate(formData).then(id => {
-      setToggle(false);
-      onCreateVoucher && onCreateVoucher(id);
-    });
+    onSave && onSave(formData);
+    setToggle(false);
   };
 
   return (
@@ -82,7 +77,7 @@ const CreateVoucher = ({
       <ModalContainer
         backdrop="static"
         size="lg"
-        header={<h5>Create New Voucher for {chargeCode}</h5>}
+        header={<h5>{title}</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >
@@ -103,7 +98,7 @@ const CreateVoucher = ({
                 <ButtonLoading
                   className="w-100"
                   type="submit"
-                  disabled={hasNoExpense || loading}
+                  disabled={hasNoExpense || loading || !formState.isDirty}
                   loading={loading}
                 >
                   Save
@@ -216,13 +211,6 @@ const CreateVoucher = ({
                 </ListGroup>
               </Col>
             </Row>
-            {error && error.data && (
-              <Row className="mt-3">
-                <Col>
-                  <ErrorInfo>{(error.data as ApiError).message}</ErrorInfo>
-                </Col>
-              </Row>
-            )}
           </Container>
         </Container>
       </ModalContainer>
@@ -230,4 +218,4 @@ const CreateVoucher = ({
   );
 };
 
-export default CreateVoucher;
+export default ManageVoucherOrOrder;

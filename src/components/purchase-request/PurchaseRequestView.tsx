@@ -12,9 +12,9 @@ import {useUrl} from '../../hooks/useUrl';
 import {useRootState} from '../../store';
 import ExpenseTable from '../@ui/ExpenseTable';
 import Loading from '../@ui/Loading';
+import ManageVoucherOrOrder from '../@ui/ManageVoucherOrOrder';
 import RoundedPanel from '../@ui/RoundedPanel';
 import ApprovePurchaseRequest from './actions/ApprovePurchaseRequest';
-import ManagePurchaseRequest from './actions/ManagePurchaseRequest';
 import NotifyApprovers from './actions/NotifyApprovers';
 import PrintPurchaseRequest from './actions/PrintPurchaseRequest';
 import RejectPurchaseRequest from './actions/RejectPurchaseRequest';
@@ -103,7 +103,7 @@ const PurchaseRequestView = () => {
                   purchaseRequestId={purchaseRequestId}
                   onReject={() => refetch()}
                 />
-                <ManagePurchaseRequest
+                <ManageVoucherOrOrder
                   key={new Date().getUTCMilliseconds()}
                   variant="primary"
                   className="mb-2 w-100"

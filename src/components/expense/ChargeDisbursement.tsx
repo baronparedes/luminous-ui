@@ -1,10 +1,15 @@
 import {useState} from 'react';
 import {Badge, Col, Row} from 'react-bootstrap';
 
-import {RequestStatus, useGetAllVouchersByChargeAndStatus} from '../../Api';
+import {
+  CreateVoucherOrOrder,
+  RequestStatus,
+  useGetAllVouchersByChargeAndStatus,
+  usePostVoucher,
+} from '../../Api';
 import {Currency} from '../@ui/Currency';
+import ManageVoucherOrOrder from '../@ui/ManageVoucherOrOrder';
 import RoundedPanel from '../@ui/RoundedPanel';
-import CreateVoucher from '../voucher/actions/CreateVoucher';
 import VoucherList from '../voucher/VoucherList';
 
 type Props = {
@@ -20,6 +25,14 @@ const ChargeDisbursement = ({chargeId, code, balance}: Props) => {
     chargeId,
     status: selectedStatus,
   });
+  const {mutate, loading: creatingVoucher} = usePostVoucher({});
+
+  const handleCreateVoucher = (data: CreateVoucherOrOrder) => {
+    mutate(data).then(() => {
+      refetch();
+    });
+  };
+
   return (
     <>
       <RoundedPanel className="p-4">
@@ -37,13 +50,15 @@ const ChargeDisbursement = ({chargeId, code, balance}: Props) => {
             </div>
           </Col>
           <Col className="text-right">
-            <CreateVoucher
+            <ManageVoucherOrOrder
               variant="primary"
               className="w-100"
               buttonLabel="create new voucher"
               chargeId={chargeId}
-              chargeCode={code}
-              onCreateVoucher={() => refetch()}
+              title={`Create New Voucher for ${code}`}
+              disabled={creatingVoucher}
+              loading={creatingVoucher}
+              onSave={handleCreateVoucher}
             />
           </Col>
         </Row>
