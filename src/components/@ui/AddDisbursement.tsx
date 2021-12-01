@@ -25,9 +25,10 @@ type Props = {
   disabled?: boolean;
   maxValue?: number;
   onDisburse?: (data: DisbursementAttr) => void;
+  chargeId: number;
 };
 
-const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
+const AddDisbursement = ({chargeId, disabled, maxValue, onDisburse}: Props) => {
   const {me} = useRootState(state => state.profile);
   const [toggle, setToggle] = useState(false);
   const {handleSubmit, control, watch, formState} = useForm<DisbursementAttr>({
@@ -39,6 +40,7 @@ const AddDisbursement = ({disabled, maxValue, onDisburse}: Props) => {
       checkNumber: '',
       checkPostingDate: '',
       amount: maxValue ?? 0,
+      chargeId,
     },
   });
   const isCheckPayment = watch('paymentType') === 'check';

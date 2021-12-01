@@ -197,6 +197,9 @@ describe('PurchaseRequestView', () => {
     await waitFor(() =>
       expect(queryByTestId('mock-notify')).not.toBeInTheDocument()
     );
+    await waitFor(() =>
+      expect(queryByTestId('mock-modify-pr')).not.toBeInTheDocument()
+    );
   });
 
   it('should modify purchase request', async () => {
@@ -206,7 +209,7 @@ describe('PurchaseRequestView', () => {
     });
 
     nock(base)
-      .post('/api/purchase-request/postPurchaseRequest', body => {
+      .post('/api/purchase-request/updatePurchaseRequest', body => {
         expect(body).toEqual({
           chargeId: 1,
           description: 'mocked-description',

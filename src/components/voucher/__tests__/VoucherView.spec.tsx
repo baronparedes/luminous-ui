@@ -3,6 +3,7 @@ import nock from 'nock';
 import {Route} from 'react-router-dom';
 
 import {waitFor} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import {
   generateFakeProfile,
@@ -14,6 +15,7 @@ import {ProfileType, RequestStatus, VoucherAttr} from '../../../Api';
 import {profileActions} from '../../../store/reducers/profile.reducer';
 import DisbursementList from '../../@ui/DisbursementList';
 import ExpenseTable from '../../@ui/ExpenseTable';
+import ManageVoucherOrOrder from '../../@ui/ManageVoucherOrOrder';
 import ApproveVoucher from '../actions/ApproveVoucher';
 import NotifyApprovers from '../actions/NotifyApprovers';
 import RejectVoucher from '../actions/RejectVoucher';
@@ -31,6 +33,10 @@ type ApproveVoucherProps = React.ComponentProps<typeof ApproveVoucher>;
 type RejectVoucherProps = React.ComponentProps<typeof RejectVoucher>;
 
 type NotifyApproversProps = React.ComponentProps<typeof NotifyApprovers>;
+
+type ManageVoucherOrOrderProps = React.ComponentProps<
+  typeof ManageVoucherOrOrder
+>;
 
 jest.mock('../VoucherDetails', () => (props: VoucherDetailsProps) => {
   return <div data-testid="mock-voucher-details">{JSON.stringify(props)}</div>;
@@ -67,6 +73,36 @@ jest.mock('../actions/RejectVoucher', () => (props: RejectVoucherProps) => {
 jest.mock('../actions/NotifyApprovers', () => (props: NotifyApproversProps) => {
   return <div data-testid="mock-notify">{JSON.stringify(props)}</div>;
 });
+
+jest.mock(
+  '../../@ui/ManageVoucherOrOrder',
+  () => (props: ManageVoucherOrOrderProps) => {
+    return (
+      <div
+        data-testid="mock-modify-v"
+        onClick={() =>
+          props.onSave &&
+          props.onSave({
+            chargeId: 1,
+            description: 'mocked-description',
+            requestedBy: 1,
+            requestedDate: 'mocked-request-date',
+            expenses: [
+              {
+                category: 'mocked-category',
+                categoryId: 1,
+                description: 'mocked-e-description',
+                quantity: 1,
+                totalCost: 1,
+                unitCost: 1,
+              },
+            ],
+          })
+        }
+      ></div>
+    );
+  }
+);
 
 describe('VoucherView', () => {
   const base = 'http://localhost';
@@ -141,6 +177,9 @@ describe('VoucherView', () => {
     );
     await waitFor(() => expect(getByTestId('mock-reject')).toBeInTheDocument());
     await waitFor(() => expect(getByTestId('mock-notify')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(getByTestId('mock-modify-v')).toBeInTheDocument()
+    );
   });
 
   it('should render and hide actions', async () => {
@@ -160,5 +199,43 @@ describe('VoucherView', () => {
     await waitFor(() =>
       expect(queryByTestId('mock-notify')).not.toBeInTheDocument()
     );
+    await waitFor(() =>
+      expect(queryByTestId('mock-modify-v')).not.toBeInTheDocument()
+    );
+  });
+
+  it('should modify voucher', async () => {
+    const {getByTestId} = await renderTarget({
+      status: 'pending',
+      isAdmin: true,
+    });
+
+    nock(base)
+      .post('/api/voucher/updateVoucher', body => {
+        expect(body).toEqual({
+          chargeId: 1,
+          description: 'mocked-description',
+          requestedBy: 1,
+          requestedDate: 'mocked-request-date',
+          expenses: [
+            {
+              category: 'mocked-category',
+              categoryId: 1,
+              description: 'mocked-e-description',
+              quantity: 1,
+              totalCost: 1,
+              unitCost: 1,
+            },
+          ],
+        });
+        return true;
+      })
+      .reply(200);
+
+    await waitFor(() =>
+      expect(getByTestId('mock-modify-v')).toBeInTheDocument()
+    );
+
+    userEvent.click(getByTestId('mock-modify-v'));
   });
 });

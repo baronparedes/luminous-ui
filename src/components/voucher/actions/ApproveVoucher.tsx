@@ -29,6 +29,7 @@ type Props = {
   voucherId: number;
   totalCost: number;
   buttonLabel: React.ReactNode;
+  chargeId: number;
   onApproveVoucher?: () => void;
 };
 
@@ -40,6 +41,7 @@ const ApproveVoucher = ({
   buttonLabel,
   voucherId,
   totalCost,
+  chargeId,
   onApproveVoucher,
   ...buttonProps
 }: Props & ButtonProps) => {
@@ -61,11 +63,13 @@ const ApproveVoucher = ({
           releasedBy: d.releasedBy,
           amount: d.amount,
           paymentType: 'cash',
+          chargeId,
         };
         const forCheckPayment: DisbursementAttr = {
           amount: d.amount,
           details: d.details,
           paymentType: d.paymentType,
+          chargeId,
           releasedBy: d.releasedBy,
           checkIssuingBank: d.checkIssuingBank,
           checkNumber: d.checkNumber,
@@ -143,6 +147,7 @@ const ApproveVoucher = ({
               {remainingCost > 0 && (
                 <AddDisbursement
                   key={new Date().getUTCMilliseconds()}
+                  chargeId={chargeId}
                   maxValue={remainingCost}
                   onDisburse={handleOnDisburse}
                 />

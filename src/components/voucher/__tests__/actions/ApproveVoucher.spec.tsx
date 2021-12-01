@@ -17,6 +17,7 @@ import ApproveVoucher from '../../actions/ApproveVoucher';
 describe('ApproveVoucher', () => {
   const base = 'http://localhost';
   const voucherId = faker.datatype.number();
+  const chargeId = faker.datatype.number();
   const expectedTotalCost = faker.datatype.number();
   const mockedProfile = generateFakeProfile();
 
@@ -24,6 +25,7 @@ describe('ApproveVoucher', () => {
     const target = renderWithProviderAndRouterAndRestful(
       <ApproveVoucher
         voucherId={voucherId}
+        chargeId={chargeId}
         buttonLabel={'toggle'}
         totalCost={expectedTotalCost}
       />,
@@ -245,6 +247,7 @@ describe('ApproveVoucher', () => {
           releasedBy: mockedProfile.id,
           amount: expectedDisbursement.amount.toString(),
           paymentType: expectedDisbursement.paymentType,
+          chargeId,
         },
       ],
     };

@@ -238,6 +238,7 @@ export const generateFakeDisbursement = (): DisbursementAttr => {
     checkIssuingBank: faker.random.words(),
     checkPostingDate: faker.datatype.datetime().toISOString(),
     releasedBy: faker.datatype.number(),
+    chargeId: faker.datatype.number(),
   };
 };
 

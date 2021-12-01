@@ -74,7 +74,8 @@ export interface ProfileAttr {
 export interface DisbursementAttr {
   id?: number;
   voucherId?: number;
-  chargeId?: number;
+  purchaseOrderId?: number;
+  chargeId: number;
   releasedBy: number;
   paymentType: PaymentType;
   details: string;
@@ -198,6 +199,7 @@ export type RequestStatus = "approved" | "rejected" | "pending";
 export interface ExpenseAttr {
   voucherId?: number;
   purchaseRequestId?: number;
+  purchaseOrderId?: number;
   categoryId: number;
   category: string;
   description: string;
@@ -205,6 +207,57 @@ export interface ExpenseAttr {
   unitCost: number;
   totalCost: number;
   waivedBy?: number;
+}
+
+export interface PurchaseOrderAttr {
+  approverProfiles?: ProfileAttr[];
+  rejectedByProfile?: ProfileAttr;
+  requestedByProfile?: ProfileAttr;
+  expenses?: ExpenseAttr[];
+  comments?: string | null;
+  rejectedBy?: number;
+  approvedBy?: string | null;
+  requestedDate: string;
+  requestedBy: number;
+  status: RequestStatus;
+  totalCost: number;
+  description: string;
+  chargeId: number;
+  otherDetails?: string | null;
+  fulfillmentDate: string;
+  vendorName: string;
+  purchaseRequestId: number;
+  id?: number;
+}
+
+export interface CreatePurchaseOrder {
+  purchaseRequestId: number;
+  otherDetails: string;
+  fulfillmentDate: string;
+  vendorName: string;
+}
+
+export interface CreateVoucherOrOrder {
+  orderData?: CreatePurchaseOrder;
+  expenses: ExpenseAttr[];
+  chargeId: number;
+  requestedDate: string;
+  requestedBy: number;
+  description: string;
+}
+
+export interface ApproveVoucherOrOrder {
+  disbursements?: DisbursementAttr[];
+  codes: string[];
+  purchaseOrderId?: number;
+  purchaseRequestId?: number;
+  voucherId?: number;
+}
+
+export interface RejectPurchaseOrder {
+  rejectedBy: number;
+  comments: string;
+  id: number;
 }
 
 export interface PurchaseRequestAttr {
@@ -222,21 +275,6 @@ export interface PurchaseRequestAttr {
   description: string;
   chargeId: number;
   id?: number;
-}
-
-export interface CreateVoucherOrOrder {
-  expenses: ExpenseAttr[];
-  chargeId: number;
-  requestedDate: string;
-  requestedBy: number;
-  description: string;
-}
-
-export interface ApproveVoucherOrOrder {
-  disbursements?: DisbursementAttr[];
-  codes: string[];
-  purchaseRequestId?: number;
-  voucherId?: number;
 }
 
 export interface RejectPurchaseRequest {
@@ -793,6 +831,153 @@ export type UseGetPaymentHistoryProps = Omit<UseGetProps<PaymentHistoryView[], u
 export const useGetPaymentHistory = ({propertyId, year, ...props}: UseGetPaymentHistoryProps) => useGet<PaymentHistoryView[], unknown, void, GetPaymentHistoryPathParams>((paramsInPath: GetPaymentHistoryPathParams) => `/api/property/getPaymentHistory/${paramsInPath.propertyId}/${paramsInPath.year}`, {  pathParams: { propertyId, year }, ...props });
 
 
+export interface GetPurchaseOrderPathParams {
+  id: number
+}
+
+export type GetPurchaseOrderProps = Omit<GetProps<PurchaseOrderAttr, unknown, void, GetPurchaseOrderPathParams>, "path"> & GetPurchaseOrderPathParams;
+
+export const GetPurchaseOrder = ({id, ...props}: GetPurchaseOrderProps) => (
+  <Get<PurchaseOrderAttr, unknown, void, GetPurchaseOrderPathParams>
+    path={`/api/purchase-order/getPurchaseOrder/${id}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetPurchaseOrderProps = Omit<UseGetProps<PurchaseOrderAttr, unknown, void, GetPurchaseOrderPathParams>, "path"> & GetPurchaseOrderPathParams;
+
+export const useGetPurchaseOrder = ({id, ...props}: UseGetPurchaseOrderProps) => useGet<PurchaseOrderAttr, unknown, void, GetPurchaseOrderPathParams>((paramsInPath: GetPurchaseOrderPathParams) => `/api/purchase-order/getPurchaseOrder/${paramsInPath.id}`, {  pathParams: { id }, ...props });
+
+
+export interface GetAllPurchaseOrdersByChargeAndStatusPathParams {
+  chargeId: number;
+  status: RequestStatus
+}
+
+export type GetAllPurchaseOrdersByChargeAndStatusProps = Omit<GetProps<PurchaseOrderAttr[], unknown, void, GetAllPurchaseOrdersByChargeAndStatusPathParams>, "path"> & GetAllPurchaseOrdersByChargeAndStatusPathParams;
+
+export const GetAllPurchaseOrdersByChargeAndStatus = ({chargeId, status, ...props}: GetAllPurchaseOrdersByChargeAndStatusProps) => (
+  <Get<PurchaseOrderAttr[], unknown, void, GetAllPurchaseOrdersByChargeAndStatusPathParams>
+    path={`/api/purchase-order/getAllPurchaseOrdersByChargeAndStatus/${chargeId}/${status}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetAllPurchaseOrdersByChargeAndStatusProps = Omit<UseGetProps<PurchaseOrderAttr[], unknown, void, GetAllPurchaseOrdersByChargeAndStatusPathParams>, "path"> & GetAllPurchaseOrdersByChargeAndStatusPathParams;
+
+export const useGetAllPurchaseOrdersByChargeAndStatus = ({chargeId, status, ...props}: UseGetAllPurchaseOrdersByChargeAndStatusProps) => useGet<PurchaseOrderAttr[], unknown, void, GetAllPurchaseOrdersByChargeAndStatusPathParams>((paramsInPath: GetAllPurchaseOrdersByChargeAndStatusPathParams) => `/api/purchase-order/getAllPurchaseOrdersByChargeAndStatus/${paramsInPath.chargeId}/${paramsInPath.status}`, {  pathParams: { chargeId, status }, ...props });
+
+
+export type PostPurchaseOrderProps = Omit<MutateProps<number, unknown, void, CreateVoucherOrOrder, void>, "path" | "verb">;
+
+export const PostPurchaseOrder = (props: PostPurchaseOrderProps) => (
+  <Mutate<number, unknown, void, CreateVoucherOrOrder, void>
+    verb="POST"
+    path={`/api/purchase-order/postPurchaseOrder`}
+    
+    {...props}
+  />
+);
+
+export type UsePostPurchaseOrderProps = Omit<UseMutateProps<number, unknown, void, CreateVoucherOrOrder, void>, "path" | "verb">;
+
+export const usePostPurchaseOrder = (props: UsePostPurchaseOrderProps) => useMutate<number, unknown, void, CreateVoucherOrOrder, void>("POST", `/api/purchase-order/postPurchaseOrder`, props);
+
+
+export interface UpdatePurchaseOrderPathParams {
+  id: number
+}
+
+export type UpdatePurchaseOrderProps = Omit<MutateProps<void, unknown, void, CreateVoucherOrOrder, UpdatePurchaseOrderPathParams>, "path" | "verb"> & UpdatePurchaseOrderPathParams;
+
+export const UpdatePurchaseOrder = ({id, ...props}: UpdatePurchaseOrderProps) => (
+  <Mutate<void, unknown, void, CreateVoucherOrOrder, UpdatePurchaseOrderPathParams>
+    verb="PATCH"
+    path={`/api/purchase-order/updatePurchaseOrder/${id}`}
+    
+    {...props}
+  />
+);
+
+export type UseUpdatePurchaseOrderProps = Omit<UseMutateProps<void, unknown, void, CreateVoucherOrOrder, UpdatePurchaseOrderPathParams>, "path" | "verb"> & UpdatePurchaseOrderPathParams;
+
+export const useUpdatePurchaseOrder = ({id, ...props}: UseUpdatePurchaseOrderProps) => useMutate<void, unknown, void, CreateVoucherOrOrder, UpdatePurchaseOrderPathParams>("PATCH", (paramsInPath: UpdatePurchaseOrderPathParams) => `/api/purchase-order/updatePurchaseOrder/${paramsInPath.id}`, {  pathParams: { id }, ...props });
+
+
+export type ApprovePurchaseOrderProps = Omit<MutateProps<void, unknown, void, ApproveVoucherOrOrder, void>, "path" | "verb">;
+
+export const ApprovePurchaseOrder = (props: ApprovePurchaseOrderProps) => (
+  <Mutate<void, unknown, void, ApproveVoucherOrOrder, void>
+    verb="POST"
+    path={`/api/purchase-order/approvePurchaseOrder`}
+    
+    {...props}
+  />
+);
+
+export type UseApprovePurchaseOrderProps = Omit<UseMutateProps<void, unknown, void, ApproveVoucherOrOrder, void>, "path" | "verb">;
+
+export const useApprovePurchaseOrder = (props: UseApprovePurchaseOrderProps) => useMutate<void, unknown, void, ApproveVoucherOrOrder, void>("POST", `/api/purchase-order/approvePurchaseOrder`, props);
+
+
+export type RejectPurchaseOrderProps = Omit<MutateProps<void, unknown, void, RejectPurchaseOrder, void>, "path" | "verb">;
+
+export const RejectPurchaseOrder = (props: RejectPurchaseOrderProps) => (
+  <Mutate<void, unknown, void, RejectPurchaseOrder, void>
+    verb="POST"
+    path={`/api/purchase-order/rejectPurchaseOrder`}
+    
+    {...props}
+  />
+);
+
+export type UseRejectPurchaseOrderProps = Omit<UseMutateProps<void, unknown, void, RejectPurchaseOrder, void>, "path" | "verb">;
+
+export const useRejectPurchaseOrder = (props: UseRejectPurchaseOrderProps) => useMutate<void, unknown, void, RejectPurchaseOrder, void>("POST", `/api/purchase-order/rejectPurchaseOrder`, props);
+
+
+export interface NotifyPurchaseOrderApproversPathParams {
+  id: number
+}
+
+export type NotifyPurchaseOrderApproversProps = Omit<MutateProps<void, unknown, void, void, NotifyPurchaseOrderApproversPathParams>, "path" | "verb"> & NotifyPurchaseOrderApproversPathParams;
+
+export const NotifyPurchaseOrderApprovers = ({id, ...props}: NotifyPurchaseOrderApproversProps) => (
+  <Mutate<void, unknown, void, void, NotifyPurchaseOrderApproversPathParams>
+    verb="POST"
+    path={`/api/purchase-order/notifyPurchaseOrderApprovers/${id}`}
+    
+    {...props}
+  />
+);
+
+export type UseNotifyPurchaseOrderApproversProps = Omit<UseMutateProps<void, unknown, void, void, NotifyPurchaseOrderApproversPathParams>, "path" | "verb"> & NotifyPurchaseOrderApproversPathParams;
+
+export const useNotifyPurchaseOrderApprovers = ({id, ...props}: UseNotifyPurchaseOrderApproversProps) => useMutate<void, unknown, void, void, NotifyPurchaseOrderApproversPathParams>("POST", (paramsInPath: NotifyPurchaseOrderApproversPathParams) => `/api/purchase-order/notifyPurchaseOrderApprovers/${paramsInPath.id}`, {  pathParams: { id }, ...props });
+
+
+export interface PostPurchaseOrderDisbursementPathParams {
+  id: number
+}
+
+export type PostPurchaseOrderDisbursementProps = Omit<MutateProps<void, unknown, void, DisbursementAttr, PostPurchaseOrderDisbursementPathParams>, "path" | "verb"> & PostPurchaseOrderDisbursementPathParams;
+
+export const PostPurchaseOrderDisbursement = ({id, ...props}: PostPurchaseOrderDisbursementProps) => (
+  <Mutate<void, unknown, void, DisbursementAttr, PostPurchaseOrderDisbursementPathParams>
+    verb="POST"
+    path={`/api/purchase-order/postPurchaseOrderDisbursement/${id}`}
+    
+    {...props}
+  />
+);
+
+export type UsePostPurchaseOrderDisbursementProps = Omit<UseMutateProps<void, unknown, void, DisbursementAttr, PostPurchaseOrderDisbursementPathParams>, "path" | "verb"> & PostPurchaseOrderDisbursementPathParams;
+
+export const usePostPurchaseOrderDisbursement = ({id, ...props}: UsePostPurchaseOrderDisbursementProps) => useMutate<void, unknown, void, DisbursementAttr, PostPurchaseOrderDisbursementPathParams>("POST", (paramsInPath: PostPurchaseOrderDisbursementPathParams) => `/api/purchase-order/postPurchaseOrderDisbursement/${paramsInPath.id}`, {  pathParams: { id }, ...props });
+
+
 export interface GetPurchaseRequestPathParams {
   id: number
 }
@@ -1146,6 +1331,26 @@ export const PostVoucher = (props: PostVoucherProps) => (
 export type UsePostVoucherProps = Omit<UseMutateProps<number, unknown, void, CreateVoucherOrOrder, void>, "path" | "verb">;
 
 export const usePostVoucher = (props: UsePostVoucherProps) => useMutate<number, unknown, void, CreateVoucherOrOrder, void>("POST", `/api/voucher/postVoucher`, props);
+
+
+export interface UpdateVoucherPathParams {
+  id: number
+}
+
+export type UpdateVoucherProps = Omit<MutateProps<void, unknown, void, CreateVoucherOrOrder, UpdateVoucherPathParams>, "path" | "verb"> & UpdateVoucherPathParams;
+
+export const UpdateVoucher = ({id, ...props}: UpdateVoucherProps) => (
+  <Mutate<void, unknown, void, CreateVoucherOrOrder, UpdateVoucherPathParams>
+    verb="PATCH"
+    path={`/api/voucher/updateVoucher/${id}`}
+    
+    {...props}
+  />
+);
+
+export type UseUpdateVoucherProps = Omit<UseMutateProps<void, unknown, void, CreateVoucherOrOrder, UpdateVoucherPathParams>, "path" | "verb"> & UpdateVoucherPathParams;
+
+export const useUpdateVoucher = ({id, ...props}: UseUpdateVoucherProps) => useMutate<void, unknown, void, CreateVoucherOrOrder, UpdateVoucherPathParams>("PATCH", (paramsInPath: UpdateVoucherPathParams) => `/api/voucher/updateVoucher/${paramsInPath.id}`, {  pathParams: { id }, ...props });
 
 
 export type ApproveVoucherProps = Omit<MutateProps<void, unknown, void, ApproveVoucherOrOrder, void>, "path" | "verb">;

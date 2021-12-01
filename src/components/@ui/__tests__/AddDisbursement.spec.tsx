@@ -15,13 +15,18 @@ import AddDisbursement from '../AddDisbursement';
 describe('AddDisbursement', () => {
   const expectedTotalCost = faker.datatype.number();
   const mockedProfile = generateFakeProfile();
+  const expectedChargeId = faker.datatype.number();
 
   async function renderTarget(
     paymentType: PaymentType,
     onDisburse?: (data: DisbursementAttr) => void
   ) {
     const target = renderWithProvider(
-      <AddDisbursement maxValue={expectedTotalCost} onDisburse={onDisburse} />,
+      <AddDisbursement
+        maxValue={expectedTotalCost}
+        onDisburse={onDisburse}
+        chargeId={expectedChargeId}
+      />,
       store => store.dispatch(profileActions.signIn({me: mockedProfile}))
     );
 
@@ -150,6 +155,7 @@ describe('AddDisbursement', () => {
           ...mockedDisbursement,
           id: undefined,
           amount: mockedDisbursement.amount.toString(),
+          chargeId: expectedChargeId,
           checkPostingDate: '',
           checkIssuingBank: '',
           checkNumber: '',
@@ -158,6 +164,7 @@ describe('AddDisbursement', () => {
         expect(mockOnDisburse).toHaveBeenCalledWith({
           ...mockedDisbursement,
           id: undefined,
+          chargeId: expectedChargeId,
           amount: mockedDisbursement.amount.toString(),
           checkPostingDate: mockedDisbursement.checkPostingDate?.substr(0, 10),
         });
