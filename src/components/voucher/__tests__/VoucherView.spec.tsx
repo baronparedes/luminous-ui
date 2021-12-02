@@ -163,6 +163,7 @@ describe('VoucherView', () => {
 
     return {
       ...target,
+      mockedVoucher,
     };
   }
 
@@ -205,13 +206,13 @@ describe('VoucherView', () => {
   });
 
   it('should modify voucher', async () => {
-    const {getByTestId} = await renderTarget({
+    const {mockedVoucher, getByTestId, queryByRole} = await renderTarget({
       status: 'pending',
       isAdmin: true,
     });
 
     nock(base)
-      .post('/api/voucher/updateVoucher', body => {
+      .patch(`/api/voucher/updateVoucher/${mockedVoucher.id}`, body => {
         expect(body).toEqual({
           chargeId: 1,
           description: 'mocked-description',
@@ -237,5 +238,8 @@ describe('VoucherView', () => {
     );
 
     userEvent.click(getByTestId('mock-modify-v'));
+    await waitFor(() =>
+      expect(queryByRole('progressbar')).not.toBeInTheDocument()
+    );
   });
 });

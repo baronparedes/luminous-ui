@@ -1,5 +1,13 @@
 import {useState} from 'react';
-import {Button, Col, Container, Form, InputGroup, Row} from 'react-bootstrap';
+import {
+  Button,
+  ButtonProps,
+  Col,
+  Container,
+  Form,
+  InputGroup,
+  Row,
+} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
 import {
   FaCalendar,
@@ -26,9 +34,17 @@ type Props = {
   maxValue?: number;
   onDisburse?: (data: DisbursementAttr) => void;
   chargeId: number;
+  buttonLabel?: string;
 };
 
-const AddDisbursement = ({chargeId, disabled, maxValue, onDisburse}: Props) => {
+const AddDisbursement = ({
+  chargeId,
+  disabled,
+  maxValue,
+  buttonLabel,
+  onDisburse,
+  ...buttonProps
+}: Props & ButtonProps) => {
   const {me} = useRootState(state => state.profile);
   const [toggle, setToggle] = useState(false);
   const {handleSubmit, control, watch, formState} = useForm<DisbursementAttr>({
@@ -58,8 +74,9 @@ const AddDisbursement = ({chargeId, disabled, maxValue, onDisburse}: Props) => {
         onClick={() => {
           setToggle(true);
         }}
+        {...buttonProps}
       >
-        <FaPlus />
+        {buttonLabel ? buttonLabel : <FaPlus />}
       </Button>
       <ModalContainer
         backdrop="static"

@@ -213,6 +213,7 @@ export interface PurchaseOrderAttr {
   approverProfiles?: ProfileAttr[];
   rejectedByProfile?: ProfileAttr;
   requestedByProfile?: ProfileAttr;
+  disbursements?: DisbursementAttr[];
   expenses?: ExpenseAttr[];
   comments?: string | null;
   rejectedBy?: number;

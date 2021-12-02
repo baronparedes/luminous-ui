@@ -6,13 +6,20 @@ import {waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import {
+  generateFakeDisbursement,
   generateFakeProfile,
   generateFakePurchaseOrder,
 } from '../../../@utils/fake-models';
 import routes from '../../../@utils/routes';
 import {renderWithProviderAndRouterAndRestful} from '../../../@utils/test-renderers';
-import {ProfileType, PurchaseOrderAttr, RequestStatus} from '../../../Api';
+import {
+  DisbursementAttr,
+  ProfileType,
+  PurchaseOrderAttr,
+  RequestStatus,
+} from '../../../Api';
 import {profileActions} from '../../../store/reducers/profile.reducer';
+import DisbursementList from '../../@ui/DisbursementList';
 import ExpenseTable from '../../@ui/ExpenseTable';
 import ManageVoucherOrOrder from '../../@ui/ManageVoucherOrOrder';
 import ApprovePurchaseOrder from '../actions/ApprovePurchaseOrder';
@@ -36,6 +43,8 @@ type RejectPurchaseOrderProps = React.ComponentProps<
 >;
 
 type NotifyApproversProps = React.ComponentProps<typeof NotifyApprovers>;
+
+type DisbursementListProps = React.ComponentProps<typeof DisbursementList>;
 
 type ManageVoucherOrOrderProps = React.ComponentProps<
   typeof ManageVoucherOrOrder
@@ -74,6 +83,17 @@ jest.mock(
 jest.mock('../actions/NotifyApprovers', () => (props: NotifyApproversProps) => {
   return <div data-testid="mock-notify">{JSON.stringify(props)}</div>;
 });
+
+jest.mock(
+  '../../@ui/DisbursementList',
+  () => (props: DisbursementListProps) => {
+    return (
+      <div data-testid="mock-disbursements">
+        {JSON.stringify(props.disbursements)}
+      </div>
+    );
+  }
+);
 
 jest.mock(
   '../../@ui/ManageVoucherOrOrder',
@@ -161,6 +181,7 @@ describe('PurchaseOrderView', () => {
 
     return {
       ...target,
+      mockedPurchaseOrder,
     };
   }
 
@@ -202,32 +223,100 @@ describe('PurchaseOrderView', () => {
     );
   });
 
-  it('should modify purchase request', async () => {
-    const {getByTestId} = await renderTarget({
+  it('should add disbursements', async () => {
+    const {
+      mockedPurchaseOrder,
+      getByText,
+      getByPlaceholderText,
+      getAllByTestId,
+      getByRole,
+      queryByRole,
+      queryByText,
+    } = await renderTarget({
+      status: 'approved',
+      isAdmin: true,
+    });
+
+    const expectedDisbursement: DisbursementAttr = {
+      ...generateFakeDisbursement(),
+      paymentType: 'cash',
+      amount: mockedPurchaseOrder.totalCost,
+    };
+
+    nock(base)
+      .post(
+        `/api/purchase-order/postPurchaseOrderDisbursement/${mockedPurchaseOrder.id}`
+      )
+      .reply(200);
+
+    nock(base)
+      .get(`/api/purchase-order/getPurchaseOrder/${mockedPurchaseOrder.id}`)
+      .reply(200, mockedPurchaseOrder);
+
+    userEvent.click(getByText(/add disbursement/i));
+
+    await waitFor(() =>
+      expect(getByText(/^add disbursements$/i)).toBeInTheDocument()
+    );
+
+    const detailsInput = getByPlaceholderText(/details/i) as HTMLInputElement;
+    const paymentTypeInput = getByPlaceholderText(
+      /payment type/i
+    ) as HTMLSelectElement;
+    const amountInput = getByPlaceholderText(
+      /amount to release/i
+    ) as HTMLInputElement;
+
+    userEvent.type(detailsInput, expectedDisbursement.details);
+    userEvent.clear(amountInput);
+    userEvent.type(amountInput, expectedDisbursement.amount.toString());
+    userEvent.selectOptions(paymentTypeInput, expectedDisbursement.paymentType);
+
+    userEvent.click(getByText(/^disburse$/i));
+
+    await waitFor(() =>
+      expect(queryByText(/^disburse$/i)).not.toBeInTheDocument()
+    );
+
+    await waitFor(() => expect(getByRole('progressbar')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+
+    await waitFor(() => {
+      expect(getAllByTestId('mock-disbursements')).toHaveLength(1);
+    });
+  });
+
+  it('should modify purchase order', async () => {
+    const {mockedPurchaseOrder, getByTestId, queryByRole} = await renderTarget({
       status: 'pending',
       isAdmin: true,
     });
 
     nock(base)
-      .post('/api/purchase-order/updatePurchaseOrder', body => {
-        expect(body).toEqual({
-          chargeId: 1,
-          description: 'mocked-description',
-          requestedBy: 1,
-          requestedDate: 'mocked-order-date',
-          expenses: [
-            {
-              category: 'mocked-category',
-              categoryId: 1,
-              description: 'mocked-e-description',
-              quantity: 1,
-              totalCost: 1,
-              unitCost: 1,
-            },
-          ],
-        });
-        return true;
-      })
+      .patch(
+        `/api/purchase-order/updatePurchaseOrder/${mockedPurchaseOrder.id}`,
+        body => {
+          expect(body).toEqual({
+            chargeId: 1,
+            description: 'mocked-description',
+            requestedBy: 1,
+            requestedDate: 'mocked-order-date',
+            expenses: [
+              {
+                category: 'mocked-category',
+                categoryId: 1,
+                description: 'mocked-e-description',
+                quantity: 1,
+                totalCost: 1,
+                unitCost: 1,
+              },
+            ],
+          });
+          return true;
+        }
+      )
       .reply(200);
 
     await waitFor(() =>
@@ -235,5 +324,8 @@ describe('PurchaseOrderView', () => {
     );
 
     userEvent.click(getByTestId('mock-modify-pr'));
+    await waitFor(() =>
+      expect(queryByRole('progressbar')).not.toBeInTheDocument()
+    );
   });
 });

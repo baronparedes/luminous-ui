@@ -163,6 +163,7 @@ describe('PurchaseRequestView', () => {
 
     return {
       ...target,
+      mockedPurchaseRequest,
     };
   }
 
@@ -211,31 +212,35 @@ describe('PurchaseRequestView', () => {
   });
 
   it('should modify purchase request', async () => {
-    const {getByTestId} = await renderTarget({
-      status: 'pending',
-      isAdmin: true,
-    });
+    const {mockedPurchaseRequest, getByTestId, queryByRole} =
+      await renderTarget({
+        status: 'pending',
+        isAdmin: true,
+      });
 
     nock(base)
-      .post('/api/purchase-request/updatePurchaseRequest', body => {
-        expect(body).toEqual({
-          chargeId: 1,
-          description: 'mocked-description',
-          requestedBy: 1,
-          requestedDate: 'mocked-request-date',
-          expenses: [
-            {
-              category: 'mocked-category',
-              categoryId: 1,
-              description: 'mocked-e-description',
-              quantity: 1,
-              totalCost: 1,
-              unitCost: 1,
-            },
-          ],
-        });
-        return true;
-      })
+      .patch(
+        `/api/purchase-request/updatePurchaseRequest/${mockedPurchaseRequest.id}`,
+        body => {
+          expect(body).toEqual({
+            chargeId: 1,
+            description: 'mocked-description',
+            requestedBy: 1,
+            requestedDate: 'mocked-request-date',
+            expenses: [
+              {
+                category: 'mocked-category',
+                categoryId: 1,
+                description: 'mocked-e-description',
+                quantity: 1,
+                totalCost: 1,
+                unitCost: 1,
+              },
+            ],
+          });
+          return true;
+        }
+      )
       .reply(200);
 
     await waitFor(() =>
@@ -243,5 +248,8 @@ describe('PurchaseRequestView', () => {
     );
 
     userEvent.click(getByTestId('mock-modify-pr'));
+    await waitFor(() =>
+      expect(queryByRole('progressbar')).not.toBeInTheDocument()
+    );
   });
 });

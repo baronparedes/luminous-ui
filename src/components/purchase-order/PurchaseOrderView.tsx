@@ -2,14 +2,19 @@ import {useEffect, useState} from 'react';
 import {Col, Container, Row} from 'react-bootstrap';
 import {FaPrint} from 'react-icons/fa';
 
+import {sum} from '../../@utils/helpers';
 import {
   CreateVoucherOrOrder,
+  DisbursementAttr,
   ExpenseAttr,
   useGetPurchaseOrder,
+  usePostPurchaseOrderDisbursement,
   useUpdatePurchaseOrder,
 } from '../../Api';
 import {useUrl} from '../../hooks/useUrl';
 import {useRootState} from '../../store';
+import AddDisbursement from '../@ui/AddDisbursement';
+import DisbursementList from '../@ui/DisbursementList';
 import ExpenseTable from '../@ui/ExpenseTable';
 import Loading from '../@ui/Loading';
 import ManageVoucherOrOrder from '../@ui/ManageVoucherOrOrder';
@@ -22,6 +27,7 @@ import PurchaseOrderDetails from './PurchaseOrderDetails';
 
 const PurchaseOrderView = () => {
   const [request, setRequest] = useState<CreateVoucherOrOrder>();
+  const [remainingCost, setRemainingCost] = useState<number>(0);
   const {me} = useRootState(state => state.profile);
   const {id} = useUrl();
   const purchaseOrderId = Number(id);
@@ -31,9 +37,38 @@ const PurchaseOrderView = () => {
   const {mutate, loading: savingPurchaseOrder} = useUpdatePurchaseOrder({
     id: Number(data?.id),
   });
+  const {mutate: mutatePurchaseOrderDisbursement, loading: savingDisbursement} =
+    usePostPurchaseOrderDisbursement({
+      id: Number(data?.id),
+    });
 
-  const handleOnModifyPurchaseOrder = (data: CreateVoucherOrOrder) => {
-    mutate(data).then(() => refetch());
+  const handleOnModifyPurchaseOrder = (formData: CreateVoucherOrOrder) => {
+    mutate(formData).then(() => refetch());
+  };
+
+  const handleOnDisburse = (d: DisbursementAttr) => {
+    const forCashPayment: DisbursementAttr = {
+      details: d.details,
+      releasedBy: d.releasedBy,
+      amount: d.amount,
+      paymentType: 'cash',
+      chargeId: Number(data?.chargeId),
+    };
+    const forCheckPayment: DisbursementAttr = {
+      amount: d.amount,
+      details: d.details,
+      paymentType: d.paymentType,
+      chargeId: Number(data?.chargeId),
+      releasedBy: d.releasedBy,
+      checkIssuingBank: d.checkIssuingBank,
+      checkNumber: d.checkNumber,
+      checkPostingDate: d.checkPostingDate
+        ? new Date(d.checkPostingDate).toISOString()
+        : undefined,
+    };
+    const sanitized =
+      d.paymentType === 'cash' ? forCashPayment : forCheckPayment;
+    mutatePurchaseOrderDisbursement(sanitized).then(() => refetch());
   };
 
   useEffect(() => {
@@ -49,6 +84,9 @@ const PurchaseOrderView = () => {
         };
         return result;
       });
+      setRemainingCost(
+        data.totalCost - sum(data.disbursements?.map(d => d.amount))
+      );
       setRequest({
         chargeId: data.chargeId,
         description: data.description,
@@ -89,9 +127,27 @@ const PurchaseOrderView = () => {
                     />
                   }
                 />
+                <DisbursementList disbursements={data.disbursements} />
               </>
             )}
           </Col>
+          {data &&
+            data.status === 'approved' &&
+            me?.type === 'admin' &&
+            remainingCost > 0 && (
+              <Col md={3}>
+                <AddDisbursement
+                  key={new Date().getUTCMilliseconds()}
+                  chargeId={data.chargeId}
+                  maxValue={remainingCost}
+                  onDisburse={handleOnDisburse}
+                  className="mb-2 w-100"
+                  size={undefined}
+                  buttonLabel="add disbursement"
+                  disabled={savingDisbursement}
+                />
+              </Col>
+            )}
           {data && data.status === 'pending' && me?.type === 'admin' && (
             <Col md={3}>
               <RoundedPanel className="mb-2">
