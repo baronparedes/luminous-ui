@@ -70,7 +70,7 @@ const CollectionEfficiency = ({data}: Props) => {
 
   return (
     <>
-      <RoundedPanel className="p-4 text-center">
+      <RoundedPanel className="p-3 text-center">
         <Row className="text-muted mb-3">
           <Col>Monthly Collection Efficiency</Col>
         </Row>
