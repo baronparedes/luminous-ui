@@ -13,6 +13,7 @@ import SettingsView from './components/admin/manage-settings/SettingsView';
 import WaterReadingView from './components/admin/upload-water-reading/WaterReadingView';
 import DashboardView from './components/dashboard/DashboardView';
 import DisbursementView from './components/expense/DisbursementView';
+import OrderView from './components/expense/OrderView';
 import RequestView from './components/expense/RequestView';
 import LoginView from './components/profile/LoginView';
 import MyProfileView from './components/profile/MyProfileView';
@@ -65,6 +66,12 @@ const AppRouter: React.FC = () => {
               exact
               onlyFor={['admin', 'stakeholder']}
               component={RequestView}
+            />
+            <ProtectedRoute
+              path={routes.EXPENSE_ORDERS}
+              exact
+              onlyFor={['admin', 'stakeholder']}
+              component={OrderView}
             />
             <ProtectedRoute
               path={routes.EXPENSE_DISBURSEMENTS}

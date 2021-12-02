@@ -44,7 +44,7 @@ export const validateUnique = (values: string[]) => {
   return validate;
 };
 
-export const requiredIf = (condition: boolean) => {
+export const requiredIf = (condition?: boolean) => {
   const rule = (value: string | undefined) => {
     if (condition) {
       if (!value) return 'should be required';

@@ -12,9 +12,13 @@ import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {FaTimes} from 'react-icons/fa';
 
 import {sum} from '../../@utils/helpers';
-import {CreateVoucherOrOrder, ExpenseAttr} from '../../Api';
+import {
+  CreatePurchaseOrder,
+  CreateVoucherOrOrder,
+  ExpenseAttr,
+} from '../../Api';
 import {useRootState} from '../../store';
-import {validateNotEmpty} from '../@validation';
+import {requiredIf, validateNotEmpty} from '../@validation';
 import AddExpense from './AddExpense';
 import ButtonLoading from './ButtonLoading';
 import {Currency} from './Currency';
@@ -27,6 +31,8 @@ type Props = {
   title: string;
   loading?: boolean;
   defaultValues?: CreateVoucherOrOrder;
+  hasOrderData?: boolean;
+  purchaseRequestId?: number;
 };
 
 const ManageVoucherOrOrder = ({
@@ -35,20 +41,34 @@ const ManageVoucherOrOrder = ({
   title,
   loading,
   defaultValues,
+  hasOrderData,
+  purchaseRequestId,
   onSave,
   ...buttonProps
 }: Props & ButtonProps) => {
   const {me} = useRootState(state => state.profile);
   const [toggle, setToggle] = useState(false);
+  const defaultOrderData: CreatePurchaseOrder = {
+    purchaseRequestId: Number(purchaseRequestId),
+    vendorName: '',
+    fulfillmentDate: new Date().toISOString(),
+    otherDetails: '',
+  };
   const {handleSubmit, control, formState, getValues} =
     useForm<CreateVoucherOrOrder>({
-      defaultValues: defaultValues ?? {
-        chargeId,
-        description: '',
-        expenses: [],
-        requestedBy: Number(me?.id),
-        requestedDate: new Date().toISOString(),
-      },
+      defaultValues: defaultValues
+        ? {
+            ...defaultValues,
+            orderData: hasOrderData ? defaultOrderData : undefined,
+          }
+        : {
+            chargeId,
+            description: '',
+            expenses: [],
+            requestedBy: Number(me?.id),
+            requestedDate: new Date().toISOString(),
+            orderData: hasOrderData ? defaultOrderData : undefined,
+          },
     });
 
   const {append, remove} = useFieldArray({
@@ -106,7 +126,7 @@ const ManageVoucherOrOrder = ({
               </Col>
             </Row>
             <Row>
-              <Form.Group as={Col} controlId="form-description">
+              <Form.Group as={Col} md={12} controlId="form-description">
                 <Form.Text className="text-muted">
                   Purpose of the request
                 </Form.Text>
@@ -120,7 +140,7 @@ const ManageVoucherOrOrder = ({
                     <Form.Control
                       {...field}
                       as="textarea"
-                      rows={3}
+                      rows={2}
                       required
                       placeholder="description"
                       isInvalid={formState.errors.description !== undefined}
@@ -130,10 +150,104 @@ const ManageVoucherOrOrder = ({
                 <Form.Control.Feedback type="invalid" className="text-right">
                   {formState.errors.description?.message}
                 </Form.Control.Feedback>
-                <hr />
               </Form.Group>
+              {hasOrderData && (
+                <>
+                  <Form.Group as={Col} md={6} controlId="form-vendor-name">
+                    <Form.Text className="text-muted">Vendor name</Form.Text>
+                    <Controller
+                      name="orderData.vendorName"
+                      control={control}
+                      rules={{
+                        validate: {
+                          required: requiredIf(hasOrderData),
+                          validateNotEmpty,
+                        },
+                      }}
+                      render={({field}) => (
+                        <Form.Control
+                          {...field}
+                          required={hasOrderData}
+                          placeholder="vendor name"
+                          isInvalid={
+                            formState.errors.orderData?.vendorName !== undefined
+                          }
+                        />
+                      )}
+                    />
+                    <Form.Control.Feedback
+                      type="invalid"
+                      className="text-right"
+                    >
+                      {formState.errors.orderData?.vendorName?.message}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group as={Col} md={6} controlId="form-fulfillment-date">
+                    <Form.Text className="text-muted">
+                      Fulfillment date
+                    </Form.Text>
+                    <Controller
+                      name="orderData.fulfillmentDate"
+                      control={control}
+                      rules={{
+                        validate: {
+                          required: requiredIf(hasOrderData),
+                        },
+                      }}
+                      render={({field}) => (
+                        <Form.Control
+                          {...field}
+                          type="date"
+                          required={hasOrderData}
+                          placeholder="fulfillment date"
+                          isInvalid={
+                            formState.errors.orderData?.fulfillmentDate !==
+                            undefined
+                          }
+                        />
+                      )}
+                    />
+                    <Form.Control.Feedback
+                      type="invalid"
+                      className="text-right"
+                    >
+                      {formState.errors.orderData?.vendorName?.message}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group as={Col} md={12} controlId="form-other details">
+                    <Form.Text className="text-muted">Other details</Form.Text>
+                    <Controller
+                      name="orderData.otherDetails"
+                      control={control}
+                      rules={{
+                        validate: {
+                          required: requiredIf(hasOrderData),
+                        },
+                      }}
+                      render={({field}) => (
+                        <Form.Control
+                          {...field}
+                          required={hasOrderData}
+                          placeholder="other details"
+                          isInvalid={
+                            formState.errors.orderData?.otherDetails !==
+                            undefined
+                          }
+                        />
+                      )}
+                    />
+                    <Form.Control.Feedback
+                      type="invalid"
+                      className="text-right"
+                    >
+                      {formState.errors.orderData?.vendorName?.message}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </>
+              )}
             </Row>
           </Form>
+          <hr />
           <Container className="p-0">
             <Row>
               <Col md={12}>

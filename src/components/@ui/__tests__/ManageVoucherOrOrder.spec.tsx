@@ -41,13 +41,17 @@ describe('ManageVoucherOrOrder', () => {
   const chargeId = faker.datatype.number();
   const fakeTitle = faker.random.words();
 
-  async function renderTarget(onSave?: (data: CreateVoucherOrOrder) => void) {
+  async function renderTarget(props?: {
+    onSave?: (data: CreateVoucherOrOrder) => void;
+    hasOrderData?: boolean;
+    purchaseRequestId?: number;
+  }) {
     const target = renderWithProvider(
       <ManageVoucherOrOrder
         chargeId={chargeId}
         buttonLabel={'toggle'}
-        onSave={onSave}
         title={fakeTitle}
+        {...props}
       />,
       store => store.dispatch(profileActions.signIn({me: mockedProfile}))
     );
@@ -100,7 +104,7 @@ describe('ManageVoucherOrOrder', () => {
     };
 
     const {addExpenseButton, descriptionInput, saveButton, queryByRole} =
-      await renderTarget(mockOnCreatePurchaseRequest);
+      await renderTarget({onSave: mockOnCreatePurchaseRequest});
 
     userEvent.type(descriptionInput, expectedBody.description);
     userEvent.click(addExpenseButton);
@@ -115,6 +119,76 @@ describe('ManageVoucherOrOrder', () => {
           requestedBy: expectedBody.requestedBy,
           expenses: expectedBody.expenses,
           chargeId,
+        })
+      );
+    });
+    await waitFor(() => expect(queryByRole('dialog')).not.toBeInTheDocument());
+  });
+
+  it('should render and create a new purchase order', async () => {
+    window.confirm = jest.fn().mockImplementation(() => true);
+
+    const mockOnCreatePurchaseRequest = jest.fn();
+    const expectedBody: CreateVoucherOrOrder = {
+      description: faker.random.words(2),
+      requestedBy: Number(mockedProfile.id),
+      requestedDate: new Date().toISOString(),
+      expenses: [mockedExpense],
+      chargeId,
+      orderData: {
+        purchaseRequestId: faker.datatype.number(),
+        fulfillmentDate: faker.date.future().toISOString(),
+        otherDetails: faker.random.words(5),
+        vendorName: faker.random.words(2),
+      },
+    };
+
+    const {
+      addExpenseButton,
+      descriptionInput,
+      saveButton,
+      getByPlaceholderText,
+      queryByRole,
+    } = await renderTarget({
+      onSave: mockOnCreatePurchaseRequest,
+      hasOrderData: true,
+      purchaseRequestId: expectedBody.orderData?.purchaseRequestId,
+    });
+
+    const vendorNameInput = getByPlaceholderText(/vendor name/i);
+    const fulfillmentDateInput = getByPlaceholderText(/fulfillment date/i);
+    const otherDetailsInput = getByPlaceholderText(/other details/i);
+
+    userEvent.type(descriptionInput, expectedBody.description);
+    if (expectedBody.orderData) {
+      userEvent.type(vendorNameInput, expectedBody.orderData.vendorName);
+      userEvent.type(
+        fulfillmentDateInput,
+        expectedBody.orderData.fulfillmentDate
+      );
+      userEvent.type(otherDetailsInput, expectedBody.orderData.otherDetails);
+    }
+    userEvent.click(addExpenseButton);
+    userEvent.click(saveButton);
+
+    await waitFor(() => expect(window.confirm).toHaveBeenCalled());
+    await waitFor(() => {
+      expect(mockOnCreatePurchaseRequest).toHaveBeenCalled();
+      expect(mockOnCreatePurchaseRequest).toHaveBeenCalledWith(
+        expect.objectContaining({
+          description: expectedBody.description,
+          requestedBy: expectedBody.requestedBy,
+          expenses: expectedBody.expenses,
+          chargeId,
+          orderData: {
+            vendorName: expectedBody.orderData?.vendorName,
+            otherDetails: expectedBody.orderData?.otherDetails,
+            fulfillmentDate: expectedBody.orderData?.fulfillmentDate.substr(
+              0,
+              10
+            ),
+            purchaseRequestId: expectedBody.orderData?.purchaseRequestId,
+          },
         })
       );
     });

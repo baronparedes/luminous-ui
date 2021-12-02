@@ -2,6 +2,7 @@ import {Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import {
   FaBook,
   FaCogs,
+  FaFileInvoice,
   FaFileUpload,
   FaHome,
   FaMoneyCheckAlt,
@@ -61,6 +62,18 @@ function buildNavigationSections(profileType: ProfileType) {
             </>
           ),
         },
+        divider,
+        {
+          to: routes.EXPENSE_ORDERS,
+          exact: true,
+          title: (
+            <>
+              <FaFileInvoice className="mr-1" />
+              orders
+            </>
+          ),
+        },
+        divider,
         {
           to: routes.EXPENSE_DISBURSEMENTS,
           exact: true,

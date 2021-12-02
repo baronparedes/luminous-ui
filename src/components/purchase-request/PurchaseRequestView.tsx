@@ -1,11 +1,14 @@
 import {useEffect, useState} from 'react';
 import {Col, Container, Row} from 'react-bootstrap';
 import {FaPrint} from 'react-icons/fa';
+import {useHistory} from 'react-router';
 
+import routes from '../../@utils/routes';
 import {
   CreateVoucherOrOrder,
   ExpenseAttr,
   useGetPurchaseRequest,
+  usePostPurchaseOrder,
   useUpdatePurchaseRequest,
 } from '../../Api';
 import {useUrl} from '../../hooks/useUrl';
@@ -21,6 +24,7 @@ import RejectPurchaseRequest from './actions/RejectPurchaseRequest';
 import PurchaseRequestDetails from './PurchaseRequestDetails';
 
 const PurchaseRequestView = () => {
+  const history = useHistory();
   const [request, setRequest] = useState<CreateVoucherOrOrder>();
   const {me} = useRootState(state => state.profile);
   const {id} = useUrl();
@@ -31,9 +35,17 @@ const PurchaseRequestView = () => {
   const {mutate, loading: savingPurchaseRequest} = useUpdatePurchaseRequest({
     id: Number(data?.id),
   });
+  const {mutate: mutatePurchaseOrder, loading: savingPurchaseOrder} =
+    usePostPurchaseOrder({});
 
   const handleOnModifyPurchaseRequest = (data: CreateVoucherOrOrder) => {
     mutate(data).then(() => refetch());
+  };
+
+  const handleOnCreatePurchaseOrder = (data: CreateVoucherOrOrder) => {
+    mutatePurchaseOrder(data).then(id => {
+      history.push(routes.PURCHASE_ORDER(id));
+    });
   };
 
   useEffect(() => {
@@ -58,6 +70,14 @@ const PurchaseRequestView = () => {
       });
     }
   }, [data]);
+
+  const newOrderRequest = !request
+    ? undefined
+    : {
+        ...request,
+        requestedDate: new Date().toISOString(),
+        requestedBy: Number(me?.id),
+      };
 
   if (loading) {
     return <Loading />;
@@ -86,6 +106,25 @@ const PurchaseRequestView = () => {
               </>
             )}
           </Col>
+          {data && data.status === 'approved' && me?.type === 'admin' && (
+            <Col md={3}>
+              <RoundedPanel className="mb-2">
+                <ManageVoucherOrOrder
+                  key={new Date().getUTCMilliseconds()}
+                  variant="primary"
+                  className="mb-2 w-100"
+                  buttonLabel="new purchase order"
+                  chargeId={Number(data.chargeId)}
+                  hasOrderData
+                  purchaseRequestId={Number(data.id)}
+                  onSave={handleOnCreatePurchaseOrder}
+                  title={'Create new Purchase Order'}
+                  defaultValues={newOrderRequest}
+                  loading={savingPurchaseOrder}
+                />
+              </RoundedPanel>
+            </Col>
+          )}
           {data && data.status === 'pending' && me?.type === 'admin' && (
             <Col md={3}>
               <RoundedPanel className="mb-2">

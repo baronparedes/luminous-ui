@@ -18,6 +18,7 @@ import {
   PropertyAccount,
   PropertyAssignmentAttr,
   PropertyAttr,
+  PurchaseOrderAttr,
   PurchaseRequestAttr,
   RecordStatus,
   RequestStatus,
@@ -225,6 +226,29 @@ export const generateFakePurchaseRequest = (): PurchaseRequestAttr => {
     comments: faker.random.words(10),
     chargeId: faker.datatype.number(),
     expenses: [generateFakeExpense(), generateFakeExpense()],
+  };
+};
+
+export const generateFakePurchaseOrder = (): PurchaseOrderAttr => {
+  return {
+    id: faker.datatype.number(),
+    description: faker.random.words(2),
+    requestedBy: faker.datatype.number(),
+    requestedByProfile: generateFakeProfileAttr(),
+    requestedDate: faker.datatype.datetime().toISOString(),
+    status: faker.random.arrayElement<RequestStatus>([
+      'approved',
+      'pending',
+      'rejected',
+    ]),
+    totalCost: faker.datatype.number(),
+    comments: faker.random.words(10),
+    expenses: [generateFakeExpense(), generateFakeExpense()],
+    chargeId: faker.datatype.number(),
+    vendorName: faker.random.words(2),
+    fulfillmentDate: faker.date.future().toISOString(),
+    purchaseRequestId: faker.datatype.number(),
+    otherDetails: faker.random.words(10),
   };
 };
 
