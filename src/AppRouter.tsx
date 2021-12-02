@@ -18,6 +18,7 @@ import RequestView from './components/expense/RequestView';
 import LoginView from './components/profile/LoginView';
 import MyProfileView from './components/profile/MyProfileView';
 import PropertyView from './components/property/PropertyView';
+import PurchaseOrderView from './components/purchase-order/PurchaseOrderView';
 import PurchaseRequestView from './components/purchase-request/PurchaseRequestView';
 import VoucherView from './components/voucher/VoucherView';
 import {useInitSettings} from './hooks/useInitSettings';
@@ -49,6 +50,11 @@ const AppRouter: React.FC = () => {
               onlyFor={['admin', 'stakeholder']}
               path={routes.PURCHASE_REQUEST(':id')}
               component={PurchaseRequestView}
+            />
+            <ProtectedRoute
+              onlyFor={['admin', 'stakeholder']}
+              path={routes.PURCHASE_ORDER(':id')}
+              component={PurchaseOrderView}
             />
             <ProtectedRoute
               path={routes.ROOT}

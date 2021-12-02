@@ -7,32 +7,32 @@ import userEvent from '@testing-library/user-event';
 
 import {
   generateFakeProfile,
-  generateFakePurchaseRequest,
+  generateFakePurchaseOrder,
 } from '../../../@utils/fake-models';
 import routes from '../../../@utils/routes';
 import {renderWithProviderAndRouterAndRestful} from '../../../@utils/test-renderers';
-import {ProfileType, PurchaseRequestAttr, RequestStatus} from '../../../Api';
+import {ProfileType, PurchaseOrderAttr, RequestStatus} from '../../../Api';
 import {profileActions} from '../../../store/reducers/profile.reducer';
 import ExpenseTable from '../../@ui/ExpenseTable';
 import ManageVoucherOrOrder from '../../@ui/ManageVoucherOrOrder';
-import ApprovePurchaseRequest from '../actions/ApprovePurchaseRequest';
+import ApprovePurchaseOrder from '../actions/ApprovePurchaseOrder';
 import NotifyApprovers from '../actions/NotifyApprovers';
-import RejectPurchaseRequest from '../actions/RejectPurchaseRequest';
-import PurchaseRequestDetails from '../PurchaseRequestDetails';
-import PurchaseRequestView from '../PurchaseRequestView';
+import RejectPurchaseOrder from '../actions/RejectPurchaseOrder';
+import PurchaseOrderDetails from '../PurchaseOrderDetails';
+import PurchaseOrderView from '../PurchaseOrderView';
 
-type PurchaseRequestDetailsProps = React.ComponentProps<
-  typeof PurchaseRequestDetails
+type PurchaseOrderDetailsProps = React.ComponentProps<
+  typeof PurchaseOrderDetails
 >;
 
 type ExpenseTableProps = React.ComponentProps<typeof ExpenseTable>;
 
-type ApprovePurchaseRequestProps = React.ComponentProps<
-  typeof ApprovePurchaseRequest
+type ApprovePurchaseOrderProps = React.ComponentProps<
+  typeof ApprovePurchaseOrder
 >;
 
-type RejectPurchaseRequestProps = React.ComponentProps<
-  typeof RejectPurchaseRequest
+type RejectPurchaseOrderProps = React.ComponentProps<
+  typeof RejectPurchaseOrder
 >;
 
 type NotifyApproversProps = React.ComponentProps<typeof NotifyApprovers>;
@@ -42,8 +42,8 @@ type ManageVoucherOrOrderProps = React.ComponentProps<
 >;
 
 jest.mock(
-  '../PurchaseRequestDetails',
-  () => (props: PurchaseRequestDetailsProps) => {
+  '../PurchaseOrderDetails',
+  () => (props: PurchaseOrderDetailsProps) => {
     return <div data-testid="mock-pr-details">{JSON.stringify(props)}</div>;
   }
 );
@@ -58,15 +58,15 @@ jest.mock('../../@ui/ExpenseTable', () => (props: ExpenseTableProps) => {
 });
 
 jest.mock(
-  '../actions/ApprovePurchaseRequest',
-  () => (props: ApprovePurchaseRequestProps) => {
+  '../actions/ApprovePurchaseOrder',
+  () => (props: ApprovePurchaseOrderProps) => {
     return <div data-testid="mock-approve">{JSON.stringify(props)}</div>;
   }
 );
 
 jest.mock(
-  '../actions/RejectPurchaseRequest',
-  () => (props: RejectPurchaseRequestProps) => {
+  '../actions/RejectPurchaseOrder',
+  () => (props: RejectPurchaseOrderProps) => {
     return <div data-testid="mock-reject">{JSON.stringify(props)}</div>;
   }
 );
@@ -87,7 +87,7 @@ jest.mock(
             chargeId: 1,
             description: 'mocked-description',
             requestedBy: 1,
-            requestedDate: 'mocked-request-date',
+            requestedDate: 'mocked-order-date',
             expenses: [
               {
                 category: 'mocked-category',
@@ -100,14 +100,12 @@ jest.mock(
             ],
           })
         }
-      >
-        {props.buttonLabel}
-      </div>
+      ></div>
     );
   }
 );
 
-describe('PurchaseRequestView', () => {
+describe('PurchaseOrderView', () => {
   const base = 'http://localhost';
 
   async function renderTarget(opts?: {
@@ -116,35 +114,35 @@ describe('PurchaseRequestView', () => {
   }) {
     const type: ProfileType = opts?.isAdmin ? 'admin' : 'unit owner';
     const status: RequestStatus = opts?.status ?? 'pending';
-    const purchaseRequestId = faker.datatype.number();
+    const purchaseOrderId = faker.datatype.number();
     const mockedProfile = generateFakeProfile(type);
-    const mockedPurchaseRequest: PurchaseRequestAttr = {
-      ...generateFakePurchaseRequest(),
-      id: purchaseRequestId,
+    const mockedPurchaseOrder: PurchaseOrderAttr = {
+      ...generateFakePurchaseOrder(),
+      id: purchaseOrderId,
       status,
     };
 
     nock(base)
-      .get(`/api/purchase-request/getPurchaseRequest/${purchaseRequestId}`)
-      .reply(200, mockedPurchaseRequest);
+      .get(`/api/purchase-order/getPurchaseOrder/${purchaseOrderId}`)
+      .reply(200, mockedPurchaseOrder);
 
     const target = renderWithProviderAndRouterAndRestful(
       <Route
         path={routes.PURCHASE_REQUEST(':id')}
-        component={PurchaseRequestView}
+        component={PurchaseOrderView}
       />,
       base,
       store => {
         store.dispatch(profileActions.signIn({me: mockedProfile}));
       },
       history => {
-        history.push(routes.PURCHASE_REQUEST(purchaseRequestId));
+        history.push(routes.PURCHASE_REQUEST(purchaseOrderId));
       }
     );
 
     await waitFor(() => {
       expect(target.history.location.pathname).toEqual(
-        routes.PURCHASE_REQUEST(purchaseRequestId)
+        routes.PURCHASE_REQUEST(purchaseOrderId)
       );
     });
 
@@ -158,7 +156,7 @@ describe('PurchaseRequestView', () => {
 
     await waitFor(() => {
       expect(target.getByTestId('mock-pr-expenses')).toBeInTheDocument();
-      expect(target.getByTitle(/print purchase request/i)).toBeInTheDocument();
+      expect(target.getByTitle(/print purchase order/i)).toBeInTheDocument();
     });
 
     return {
@@ -173,13 +171,13 @@ describe('PurchaseRequestView', () => {
     });
 
     await waitFor(() =>
-      expect(getByTestId('mock-modify-pr')).toBeInTheDocument()
-    );
-    await waitFor(() =>
       expect(getByTestId('mock-approve')).toBeInTheDocument()
     );
     await waitFor(() => expect(getByTestId('mock-reject')).toBeInTheDocument());
     await waitFor(() => expect(getByTestId('mock-notify')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(getByTestId('mock-modify-pr')).toBeInTheDocument()
+    );
   });
 
   it('should render and hide actions', async () => {
@@ -188,7 +186,7 @@ describe('PurchaseRequestView', () => {
       'rejected',
     ]);
     const isAdmin = faker.datatype.boolean();
-    const {queryByTestId, queryByText} = await renderTarget({status, isAdmin});
+    const {queryByTestId} = await renderTarget({status, isAdmin});
 
     await waitFor(() =>
       expect(queryByTestId('mock-approve')).not.toBeInTheDocument()
@@ -200,14 +198,8 @@ describe('PurchaseRequestView', () => {
       expect(queryByTestId('mock-notify')).not.toBeInTheDocument()
     );
     await waitFor(() =>
-      expect(queryByText('modify request')).not.toBeInTheDocument()
+      expect(queryByTestId('mock-modify-pr')).not.toBeInTheDocument()
     );
-
-    if (isAdmin && status === 'approved') {
-      await waitFor(() =>
-        expect(queryByText('new purchase order')).toBeInTheDocument()
-      );
-    }
   });
 
   it('should modify purchase request', async () => {
@@ -217,12 +209,12 @@ describe('PurchaseRequestView', () => {
     });
 
     nock(base)
-      .post('/api/purchase-request/updatePurchaseRequest', body => {
+      .post('/api/purchase-order/updatePurchaseOrder', body => {
         expect(body).toEqual({
           chargeId: 1,
           description: 'mocked-description',
           requestedBy: 1,
-          requestedDate: 'mocked-request-date',
+          requestedDate: 'mocked-order-date',
           expenses: [
             {
               category: 'mocked-category',

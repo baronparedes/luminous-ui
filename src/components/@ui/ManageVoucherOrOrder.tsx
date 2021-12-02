@@ -59,7 +59,9 @@ const ManageVoucherOrOrder = ({
       defaultValues: defaultValues
         ? {
             ...defaultValues,
-            orderData: hasOrderData ? defaultOrderData : undefined,
+            orderData: hasOrderData
+              ? defaultValues.orderData ?? defaultOrderData
+              : undefined,
           }
         : {
             chargeId,
