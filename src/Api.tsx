@@ -50,6 +50,28 @@ export interface ChargeCollected {
   amount: number;
 }
 
+export type TransactionType = "charged" | "collected";
+
+export interface CollectionEfficiencyView {
+  transactionType: TransactionType;
+  transactionPeriod: string;
+  amount: number;
+}
+
+export interface PropertyBalanceView {
+  balance: number;
+  collected: number;
+  charged: number;
+  code: string;
+  id: number;
+}
+
+export interface DashboardView {
+  propertyBalance: PropertyBalanceView[];
+  collectionEfficieny: CollectionEfficiencyView[];
+  year: number;
+}
+
 export interface DisbursementBreakdownView {
   passOn?: boolean;
   amount: number;
@@ -134,8 +156,6 @@ export interface PropertyAttr {
   address: string;
   status: RecordStatus;
 }
-
-export type TransactionType = "charged" | "collected";
 
 export interface PaymentDetailAttr {
   id?: number;
@@ -397,6 +417,25 @@ export const PatchCharges = (props: PatchChargesProps) => (
 export type UsePatchChargesProps = Omit<UseMutateProps<void, unknown, void, ChargeAttr[], void>, "path" | "verb">;
 
 export const usePatchCharges = (props: UsePatchChargesProps) => useMutate<void, unknown, void, ChargeAttr[], void>("PATCH", `/api/charge/patchCharges`, props);
+
+
+export interface GetDashboardByYearPathParams {
+  year: number
+}
+
+export type GetDashboardByYearProps = Omit<GetProps<DashboardView, unknown, void, GetDashboardByYearPathParams>, "path"> & GetDashboardByYearPathParams;
+
+export const GetDashboardByYear = ({year, ...props}: GetDashboardByYearProps) => (
+  <Get<DashboardView, unknown, void, GetDashboardByYearPathParams>
+    path={`/api/dashboard/getDashboardByYear/${year}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetDashboardByYearProps = Omit<UseGetProps<DashboardView, unknown, void, GetDashboardByYearPathParams>, "path"> & GetDashboardByYearPathParams;
+
+export const useGetDashboardByYear = ({year, ...props}: UseGetDashboardByYearProps) => useGet<DashboardView, unknown, void, GetDashboardByYearPathParams>((paramsInPath: GetDashboardByYearPathParams) => `/api/dashboard/getDashboardByYear/${paramsInPath.year}`, {  pathParams: { year }, ...props });
 
 
 export type GetDisbursementBreakdownProps = Omit<GetProps<DisbursementBreakdownView[], unknown, void, void>, "path">;

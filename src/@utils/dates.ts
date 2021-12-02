@@ -45,7 +45,7 @@ export function toTransactionPeriod(year: number, month: Month) {
   return new Date(dateString);
 }
 
-export function toTransactionPeriodFromDate(date: Date): Period {
+export function toTransactionPeriodFromDate(date: Date | string): Period {
   const [year, month] = moment(date).format('YYYY MMM').split(' ');
   return {
     year: Number(year),

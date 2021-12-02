@@ -4,7 +4,7 @@ import {sum} from '../@utils/helpers';
 import {useGetAllCollectedCharges, useGetDisbursementBreakdown} from '../Api';
 import {DEFAULTS} from '../constants';
 
-type ChargeBalance = {
+export type ChargeBalance = {
   chargeId: number;
   code: string;
   balance: number;

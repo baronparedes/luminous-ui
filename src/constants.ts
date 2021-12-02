@@ -1,4 +1,4 @@
-import {Period, ProfileType, RecordStatus} from './Api';
+import {Month, Period, ProfileType, RecordStatus} from './Api';
 
 export const STATUS_COLORS = {
   active: 'text-success',
@@ -36,3 +36,18 @@ export const VERBIAGE = {
     ) => `${propertyCode ?? 'Unit'} - Payment History - ${year}`,
   },
 };
+
+export const MONTHS: Month[] = [
+  'JAN',
+  'FEB',
+  'MAR',
+  'APR',
+  'MAY',
+  'JUN',
+  'JUL',
+  'AUG',
+  'SEP',
+  'OCT',
+  'NOV',
+  'DEC',
+];
