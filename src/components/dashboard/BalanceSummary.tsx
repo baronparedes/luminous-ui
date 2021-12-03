@@ -1,8 +1,13 @@
 import {Badge, Col, Row} from 'react-bootstrap';
 
-import {ChargeBalance, useChargeBalance} from '../../hooks/useChargeBalance';
+import {ChargeBalance} from '../../hooks/useChargeBalance';
 import {Currency} from '../@ui/Currency';
 import RoundedPanel from '../@ui/RoundedPanel';
+
+type Props = {
+  availableCommunityBalance: ChargeBalance;
+  availableBalances: ChargeBalance[];
+};
 
 const ChargeBalanceSummary = ({code, balance}: ChargeBalance) => {
   return (
@@ -21,9 +26,10 @@ const ChargeBalanceSummary = ({code, balance}: ChargeBalance) => {
   );
 };
 
-const BalanceSummary = () => {
-  const {availableBalances, availableCommunityBalance} = useChargeBalance();
-
+const BalanceSummary = ({
+  availableBalances,
+  availableCommunityBalance,
+}: Props) => {
   return (
     <>
       <RoundedPanel className="p-4 text-center">

@@ -66,7 +66,14 @@ export interface PropertyBalanceView {
   id: number;
 }
 
+export interface ChargeExpenseView {
+  chargeId: number;
+  transactionPeriod: string;
+  amount: number;
+}
+
 export interface DashboardView {
+  chargeExpense: ChargeExpenseView[];
   propertyBalance: PropertyBalanceView[];
   collectionEfficieny: CollectionEfficiencyView[];
   year: number;
