@@ -4,15 +4,10 @@ import {Link} from 'react-router-dom';
 import {getNames} from '../../@utils/helpers';
 import routes from '../../@utils/routes';
 import {PurchaseOrderAttr} from '../../Api';
+import {STATUS_VARIANT} from '../../constants';
 
 type Props = {
   purchaseOrder: PurchaseOrderAttr;
-};
-
-const STATUS_VARIANT = {
-  pending: 'primary',
-  rejected: 'danger',
-  approved: 'success',
 };
 
 const PurchaseOrderCard = ({purchaseOrder}: Props) => {
@@ -51,7 +46,7 @@ const PurchaseOrderCard = ({purchaseOrder}: Props) => {
               by {getNames(purchaseOrder.approverProfiles)}
             </small>
           )}
-        {purchaseOrder.status === 'rejected' &&
+        {['rejected', 'cancelled'].includes(purchaseOrder.status) &&
           purchaseOrder.rejectedByProfile && (
             <small className="text-muted ml-2">
               by {purchaseOrder.rejectedByProfile?.name}

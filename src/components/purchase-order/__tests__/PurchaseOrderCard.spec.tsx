@@ -75,4 +75,19 @@ describe('PurchaseOrderCard', () => {
       getByText(`by ${mockedPurchaseOrder.rejectedByProfile?.name}`)
     ).toBeInTheDocument();
   });
+
+  it('should render cancelled by profile', () => {
+    const mockedPurchaseOrder: PurchaseOrderAttr = {
+      ...generateFakePurchaseOrder(),
+      requestedByProfile: generateFakeProfileAttr(),
+      rejectedByProfile: generateFakeProfileAttr(),
+      status: 'cancelled',
+    };
+    const {getByText} = renderWithRouter(
+      <PurchaseOrderCard purchaseOrder={mockedPurchaseOrder} />
+    );
+    expect(
+      getByText(`by ${mockedPurchaseOrder.rejectedByProfile?.name}`)
+    ).toBeInTheDocument();
+  });
 });

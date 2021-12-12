@@ -221,7 +221,7 @@ export interface PaymentHistoryView {
   amount: number;
 }
 
-export type RequestStatus = "approved" | "rejected" | "pending";
+export type RequestStatus = "approved" | "rejected" | "pending" | "cancelled";
 
 export interface ExpenseAttr {
   voucherId?: number;
@@ -237,6 +237,7 @@ export interface ExpenseAttr {
 }
 
 export interface PurchaseOrderAttr {
+  isClosed?: boolean;
   approverProfiles?: ProfileAttr[];
   rejectedByProfile?: ProfileAttr;
   requestedByProfile?: ProfileAttr;
@@ -284,6 +285,12 @@ export interface ApproveVoucherOrOrder {
 
 export interface RejectPurchaseOrder {
   rejectedBy: number;
+  comments: string;
+  id: number;
+}
+
+export interface CancelPurchaseOrder {
+  cancelledBy: number;
   comments: string;
   id: number;
 }
@@ -983,6 +990,22 @@ export const RejectPurchaseOrder = (props: RejectPurchaseOrderProps) => (
 export type UseRejectPurchaseOrderProps = Omit<UseMutateProps<void, unknown, void, RejectPurchaseOrder, void>, "path" | "verb">;
 
 export const useRejectPurchaseOrder = (props: UseRejectPurchaseOrderProps) => useMutate<void, unknown, void, RejectPurchaseOrder, void>("POST", `/api/purchase-order/rejectPurchaseOrder`, props);
+
+
+export type CancelPurchaseOrderProps = Omit<MutateProps<void, unknown, void, CancelPurchaseOrder, void>, "path" | "verb">;
+
+export const CancelPurchaseOrder = (props: CancelPurchaseOrderProps) => (
+  <Mutate<void, unknown, void, CancelPurchaseOrder, void>
+    verb="POST"
+    path={`/api/purchase-order/cancelPurchaseOrder`}
+    
+    {...props}
+  />
+);
+
+export type UseCancelPurchaseOrderProps = Omit<UseMutateProps<void, unknown, void, CancelPurchaseOrder, void>, "path" | "verb">;
+
+export const useCancelPurchaseOrder = (props: UseCancelPurchaseOrderProps) => useMutate<void, unknown, void, CancelPurchaseOrder, void>("POST", `/api/purchase-order/cancelPurchaseOrder`, props);
 
 
 export interface NotifyPurchaseOrderApproversPathParams {

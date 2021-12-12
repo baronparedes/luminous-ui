@@ -4,15 +4,10 @@ import {Link} from 'react-router-dom';
 import {getNames} from '../../@utils/helpers';
 import routes from '../../@utils/routes';
 import {VoucherAttr} from '../../Api';
+import {STATUS_VARIANT} from '../../constants';
 
 type Props = {
   voucher: VoucherAttr;
-};
-
-const STATUS_VARIANT = {
-  pending: 'primary',
-  rejected: 'danger',
-  approved: 'success',
 };
 
 const VoucherCard = ({voucher}: Props) => {

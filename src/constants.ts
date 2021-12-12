@@ -51,3 +51,10 @@ export const MONTHS: Month[] = [
   'NOV',
   'DEC',
 ];
+
+export const STATUS_VARIANT = {
+  pending: 'primary',
+  rejected: 'danger',
+  cancelled: 'warning',
+  approved: 'success',
+};

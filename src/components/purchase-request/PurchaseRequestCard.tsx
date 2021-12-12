@@ -4,15 +4,10 @@ import {Link} from 'react-router-dom';
 import {getNames} from '../../@utils/helpers';
 import routes from '../../@utils/routes';
 import {PurchaseRequestAttr} from '../../Api';
+import {STATUS_VARIANT} from '../../constants';
 
 type Props = {
   purchaseRequest: PurchaseRequestAttr;
-};
-
-const STATUS_VARIANT = {
-  pending: 'primary',
-  rejected: 'danger',
-  approved: 'success',
 };
 
 const PurchaseRequestCard = ({purchaseRequest}: Props) => {

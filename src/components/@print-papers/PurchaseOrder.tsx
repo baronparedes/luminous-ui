@@ -67,7 +67,7 @@ const PurchaseOrder = ({purchaseOrder, notes}: Props) => {
                   by {getNames(purchaseOrder.approverProfiles)}
                 </span>
               )}
-            {purchaseOrder.status === 'rejected' &&
+            {['rejected', 'cancelled'].includes(purchaseOrder.status) &&
               purchaseOrder.rejectedByProfile && (
                 <span className="ml-2">
                   by {purchaseOrder.rejectedByProfile?.name}

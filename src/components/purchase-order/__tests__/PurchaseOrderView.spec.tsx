@@ -23,6 +23,7 @@ import DisbursementList from '../../@ui/DisbursementList';
 import ExpenseTable from '../../@ui/ExpenseTable';
 import ManageVoucherOrOrder from '../../@ui/ManageVoucherOrOrder';
 import ApprovePurchaseOrder from '../actions/ApprovePurchaseOrder';
+import CancelPurchaseOrder from '../actions/CancelPurchaseOrder';
 import NotifyApprovers from '../actions/NotifyApprovers';
 import RejectPurchaseOrder from '../actions/RejectPurchaseOrder';
 import PurchaseOrderDetails from '../PurchaseOrderDetails';
@@ -40,6 +41,10 @@ type ApprovePurchaseOrderProps = React.ComponentProps<
 
 type RejectPurchaseOrderProps = React.ComponentProps<
   typeof RejectPurchaseOrder
+>;
+
+type CancelPurchaseOrderProps = React.ComponentProps<
+  typeof CancelPurchaseOrder
 >;
 
 type NotifyApproversProps = React.ComponentProps<typeof NotifyApprovers>;
@@ -77,6 +82,13 @@ jest.mock(
   '../actions/RejectPurchaseOrder',
   () => (props: RejectPurchaseOrderProps) => {
     return <div data-testid="mock-reject">{JSON.stringify(props)}</div>;
+  }
+);
+
+jest.mock(
+  '../actions/CancelPurchaseOrder',
+  () => (props: CancelPurchaseOrderProps) => {
+    return <div data-testid="mock-cancel">{JSON.stringify(props)}</div>;
   }
 );
 
@@ -131,6 +143,7 @@ describe('PurchaseOrderView', () => {
   async function renderTarget(opts?: {
     isAdmin?: boolean;
     status?: RequestStatus;
+    disbursements?: DisbursementAttr[];
   }) {
     const type: ProfileType = opts?.isAdmin ? 'admin' : 'unit owner';
     const status: RequestStatus = opts?.status ?? 'pending';
@@ -140,6 +153,7 @@ describe('PurchaseOrderView', () => {
       ...generateFakePurchaseOrder(),
       id: purchaseOrderId,
       status,
+      disbursements: opts?.disbursements,
     };
 
     nock(base)
@@ -232,9 +246,11 @@ describe('PurchaseOrderView', () => {
       getByRole,
       queryByRole,
       queryByText,
+      queryByTestId,
     } = await renderTarget({
       status: 'approved',
       isAdmin: true,
+      disbursements: [],
     });
 
     const expectedDisbursement: DisbursementAttr = {
@@ -251,13 +267,19 @@ describe('PurchaseOrderView', () => {
 
     nock(base)
       .get(`/api/purchase-order/getPurchaseOrder/${mockedPurchaseOrder.id}`)
-      .reply(200, mockedPurchaseOrder);
+      .reply(200, {
+        ...mockedPurchaseOrder,
+        disbursements: [expectedDisbursement],
+      });
 
     userEvent.click(getByText(/add disbursement/i));
 
     await waitFor(() =>
       expect(getByText(/^add disbursements$/i)).toBeInTheDocument()
     );
+    await waitFor(() => {
+      expect(queryByTestId('mock-cancel')).toBeInTheDocument();
+    });
 
     const detailsInput = getByPlaceholderText(/details/i) as HTMLInputElement;
     const paymentTypeInput = getByPlaceholderText(
@@ -285,6 +307,9 @@ describe('PurchaseOrderView', () => {
 
     await waitFor(() => {
       expect(getAllByTestId('mock-disbursements')).toHaveLength(1);
+    });
+    await waitFor(() => {
+      expect(queryByTestId('mock-cancel')).not.toBeInTheDocument();
     });
   });
 

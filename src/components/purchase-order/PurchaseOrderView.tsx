@@ -20,6 +20,7 @@ import Loading from '../@ui/Loading';
 import ManageVoucherOrOrder from '../@ui/ManageVoucherOrOrder';
 import RoundedPanel from '../@ui/RoundedPanel';
 import ApprovePurchaseOrder from './actions/ApprovePurchaseOrder';
+import CancelPurchaseOrder from './actions/CancelPurchaseOrder';
 import NotifyApprovers from './actions/NotifyApprovers';
 import PrintPurchaseOrder from './actions/PrintPurchaseOrder';
 import RejectPurchaseOrder from './actions/RejectPurchaseOrder';
@@ -41,6 +42,10 @@ const PurchaseOrderView = () => {
     usePostPurchaseOrderDisbursement({
       id: Number(data?.id),
     });
+
+  const renderCancel =
+    data && data.disbursements && data.disbursements.length === 0;
+  const renderAddDisbursement = remainingCost > 0;
 
   const handleOnModifyPurchaseOrder = (formData: CreateVoucherOrOrder) => {
     mutate(formData).then(() => refetch());
@@ -134,18 +139,29 @@ const PurchaseOrderView = () => {
           {data &&
             data.status === 'approved' &&
             me?.type === 'admin' &&
-            remainingCost > 0 && (
+            (renderAddDisbursement || renderCancel) && (
               <Col md={3}>
-                <AddDisbursement
-                  key={new Date().getUTCMilliseconds()}
-                  chargeId={data.chargeId}
-                  maxValue={remainingCost}
-                  onDisburse={handleOnDisburse}
-                  className="mb-2 w-100"
-                  size={undefined}
-                  buttonLabel="add disbursement"
-                  disabled={savingDisbursement}
-                />
+                {renderAddDisbursement && (
+                  <AddDisbursement
+                    key={new Date().getUTCMilliseconds()}
+                    chargeId={data.chargeId}
+                    maxValue={remainingCost}
+                    onDisburse={handleOnDisburse}
+                    className="mb-2 w-100"
+                    size={undefined}
+                    buttonLabel="add disbursement"
+                    disabled={savingDisbursement}
+                  />
+                )}
+                {renderCancel && (
+                  <CancelPurchaseOrder
+                    className="mb-2 w-100"
+                    variant="warning"
+                    buttonLabel="cancel"
+                    purchaseOrderId={purchaseOrderId}
+                    onCancel={() => refetch()}
+                  />
+                )}
               </Col>
             )}
           {data && data.status === 'pending' && me?.type === 'admin' && (
