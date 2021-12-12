@@ -9,7 +9,7 @@ import RoundedPanel from '../@ui/RoundedPanel';
 import SelectYear from '../@ui/SelectYear';
 import {Spacer} from '../@ui/Spacer';
 import BalanceSummary from './BalanceSummary';
-import ChargeExpense from './ChargeExpense';
+import ChargeDisbrused from './ChargeDisbrused';
 import CollectionEfficiency from './CollectionEfficiency';
 import PropertyBalance from './PropertyBalance';
 
@@ -49,22 +49,23 @@ const DashboardView = () => {
                 <Tab eventKey="collection" title="Collection">
                   <CollectionEfficiency data={data?.collectionEfficieny} />
                 </Tab>
-                <Tab eventKey="expense" title="Expenses">
-                  <ChargeExpense
+                <Tab eventKey="charge-disbrusements" title="Disbursements">
+                  <ChargeDisbrused
                     header={availableCommunityBalance.code}
                     data={data?.chargeExpense.filter(
                       c => c.chargeId === availableCommunityBalance.chargeId
                     )}
                   />
                   {availableBalances.map(chargeBalance => {
+                    const items = data?.chargeExpense.filter(
+                      c => c.chargeId === chargeBalance.chargeId
+                    );
                     return (
                       <>
                         <Spacer />
-                        <ChargeExpense
+                        <ChargeDisbrused
                           header={chargeBalance.code}
-                          data={data?.chargeExpense.filter(
-                            c => c.chargeId === chargeBalance.chargeId
-                          )}
+                          data={items}
                         />
                       </>
                     );

@@ -12,21 +12,21 @@ import {
 
 import {toTransactionPeriodFromDate} from '../../@utils/dates';
 import {sum} from '../../@utils/helpers';
-import {ChargeExpenseView, Month} from '../../Api';
+import {ChargeDisbursedView, Month} from '../../Api';
 import {MONTHS} from '../../constants';
 import RoundedPanel from '../@ui/RoundedPanel';
 
 type Props = {
-  data: ChargeExpenseView[];
+  data: ChargeDisbursedView[];
   header: string;
 };
 
 type ChartData = {
   period: string;
-  total: number;
+  'total disbursed': number;
 };
 
-const ChargeExpense = ({data, header}: Props) => {
+const ChargeDisbrused = ({data, header}: Props) => {
   const getAmount = (month: Month) => {
     const filtered = data
       .filter(
@@ -39,7 +39,7 @@ const ChargeExpense = ({data, header}: Props) => {
   const chartData = MONTHS.map(m => {
     const result: ChartData = {
       period: m,
-      total: getAmount(m),
+      'total disbursed': getAmount(m),
     };
     return result;
   });
@@ -50,7 +50,7 @@ const ChargeExpense = ({data, header}: Props) => {
         <Row className="text-muted mb-2">
           <Col>{header}</Col>
         </Row>
-        <ResponsiveContainer width="100%" height={200}>
+        <ResponsiveContainer width="100%" height={300}>
           <BarChart
             data={chartData}
             margin={{
@@ -65,7 +65,7 @@ const ChargeExpense = ({data, header}: Props) => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="total" fill="#82ca9d" />
+            <Bar dataKey="total disbursed" fill="#82ca9d" />
           </BarChart>
         </ResponsiveContainer>
       </RoundedPanel>
@@ -73,4 +73,4 @@ const ChargeExpense = ({data, header}: Props) => {
   );
 };
 
-export default ChargeExpense;
+export default ChargeDisbrused;
