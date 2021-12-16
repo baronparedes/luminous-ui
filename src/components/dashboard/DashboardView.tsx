@@ -9,6 +9,7 @@ import RoundedPanel from '../@ui/RoundedPanel';
 import SelectYear from '../@ui/SelectYear';
 import {Spacer} from '../@ui/Spacer';
 import BalanceSummary from './BalanceSummary';
+import CategorizedExpense from './CategorizedExpense';
 import ChargeDisbrused from './ChargeDisbrused';
 import CollectionEfficiency from './CollectionEfficiency';
 import PropertyBalance from './PropertyBalance';
@@ -52,12 +53,12 @@ const DashboardView = () => {
                 <Tab eventKey="charge-disbrusements" title="Disbursements">
                   <ChargeDisbrused
                     header={availableCommunityBalance.code}
-                    data={data?.chargeExpense.filter(
+                    data={data?.chargeDisbursed.filter(
                       c => c.chargeId === availableCommunityBalance.chargeId
                     )}
                   />
                   {availableBalances.map(chargeBalance => {
-                    const items = data?.chargeExpense.filter(
+                    const items = data?.chargeDisbursed.filter(
                       c => c.chargeId === chargeBalance.chargeId
                     );
                     return (
@@ -70,6 +71,9 @@ const DashboardView = () => {
                       </>
                     );
                   })}
+                </Tab>
+                <Tab eventKey="categorized-expenses" title="Expenses">
+                  <CategorizedExpense data={data.categorizedExpense} />
                 </Tab>
               </Tabs>
             </TabContainer>

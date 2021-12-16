@@ -13,6 +13,7 @@ type Props = {
   period?: Period;
   properties: PropertyAttr[] | null;
   onComplete?: () => void;
+  batchId?: string;
 };
 
 type ProcessError = {
@@ -20,7 +21,12 @@ type ProcessError = {
   message: string;
 };
 
-const BatchPropertiesToProcess = ({period, properties, onComplete}: Props) => {
+const BatchPropertiesToProcess = ({
+  period,
+  properties,
+  batchId,
+  onComplete,
+}: Props) => {
   const [toggleErrors, setToggleErrors] = useState(false);
   const [errors, setErrors] = useState<ProcessError[]>([]);
   const [currentProps, setCurrentProps] = useState<{
@@ -50,6 +56,7 @@ const BatchPropertiesToProcess = ({period, properties, onComplete}: Props) => {
             propertyId: Number(targetProperty.id),
             year: period.year,
             month: period.month,
+            batchId,
           })
             .catch(err => {
               const apiError = err.data as ApiError;

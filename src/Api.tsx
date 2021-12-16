@@ -72,8 +72,16 @@ export interface ChargeDisbursedView {
   amount: number;
 }
 
+export interface CategorizedExpenseView {
+  amount: number;
+  category: string;
+  description: string;
+  categoryId: number;
+}
+
 export interface DashboardView {
-  chargeExpense: ChargeDisbursedView[];
+  categorizedExpense: CategorizedExpenseView[];
+  chargeDisbursed: ChargeDisbursedView[];
   propertyBalance: PropertyBalanceView[];
   collectionEfficieny: CollectionEfficiencyView[];
   year: number;
@@ -331,6 +339,7 @@ export interface CategoryAttr {
 }
 
 export interface PostTransactionBody {
+  batchId?: string;
   propertyId: number;
   month: Month;
   year: number;

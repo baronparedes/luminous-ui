@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {Container} from 'react-bootstrap';
 import {Prompt} from 'react-router-dom';
+import {v4 as uuidv4} from 'uuid';
 
 import {Period, useGetAllProperties} from '../../../Api';
 import RoundedPanel from '../../@ui/RoundedPanel';
@@ -10,6 +11,7 @@ import BatchPropertiesToProcess from './BatchPropertiesToProcess';
 const BatchTransactionView = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<Period>();
   const [inProgress, setInProgress] = useState(false);
+  const [batchId, setBatchId] = useState<string>();
   const {data, loading, refetch} = useGetAllProperties({
     debounce: 300,
     lazy: true,
@@ -17,6 +19,7 @@ const BatchTransactionView = () => {
   const handleOnSelect = (period: Period) => {
     if (confirm('Start Process?')) {
       refetch();
+      setBatchId(uuidv4());
       setSelectedPeriod(period);
       setInProgress(true);
     }
@@ -47,6 +50,7 @@ const BatchTransactionView = () => {
               properties={data}
               period={selectedPeriod}
               onComplete={handleOnProcessComplete}
+              batchId={batchId}
             />
           </RoundedPanel>
         )}
