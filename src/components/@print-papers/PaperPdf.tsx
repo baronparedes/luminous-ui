@@ -1,6 +1,8 @@
 import React, {PropsWithChildren} from 'react';
 import styled from 'styled-components';
 
+import config from '../../config';
+
 const StyledPageSection = styled.div`
   @media all {
     .page-break {
@@ -36,9 +38,7 @@ export function PageHeader({
     <PageSection>
       <div className="text-center">
         <small>
-          <h4 className="brand">
-            Hampton Gardens Phase IV Condominium Corporation
-          </h4>
+          <h4 className="brand">{config.BRAND}</h4>
         </small>
         <h4>{title}</h4>
         {children}

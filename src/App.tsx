@@ -2,6 +2,7 @@ import React from 'react';
 import {useDispatch} from 'react-redux';
 import {RestfulProvider} from 'restful-react';
 
+import config from './config';
 import {useRootState} from './store';
 import {profileActions} from './store/reducers/profile.reducer';
 
@@ -10,7 +11,7 @@ const App: React.FC = props => {
   const {token} = useRootState(state => state.profile);
   return (
     <RestfulProvider
-      base={process.env.REACT_APP_API_URI as string}
+      base={config.API_URI}
       onRequest={req => {
         if (token) {
           req.headers.append('Authorization', `Bearer ${token}`);
