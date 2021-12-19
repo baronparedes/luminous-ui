@@ -35,7 +35,11 @@ export function PageHeader({
   return (
     <PageSection>
       <div className="text-center">
-        <h1 className="brand">Luminous</h1>
+        <small>
+          <h4 className="brand">
+            Hampton Gardens Phase IV Condominium Corporation
+          </h4>
+        </small>
         <h4>{title}</h4>
         {children}
       </div>
