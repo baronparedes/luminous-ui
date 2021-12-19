@@ -15,11 +15,13 @@ exports[`PaperPaymentHistory should render 1`] = `
           <div
             class="text-center"
           >
-            <h1
-              class="brand"
-            >
-              Luminous
-            </h1>
+            <small>
+              <h4
+                class="brand"
+              >
+                Luminous
+              </h4>
+            </small>
             <h4>
               PAYMENT HISTORY
             </h4>
