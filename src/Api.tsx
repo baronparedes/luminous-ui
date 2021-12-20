@@ -30,7 +30,7 @@ export interface CommunityAttr {
 
 export type ChargeType = "unit" | "percentage" | "amount";
 
-export type PostingType = "monthly" | "manual" | "accrued" | "interest";
+export type PostingType = "monthly" | "manual" | "accrued" | "interest" | "quarterly";
 
 export interface ChargeAttr {
   id?: number;
