@@ -4,19 +4,21 @@ import {CSVLink} from 'react-csv';
 import {Link} from 'react-router-dom';
 
 import routes from '../../@utils/routes';
-import {PropertyBalanceView} from '../../Api';
+import {PropertyBalanceByChargeView, PropertyBalanceView} from '../../Api';
 import ModalContainer from '../@ui/ModalContainer';
 import RoundedPanel from '../@ui/RoundedPanel';
 import {Table} from '../@ui/Table';
 
 type Props = {
   data: PropertyBalanceView[];
+  dataBreakdown: PropertyBalanceByChargeView[];
 };
 
-const PropertyBalance = ({data}: Props) => {
+const PropertyBalance = ({data, dataBreakdown}: Props) => {
   const [toggle, setToggle] = useState(false);
   const [threshold, setThreshold] = useState(15000);
   const thresholdData = data.filter(d => d.balance >= threshold);
+  const propertyLabel = thresholdData.length > 1 ? 'properties' : 'property';
 
   return (
     <>
@@ -34,7 +36,7 @@ const PropertyBalance = ({data}: Props) => {
                     setToggle(true);
                   }}
                 >
-                  {thresholdData.length} properties
+                  {`${thresholdData.length} ${propertyLabel}`}
                 </a>
               </strong>{' '}
               that have a balance of more than{' '}
@@ -50,6 +52,14 @@ const PropertyBalance = ({data}: Props) => {
                 step="any"
                 min={0}
               />
+              <CSVLink
+                data={dataBreakdown}
+                filename={'property-balance-by-charge.csv'}
+                className="btn btn-primary ml-2"
+                target="_blank"
+              >
+                Download Balance Breakdown
+              </CSVLink>
             </div>
           </Col>
         </Row>

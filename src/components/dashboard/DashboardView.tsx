@@ -34,7 +34,10 @@ const DashboardView = () => {
         {loading && <Loading />}
         {data && !loading && (
           <>
-            <PropertyBalance data={data?.propertyBalance} />
+            <PropertyBalance
+              data={data?.propertyBalance}
+              dataBreakdown={data?.propertyBalanceByCharge}
+            />
             <Spacer />
             <RoundedPanel className="p-3">
               <SelectYear

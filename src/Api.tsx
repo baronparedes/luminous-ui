@@ -79,7 +79,17 @@ export interface CategorizedExpenseView {
   categoryId: number;
 }
 
+export interface PropertyBalanceByChargeView {
+  chargeCode: string;
+  balance: number;
+  floorArea: string;
+  address: string;
+  code: string;
+  id: number;
+}
+
 export interface DashboardView {
+  propertyBalanceByCharge: PropertyBalanceByChargeView[];
   categorizedExpense: CategorizedExpenseView[];
   chargeDisbursed: ChargeDisbursedView[];
   propertyBalance: PropertyBalanceView[];
