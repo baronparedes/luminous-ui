@@ -20,11 +20,7 @@ const PropertyBalanceByCharge = ({data, charges}: Props) => {
   const [toggle, setToggle] = useState(false);
 
   useEffect(() => {
-    if (selectedCharges.length > 0) {
-      setFilteredData(data.filter(d => selectedCharges.includes(d.chargeCode)));
-    } else {
-      setFilteredData(data);
-    }
+    setFilteredData(data.filter(d => selectedCharges.includes(d.chargeCode)));
   }, [selectedCharges]);
 
   return (
@@ -55,18 +51,20 @@ const PropertyBalanceByCharge = ({data, charges}: Props) => {
               />
             </Col>
           </Row>
-          <Row className="text-right">
-            <Col>
-              <CSVLink
-                data={filteredData}
-                filename={'property-balance-by-charge.csv'}
-                className="btn btn-primary ml-2"
-                target="_blank"
-              >
-                Download
-              </CSVLink>
-            </Col>
-          </Row>
+          {filteredData.length > 0 && (
+            <Row className="text-right">
+              <Col>
+                <CSVLink
+                  data={filteredData}
+                  filename={'property-balance-by-charge.csv'}
+                  className="btn btn-primary ml-2"
+                  target="_blank"
+                >
+                  Download
+                </CSVLink>
+              </Col>
+            </Row>
+          )}
         </Container>
       </ModalContainer>
     </>
