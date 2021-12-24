@@ -4,20 +4,26 @@ import {CSVLink} from 'react-csv';
 import {Link} from 'react-router-dom';
 
 import routes from '../../@utils/routes';
-import {PropertyBalanceByChargeView, PropertyBalanceView} from '../../Api';
+import {
+  ChargeAttr,
+  PropertyBalanceByChargeView,
+  PropertyBalanceView,
+} from '../../Api';
 import ModalContainer from '../@ui/ModalContainer';
 import RoundedPanel from '../@ui/RoundedPanel';
 import {Table} from '../@ui/Table';
+import PropertyBalanceByCharge from './PropertyBalanceByCharge';
 
 type Props = {
   data: PropertyBalanceView[];
   dataBreakdown: PropertyBalanceByChargeView[];
+  charges: ChargeAttr[] | null;
 };
 
-const PropertyBalance = ({data, dataBreakdown}: Props) => {
+const PropertyBalance = ({data, dataBreakdown, charges}: Props) => {
   const [toggle, setToggle] = useState(false);
   const [threshold, setThreshold] = useState(15000);
-  const thresholdData = data.filter(d => d.balance >= threshold);
+  const thresholdData = data.filter(d => Number(d.balance) >= threshold);
   const propertyLabel = thresholdData.length > 1 ? 'properties' : 'property';
 
   return (
@@ -52,14 +58,7 @@ const PropertyBalance = ({data, dataBreakdown}: Props) => {
                 step="any"
                 min={0}
               />
-              <CSVLink
-                data={dataBreakdown}
-                filename={'property-balance-by-charge.csv'}
-                className="btn btn-primary ml-2"
-                target="_blank"
-              >
-                Download Balance Breakdown
-              </CSVLink>
+              <PropertyBalanceByCharge data={dataBreakdown} charges={charges} />
             </div>
           </Col>
         </Row>
@@ -71,7 +70,7 @@ const PropertyBalance = ({data, dataBreakdown}: Props) => {
         onClose={() => setToggle(false)}
         size="lg"
       >
-        <Container className="text-right">
+        <Container className="text-right p-3">
           <CSVLink
             data={thresholdData}
             filename={'property-balance.csv'}

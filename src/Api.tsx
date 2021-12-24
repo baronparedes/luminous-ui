@@ -53,6 +53,7 @@ export interface ChargeCollected {
 export type TransactionType = "charged" | "collected";
 
 export interface CollectionEfficiencyView {
+  chargeCode: string;
   transactionType: TransactionType;
   transactionPeriod: string;
   amount: number;

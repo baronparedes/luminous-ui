@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {Container, Tab, TabContainer, Tabs} from 'react-bootstrap';
 
 import {getCurrentMonthYear, getPastYears} from '../../@utils/dates';
-import {useGetDashboardByYear} from '../../Api';
+import {useGetAllCharges, useGetDashboardByYear} from '../../Api';
 import {useChargeBalance} from '../../hooks/useChargeBalance';
 import Loading from '../@ui/Loading';
 import RoundedPanel from '../@ui/RoundedPanel';
@@ -12,6 +12,7 @@ import BalanceSummary from './BalanceSummary';
 import CategorizedExpense from './CategorizedExpense';
 import ChargeDisbrused from './ChargeDisbrused';
 import CollectionEfficiency from './CollectionEfficiency';
+import CollectionEfficiencyByCharge from './CollectionEfficiencyByCharge';
 import PropertyBalance from './PropertyBalance';
 
 const DashboardView = () => {
@@ -22,6 +23,7 @@ const DashboardView = () => {
 
   const {data, loading} = useGetDashboardByYear({year: selectedYear});
   const {availableBalances, availableCommunityBalance} = useChargeBalance();
+  const {data: charges} = useGetAllCharges({});
 
   return (
     <>
@@ -37,6 +39,7 @@ const DashboardView = () => {
             <PropertyBalance
               data={data?.propertyBalance}
               dataBreakdown={data?.propertyBalanceByCharge}
+              charges={charges}
             />
             <Spacer />
             <RoundedPanel className="p-3">
@@ -52,6 +55,15 @@ const DashboardView = () => {
               <Tabs defaultActiveKey="collection" className="mb-3">
                 <Tab eventKey="collection" title="Collection">
                   <CollectionEfficiency data={data?.collectionEfficieny} />
+                </Tab>
+                <Tab
+                  eventKey="collection-breakdown"
+                  title="Collection Breakdown"
+                >
+                  <CollectionEfficiencyByCharge
+                    data={data?.collectionEfficieny}
+                    charges={charges}
+                  />
                 </Tab>
                 <Tab eventKey="charge-disbrusements" title="Disbursements">
                   <ChargeDisbrused

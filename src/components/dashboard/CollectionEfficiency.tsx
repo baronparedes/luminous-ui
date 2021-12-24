@@ -20,6 +20,7 @@ import {Spacer} from '../@ui/Spacer';
 
 type Props = {
   data: CollectionEfficiencyView[];
+  filterByChargeCode?: string;
 };
 
 type ChartData = {
@@ -42,14 +43,19 @@ const PeriodEfficiency = ({period, collected, charged}: ChartData) => {
   );
 };
 
-const CollectionEfficiency = ({data}: Props) => {
+const CollectionEfficiency = ({data, filterByChargeCode}: Props) => {
   const getAmount = (month: Month, type: TransactionType) => {
-    return (
-      data.find(
-        d =>
-          toTransactionPeriodFromDate(d.transactionPeriod).month === month &&
-          d.transactionType === type
-      )?.amount ?? 0
+    const targetData = filterByChargeCode
+      ? data.filter(d => d.chargeCode === filterByChargeCode)
+      : data;
+    return sum(
+      targetData
+        .filter(
+          d =>
+            toTransactionPeriodFromDate(d.transactionPeriod).month === month &&
+            d.transactionType === type
+        )
+        .map(d => d.amount)
     );
   };
 
