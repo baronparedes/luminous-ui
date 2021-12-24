@@ -17,7 +17,7 @@ const PurchaseRequestCard = ({purchaseRequest}: Props) => {
         className="text-underline"
         to={routes.PURCHASE_REQUEST(purchaseRequest.id)}
       >
-        <h4>PR-{purchaseRequest.id}</h4>
+        <h4>PR-{purchaseRequest.series ?? purchaseRequest.id}</h4>
       </Link>
       <div>
         <small>

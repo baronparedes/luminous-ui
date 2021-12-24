@@ -85,7 +85,7 @@ const PurchaseRequestList = ({
                         className="text-underline"
                         to={routes.PURCHASE_REQUEST(row.id)}
                       >
-                        PR-{row.id}
+                        PR-{row.series ?? row.id}
                       </Link>
                     </td>
                     <td>{row.description}</td>

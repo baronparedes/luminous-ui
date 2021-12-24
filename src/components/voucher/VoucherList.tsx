@@ -83,7 +83,7 @@ const VoucherList = ({
                         className="text-underline"
                         to={routes.VOUCHER(row.id)}
                       >
-                        V-{row.id}
+                        V-{row.series ?? row.id}
                       </Link>
                     </td>
                     <td>{row.description}</td>
