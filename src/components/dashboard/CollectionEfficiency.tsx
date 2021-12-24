@@ -37,7 +37,8 @@ const PeriodEfficiency = ({period, collected, charged}: ChartData) => {
         {period}
       </Badge>
       <p>
-        <strong>{percentage}%</strong>
+        {charged > 0 && <strong>{percentage}%</strong>}
+        {charged === 0 && <strong>N/A</strong>}
       </p>
     </div>
   );
