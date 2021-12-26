@@ -1,0 +1,6 @@
+node_modules
+build
+test-report.xml
+.env
+.vscode
+.env.sample
