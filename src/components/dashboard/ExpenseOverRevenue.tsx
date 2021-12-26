@@ -3,6 +3,8 @@ import {Col, Container, Row} from 'react-bootstrap';
 
 import {roundOff} from '../../@utils/currencies';
 import {
+  filterByMonth,
+  filterOnOrBeforeByMonth,
   getCurrentMonthYear,
   toMonthValue,
   toTransactionPeriodFromDate,
@@ -20,6 +22,7 @@ import RoundedPanel from '../@ui/RoundedPanel';
 import SelectMonth from '../@ui/SelectMonth';
 import {Spacer} from '../@ui/Spacer';
 import {Table} from '../@ui/Table';
+import ExpenseOverRevenueStats from './ExpenseOverRevenueStats';
 
 type Props = {
   collectionEfficieny: CollectionEfficiencyView[];
@@ -34,20 +37,6 @@ type ReportData = {
   runningTotal: number;
   averageDifference: number;
 };
-
-function filterByMonth(transactionPeriod: Date | string, month: Month) {
-  return toTransactionPeriodFromDate(transactionPeriod).month === month;
-}
-
-function filterOnOrBeforeByMonth(
-  transactionPeriod: Date | string,
-  month: Month
-) {
-  return (
-    toMonthValue(toTransactionPeriodFromDate(transactionPeriod).month) <=
-    toMonthValue(month)
-  );
-}
 
 function calculateEfficiencyByMonth(
   data: CollectionEfficiencyView[],
@@ -360,6 +349,15 @@ const ExpenseOverRevenue = ({
           onSelectMonth={setSelectedMonth}
           size="lg"
         />
+        <Container>
+          <Spacer />
+          <ExpenseOverRevenueStats
+            collectionEfficieny={collectionEfficieny}
+            categorizedExpense={categorizedExpense}
+            charges={charges}
+            selectedMonth={selectedMonth}
+          />
+        </Container>
         <Container>
           <Spacer />
           <ReportTable

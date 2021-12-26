@@ -94,3 +94,17 @@ export function getMonthsUpToCurrent() {
   }
   return months;
 }
+
+export function filterByMonth(transactionPeriod: Date | string, month: Month) {
+  return toTransactionPeriodFromDate(transactionPeriod).month === month;
+}
+
+export function filterOnOrBeforeByMonth(
+  transactionPeriod: Date | string,
+  month: Month
+) {
+  return (
+    toMonthValue(toTransactionPeriodFromDate(transactionPeriod).month) <=
+    toMonthValue(month)
+  );
+}
