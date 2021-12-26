@@ -9,6 +9,7 @@ import {
 } from '../../@utils/dates';
 import {sum} from '../../@utils/helpers';
 import {
+  CategorizedExpenseView,
   ChargeAttr,
   CollectionEfficiencyView,
   Month,
@@ -22,33 +23,29 @@ import {Table} from '../@ui/Table';
 
 type Props = {
   collectionEfficieny: CollectionEfficiencyView[];
+  categorizedExpense: CategorizedExpenseView[];
   charges: ChargeAttr[] | null;
 };
 
 type ReportData = {
-  description: string;
+  label: string | React.ReactNode;
   total: number;
   runningAverage: number;
   runningTotal: number;
   averageDifference: number;
 };
 
-function filterByMonth(data: CollectionEfficiencyView[], month: Month) {
-  return data.filter(
-    d =>
-      toTransactionPeriodFromDate(d.transactionPeriod).month === month &&
-      d.transactionType === 'collected'
-  );
+function filterByMonth(transactionPeriod: Date | string, month: Month) {
+  return toTransactionPeriodFromDate(transactionPeriod).month === month;
 }
 
 function filterOnOrBeforeByMonth(
-  data: CollectionEfficiencyView[],
+  transactionPeriod: Date | string,
   month: Month
 ) {
-  return data.filter(
-    d =>
-      toMonthValue(toTransactionPeriodFromDate(d.transactionPeriod).month) <=
-        toMonthValue(month) && d.transactionType === 'collected'
+  return (
+    toMonthValue(toTransactionPeriodFromDate(transactionPeriod).month) <=
+    toMonthValue(month)
   );
 }
 
@@ -79,7 +76,7 @@ function toTotals(data: ReportData[], selectedMonth: Month) {
     summaryRunningTotal / toMonthValue(selectedMonth);
   const summaryAverageDifference = summaryTotal - summaryRunningAverage;
   return {
-    description: 'TOTAL',
+    label: 'TOTAL',
     total: summaryTotal,
     runningAverage: summaryRunningAverage,
     runningTotal: summaryRunningTotal,
@@ -89,26 +86,32 @@ function toTotals(data: ReportData[], selectedMonth: Month) {
 
 function toRevenueData(
   data: CollectionEfficiencyView[],
-  charges: ChargeAttr[] | null,
-  selectedMonth: Month
+  selectedMonth: Month,
+  charges: ChargeAttr[] | null
 ) {
   const revenueData: ReportData[] = [];
   const revenueEfficiency = calculateEfficiencyByMonth(data, selectedMonth);
+
   if (charges) {
     charges.forEach(charge => {
-      const filtered = filterByMonth(data, selectedMonth).filter(
-        d => d.chargeCode === charge.code
+      const filteredByMonth = data.filter(
+        d =>
+          d.chargeCode === charge.code &&
+          d.transactionType === 'collected' &&
+          filterByMonth(d.transactionPeriod, selectedMonth)
       );
-      const filteredOnOrBefore = filterOnOrBeforeByMonth(
-        data,
-        selectedMonth
-      ).filter(d => d.chargeCode === charge.code);
-      const total = sum(filtered.map(d => d.amount));
+      const filteredOnOrBefore = data.filter(
+        d =>
+          d.chargeCode === charge.code &&
+          d.transactionType === 'collected' &&
+          filterOnOrBeforeByMonth(d.transactionPeriod, selectedMonth)
+      );
+      const total = sum(filteredByMonth.map(d => d.amount));
       const runningTotal = sum(filteredOnOrBefore.map(d => d.amount));
       const runningAverage = runningTotal / toMonthValue(selectedMonth);
       const averageDifference = total - runningAverage;
       revenueData.push({
-        description: charge.code,
+        label: charge.code,
         total,
         runningAverage,
         runningTotal,
@@ -123,62 +126,164 @@ function toRevenueData(
   };
 }
 
+function formatExpenseData(
+  data: CategorizedExpenseView[],
+  selectedMonth: Month,
+  parentCategory: string
+) {
+  const generateReportDataByCategory = (
+    category: string,
+    indented?: boolean
+  ) => {
+    const filteredByMonth = data.filter(
+      d =>
+        d.category === category &&
+        filterByMonth(d.transactionPeriod, selectedMonth)
+    );
+    const filteredOnOrBefore = data.filter(
+      d =>
+        d.category === category &&
+        filterOnOrBeforeByMonth(d.transactionPeriod, selectedMonth)
+    );
+    const total = sum(filteredByMonth.map(d => d.totalCost));
+    const runningTotal = sum(filteredOnOrBefore.map(d => d.totalCost));
+    const runningAverage = runningTotal / toMonthValue(selectedMonth);
+    const averageDifference = total - runningAverage;
+    const item: ReportData = {
+      label: indented ? <text className="pl-5">{category}</text> : category,
+      total,
+      runningAverage,
+      runningTotal,
+      averageDifference,
+    };
+    return item;
+  };
+
+  const result: ReportData[] = [generateReportDataByCategory(parentCategory)];
+  const uniqueSubCategories = [
+    ...new Set(
+      data.filter(d => d.category !== parentCategory).map(d => d.category)
+    ),
+  ];
+  uniqueSubCategories.forEach(subCategory => {
+    result.push(generateReportDataByCategory(subCategory, true));
+  });
+
+  return result;
+}
+
+function toExpenseData(data: CategorizedExpenseView[], selectedMonth: Month) {
+  const targetData = data.filter(d => !d.passOn);
+  const expenseData: ReportData[] = [];
+  const uniqueParentCategories = [
+    ...new Set(targetData.map(d => d.parentCategory)),
+  ];
+  uniqueParentCategories.forEach(parentCategory => {
+    const categorizedData = targetData.filter(
+      d => d.parentCategory === parentCategory
+    );
+    expenseData.push(
+      ...formatExpenseData(categorizedData, selectedMonth, parentCategory)
+    );
+  });
+
+  return {
+    expenseData,
+  };
+}
+
+function toExpensePassOnData(
+  data: CategorizedExpenseView[],
+  selectedMonth: Month,
+  charges: ChargeAttr[] | null
+) {
+  const expensePassOnData: ReportData[] = [];
+  if (charges) {
+    charges
+      .filter(c => c.passOn === true)
+      .forEach(charge => {
+        const filteredByMonth = data.filter(
+          d =>
+            d.chargeCode === charge.code &&
+            filterByMonth(d.transactionPeriod, selectedMonth)
+        );
+        const filteredOnOrBefore = data.filter(
+          d =>
+            d.chargeCode === charge.code &&
+            filterOnOrBeforeByMonth(d.transactionPeriod, selectedMonth)
+        );
+        const total = sum(filteredByMonth.map(d => d.totalCost));
+        const runningTotal = sum(filteredOnOrBefore.map(d => d.totalCost));
+        const runningAverage = runningTotal / toMonthValue(selectedMonth);
+        const averageDifference = total - runningAverage;
+        expensePassOnData.push({
+          label: charge.code,
+          total,
+          runningAverage,
+          runningTotal,
+          averageDifference,
+        });
+      });
+  }
+
+  return {
+    expensePassOnData,
+  };
+}
+
 const ReportTable = ({
   data,
   selectedMonth,
-  efficiency,
+  renderHeaderContent,
+  noZero,
 }: {
   data: ReportData[];
-  efficiency?: number;
   selectedMonth: Month;
+  renderHeaderContent?: React.ReactNode;
+  noZero?: boolean;
 }) => {
   const totals = toTotals(data, selectedMonth);
   return (
     <Table
       className="table-sm"
-      renderHeaderContent={
-        <>
-          <Row>
-            <Col sm={12} md={8}>
-              <div>
-                <h6>Revenue for the month of {selectedMonth}</h6>
-              </div>
-            </Col>
-            {Number(efficiency) > 0 && (
-              <Col>
-                <div className="text-md-right">
-                  <small>Collection Efficiency of {efficiency}%</small>
-                </div>
-              </Col>
-            )}
-          </Row>
-        </>
-      }
+      renderHeaderContent={renderHeaderContent}
       headers={['', 'total', 'running total', 'running average', 'difference']}
     >
       <tbody>
         {data.map((item, i) => {
           return (
             <tr key={i}>
-              <td>{item.description}</td>
+              <td width={300}>{item.label}</td>
               <td>
                 <strong>
-                  <Currency noCurrencyColor currency={item.total} />
+                  <Currency
+                    noCurrencyColor
+                    noZero={noZero}
+                    currency={item.total}
+                  />
                 </strong>
               </td>
               <td>
                 <strong>
-                  <Currency noCurrencyColor currency={item.runningTotal} />
+                  <Currency
+                    noCurrencyColor
+                    noZero={noZero}
+                    currency={item.runningTotal}
+                  />
                 </strong>
               </td>
               <td>
                 <strong>
-                  <Currency noCurrencyColor currency={item.runningAverage} />
+                  <Currency
+                    noCurrencyColor
+                    noZero={noZero}
+                    currency={item.runningAverage}
+                  />
                 </strong>
               </td>
               <td>
                 <strong>
-                  <Currency currency={item.averageDifference} />
+                  <Currency noZero={noZero} currency={item.averageDifference} />
                 </strong>
               </td>
             </tr>
@@ -188,26 +293,38 @@ const ReportTable = ({
       <tfoot>
         <tr>
           <td className="pt-3">
-            <h5>{totals.description}</h5>
+            <h5>{totals.label}</h5>
           </td>
           <td className="pt-3">
             <h5>
-              <Currency noCurrencyColor currency={totals.total} />
+              <Currency
+                noCurrencyColor
+                noZero={noZero}
+                currency={totals.total}
+              />
             </h5>
           </td>
           <td className="pt-3">
             <h5>
-              <Currency noCurrencyColor currency={totals.runningTotal} />
+              <Currency
+                noCurrencyColor
+                noZero={noZero}
+                currency={totals.runningTotal}
+              />
             </h5>
           </td>
           <td className="pt-3">
             <h5>
-              <Currency noCurrencyColor currency={totals.runningAverage} />
+              <Currency
+                noCurrencyColor
+                noZero={noZero}
+                currency={totals.runningAverage}
+              />
             </h5>
           </td>
           <td className="pt-3">
             <h5>
-              <Currency currency={totals.averageDifference} />
+              <Currency noZero={noZero} currency={totals.averageDifference} />
             </h5>
           </td>
         </tr>
@@ -216,14 +333,25 @@ const ReportTable = ({
   );
 };
 
-const ExpenseOverRevenue = ({collectionEfficieny, charges}: Props) => {
+const ExpenseOverRevenue = ({
+  collectionEfficieny,
+  categorizedExpense,
+  charges,
+}: Props) => {
   const {month} = getCurrentMonthYear();
   const [selectedMonth, setSelectedMonth] = useState<Month>(month);
   const {revenueData, revenueEfficiency} = toRevenueData(
     collectionEfficieny,
-    charges,
-    selectedMonth
+    selectedMonth,
+    charges
   );
+  const {expenseData} = toExpenseData(categorizedExpense, selectedMonth);
+  const {expensePassOnData} = toExpensePassOnData(
+    categorizedExpense,
+    selectedMonth,
+    charges
+  );
+
   return (
     <>
       <RoundedPanel className="p-3">
@@ -232,12 +360,73 @@ const ExpenseOverRevenue = ({collectionEfficieny, charges}: Props) => {
           onSelectMonth={setSelectedMonth}
           size="lg"
         />
-        <Spacer />
         <Container>
+          <Spacer />
           <ReportTable
             data={revenueData}
-            efficiency={revenueEfficiency}
             selectedMonth={selectedMonth}
+            renderHeaderContent={
+              <>
+                <Row>
+                  <Col sm={12} md={8}>
+                    <div>
+                      <h6>Revenue for the month of {selectedMonth}</h6>
+                    </div>
+                  </Col>
+                  {Number(revenueEfficiency) > 0 && (
+                    <Col>
+                      <div className="text-md-right">
+                        <small>
+                          Collection Efficiency of {revenueEfficiency}%
+                        </small>
+                      </div>
+                    </Col>
+                  )}
+                </Row>
+              </>
+            }
+          />
+        </Container>
+        <Container>
+          <Spacer />
+          <ReportTable
+            noZero
+            data={expenseData}
+            selectedMonth={selectedMonth}
+            renderHeaderContent={
+              <>
+                <Row>
+                  <Col>
+                    <div>
+                      <h6>
+                        Approved Expenses for the month of {selectedMonth}
+                      </h6>
+                    </div>
+                  </Col>
+                </Row>
+              </>
+            }
+          />
+        </Container>
+        <Container>
+          <Spacer />
+          <ReportTable
+            data={expensePassOnData}
+            selectedMonth={selectedMonth}
+            renderHeaderContent={
+              <>
+                <Row>
+                  <Col>
+                    <div>
+                      <h6>
+                        Approved Pass-On Expenses for the month of{' '}
+                        {selectedMonth}
+                      </h6>
+                    </div>
+                  </Col>
+                </Row>
+              </>
+            }
           />
         </Container>
       </RoundedPanel>

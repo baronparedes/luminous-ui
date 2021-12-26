@@ -38,8 +38,8 @@ const DashboardView = () => {
         {data && !loading && (
           <>
             <PropertyBalance
-              data={data?.propertyBalance}
-              breakdownData={data?.propertyBalanceByCharge}
+              data={data.propertyBalance}
+              breakdownData={data.propertyBalanceByCharge}
               charges={charges}
             />
             <Spacer />
@@ -55,26 +55,26 @@ const DashboardView = () => {
             <TabContainer>
               <Tabs defaultActiveKey="collection" className="mb-3">
                 <Tab eventKey="collection" title="Collection">
-                  <CollectionEfficiency data={data?.collectionEfficieny} />
+                  <CollectionEfficiency data={data.collectionEfficieny} />
                 </Tab>
                 <Tab
                   eventKey="collection-breakdown"
                   title="Collection Breakdown"
                 >
                   <CollectionEfficiencyByCharge
-                    data={data?.collectionEfficieny}
+                    data={data.collectionEfficieny}
                     charges={charges}
                   />
                 </Tab>
                 <Tab eventKey="charge-disbrusements" title="Disbursements">
                   <ChargeDisbrused
                     header={availableCommunityBalance.code}
-                    data={data?.chargeDisbursed.filter(
+                    data={data.chargeDisbursed.filter(
                       c => c.chargeId === availableCommunityBalance.chargeId
                     )}
                   />
                   {availableBalances.map(chargeBalance => {
-                    const items = data?.chargeDisbursed.filter(
+                    const items = data.chargeDisbursed.filter(
                       c => c.chargeId === chargeBalance.chargeId
                     );
                     return (
@@ -96,7 +96,8 @@ const DashboardView = () => {
                   title="Expense Over Revenue"
                 >
                   <ExpenseOverRevenue
-                    collectionEfficieny={data?.collectionEfficieny}
+                    collectionEfficieny={data.collectionEfficieny}
+                    categorizedExpense={data.categorizedExpense}
                     charges={charges}
                   />
                 </Tab>

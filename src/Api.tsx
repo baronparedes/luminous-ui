@@ -74,10 +74,13 @@ export interface ChargeDisbursedView {
 }
 
 export interface CategorizedExpenseView {
-  amount: number;
+  series: string;
+  transactionPeriod: string;
+  passOn?: boolean;
+  chargeCode: string;
+  totalCost: number;
+  parentCategory: string;
   category: string;
-  description: string;
-  categoryId: number;
 }
 
 export interface PropertyBalanceByChargeView {

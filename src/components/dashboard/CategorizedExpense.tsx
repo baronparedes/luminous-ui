@@ -18,13 +18,13 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 const RADIAN = Math.PI / 180;
 
 function getChartData(data: CategorizedExpenseView[]) {
-  const uniqueCategories = [...new Set(data.map(d => d.description))];
-  const chartData = uniqueCategories.map(category => {
+  const uniqueParentCategories = [...new Set(data.map(d => d.parentCategory))];
+  const chartData = uniqueParentCategories.map(parentCategory => {
     const items = data
-      .filter(d => d.description === category)
-      .map(d => d.amount);
+      .filter(d => d.parentCategory === parentCategory)
+      .map(d => d.totalCost);
     return {
-      name: category,
+      name: parentCategory,
       value: Number(sum(items)),
     } as ChartData;
   });
