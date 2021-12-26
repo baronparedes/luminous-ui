@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {Table as RBTable} from 'react-bootstrap';
+import {Table as RBTable, TableProps as RBTableProps} from 'react-bootstrap';
 import styled from 'styled-components';
 
 import Loading from './Loading';
@@ -19,12 +19,14 @@ type TableProps = {
   renderHeaderContent?: ReactNode;
   renderFooterContent?: ReactNode;
 };
-export const Table: React.FC<TableProps> = ({
+
+export const Table: React.FC<TableProps & RBTableProps> = ({
   children,
   headers,
   loading,
   renderHeaderContent,
   renderFooterContent,
+  ...tableProps
 }) => {
   return (
     <>
@@ -36,7 +38,7 @@ export const Table: React.FC<TableProps> = ({
       <TableContent>
         {loading && <Loading />}
         {!loading && (
-          <RBTable responsive hover role="table">
+          <RBTable responsive hover role="table" {...tableProps}>
             <thead>
               <tr>
                 {headers.map((header, i) => {

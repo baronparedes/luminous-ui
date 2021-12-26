@@ -16,11 +16,11 @@ import PropertyBalanceByCharge from './PropertyBalanceByCharge';
 
 type Props = {
   data: PropertyBalanceView[];
-  dataBreakdown: PropertyBalanceByChargeView[];
+  breakdownData: PropertyBalanceByChargeView[];
   charges: ChargeAttr[] | null;
 };
 
-const PropertyBalance = ({data, dataBreakdown, charges}: Props) => {
+const PropertyBalance = ({data, breakdownData, charges}: Props) => {
   const [toggle, setToggle] = useState(false);
   const [threshold, setThreshold] = useState(15000);
   const thresholdData = data.filter(d => Number(d.balance) >= threshold);
@@ -58,7 +58,7 @@ const PropertyBalance = ({data, dataBreakdown, charges}: Props) => {
                 step="any"
                 min={0}
               />
-              <PropertyBalanceByCharge data={dataBreakdown} charges={charges} />
+              <PropertyBalanceByCharge data={breakdownData} charges={charges} />
             </div>
           </Col>
         </Row>

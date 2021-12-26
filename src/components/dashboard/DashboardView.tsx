@@ -13,6 +13,7 @@ import CategorizedExpense from './CategorizedExpense';
 import ChargeDisbrused from './ChargeDisbrused';
 import CollectionEfficiency from './CollectionEfficiency';
 import CollectionEfficiencyByCharge from './CollectionEfficiencyByCharge';
+import ExpenseOverRevenue from './ExpenseOverRevenue';
 import PropertyBalance from './PropertyBalance';
 
 const DashboardView = () => {
@@ -38,7 +39,7 @@ const DashboardView = () => {
           <>
             <PropertyBalance
               data={data?.propertyBalance}
-              dataBreakdown={data?.propertyBalanceByCharge}
+              breakdownData={data?.propertyBalanceByCharge}
               charges={charges}
             />
             <Spacer />
@@ -89,6 +90,15 @@ const DashboardView = () => {
                 </Tab>
                 <Tab eventKey="categorized-expenses" title="Expenses">
                   <CategorizedExpense data={data.categorizedExpense} />
+                </Tab>
+                <Tab
+                  eventKey="expense-over-revenues"
+                  title="Expense Over Revenue"
+                >
+                  <ExpenseOverRevenue
+                    collectionEfficieny={data?.collectionEfficieny}
+                    charges={charges}
+                  />
                 </Tab>
               </Tabs>
             </TabContainer>
