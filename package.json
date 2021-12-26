@@ -37,6 +37,7 @@
     "restful": "restful-react import --file ../luminous-api/src/swagger.json --output ./src/Api.tsx",
     "prestart": "npm run restful",
     "start": "react-scripts start",
+    "prebuild": "npm run fix",
     "build": "react-scripts build",
     "posttest": "npm.cmd run lint",
     "test": "react-scripts test",
