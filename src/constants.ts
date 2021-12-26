@@ -34,6 +34,8 @@ export const VERBIAGE = {
       propertyCode: string | undefined,
       year: number
     ) => `${propertyCode ?? 'Unit'} - Payment History - ${year}`,
+    EXPENSE_OVER_REVENUE: (year: number, month: Month) =>
+      `Expense over Revenue - ${year} ${month}`,
   },
 };
 

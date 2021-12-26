@@ -6,8 +6,6 @@ import {
   Legend,
   ResponsiveContainer,
   Tooltip,
-  XAxis,
-  YAxis,
 } from 'recharts';
 
 import {ApprovedAny} from '../../@types';
@@ -57,8 +55,6 @@ const ExpenseOverRevenueBarChart = ({
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="period" />
-        <YAxis />
         <Tooltip />
         <Legend />
         <Bar dataKey={dataKey1} fill="#82ca9d" />
@@ -93,27 +89,19 @@ const CollectionStats = ({
   };
 
   return (
-    <Container className="p-4 text-center">
-      <Row className="text-center">
-        <Col>
-          <text className="text-muted">Collection Deficit</text>
-          <div>
-            <strong>
-              <Currency noCurrencyColor currency={charged - collected} />
-            </strong>
-          </div>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Spacer />
-          <ExpenseOverRevenueBarChart
-            data={[summary]}
-            dataKey1="charged"
-            dataKey2="collected"
-          />
-        </Col>
-      </Row>
+    <Container>
+      <text className="text-muted">Collection Deficit</text>
+      <div>
+        <strong>
+          <Currency noCurrencyColor currency={charged - collected} />
+        </strong>
+      </div>
+      <Spacer />
+      <ExpenseOverRevenueBarChart
+        data={[summary]}
+        dataKey1="charged"
+        dataKey2="collected"
+      />
     </Container>
   );
 };
@@ -149,27 +137,19 @@ const ExcessRevenueStats = ({
   };
 
   return (
-    <Container className="p-4 text-center">
-      <Row className="text-center">
-        <Col>
-          <text className="text-muted">Excess Revenue</text>
-          <div>
-            <strong>
-              <Currency noCurrencyColor currency={revenue - expense} />
-            </strong>
-          </div>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Spacer />
-          <ExpenseOverRevenueBarChart
-            data={[summary]}
-            dataKey1="revenue"
-            dataKey2="expense"
-          />
-        </Col>
-      </Row>
+    <Container>
+      <text className="text-muted">Excess Revenue</text>
+      <div>
+        <strong>
+          <Currency noCurrencyColor currency={revenue - expense} />
+        </strong>
+      </div>
+      <Spacer />
+      <ExpenseOverRevenueBarChart
+        data={[summary]}
+        dataKey1="revenue"
+        dataKey2="expense"
+      />
     </Container>
   );
 };
@@ -205,27 +185,19 @@ const ExcessPassOnStats = ({
   };
 
   return (
-    <Container className="p-4 text-center">
-      <Row className="text-center">
-        <Col>
-          <text className="text-muted">Unreleased Pass-On Funds</text>
-          <div>
-            <strong>
-              <Currency noCurrencyColor currency={collected - released} />
-            </strong>
-          </div>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Spacer />
-          <ExpenseOverRevenueBarChart
-            data={[summary]}
-            dataKey1="collected"
-            dataKey2="released"
-          />
-        </Col>
-      </Row>
+    <Container>
+      <text className="text-muted">Unreleased Pass-On Funds</text>
+      <div>
+        <strong>
+          <Currency noCurrencyColor currency={collected - released} />
+        </strong>
+      </div>
+      <Spacer />
+      <ExpenseOverRevenueBarChart
+        data={[summary]}
+        dataKey1="collected"
+        dataKey2="released"
+      />
     </Container>
   );
 };

@@ -1,6 +1,9 @@
-import {useState} from 'react';
-import {Col, Container, Row} from 'react-bootstrap';
+import React, {useState} from 'react';
+import {Button, Col, Container, Row} from 'react-bootstrap';
+import {FaPrint} from 'react-icons/fa';
+import {useReactToPrint} from 'react-to-print';
 
+import {ApprovedAny} from '../../@types';
 import {roundOff} from '../../@utils/currencies';
 import {
   filterByMonth,
@@ -17,6 +20,8 @@ import {
   Month,
   TransactionType,
 } from '../../Api';
+import {VERBIAGE} from '../../constants';
+import {PageBreak, PageHeader, PrintPaper} from '../@print-papers/PaperPdf';
 import {Currency} from '../@ui/Currency';
 import RoundedPanel from '../@ui/RoundedPanel';
 import SelectMonth from '../@ui/SelectMonth';
@@ -28,6 +33,7 @@ type Props = {
   collectionEfficieny: CollectionEfficiencyView[];
   categorizedExpense: CategorizedExpenseView[];
   charges: ChargeAttr[] | null;
+  selectedYear: number;
 };
 
 type ReportData = {
@@ -326,6 +332,7 @@ const ExpenseOverRevenue = ({
   collectionEfficieny,
   categorizedExpense,
   charges,
+  selectedYear,
 }: Props) => {
   const {month} = getCurrentMonthYear();
   const [selectedMonth, setSelectedMonth] = useState<Month>(month);
@@ -341,92 +348,126 @@ const ExpenseOverRevenue = ({
     charges
   );
 
+  const printPaperRef = React.createRef<ApprovedAny>();
+  const documentTitle = VERBIAGE.FILE_NAMES.EXPENSE_OVER_REVENUE(
+    selectedYear,
+    selectedMonth
+  );
+  const handlePrint = useReactToPrint({
+    bodyClass: 'print-body',
+    content: () => printPaperRef.current,
+    documentTitle,
+  });
+
   return (
     <>
       <RoundedPanel className="p-3">
-        <SelectMonth
-          value={selectedMonth}
-          onSelectMonth={setSelectedMonth}
-          size="lg"
-        />
-        <Container>
-          <Spacer />
-          <ExpenseOverRevenueStats
-            collectionEfficieny={collectionEfficieny}
-            categorizedExpense={categorizedExpense}
-            charges={charges}
-            selectedMonth={selectedMonth}
-          />
+        <Container className="p-0 m-0">
+          <Row>
+            <Col md={10}>
+              <SelectMonth
+                value={selectedMonth}
+                onSelectMonth={setSelectedMonth}
+                size="lg"
+              />
+            </Col>
+            <Col>
+              <Button
+                className={'w-100'}
+                onClick={() => {
+                  handlePrint && handlePrint();
+                }}
+              >
+                <FaPrint />
+              </Button>
+            </Col>
+          </Row>
         </Container>
-        <Container>
+        <PrintPaper ref={printPaperRef}>
           <Spacer />
-          <ReportTable
-            data={revenueData}
-            selectedMonth={selectedMonth}
-            renderHeaderContent={
-              <>
-                <Row>
-                  <Col sm={12} md={8}>
-                    <div>
-                      <h6>Revenue for the month of {selectedMonth}</h6>
-                    </div>
-                  </Col>
-                  {Number(revenueEfficiency) > 0 && (
-                    <Col>
-                      <div className="text-md-right">
-                        <small>
-                          Collection Efficiency of {revenueEfficiency}%
-                        </small>
+          <PageHeader title={documentTitle} />
+          <Container>
+            <Spacer />
+            <ExpenseOverRevenueStats
+              collectionEfficieny={collectionEfficieny}
+              categorizedExpense={categorizedExpense}
+              charges={charges}
+              selectedMonth={selectedMonth}
+            />
+          </Container>
+          <PageBreak />
+          <Container>
+            <Spacer />
+            <ReportTable
+              data={revenueData}
+              selectedMonth={selectedMonth}
+              renderHeaderContent={
+                <>
+                  <Row>
+                    <Col sm={12} md={8}>
+                      <div>
+                        <h6>Revenue for the month of {selectedMonth}</h6>
                       </div>
                     </Col>
-                  )}
-                </Row>
-              </>
-            }
-          />
-        </Container>
-        <Container>
-          <Spacer />
-          <ReportTable
-            noZero
-            data={expenseData}
-            selectedMonth={selectedMonth}
-            renderHeaderContent={
-              <>
-                <Row>
-                  <Col>
-                    <div>
-                      <h6>
-                        Approved Expenses for the month of {selectedMonth}
-                      </h6>
-                    </div>
-                  </Col>
-                </Row>
-              </>
-            }
-          />
-        </Container>
-        <Container>
-          <Spacer />
-          <ReportTable
-            data={expensePassOnData}
-            selectedMonth={selectedMonth}
-            renderHeaderContent={
-              <>
-                <Row>
-                  <Col>
-                    <div>
-                      <h6>
-                        Approved Pass-On Expenses for the month of{' '}
-                        {selectedMonth}
-                      </h6>
-                    </div>
-                  </Col>
-                </Row>
-              </>
-            }
-          />
-        </Container>
+                    {Number(revenueEfficiency) > 0 && (
+                      <Col>
+                        <div className="text-md-right">
+                          <small>
+                            Collection Efficiency of {revenueEfficiency}%
+                          </small>
+                        </div>
+                      </Col>
+                    )}
+                  </Row>
+                </>
+              }
+            />
+          </Container>
+          <PageBreak />
+          <Container>
+            <Spacer />
+            <ReportTable
+              noZero
+              data={expenseData}
+              selectedMonth={selectedMonth}
+              renderHeaderContent={
+                <>
+                  <Row>
+                    <Col>
+                      <div>
+                        <h6>
+                          Approved Expenses for the month of {selectedMonth}
+                        </h6>
+                      </div>
+                    </Col>
+                  </Row>
+                </>
+              }
+            />
+          </Container>
+          <PageBreak />
+          <Container>
+            <Spacer />
+            <ReportTable
+              data={expensePassOnData}
+              selectedMonth={selectedMonth}
+              renderHeaderContent={
+                <>
+                  <Row>
+                    <Col>
+                      <div>
+                        <h6>
+                          Approved Pass-On Expenses for the month of{' '}
+                          {selectedMonth}
+                        </h6>
+                      </div>
+                    </Col>
+                  </Row>
+                </>
+              }
+            />
+          </Container>
+        </PrintPaper>
       </RoundedPanel>
     </>
   );

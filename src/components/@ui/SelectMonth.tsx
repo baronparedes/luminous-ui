@@ -17,7 +17,7 @@ const SelectMonth = ({value, onSelectMonth, size}: Props) => {
 
   return (
     <>
-      <InputGroup className="mb-2">
+      <InputGroup className="mb-2 d-print-none">
         <Form.Label htmlFor="month" column sm={3}>
           select month
         </Form.Label>

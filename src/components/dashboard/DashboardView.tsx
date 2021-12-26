@@ -96,6 +96,7 @@ const DashboardView = () => {
                   title="Expense Over Revenue"
                 >
                   <ExpenseOverRevenue
+                    selectedYear={selectedYear}
                     collectionEfficieny={data.collectionEfficieny}
                     categorizedExpense={data.categorizedExpense}
                     charges={charges}
