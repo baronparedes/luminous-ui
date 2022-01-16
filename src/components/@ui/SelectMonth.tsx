@@ -1,19 +1,20 @@
 import {Form, InputGroup} from 'react-bootstrap';
 
-import {getMonthsUpToCurrent} from '../../@utils/dates';
 import {Month} from '../../Api';
+import {MONTHS} from '../../constants';
 
 type Props = {
   value: Month;
   onSelectMonth: (month: Month) => void;
   size?: 'sm' | 'lg';
+  months?: Month[];
 };
 
-const SelectMonth = ({value, onSelectMonth, size}: Props) => {
-  const months = getMonthsUpToCurrent();
+const SelectMonth = ({value, onSelectMonth, size, months}: Props) => {
   const handleOnSelectMonth = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onSelectMonth(e.target.value as Month);
   };
+  const targetMonths = months ?? MONTHS;
 
   return (
     <>
@@ -29,7 +30,7 @@ const SelectMonth = ({value, onSelectMonth, size}: Props) => {
           onChange={handleOnSelectMonth}
           value={value?.toString()}
         >
-          {months.map((s, i) => {
+          {targetMonths.map((s, i) => {
             return (
               <option key={i} value={s}>
                 {s}

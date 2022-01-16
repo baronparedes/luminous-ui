@@ -371,6 +371,15 @@ export interface Period {
   year: number;
 }
 
+export interface PropertyCollectionByChargeView {
+  chargeCode: string;
+  collected: number;
+  floorArea: string;
+  address: string;
+  code: string;
+  id: number;
+}
+
 export interface VoucherAttr {
   id?: number;
   chargeId: number;
@@ -1372,6 +1381,26 @@ export const SuggestPaymentBreakdown = ({propertyId, ...props}: SuggestPaymentBr
 export type UseSuggestPaymentBreakdownProps = Omit<UseGetProps<TransactionAttr[], unknown, SuggestPaymentBreakdownQueryParams, SuggestPaymentBreakdownPathParams>, "path"> & SuggestPaymentBreakdownPathParams;
 
 export const useSuggestPaymentBreakdown = ({propertyId, ...props}: UseSuggestPaymentBreakdownProps) => useGet<TransactionAttr[], unknown, SuggestPaymentBreakdownQueryParams, SuggestPaymentBreakdownPathParams>((paramsInPath: SuggestPaymentBreakdownPathParams) => `/api/transaction/suggestPaymentBreakdown/${paramsInPath.propertyId}`, {  pathParams: { propertyId }, ...props });
+
+
+export interface GetCollectionBreakdownPathParams {
+  year: number;
+  month: Month
+}
+
+export type GetCollectionBreakdownProps = Omit<GetProps<PropertyCollectionByChargeView[], unknown, void, GetCollectionBreakdownPathParams>, "path"> & GetCollectionBreakdownPathParams;
+
+export const GetCollectionBreakdown = ({year, month, ...props}: GetCollectionBreakdownProps) => (
+  <Get<PropertyCollectionByChargeView[], unknown, void, GetCollectionBreakdownPathParams>
+    path={`/api/transaction/getCollectionBreakdown/${year}/${month}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetCollectionBreakdownProps = Omit<UseGetProps<PropertyCollectionByChargeView[], unknown, void, GetCollectionBreakdownPathParams>, "path"> & GetCollectionBreakdownPathParams;
+
+export const useGetCollectionBreakdown = ({year, month, ...props}: UseGetCollectionBreakdownProps) => useGet<PropertyCollectionByChargeView[], unknown, void, GetCollectionBreakdownPathParams>((paramsInPath: GetCollectionBreakdownPathParams) => `/api/transaction/getCollectionBreakdown/${paramsInPath.year}/${paramsInPath.month}`, {  pathParams: { year, month }, ...props });
 
 
 export interface GetVoucherPathParams {

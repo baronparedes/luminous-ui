@@ -19,6 +19,7 @@ import {
   CollectionEfficiencyView,
   Month,
   TransactionType,
+  useGetCollectionBreakdown,
 } from '../../Api';
 import {VERBIAGE} from '../../constants';
 import {PageBreak, PageHeader, PrintPaper} from '../@print-papers/PaperPdf';
@@ -28,6 +29,7 @@ import SelectMonth from '../@ui/SelectMonth';
 import {Spacer} from '../@ui/Spacer';
 import {Table} from '../@ui/Table';
 import ExpenseOverRevenueStats from './ExpenseOverRevenueStats';
+import PropertyCollectionByCharge from './PropertyCollectionByCharge';
 
 type Props = {
   collectionEfficieny: CollectionEfficiencyView[];
@@ -359,6 +361,9 @@ const ExpenseOverRevenue = ({
     documentTitle,
   });
 
+  const {data: propertyCollectionByChargeData, loading} =
+    useGetCollectionBreakdown({year: selectedYear, month: selectedMonth});
+
   return (
     <>
       <RoundedPanel className="p-3">
@@ -406,7 +411,18 @@ const ExpenseOverRevenue = ({
                   <Row>
                     <Col sm={12} md={8}>
                       <div>
-                        <h6>Revenue for the month of {selectedMonth}</h6>
+                        <h6>
+                          Revenue for the month of {selectedMonth}
+                          {!loading &&
+                            propertyCollectionByChargeData &&
+                            propertyCollectionByChargeData.length > 0 && (
+                              <PropertyCollectionByCharge
+                                data={propertyCollectionByChargeData}
+                                selectedMonth={selectedMonth}
+                                selectedYear={selectedYear}
+                              />
+                            )}
+                        </h6>
                       </div>
                     </Col>
                     {Number(revenueEfficiency) > 0 && (
