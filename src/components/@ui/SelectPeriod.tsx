@@ -1,12 +1,9 @@
 import {Button, ButtonProps, Col, Form, InputGroup, Row} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
 
-import {
-  getCurrentMonthYear,
-  getMonthsUpToCurrent,
-  getPastYears,
-} from '../../@utils/dates';
+import {getCurrentMonthYear, getPastYears} from '../../@utils/dates';
 import {Period} from '../../Api';
+import {MONTHS} from '../../constants';
 
 type Props = {
   onPeriodSelect: (period: Period) => void;
@@ -19,7 +16,6 @@ const SelectPeriod = ({
   ...buttonProps
 }: Props & ButtonProps) => {
   const years = getPastYears(2);
-  const months = getMonthsUpToCurrent();
   const initialValue = getCurrentMonthYear();
   const {handleSubmit, control} = useForm<Period>({
     defaultValues: initialValue,
@@ -74,7 +70,7 @@ const SelectPeriod = ({
                     placeholder="month"
                     disabled={buttonProps.disabled}
                   >
-                    {months.map((s, i) => {
+                    {MONTHS.map((s, i) => {
                       return (
                         <option key={i} value={s}>
                           {s}
