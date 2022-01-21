@@ -5,7 +5,10 @@ import {Controller, useForm} from 'react-hook-form';
 import {ChargeAttr, useGetAllCharges, usePatchCharges} from '../../../Api';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import {Table} from '../../@ui/Table';
-import {decimalPatternRule, validateGreaterThanZero} from '../../@validation';
+import {
+  decimalPatternRule,
+  validateGreaterThanOrEqualZero,
+} from '../../@validation';
 import {SettingContainer} from './SettingsView';
 
 type FormData = {
@@ -39,7 +42,7 @@ const ChargeRateInput = ({
           control={control}
           rules={{
             pattern: decimalPatternRule,
-            validate: validateGreaterThanZero,
+            validate: validateGreaterThanOrEqualZero,
           }}
           render={({field}) => (
             <Form.Control
