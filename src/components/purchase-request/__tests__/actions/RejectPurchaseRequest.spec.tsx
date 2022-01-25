@@ -4,20 +4,23 @@ import nock from 'nock';
 import {waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import {generateFakeProfile} from '../../../../@utils/fake-models';
+import {
+  generateFakeProfile,
+  generateFakePurchaseRequest,
+} from '../../../../@utils/fake-models';
 import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
 import {profileActions} from '../../../../store/reducers/profile.reducer';
 import RejectPurchaseRequest from '../../actions/RejectPurchaseRequest';
 
 describe('RejectPurchaseRequest', () => {
   const base = 'http://localhost';
-  const purchaseRequestId = faker.datatype.number();
+  const purchaseRequest = generateFakePurchaseRequest();
 
   it('should render and toggle modal', async () => {
     const {getByText, getByRole, getByPlaceholderText} =
       renderWithProviderAndRestful(
         <RejectPurchaseRequest
-          purchaseRequestId={purchaseRequestId}
+          purchaseRequest={purchaseRequest}
           buttonLabel={'toggle'}
         />,
         base
@@ -26,7 +29,9 @@ describe('RejectPurchaseRequest', () => {
     userEvent.click(getByText(/toggle/i));
     await waitFor(() => expect(getByRole('dialog')).toBeInTheDocument());
 
-    expect(getByText(`Reject PR-${purchaseRequestId}`)).toBeInTheDocument();
+    expect(
+      getByText(`Reject PR-${purchaseRequest.series ?? purchaseRequest.id}`)
+    ).toBeInTheDocument();
     expect(getByPlaceholderText(/comments/i)).toBeInTheDocument();
     expect(getByText(/reject$/i, {selector: 'button'})).toBeInTheDocument();
   });
@@ -40,7 +45,7 @@ describe('RejectPurchaseRequest', () => {
     nock(base)
       .post('/api/purchase-request/rejectPurchaseRequest', {
         comments: expectedComments,
-        id: purchaseRequestId,
+        id: purchaseRequest.id,
         rejectedBy: Number(mockedProfile?.id),
       })
       .reply(200);
@@ -48,7 +53,7 @@ describe('RejectPurchaseRequest', () => {
     const {getByText, getByRole, getByPlaceholderText, queryByRole} =
       renderWithProviderAndRestful(
         <RejectPurchaseRequest
-          purchaseRequestId={purchaseRequestId}
+          purchaseRequest={purchaseRequest}
           buttonLabel={'toggle'}
         />,
         base,
@@ -78,7 +83,7 @@ describe('RejectPurchaseRequest', () => {
       const {getByRole, getByText, getByPlaceholderText} =
         renderWithProviderAndRestful(
           <RejectPurchaseRequest
-            purchaseRequestId={purchaseRequestId}
+            purchaseRequest={purchaseRequest}
             buttonLabel={'toggle'}
           />,
           base

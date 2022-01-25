@@ -132,14 +132,14 @@ const PurchaseRequestView = () => {
                   className="mb-2 w-100"
                   variant="success"
                   buttonLabel="approve"
-                  purchaseRequestId={purchaseRequestId}
+                  purchaseRequest={data}
                   onApprove={() => refetch()}
                 />
                 <RejectPurchaseRequest
                   className="mb-2 w-100"
                   variant="danger"
                   buttonLabel="reject"
-                  purchaseRequestId={purchaseRequestId}
+                  purchaseRequest={data}
                   onReject={() => refetch()}
                 />
                 <ManageVoucherOrOrder

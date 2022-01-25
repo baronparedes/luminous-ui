@@ -13,6 +13,7 @@ import {FaTimes} from 'react-icons/fa';
 import {
   ApiError,
   ApproveVoucherOrOrder,
+  PurchaseOrderAttr,
   useApprovePurchaseOrder,
 } from '../../../Api';
 import ErrorInfo from '../../@ui/ErrorInfo';
@@ -20,14 +21,14 @@ import InputApprovalCodes from '../../@ui/InputApprovalCodes';
 import ModalContainer from '../../@ui/ModalContainer';
 
 type Props = {
-  purchaseOrderId: number;
+  purchaseOrder: PurchaseOrderAttr;
   buttonLabel: React.ReactNode;
   onApprove?: () => void;
 };
 
 const ApprovePurchaseOrder = ({
   buttonLabel,
-  purchaseOrderId,
+  purchaseOrder,
   onApprove,
   ...buttonProps
 }: Props & ButtonProps) => {
@@ -39,7 +40,7 @@ const ApprovePurchaseOrder = ({
   const handleOnApprove = () => {
     const data: ApproveVoucherOrOrder = {
       codes,
-      purchaseOrderId,
+      purchaseOrderId: Number(purchaseOrder.id),
     };
 
     if (confirm('Proceed?')) {
@@ -57,7 +58,7 @@ const ApprovePurchaseOrder = ({
       </Button>
       <ModalContainer
         size="lg"
-        header={<h5>Approve PO-{purchaseOrderId}</h5>}
+        header={<h5>Approve PO-{purchaseOrder.series ?? purchaseOrder.id}</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >

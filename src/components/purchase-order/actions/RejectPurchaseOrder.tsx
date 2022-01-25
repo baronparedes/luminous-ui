@@ -2,14 +2,14 @@ import {useState} from 'react';
 import {Button, ButtonProps, Form} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
 
-import {useRejectPurchaseOrder} from '../../../Api';
+import {PurchaseOrderAttr, useRejectPurchaseOrder} from '../../../Api';
 import {useRootState} from '../../../store';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import ModalContainer from '../../@ui/ModalContainer';
 import {validateNotEmpty} from '../../@validation';
 
 type Props = {
-  purchaseOrderId: number;
+  purchaseOrder: PurchaseOrderAttr;
   buttonLabel: React.ReactNode;
   onReject?: () => void;
 };
@@ -20,7 +20,7 @@ type FormData = {
 
 const RejectPurchaseOrder = ({
   buttonLabel,
-  purchaseOrderId,
+  purchaseOrder,
   onReject,
   ...buttonProps
 }: Props & ButtonProps) => {
@@ -37,7 +37,7 @@ const RejectPurchaseOrder = ({
     if (confirm('Proceed?')) {
       mutate({
         comments: formData.comments,
-        id: purchaseOrderId,
+        id: Number(purchaseOrder.id),
         rejectedBy: Number(me?.id),
       }).then(() => {
         setToggle(false);
@@ -52,7 +52,7 @@ const RejectPurchaseOrder = ({
         {buttonLabel}
       </Button>
       <ModalContainer
-        header={<h5>Reject PO-{purchaseOrderId}</h5>}
+        header={<h5>Reject PO-{purchaseOrder.series ?? purchaseOrder.id}</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >

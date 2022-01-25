@@ -2,14 +2,14 @@ import {useState} from 'react';
 import {Button, ButtonProps, Form} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
 
-import {useRejectVoucher} from '../../../Api';
+import {useRejectVoucher, VoucherAttr} from '../../../Api';
 import {useRootState} from '../../../store';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import ModalContainer from '../../@ui/ModalContainer';
 import {validateNotEmpty} from '../../@validation';
 
 type Props = {
-  voucherId: number;
+  voucher: VoucherAttr;
   buttonLabel: React.ReactNode;
   onRejectVoucher?: () => void;
 };
@@ -20,7 +20,7 @@ type FormData = {
 
 const RejectVoucher = ({
   buttonLabel,
-  voucherId,
+  voucher,
   onRejectVoucher,
   ...buttonProps
 }: Props & ButtonProps) => {
@@ -37,7 +37,7 @@ const RejectVoucher = ({
     if (confirm('Proceed?')) {
       mutate({
         comments: formData.comments,
-        id: voucherId,
+        id: Number(voucher.id),
         rejectedBy: Number(me?.id),
       }).then(() => {
         setToggle(false);
@@ -52,7 +52,7 @@ const RejectVoucher = ({
         {buttonLabel}
       </Button>
       <ModalContainer
-        header={<h5>Reject V-{voucherId}</h5>}
+        header={<h5>Reject V-{voucher.series ?? voucher.id}</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >

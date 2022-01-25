@@ -4,26 +4,31 @@ import nock from 'nock';
 import {waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import {generateFakeProfile} from '../../../../@utils/fake-models';
+import {
+  generateFakeProfile,
+  generateFakeVoucher,
+} from '../../../../@utils/fake-models';
 import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
 import {profileActions} from '../../../../store/reducers/profile.reducer';
 import RejectVoucher from '../../actions/RejectVoucher';
 
 describe('RejectVoucher', () => {
   const base = 'http://localhost';
-  const voucherId = faker.datatype.number();
+  const voucher = generateFakeVoucher();
 
   it('should render and toggle modal', async () => {
     const {getByText, getByRole, getByPlaceholderText} =
       renderWithProviderAndRestful(
-        <RejectVoucher voucherId={voucherId} buttonLabel={'toggle'} />,
+        <RejectVoucher voucher={voucher} buttonLabel={'toggle'} />,
         base
       );
 
     userEvent.click(getByText(/toggle/i));
     await waitFor(() => expect(getByRole('dialog')).toBeInTheDocument());
 
-    expect(getByText(`Reject V-${voucherId}`)).toBeInTheDocument();
+    expect(
+      getByText(`Reject V-${voucher.series ?? voucher.id}`)
+    ).toBeInTheDocument();
     expect(getByPlaceholderText(/comments/i)).toBeInTheDocument();
     expect(getByText(/reject$/i, {selector: 'button'})).toBeInTheDocument();
   });
@@ -37,14 +42,14 @@ describe('RejectVoucher', () => {
     nock(base)
       .post('/api/voucher/rejectVoucher', {
         comments: expectedComments,
-        id: voucherId,
+        id: Number(voucher.id),
         rejectedBy: Number(mockedProfile?.id),
       })
       .reply(200);
 
     const {getByText, getByRole, getByPlaceholderText, queryByRole} =
       renderWithProviderAndRestful(
-        <RejectVoucher voucherId={voucherId} buttonLabel={'toggle'} />,
+        <RejectVoucher voucher={voucher} buttonLabel={'toggle'} />,
         base,
         store => {
           store.dispatch(profileActions.signIn({me: mockedProfile}));
@@ -71,7 +76,7 @@ describe('RejectVoucher', () => {
 
       const {getByRole, getByText, getByPlaceholderText} =
         renderWithProviderAndRestful(
-          <RejectVoucher voucherId={voucherId} buttonLabel={'toggle'} />,
+          <RejectVoucher voucher={voucher} buttonLabel={'toggle'} />,
           base
         );
 

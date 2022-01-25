@@ -2,14 +2,14 @@ import {useState} from 'react';
 import {Button, ButtonProps, Form} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
 
-import {useRejectPurchaseRequest} from '../../../Api';
+import {PurchaseRequestAttr, useRejectPurchaseRequest} from '../../../Api';
 import {useRootState} from '../../../store';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import ModalContainer from '../../@ui/ModalContainer';
 import {validateNotEmpty} from '../../@validation';
 
 type Props = {
-  purchaseRequestId: number;
+  purchaseRequest: PurchaseRequestAttr;
   buttonLabel: React.ReactNode;
   onReject?: () => void;
 };
@@ -20,10 +20,11 @@ type FormData = {
 
 const RejectPurchaseRequest = ({
   buttonLabel,
-  purchaseRequestId,
+  purchaseRequest,
   onReject,
   ...buttonProps
 }: Props & ButtonProps) => {
+  const purchaseRequestId = Number(purchaseRequest.id);
   const {me} = useRootState(state => state.profile);
   const [toggle, setToggle] = useState(false);
   const {handleSubmit, control, formState} = useForm<FormData>({
@@ -52,7 +53,9 @@ const RejectPurchaseRequest = ({
         {buttonLabel}
       </Button>
       <ModalContainer
-        header={<h5>Reject PR-{purchaseRequestId}</h5>}
+        header={
+          <h5>Reject PR-{purchaseRequest.series ?? purchaseRequest.id}</h5>
+        }
         toggle={toggle}
         onClose={() => setToggle(false)}
       >

@@ -96,7 +96,7 @@ const VoucherView = () => {
                   variant="success"
                   buttonLabel="approve"
                   chargeId={Number(data.chargeId)}
-                  voucherId={Number(data.id)}
+                  voucher={data}
                   totalCost={data.totalCost}
                   onApproveVoucher={() => refetch()}
                 />
@@ -104,7 +104,7 @@ const VoucherView = () => {
                   className="mb-2 w-100"
                   variant="danger"
                   buttonLabel="reject"
-                  voucherId={Number(data.id)}
+                  voucher={data}
                   onRejectVoucher={() => refetch()}
                 />
                 <NotifyApprovers

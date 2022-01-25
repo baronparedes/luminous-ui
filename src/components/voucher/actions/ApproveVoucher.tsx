@@ -17,6 +17,7 @@ import {
   ApproveVoucherOrOrder,
   DisbursementAttr,
   useApproveVoucher,
+  VoucherAttr,
 } from '../../../Api';
 import AddDisbursement from '../../@ui/AddDisbursement';
 import {Currency} from '../../@ui/Currency';
@@ -26,7 +27,7 @@ import ModalContainer from '../../@ui/ModalContainer';
 import InputApprovalCodes from './InputApprovalCodes';
 
 type Props = {
-  voucherId: number;
+  voucher: VoucherAttr;
   totalCost: number;
   buttonLabel: React.ReactNode;
   chargeId: number;
@@ -39,7 +40,7 @@ type NewDisbursement = DisbursementAttr & {
 
 const ApproveVoucher = ({
   buttonLabel,
-  voucherId,
+  voucher,
   totalCost,
   chargeId,
   onApproveVoucher,
@@ -56,7 +57,7 @@ const ApproveVoucher = ({
   const handleOnApprove = () => {
     const data: ApproveVoucherOrOrder = {
       codes,
-      voucherId,
+      voucherId: Number(voucher.id),
       disbursements: disbursements.map(d => {
         const forCashPayment: DisbursementAttr = {
           details: d.details,
@@ -102,7 +103,7 @@ const ApproveVoucher = ({
       </Button>
       <ModalContainer
         size="lg"
-        header={<h5>Approve V-{voucherId}</h5>}
+        header={<h5>Approve V-{voucher.series ?? voucher.id}</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >

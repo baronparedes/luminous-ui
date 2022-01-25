@@ -4,20 +4,23 @@ import nock from 'nock';
 import {waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import {generateFakeProfile} from '../../../../@utils/fake-models';
+import {
+  generateFakeProfile,
+  generateFakePurchaseOrder,
+} from '../../../../@utils/fake-models';
 import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
 import {profileActions} from '../../../../store/reducers/profile.reducer';
 import RejectPurchaseOrder from '../../actions/RejectPurchaseOrder';
 
 describe('RejectPurchaseOrder', () => {
   const base = 'http://localhost';
-  const purchaseOrderId = faker.datatype.number();
+  const purchaseOrder = generateFakePurchaseOrder();
 
   it('should render and toggle modal', async () => {
     const {getByText, getByRole, getByPlaceholderText} =
       renderWithProviderAndRestful(
         <RejectPurchaseOrder
-          purchaseOrderId={purchaseOrderId}
+          purchaseOrder={purchaseOrder}
           buttonLabel={'toggle'}
         />,
         base
@@ -26,7 +29,9 @@ describe('RejectPurchaseOrder', () => {
     userEvent.click(getByText(/toggle/i));
     await waitFor(() => expect(getByRole('dialog')).toBeInTheDocument());
 
-    expect(getByText(`Reject PO-${purchaseOrderId}`)).toBeInTheDocument();
+    expect(
+      getByText(`Reject PO-${purchaseOrder.series ?? purchaseOrder.id}`)
+    ).toBeInTheDocument();
     expect(getByPlaceholderText(/comments/i)).toBeInTheDocument();
     expect(getByText(/reject$/i, {selector: 'button'})).toBeInTheDocument();
   });
@@ -40,7 +45,7 @@ describe('RejectPurchaseOrder', () => {
     nock(base)
       .post('/api/purchase-order/rejectPurchaseOrder', {
         comments: expectedComments,
-        id: purchaseOrderId,
+        id: Number(purchaseOrder.id),
         rejectedBy: Number(mockedProfile?.id),
       })
       .reply(200);
@@ -48,7 +53,7 @@ describe('RejectPurchaseOrder', () => {
     const {getByText, getByRole, getByPlaceholderText, queryByRole} =
       renderWithProviderAndRestful(
         <RejectPurchaseOrder
-          purchaseOrderId={purchaseOrderId}
+          purchaseOrder={purchaseOrder}
           buttonLabel={'toggle'}
         />,
         base,
@@ -78,7 +83,7 @@ describe('RejectPurchaseOrder', () => {
       const {getByRole, getByText, getByPlaceholderText} =
         renderWithProviderAndRestful(
           <RejectPurchaseOrder
-            purchaseOrderId={purchaseOrderId}
+            purchaseOrder={purchaseOrder}
             buttonLabel={'toggle'}
           />,
           base

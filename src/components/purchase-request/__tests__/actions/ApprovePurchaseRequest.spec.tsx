@@ -4,20 +4,23 @@ import nock from 'nock';
 import {waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import {generateFakeProfile} from '../../../../@utils/fake-models';
+import {
+  generateFakeProfile,
+  generateFakePurchaseRequest,
+} from '../../../../@utils/fake-models';
 import {renderWithProviderAndRouterAndRestful} from '../../../../@utils/test-renderers';
 import {profileActions} from '../../../../store/reducers/profile.reducer';
 import ApprovePurchaseRequest from '../../actions/ApprovePurchaseRequest';
 
 describe('ApprovePurchaseRequest', () => {
   const base = 'http://localhost';
-  const purchaseRequestId = faker.datatype.number();
+  const purchaseRequest = generateFakePurchaseRequest();
   const mockedProfile = generateFakeProfile();
 
   async function renderTarget() {
     const target = renderWithProviderAndRouterAndRestful(
       <ApprovePurchaseRequest
-        purchaseRequestId={purchaseRequestId}
+        purchaseRequest={purchaseRequest}
         buttonLabel={'toggle'}
       />,
       base,
@@ -28,7 +31,9 @@ describe('ApprovePurchaseRequest', () => {
     await waitFor(() => expect(target.getByRole('dialog')).toBeInTheDocument());
 
     expect(
-      target.getByText(`Approve PR-${purchaseRequestId}`)
+      target.getByText(
+        `Approve PR-${purchaseRequest.series ?? purchaseRequest.id}`
+      )
     ).toBeInTheDocument();
 
     expect(target.getByText(/^approval codes$/i)).toBeInTheDocument();
@@ -96,7 +101,7 @@ describe('ApprovePurchaseRequest', () => {
 
     const expectedRequest = {
       codes: [code1, code2, code3],
-      purchaseRequestId: purchaseRequestId,
+      purchaseRequestId: purchaseRequest.id,
     };
 
     nock(base)

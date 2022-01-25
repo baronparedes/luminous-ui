@@ -8,6 +8,7 @@ import {currencyFormat} from '../../../../@utils/currencies';
 import {
   generateFakeDisbursement,
   generateFakeProfile,
+  generateFakeVoucher,
 } from '../../../../@utils/fake-models';
 import {renderWithProviderAndRouterAndRestful} from '../../../../@utils/test-renderers';
 import {DisbursementAttr} from '../../../../Api';
@@ -16,7 +17,7 @@ import ApproveVoucher from '../../actions/ApproveVoucher';
 
 describe('ApproveVoucher', () => {
   const base = 'http://localhost';
-  const voucherId = faker.datatype.number();
+  const voucher = generateFakeVoucher();
   const chargeId = faker.datatype.number();
   const expectedTotalCost = faker.datatype.number();
   const mockedProfile = generateFakeProfile();
@@ -24,7 +25,7 @@ describe('ApproveVoucher', () => {
   async function renderTarget() {
     const target = renderWithProviderAndRouterAndRestful(
       <ApproveVoucher
-        voucherId={voucherId}
+        voucher={voucher}
         chargeId={chargeId}
         buttonLabel={'toggle'}
         totalCost={expectedTotalCost}
@@ -36,7 +37,9 @@ describe('ApproveVoucher', () => {
     userEvent.click(target.getByText(/toggle/i));
     await waitFor(() => expect(target.getByRole('dialog')).toBeInTheDocument());
 
-    expect(target.getByText(`Approve V-${voucherId}`)).toBeInTheDocument();
+    expect(
+      target.getByText(`Approve V-${voucher.series ?? voucher.id}`)
+    ).toBeInTheDocument();
 
     expect(target.getByText(/^approval codes$/i)).toBeInTheDocument();
     expect(target.getByPlaceholderText(/code/i)).toBeInTheDocument();
@@ -240,7 +243,7 @@ describe('ApproveVoucher', () => {
 
     const expectedRequest = {
       codes: [code1, code2, code3],
-      voucherId,
+      voucherId: Number(voucher.id),
       disbursements: [
         {
           details: expectedDisbursement.details,
