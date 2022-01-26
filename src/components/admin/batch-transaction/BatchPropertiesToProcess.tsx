@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Button, Container, ProgressBar} from 'react-bootstrap';
+import {Alert, Button, Container, ProgressBar} from 'react-bootstrap';
 
 import {
   ApiError,
@@ -8,6 +8,7 @@ import {
   usePostMonthlyCharges,
 } from '../../../Api';
 import ErrorInfo from '../../@ui/ErrorInfo';
+import {Spacer} from '../../@ui/Spacer';
 
 type Props = {
   period?: Period;
@@ -115,10 +116,17 @@ const BatchPropertiesToProcess = ({
               Processed {progress} out of {properties.length} properties
             </h5>
             <ProgressBar now={calculatePercentage()} srOnly />
+            {progress === properties?.length && errors.length === 0 && (
+              <div>
+                <Spacer />
+                <Alert variant="success">Process Completed</Alert>
+              </div>
+            )}
           </>
         )}
         {properties && errors.length > 0 && (
-          <div className="pt-3">
+          <div>
+            <Spacer />
             <ErrorInfo>
               Unable to process {errors.length} out of {properties.length}{' '}
               properties
@@ -134,7 +142,8 @@ const BatchPropertiesToProcess = ({
           </div>
         )}
         {toggleErrors && errors.length > 0 && (
-          <div className="pt-3">
+          <div>
+            <Spacer />
             {errors.map((err, i) => {
               return (
                 <ErrorInfo key={i}>

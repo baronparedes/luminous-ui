@@ -67,6 +67,7 @@ describe('WaterReadingView', () => {
       .reply(200);
 
     window.confirm = jest.fn().mockImplementation(() => true);
+    window.alert = jest.fn().mockImplementation();
 
     const {
       getByText,
@@ -135,5 +136,7 @@ describe('WaterReadingView', () => {
       ).not.toBeInTheDocument();
       expect(queryByText(/Save Transactions/i)).not.toBeInTheDocument();
     });
+
+    await waitFor(() => expect(window.alert).toHaveBeenCalledTimes(1));
   });
 });

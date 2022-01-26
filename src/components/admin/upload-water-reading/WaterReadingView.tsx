@@ -74,7 +74,10 @@ const WaterReadingView = () => {
       const transactionsToBeSaved = transactions.map(t =>
         sanitizeTransaction(t)
       );
-      mutate(transactionsToBeSaved).then(() => onReset());
+      mutate(transactionsToBeSaved).then(() => {
+        onReset();
+        alert('Transactions uploaded successfully');
+      });
     }
   };
 
