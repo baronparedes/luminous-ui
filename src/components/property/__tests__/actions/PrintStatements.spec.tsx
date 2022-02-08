@@ -8,9 +8,9 @@ import {getCurrentMonthYear} from '../../../../@utils/dates';
 import {generateFakePropertyAccount} from '../../../../@utils/fake-models';
 import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
 import {Month, Period} from '../../../../Api';
-import ViewPreviousStatements from '../../actions/ViewPreviousStatements';
+import PrintStatements from '../../actions/PrintStatements';
 
-describe.skip('ViewPreviousStatements', () => {
+describe.skip('PrintStatements', () => {
   const base = 'http://localhost';
 
   async function renderTarget() {
@@ -31,7 +31,7 @@ describe.skip('ViewPreviousStatements', () => {
       .reply(200, availableYears);
 
     const target = renderWithProviderAndRestful(
-      <ViewPreviousStatements
+      <PrintStatements
         buttonLabel="view previous statements"
         propertyId={propertyId}
       />,

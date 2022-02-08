@@ -7,10 +7,11 @@ import {useRootState} from '../../store';
 import Loading from '../@ui/Loading';
 import RoundedPanel from '../@ui/RoundedPanel';
 import AdjustTransactions from './actions/AdjustTransactions';
+import PrintStatements from './actions/PrintStatements';
 import ProcessManualPayment from './actions/ProcessManualPayment';
 import ProcessPayment from './actions/ProcessPayment';
 import ViewPaymentHistory from './actions/ViewPaymentHistory';
-import ViewPreviousStatements from './actions/ViewPreviousStatements';
+import ViewTransactionHistory from './actions/ViewTransactionHistory';
 import PropertyAssignmentCard from './PropertyAssignmentCard';
 import PropertyDetails from './PropertyDetails';
 import PropertyStatementOfAccount from './PropertyStatementOfAccount';
@@ -88,15 +89,21 @@ const PropertyView = () => {
                 )}
                 {propertyAccountData.property && (
                   <>
-                    <ViewPreviousStatements
+                    <PrintStatements
                       className="mb-2 w-100"
-                      buttonLabel="view previous statements"
+                      buttonLabel="print statements"
                       disabled={id === undefined}
                       propertyId={propertyId}
                     />
                     <ViewPaymentHistory
                       className="mb-2 w-100"
                       buttonLabel="view payment history"
+                      disabled={id === undefined}
+                      property={propertyAccountData.property}
+                    />
+                    <ViewTransactionHistory
+                      className="mb-2 w-100"
+                      buttonLabel="view transaction history"
                       disabled={id === undefined}
                       property={propertyAccountData.property}
                     />

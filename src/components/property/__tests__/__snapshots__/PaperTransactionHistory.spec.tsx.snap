@@ -1,0 +1,171 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PaperTransactionHistory should render 1`] = `
+<DocumentFragment>
+  <div
+    class="d-none"
+  >
+    <div>
+      <div
+        class="sc-bdfBQB dxnWgn"
+      >
+        <div
+          class="sc-bdfBQB dxnWgn"
+        >
+          <div
+            class="text-center"
+          >
+            <small>
+              <h4
+                class="brand"
+              >
+                Luminous
+              </h4>
+            </small>
+            <h4>
+              TRANSACTION HISTORY
+            </h4>
+          </div>
+        </div>
+        <div
+          class="sc-bdfBQB dxnWgn pt-3"
+        >
+          <div
+            class="sc-hKgJUU cTopnv"
+          >
+            <strong>
+              Unit Number: 
+            </strong>
+            G-111
+          </div>
+          <small>
+            <div
+              class="sc-hKgJUU cTopnv"
+            >
+              <strong>
+                Address: 
+              </strong>
+              Pasig City Philippines
+            </div>
+          </small>
+          <small>
+            <div
+              class="sc-hKgJUU cTopnv"
+            >
+              <strong>
+                Floor area: 
+              </strong>
+              33.1
+            </div>
+          </small>
+          <hr />
+        </div>
+        <div
+          class="sc-bdfBQB dxnWgn pt-3"
+        >
+          <div
+            class="sc-hKgJUU cTopnv"
+          >
+            <strong>
+              Transaction History for: 
+            </strong>
+            2022
+          </div>
+          <hr />
+        </div>
+        <div
+          class="sc-bdfBQB dxnWgn"
+        >
+          <div
+            class="text-right"
+          >
+            <span
+              class="badge badge-pill badge-info"
+            >
+              running balance
+            </span>
+            <h4>
+              <span
+                class="currency"
+              >
+                0
+              </span>
+            </h4>
+          </div>
+          <div
+            class="sc-dlfnuX cEAejh"
+          >
+            <div
+              class="table-responsive"
+            >
+              <table
+                class="table table-sm table-hover"
+                role="table"
+              >
+                <thead>
+                  <tr>
+                    <th>
+                      charge code
+                    </th>
+                    <th>
+                      month
+                    </th>
+                    <th>
+                      type
+                    </th>
+                    <th>
+                      amount
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      ESTATE DUES
+                    </td>
+                    <td>
+                      JAN
+                    </td>
+                    <td>
+                      charged
+                    </td>
+                    <td>
+                      <strong>
+                        <span
+                          class="currency"
+                        >
+                          1,000
+                        </span>
+                      </strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      ESTATE DUES
+                    </td>
+                    <td>
+                      JAN
+                    </td>
+                    <td>
+                      collected
+                    </td>
+                    <td>
+                      <strong>
+                        <span
+                          class="currency text-success"
+                        >
+                          -1,000
+                        </span>
+                      </strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -21,7 +21,7 @@ type Props = {
   buttonLabel: string;
 };
 
-const ViewPreviousStatements = ({
+const PrintStatements = ({
   propertyId,
   buttonLabel,
   ...buttonProps
@@ -85,7 +85,7 @@ const ViewPreviousStatements = ({
         {buttonLabel}
       </Button>
       <ModalContainer
-        header={<h5>View Previous Statements</h5>}
+        header={<h5>Select SOA to Print</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >
@@ -131,4 +131,4 @@ const ViewPreviousStatements = ({
   );
 };
 
-export default ViewPreviousStatements;
+export default PrintStatements;

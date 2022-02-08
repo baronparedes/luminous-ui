@@ -920,6 +920,26 @@ export type UseGetPaymentHistoryProps = Omit<UseGetProps<PaymentHistoryView[], u
 export const useGetPaymentHistory = ({propertyId, year, ...props}: UseGetPaymentHistoryProps) => useGet<PaymentHistoryView[], unknown, void, GetPaymentHistoryPathParams>((paramsInPath: GetPaymentHistoryPathParams) => `/api/property/getPaymentHistory/${paramsInPath.propertyId}/${paramsInPath.year}`, {  pathParams: { propertyId, year }, ...props });
 
 
+export interface GetTransactionHistoryPathParams {
+  propertyId: number;
+  year: number
+}
+
+export type GetTransactionHistoryProps = Omit<GetProps<TransactionAttr[], unknown, void, GetTransactionHistoryPathParams>, "path"> & GetTransactionHistoryPathParams;
+
+export const GetTransactionHistory = ({propertyId, year, ...props}: GetTransactionHistoryProps) => (
+  <Get<TransactionAttr[], unknown, void, GetTransactionHistoryPathParams>
+    path={`/api/property/getTransactionHistory/${propertyId}/${year}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetTransactionHistoryProps = Omit<UseGetProps<TransactionAttr[], unknown, void, GetTransactionHistoryPathParams>, "path"> & GetTransactionHistoryPathParams;
+
+export const useGetTransactionHistory = ({propertyId, year, ...props}: UseGetTransactionHistoryProps) => useGet<TransactionAttr[], unknown, void, GetTransactionHistoryPathParams>((paramsInPath: GetTransactionHistoryPathParams) => `/api/property/getTransactionHistory/${paramsInPath.propertyId}/${paramsInPath.year}`, {  pathParams: { propertyId, year }, ...props });
+
+
 export interface GetPurchaseOrderPathParams {
   id: number
 }

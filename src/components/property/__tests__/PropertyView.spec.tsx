@@ -14,8 +14,8 @@ import {renderWithProviderAndRouterAndRestful} from '../../../@utils/test-render
 import {ProfileType} from '../../../Api';
 import {profileActions} from '../../../store/reducers/profile.reducer';
 import AdjustTransactions from '../actions/AdjustTransactions';
+import PrintStatements from '../actions/PrintStatements';
 import ViewPaymentHistory from '../actions/ViewPaymentHistory';
-import ViewPreviousStatements from '../actions/ViewPreviousStatements';
 import PropertyAssignmentCard from '../PropertyAssignmentCard';
 import PropertyDetails from '../PropertyDetails';
 import PropertyStatementOfAccount from '../PropertyStatementOfAccount';
@@ -31,9 +31,7 @@ type PropertyAssignmentCardProps = React.ComponentProps<
   typeof PropertyAssignmentCard
 >;
 
-type ViewPreviousStatementsProps = React.ComponentProps<
-  typeof ViewPreviousStatements
->;
+type PrintStatementsProps = React.ComponentProps<typeof PrintStatements>;
 
 type ViewPaymentHistoryProps = React.ComponentProps<typeof ViewPaymentHistory>;
 
@@ -62,9 +60,9 @@ jest.mock(
 );
 
 jest.mock(
-  '../actions/ViewPreviousStatements',
+  '../actions/PrintStatements',
   () =>
-    ({buttonLabel}: ViewPreviousStatementsProps) => {
+    ({buttonLabel}: PrintStatementsProps) => {
       return <button>{buttonLabel}</button>;
     }
 );
@@ -133,8 +131,9 @@ describe('PropertyView', () => {
       expect(count).toEqual(mockedPropertyAccount.assignedProfiles?.length);
     });
 
-    expect(target.getByText(/view previous statements/i)).toBeInTheDocument();
+    expect(target.getByText(/print statements/i)).toBeInTheDocument();
     expect(target.getByText(/view payment history/i)).toBeInTheDocument();
+    expect(target.getByText(/view transaction history/i)).toBeInTheDocument();
 
     return {
       ...target,
