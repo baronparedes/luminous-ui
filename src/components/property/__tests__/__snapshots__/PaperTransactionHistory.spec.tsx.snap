@@ -31,7 +31,7 @@ exports[`PaperTransactionHistory should render 1`] = `
           class="sc-bdfBQB dxnWgn pt-3"
         >
           <div
-            class="sc-hKgJUU cTopnv"
+            class="sc-gsTEea bjzFuM"
           >
             <strong>
               Unit Number: 
@@ -40,7 +40,7 @@ exports[`PaperTransactionHistory should render 1`] = `
           </div>
           <small>
             <div
-              class="sc-hKgJUU cTopnv"
+              class="sc-gsTEea bjzFuM"
             >
               <strong>
                 Address: 
@@ -50,7 +50,7 @@ exports[`PaperTransactionHistory should render 1`] = `
           </small>
           <small>
             <div
-              class="sc-hKgJUU cTopnv"
+              class="sc-gsTEea bjzFuM"
             >
               <strong>
                 Floor area: 
@@ -64,7 +64,7 @@ exports[`PaperTransactionHistory should render 1`] = `
           class="sc-bdfBQB dxnWgn pt-3"
         >
           <div
-            class="sc-hKgJUU cTopnv"
+            class="sc-gsTEea bjzFuM"
           >
             <strong>
               Transaction History for: 
@@ -77,90 +77,258 @@ exports[`PaperTransactionHistory should render 1`] = `
           class="sc-bdfBQB dxnWgn"
         >
           <div
-            class="text-right"
-          >
-            <span
-              class="badge badge-pill badge-info"
-            >
-              running balance
-            </span>
-            <h4>
-              <span
-                class="currency"
-              >
-                0
-              </span>
-            </h4>
-          </div>
-          <div
-            class="sc-dlfnuX cEAejh"
+            class="text-right mb-3 container"
           >
             <div
-              class="table-responsive"
+              class="row"
             >
-              <table
-                class="table table-sm table-hover"
-                role="table"
+              <div
+                class="col"
               >
-                <thead>
-                  <tr>
-                    <th>
-                      charge code
-                    </th>
-                    <th>
-                      month
-                    </th>
-                    <th>
-                      type
-                    </th>
-                    <th>
-                      amount
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      ESTATE DUES
-                    </td>
-                    <td>
-                      JAN
-                    </td>
-                    <td>
-                      charged
-                    </td>
-                    <td>
-                      <strong>
-                        <span
-                          class="currency"
-                        >
-                          1,000
-                        </span>
-                      </strong>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      ESTATE DUES
-                    </td>
-                    <td>
-                      JAN
-                    </td>
-                    <td>
-                      collected
-                    </td>
-                    <td>
-                      <strong>
-                        <span
-                          class="currency text-success"
-                        >
-                          -1,000
-                        </span>
-                      </strong>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                <div
+                  class="text-center"
+                >
+                  <span
+                    class="badge badge-pill badge-danger"
+                  >
+                    previous balance
+                  </span>
+                  <h4>
+                    <span
+                      class="currency"
+                    >
+                      0
+                    </span>
+                  </h4>
+                </div>
+              </div>
+              <div
+                class="col"
+              >
+                <div
+                  class="text-center"
+                >
+                  <span
+                    class="badge badge-pill badge-info"
+                  >
+                    running balance
+                  </span>
+                  <h4>
+                    <span
+                      class="currency"
+                    >
+                      0
+                    </span>
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="list-group"
+          >
+            <div
+              class="list-group-item"
+            >
+              <div
+                class="p-0 m-0 container"
+              >
+                <div
+                  class="row"
+                >
+                  <div
+                    class="col-md-2"
+                  >
+                    <div>
+                      <h5>
+                        JAN
+                      </h5>
+                    </div>
+                  </div>
+                  <div
+                    class="col"
+                  >
+                    <div
+                      class="list-group"
+                    >
+                      <div
+                        class="p-2 list-group-item"
+                      >
+                        <small>
+                          <div
+                            class="d-inline pr-2"
+                          >
+                            <span
+                              class="text-muted pr-2"
+                            >
+                              Charged
+                            </span>
+                            <strong>
+                              ESTATE DUES
+                            </strong>
+                          </div>
+                          <div
+                            class="d-inline pr-2"
+                          >
+                            <span
+                              class="text-muted pr-2"
+                            >
+                              with an amount of
+                            </span>
+                            <strong>
+                              1000
+                            </strong>
+                          </div>
+                        </small>
+                      </div>
+                      <div
+                        class="p-2 list-group-item"
+                      >
+                        <small>
+                          <div
+                            class="d-inline pr-2"
+                          >
+                            <strong>
+                              <span
+                                class="text-muted pr-2"
+                              >
+                                OR#
+                              </span>
+                              OR#1
+                            </strong>
+                          </div>
+                          <div
+                            class="d-inline pr-2"
+                          >
+                            <span
+                              class="text-muted pr-2"
+                            >
+                              received
+                            </span>
+                            <strong>
+                              cash
+                            </strong>
+                          </div>
+                          <div
+                            class="d-inline pr-2"
+                          >
+                            <span
+                              class="text-muted pr-2"
+                            >
+                              with an amount of
+                            </span>
+                            <strong>
+                              <span
+                                class="currency text-success"
+                              >
+                                1,000
+                              </span>
+                            </strong>
+                          </div>
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="list-group-item"
+            >
+              <div
+                class="p-0 m-0 container"
+              >
+                <div
+                  class="row"
+                >
+                  <div
+                    class="col-md-2"
+                  >
+                    <div>
+                      <h5>
+                        FEB
+                      </h5>
+                    </div>
+                  </div>
+                  <div
+                    class="col"
+                  >
+                    <div
+                      class="list-group"
+                    >
+                      <div
+                        class="p-2 list-group-item"
+                      >
+                        <small>
+                          <div
+                            class="d-inline pr-2"
+                          >
+                            <strong>
+                              <span
+                                class="text-muted pr-2"
+                              >
+                                OR#
+                              </span>
+                              OR#2
+                            </strong>
+                          </div>
+                          <div
+                            class="d-inline pr-2"
+                          >
+                            <span
+                              class="text-muted pr-2"
+                            >
+                              received
+                            </span>
+                            <strong>
+                              check
+                            </strong>
+                          </div>
+                          <div
+                            class="d-inline pr-2"
+                          >
+                            <span
+                              class="text-muted pr-2"
+                            >
+                              with an amount of
+                            </span>
+                            <strong>
+                              <span
+                                class="currency text-success"
+                              >
+                                1,000
+                              </span>
+                            </strong>
+                          </div>
+                          <div
+                            class="text-muted"
+                          >
+                            <small
+                              class="pr-3"
+                            >
+                              <span>
+                                Bank of America
+                              </span>
+                            </small>
+                            <small
+                              class="pr-3"
+                            >
+                              <span>
+                                BA-123-123
+                              </span>
+                            </small>
+                            <small>
+                              <span>
+                                2022-02-28
+                              </span>
+                            </small>
+                          </div>
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

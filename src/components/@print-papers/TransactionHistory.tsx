@@ -1,11 +1,8 @@
 import styled from 'styled-components';
 
-import {toTransactionPeriodFromDate} from '../../@utils/dates';
 import {sum} from '../../@utils/helpers';
 import {PropertyAttr, PropertyTransactionHistoryView} from '../../Api';
-import {Currency} from '../@ui/Currency';
-import {LabeledCurrency} from '../@ui/LabeledCurrency';
-import {Table} from '../@ui/Table';
+import TransactionHistoryDetail from '../@ui/TransactionHistoryDetail';
 import {PageHeader, PageSection} from './PaperPdf';
 
 const Label = styled('div')`
@@ -60,46 +57,7 @@ const TransactionHistory = ({property, data}: Props) => {
         <hr />
       </PageSection>
       <PageSection>
-        <LabeledCurrency
-          label="running balance"
-          pill
-          variant="info"
-          noCurrencyColor
-          currency={balance}
-          className="text-right"
-        />
-        <Table headers={['charge code', 'month', 'type', 'amount']} size="sm">
-          <tbody>
-            {transactionHistory.map((t, i) => {
-              const period = toTransactionPeriodFromDate(t.transactionPeriod);
-              return (
-                <tr key={i}>
-                  <td>{t.charge?.code}</td>
-                  <td>{`${period.month}`}</td>
-                  <td>{t.transactionType}</td>
-                  {t.transactionType === 'charged' && (
-                    <td>
-                      <strong>
-                        <Currency noCurrencyColor currency={t.amount} />
-                      </strong>
-                    </td>
-                  )}
-                  {t.transactionType === 'collected' && (
-                    <td>
-                      <strong>
-                        <Currency
-                          noCurrencyColor
-                          className="text-success"
-                          currency={t.amount * -1}
-                        />
-                      </strong>
-                    </td>
-                  )}
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
+        <TransactionHistoryDetail data={data} />
       </PageSection>
     </PageSection>
   );

@@ -244,6 +244,7 @@ export interface PaymentHistoryView {
 }
 
 export interface PropertyTransactionHistoryView {
+  paymentHistory: PaymentHistoryView[];
   transactionHistory: TransactionAttr[];
   previousBalance: number;
   targetYear: number;

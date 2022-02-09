@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {Button, ButtonProps, Container} from 'react-bootstrap';
+import {Button, ButtonProps, Col, Container, Row} from 'react-bootstrap';
 import {FaPrint} from 'react-icons/fa';
 
 import {getCurrentMonthYear, getPastYears} from '../../../@utils/dates';
@@ -45,24 +45,32 @@ const ViewTransactionHistory = ({
       >
         <div className="m-2 pb-3">
           <Container className="m-0 p-0 pb-3">
-            <SelectYear
-              availableYears={years}
-              value={selectedYear}
-              onSelectYear={setSelectedYear}
-              size="lg"
-            />
+            <Row>
+              <Col>
+                <SelectYear
+                  availableYears={years}
+                  value={selectedYear}
+                  onSelectYear={setSelectedYear}
+                  size="lg"
+                />
+              </Col>
+              {data && (
+                <Col md={2} sm={4}>
+                  <div className="text-right mb-3">
+                    <PrintTransactionHistory
+                      property={property}
+                      data={data}
+                      buttonLabel={<FaPrint />}
+                      className="w-100"
+                    />
+                  </div>
+                </Col>
+              )}
+            </Row>
           </Container>
-
           {loading && <Loading />}
           {!loading && data && (
             <>
-              <div className="text-right mb-3">
-                <PrintTransactionHistory
-                  property={property}
-                  data={data}
-                  buttonLabel={<FaPrint />}
-                />
-              </div>
               <TransactionHistoryDetail data={data} />
             </>
           )}

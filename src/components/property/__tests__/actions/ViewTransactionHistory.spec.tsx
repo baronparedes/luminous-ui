@@ -6,6 +6,7 @@ import userEvent from '@testing-library/user-event';
 
 import {getCurrentMonthYear} from '../../../../@utils/dates';
 import {
+  generateFakePaymentHistory,
   generateFakeProperty,
   generateFakeTransaction,
 } from '../../../../@utils/fake-models';
@@ -42,6 +43,11 @@ describe('ViewTransactionHistory', () => {
       generateFakeTransaction(),
       generateFakeTransaction(),
       generateFakeTransaction(),
+    ],
+    paymentHistory: [
+      {...generateFakePaymentHistory(), transactionPeriod: `${year}-10-01`},
+      {...generateFakePaymentHistory(), transactionPeriod: `${year}-11-01`},
+      {...generateFakePaymentHistory(), transactionPeriod: `${year}-12-01`},
     ],
   };
 
@@ -89,7 +95,9 @@ describe('ViewTransactionHistory', () => {
     await waitFor(() =>
       expect(queryByRole('progressbar')).not.toBeInTheDocument()
     );
-    for (const expected of data.transactionHistory) {
+    for (const expected of data.transactionHistory.filter(
+      d => d.transactionType === 'charged'
+    )) {
       expect(getByText(expected.charge?.code as string)).toBeInTheDocument();
     }
   });

@@ -40,6 +40,27 @@ describe('PaperTransactionHistory', () => {
           transactionType: 'collected',
         },
       ],
+      paymentHistory: [
+        {
+          amount: 1000,
+          code: 'Charge 1',
+          collectedBy: 'Jhon Doe',
+          orNumber: 'OR#1',
+          paymentType: 'cash',
+          transactionPeriod: '2022-01-01',
+        },
+        {
+          amount: 1000,
+          code: 'Charge 2',
+          collectedBy: 'Jhon Doe',
+          orNumber: 'OR#2',
+          paymentType: 'check',
+          transactionPeriod: '2022-02-01',
+          checkIssuingBank: 'Bank of America',
+          checkNumber: 'BA-123-123',
+          checkPostingDate: '2022-02-28',
+        },
+      ],
     },
   };
 

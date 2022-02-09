@@ -149,12 +149,14 @@ exports[`PaperStatementOfAccount should render 1`] = `
                   <div
                     class="d-inline pr-2"
                   >
-                    <span
-                      class="text-muted pr-2"
-                    >
-                      OR#
-                    </span>
-                    1234-1234
+                    <strong>
+                      <span
+                        class="text-muted pr-2"
+                      >
+                        OR#
+                      </span>
+                      1234-1234
+                    </strong>
                   </div>
                   <div
                     class="d-inline pr-2"
@@ -164,7 +166,9 @@ exports[`PaperStatementOfAccount should render 1`] = `
                     >
                       received
                     </span>
-                    cash
+                    <strong>
+                      cash
+                    </strong>
                   </div>
                   <div
                     class="d-inline pr-2"
@@ -174,11 +178,13 @@ exports[`PaperStatementOfAccount should render 1`] = `
                     >
                       with an amount of
                     </span>
-                    <span
-                      class="currency"
-                    >
-                      500
-                    </span>
+                    <strong>
+                      <span
+                        class="currency"
+                      >
+                        500
+                      </span>
+                    </strong>
                   </div>
                 </div>
               </div>
@@ -193,12 +199,14 @@ exports[`PaperStatementOfAccount should render 1`] = `
                   <div
                     class="d-inline pr-2"
                   >
-                    <span
-                      class="text-muted pr-2"
-                    >
-                      OR#
-                    </span>
-                    1234-1234
+                    <strong>
+                      <span
+                        class="text-muted pr-2"
+                      >
+                        OR#
+                      </span>
+                      1234-1234
+                    </strong>
                   </div>
                   <div
                     class="d-inline pr-2"
@@ -208,7 +216,9 @@ exports[`PaperStatementOfAccount should render 1`] = `
                     >
                       received
                     </span>
-                    check
+                    <strong>
+                      check
+                    </strong>
                   </div>
                   <div
                     class="d-inline pr-2"
@@ -218,11 +228,13 @@ exports[`PaperStatementOfAccount should render 1`] = `
                     >
                       with an amount of
                     </span>
-                    <span
-                      class="currency"
-                    >
-                      300
-                    </span>
+                    <strong>
+                      <span
+                        class="currency"
+                      >
+                        300
+                      </span>
+                    </strong>
                   </div>
                   <div
                     class="text-muted"

@@ -64,27 +64,34 @@ const ViewPaymentHistory = ({
       >
         <div className="m-2 pb-3">
           <Container className="m-0 p-0 pb-3">
-            <SelectYear
-              availableYears={years}
-              value={selectedYear}
-              onSelectYear={setSelectedYear}
-              size="lg"
-            />
+            <Row>
+              <Col>
+                <SelectYear
+                  availableYears={years}
+                  value={selectedYear}
+                  onSelectYear={setSelectedYear}
+                  size="lg"
+                />
+              </Col>
+              {availablePeriods.length > 0 && data && (
+                <Col md={2} sm={4}>
+                  <div className="text-right mb-3">
+                    <PrintPaymentHistory
+                      availablePeriods={availablePeriods}
+                      year={year}
+                      property={property}
+                      paymentHistory={data}
+                      buttonLabel={<FaPrint />}
+                      className="w-100"
+                    />
+                  </div>
+                </Col>
+              )}
+            </Row>
           </Container>
           {loading && <Loading />}
           {!loading && data && (
             <>
-              {availablePeriods.length > 0 && (
-                <div className="text-right mb-3">
-                  <PrintPaymentHistory
-                    availablePeriods={availablePeriods}
-                    year={year}
-                    property={property}
-                    paymentHistory={data}
-                    buttonLabel={<FaPrint />}
-                  />
-                </div>
-              )}
               <ListGroup>
                 {availablePeriods.length === 0 && (
                   <ListGroup.Item className="text-center text-muted">

@@ -1,17 +1,18 @@
-import {Col, Container, Row} from 'react-bootstrap';
+import {Col, Container, ListGroup, Row} from 'react-bootstrap';
 
 import {toTransactionPeriodFromDate} from '../../@utils/dates';
 import {sum} from '../../@utils/helpers';
-import {PropertyTransactionHistoryView} from '../../Api';
-import {Currency} from './Currency';
+import {PaymentDetailAttr, PropertyTransactionHistoryView} from '../../Api';
 import {LabeledCurrency} from './LabeledCurrency';
-import {Table} from './Table';
+import PaymentDetail from './PaymentDetail';
+import TransactionDetail from './TransactionDetail';
 
 type Props = {
   data: PropertyTransactionHistoryView;
 };
 
 const TransactionHistoryDetail = ({data}: Props) => {
+  const {transactionHistory, paymentHistory} = data;
   const totalCharges = sum(
     data?.transactionHistory
       ?.filter(d => d.transactionType === 'charged')
@@ -23,6 +24,16 @@ const TransactionHistoryDetail = ({data}: Props) => {
       ?.map(d => d.amount)
   );
   const balance = totalCharges - totalCollected;
+  const availableChargedPeriods = data
+    ? [...new Set(transactionHistory.map(f => f.transactionPeriod))]
+    : [];
+  const availableCollectedPeriods = data
+    ? [...new Set(paymentHistory.map(f => f.transactionPeriod))]
+    : [];
+  const availablePeriods = [
+    ...new Set([...availableChargedPeriods, ...availableCollectedPeriods]),
+  ];
+
   return (
     <>
       <Container className="text-right mb-3">
@@ -49,39 +60,71 @@ const TransactionHistoryDetail = ({data}: Props) => {
           </Col>
         </Row>
       </Container>
-      <Table headers={['charge code', 'month', 'type', 'amount']} size="sm">
-        <tbody>
-          {data &&
-            data.transactionHistory.map((t, i) => {
-              const period = toTransactionPeriodFromDate(t.transactionPeriod);
-              return (
-                <tr key={i}>
-                  <td>{t.charge?.code}</td>
-                  <td>{`${period.month}`}</td>
-                  <td>{t.transactionType}</td>
-                  {t.transactionType === 'charged' && (
-                    <td>
-                      <strong>
-                        <Currency noCurrencyColor currency={t.amount} />
-                      </strong>
-                    </td>
-                  )}
-                  {t.transactionType === 'collected' && (
-                    <td>
-                      <strong>
-                        <Currency
-                          noCurrencyColor
-                          className="text-success"
-                          currency={t.amount * -1}
-                        />
-                      </strong>
-                    </td>
-                  )}
-                </tr>
-              );
-            })}
-        </tbody>
-      </Table>
+      <ListGroup>
+        {availablePeriods.length === 0 && (
+          <ListGroup.Item className="text-center text-muted">
+            No items to display
+          </ListGroup.Item>
+        )}
+        {availablePeriods.sort().map((p, i) => {
+          const {month} = toTransactionPeriodFromDate(new Date(p));
+          const charged = transactionHistory.filter(
+            d => d.transactionPeriod === p && d.transactionType === 'charged'
+          );
+          const collected = paymentHistory
+            .filter(d => d.transactionPeriod === p)
+            .map(d => {
+              const totalCollected = d.amount;
+              const paymentDetail: PaymentDetailAttr = {
+                ...d,
+                orNumber: d.orNumber,
+                collectedBy: 0,
+              };
+              return {
+                paymentDetail,
+                totalCollected,
+              };
+            });
+          return (
+            <ListGroup.Item key={i}>
+              <Container className="p-0 m-0">
+                <Row>
+                  <Col md={2}>
+                    <div>
+                      <h5>{month}</h5>
+                    </div>
+                  </Col>
+                  <Col>
+                    <ListGroup>
+                      {charged.map((item, j) => {
+                        return (
+                          <ListGroup.Item key={j} className="p-2">
+                            <small>
+                              <TransactionDetail transaction={item} />
+                            </small>
+                          </ListGroup.Item>
+                        );
+                      })}
+                      {collected.map((item, j) => {
+                        return (
+                          <ListGroup.Item key={j} className="p-2">
+                            <small>
+                              <PaymentDetail
+                                paymentDetail={item.paymentDetail}
+                                totalCollected={item.totalCollected}
+                              />
+                            </small>
+                          </ListGroup.Item>
+                        );
+                      })}
+                    </ListGroup>
+                  </Col>
+                </Row>
+              </Container>
+            </ListGroup.Item>
+          );
+        })}
+      </ListGroup>
     </>
   );
 };

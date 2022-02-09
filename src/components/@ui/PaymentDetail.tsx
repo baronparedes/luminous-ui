@@ -15,16 +15,23 @@ const PaymentDetail = ({
   return (
     <>
       <div className="d-inline pr-2">
-        <span className="text-muted pr-2">OR#</span>
-        {paymentDetail.orNumber}
+        <strong>
+          <span className="text-muted pr-2">OR#</span>
+          {paymentDetail.orNumber}
+        </strong>
       </div>
       <div className="d-inline pr-2">
         <span className="text-muted pr-2">received</span>
-        {paymentDetail.paymentType}
+        <strong>{paymentDetail.paymentType}</strong>
       </div>
       <div className="d-inline pr-2">
         <span className="text-muted pr-2">with an amount of</span>
-        <Currency currency={totalCollected} noCurrencyColor={noCurrencyColor} />
+        <strong>
+          <Currency
+            currency={totalCollected}
+            noCurrencyColor={noCurrencyColor}
+          />
+        </strong>
       </div>
       {paymentDetail.paymentType === 'check' && (
         <div className="text-muted">
