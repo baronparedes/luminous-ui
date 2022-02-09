@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-import {sum} from '../../@utils/helpers';
 import {PropertyAttr, PropertyTransactionHistoryView} from '../../Api';
 import TransactionHistoryDetail from '../@ui/TransactionHistoryDetail';
 import {PageHeader, PageSection} from './PaperPdf';
@@ -15,18 +14,7 @@ type Props = {
 };
 
 const TransactionHistory = ({property, data}: Props) => {
-  const {transactionHistory, targetYear} = data;
-  const totalCharges = sum(
-    transactionHistory
-      .filter(d => d.transactionType === 'charged')
-      ?.map(d => d.amount)
-  );
-  const totalCollected = sum(
-    transactionHistory
-      .filter(d => d.transactionType === 'collected')
-      ?.map(d => d.amount)
-  );
-  const balance = totalCharges - totalCollected;
+  const {targetYear} = data;
   return (
     <PageSection>
       <PageHeader title="TRANSACTION HISTORY" />
