@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import {toTransactionPeriodFromDate} from '../../@utils/dates';
 import {sum} from '../../@utils/helpers';
-import {PropertyAttr, TransactionAttr} from '../../Api';
+import {PropertyAttr, PropertyTransactionHistoryView} from '../../Api';
 import {Currency} from '../@ui/Currency';
 import {LabeledCurrency} from '../@ui/LabeledCurrency';
 import {Table} from '../@ui/Table';
@@ -14,11 +14,11 @@ const Label = styled('div')`
 
 type Props = {
   property: PropertyAttr;
-  transactionHistory: TransactionAttr[];
-  year: number;
+  data: PropertyTransactionHistoryView;
 };
 
-const TransactionHistory = ({property, transactionHistory, year}: Props) => {
+const TransactionHistory = ({property, data}: Props) => {
+  const {transactionHistory, targetYear} = data;
   const totalCharges = sum(
     transactionHistory
       .filter(d => d.transactionType === 'charged')
@@ -55,7 +55,7 @@ const TransactionHistory = ({property, transactionHistory, year}: Props) => {
       <PageSection className="pt-3">
         <Label>
           <strong>Transaction History for: </strong>
-          {`${year}`}
+          {`${targetYear}`}
         </Label>
         <hr />
       </PageSection>

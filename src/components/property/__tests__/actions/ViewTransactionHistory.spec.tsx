@@ -1,3 +1,4 @@
+import faker from 'faker';
 import nock from 'nock';
 
 import {waitFor} from '@testing-library/react';
@@ -9,7 +10,7 @@ import {
   generateFakeTransaction,
 } from '../../../../@utils/fake-models';
 import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
-import {TransactionAttr} from '../../../../Api';
+import {PropertyTransactionHistoryView} from '../../../../Api';
 import PrintTransactionHistory from '../../actions/PrintTransactionHistory';
 import ViewTransactionHistory from '../../actions/ViewTransactionHistory';
 
@@ -32,18 +33,22 @@ describe('ViewTransactionHistory', () => {
   const previousYear = year - 1;
   const twoYearsAgo = year - 2;
 
-  const transactionHistoryData: TransactionAttr[] = [
-    generateFakeTransaction(),
-    generateFakeTransaction(),
-    generateFakeTransaction(),
-    generateFakeTransaction(),
-    generateFakeTransaction(),
-  ];
+  const data: PropertyTransactionHistoryView = {
+    targetYear: year,
+    previousBalance: faker.datatype.number(),
+    transactionHistory: [
+      generateFakeTransaction(),
+      generateFakeTransaction(),
+      generateFakeTransaction(),
+      generateFakeTransaction(),
+      generateFakeTransaction(),
+    ],
+  };
 
   async function renderTarget() {
     nock(base)
       .get(`/api/property/getTransactionHistory/${propertyId}/${year}`)
-      .reply(200, transactionHistoryData);
+      .reply(200, data);
 
     const target = renderWithProviderAndRestful(
       <ViewTransactionHistory buttonLabel="toggle" property={property} />,
@@ -84,7 +89,7 @@ describe('ViewTransactionHistory', () => {
     await waitFor(() =>
       expect(queryByRole('progressbar')).not.toBeInTheDocument()
     );
-    for (const expected of transactionHistoryData) {
+    for (const expected of data.transactionHistory) {
       expect(getByText(expected.charge?.code as string)).toBeInTheDocument();
     }
   });
@@ -95,11 +100,15 @@ describe('ViewTransactionHistory', () => {
 
     nock(base)
       .get(`/api/property/getTransactionHistory/${propertyId}/${previousYear}`)
-      .reply(200, []);
+      .reply(200, data);
 
     nock(base)
       .get(`/api/property/getTransactionHistory/${propertyId}/${twoYearsAgo}`)
-      .reply(200, [expectedTransaction]);
+      .reply(200, {
+        ...data,
+        targetYear: twoYearsAgo,
+        transactionHistory: [expectedTransaction],
+      });
 
     userEvent.selectOptions(selectYearInput, previousYear.toString());
     await waitFor(() =>

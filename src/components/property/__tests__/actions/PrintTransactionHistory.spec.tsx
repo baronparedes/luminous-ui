@@ -16,7 +16,6 @@ describe('PrintTransactionHistory', () => {
   };
   const props: React.ComponentProps<typeof PrintTransactionHistory> = {
     buttonLabel: 'print',
-    year: 2022,
     property: {
       id: 1,
       code: 'G-111',
@@ -24,25 +23,30 @@ describe('PrintTransactionHistory', () => {
       floorArea: 33.1,
       status: 'active',
     },
-    transactionHistory: [
-      {
-        amount: 1000,
-        charge: charge,
-        chargeId: 1,
-        propertyId: 1,
-        transactionPeriod: '2022-01-01',
-        transactionType: 'charged',
-      },
-      {
-        amount: 1000,
-        charge: charge,
-        chargeId: 1,
-        propertyId: 1,
-        transactionPeriod: '2022-01-01',
-        transactionType: 'collected',
-      },
-    ],
+    data: {
+      targetYear: 2022,
+      previousBalance: 0,
+      transactionHistory: [
+        {
+          amount: 1000,
+          charge: charge,
+          chargeId: 1,
+          propertyId: 1,
+          transactionPeriod: '2022-01-01',
+          transactionType: 'charged',
+        },
+        {
+          amount: 1000,
+          charge: charge,
+          chargeId: 1,
+          propertyId: 1,
+          transactionPeriod: '2022-01-01',
+          transactionType: 'collected',
+        },
+      ],
+    },
   };
+
   it('should render and print', async () => {
     const handlePrintFn = jest.fn();
     const mocked = jest.spyOn(reactToPrint, 'useReactToPrint');

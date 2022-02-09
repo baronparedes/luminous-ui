@@ -17,17 +17,16 @@ type PaperTransactionHistoryProps = React.ComponentProps<
 const PrintPaymentHistory = ({
   buttonLabel,
   property,
-  transactionHistory,
-  year,
+  data,
   ...buttonProps
 }: Props & PaperTransactionHistoryProps & Omit<ButtonProps, 'property'>) => {
   const printPaperRef = React.createRef<ApprovedAny>();
   const handlePrint = useReactToPrint({
     bodyClass: 'print-body',
     content: () => printPaperRef.current,
-    documentTitle: VERBIAGE.FILE_NAMES.PAYMENT_HISTORY_DOC_TITLE(
+    documentTitle: VERBIAGE.FILE_NAMES.TRANSACTION_HISTORY_DOC_TITLE(
       property?.code,
-      year
+      data.targetYear
     ),
   });
 
@@ -44,8 +43,7 @@ const PrintPaymentHistory = ({
       <PaperTransactionHistory
         ref={printPaperRef}
         property={property}
-        transactionHistory={transactionHistory}
-        year={year}
+        data={data}
       />
     </>
   );
