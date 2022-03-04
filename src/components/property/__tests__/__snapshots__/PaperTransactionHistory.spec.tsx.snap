@@ -176,7 +176,11 @@ exports[`PaperTransactionHistory should render 1`] = `
                               with an amount of
                             </span>
                             <strong>
-                              1000
+                              <span
+                                class="currency"
+                              >
+                                1,000
+                              </span>
                             </strong>
                           </div>
                         </small>

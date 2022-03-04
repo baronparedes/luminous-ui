@@ -70,12 +70,14 @@ const DashboardView = () => {
                   <ChargeDisbrused
                     header={availableCommunityBalance.code}
                     data={data.chargeDisbursed.filter(
-                      c => c.chargeId === availableCommunityBalance.chargeId
+                      c =>
+                        c.chargeId === availableCommunityBalance.chargeId &&
+                        c.amount > 0
                     )}
                   />
                   {availableBalances.map(chargeBalance => {
                     const items = data.chargeDisbursed.filter(
-                      c => c.chargeId === chargeBalance.chargeId
+                      c => c.chargeId === chargeBalance.chargeId && c.amount > 0
                     );
                     return (
                       <>

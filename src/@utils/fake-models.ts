@@ -129,7 +129,7 @@ export function generateFakeCharge(): ChargeAttr {
 export function generateFakeTransaction(): TransactionAttr {
   const charge = generateFakeCharge();
   return {
-    amount: faker.datatype.number(),
+    amount: Number(faker.finance.amount(1, 1000, 2)),
     chargeId: faker.datatype.number(),
     propertyId: faker.datatype.number(),
     transactionPeriod: faker.date.recent().toDateString(),

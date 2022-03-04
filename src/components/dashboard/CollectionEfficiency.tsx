@@ -14,7 +14,7 @@ import {roundOff} from '../../@utils/currencies';
 import {toTransactionPeriodFromDate} from '../../@utils/dates';
 import {sum} from '../../@utils/helpers';
 import {CollectionEfficiencyView, Month, TransactionType} from '../../Api';
-import {MONTHS} from '../../constants';
+import {DEFAULTS, MONTHS} from '../../constants';
 import RoundedPanel from '../@ui/RoundedPanel';
 import {Spacer} from '../@ui/Spacer';
 
@@ -102,10 +102,10 @@ const CollectionEfficiency = ({data, filterByChargeCode}: Props) => {
           <BarChart
             data={chartData}
             margin={{
-              top: 5,
-              bottom: 5,
-              left: 5,
-              right: 5,
+              top: DEFAULTS.CHART_MARGIN,
+              bottom: DEFAULTS.CHART_MARGIN,
+              left: DEFAULTS.CHART_MARGIN,
+              right: DEFAULTS.CHART_MARGIN,
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />

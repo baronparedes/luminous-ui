@@ -13,7 +13,7 @@ import {
 import {toTransactionPeriodFromDate} from '../../@utils/dates';
 import {sum} from '../../@utils/helpers';
 import {ChargeDisbursedView, Month} from '../../Api';
-import {MONTHS} from '../../constants';
+import {DEFAULTS, MONTHS} from '../../constants';
 import RoundedPanel from '../@ui/RoundedPanel';
 
 type Props = {
@@ -54,10 +54,10 @@ const ChargeDisbrused = ({data, header}: Props) => {
           <BarChart
             data={chartData}
             margin={{
-              top: 5,
-              bottom: 5,
-              left: 5,
-              right: 5,
+              top: DEFAULTS.CHART_MARGIN,
+              bottom: DEFAULTS.CHART_MARGIN,
+              left: DEFAULTS.CHART_MARGIN,
+              right: DEFAULTS.CHART_MARGIN,
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />

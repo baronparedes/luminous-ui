@@ -1,4 +1,5 @@
 import {TransactionAttr} from '../../Api';
+import {Currency} from './Currency';
 
 type Props = {
   transaction: TransactionAttr;
@@ -13,7 +14,9 @@ const TransactionDetail = ({transaction}: Props) => {
       </div>
       <div className="d-inline pr-2">
         <span className="text-muted pr-2">with an amount of</span>
-        <strong>{transaction.amount}</strong>
+        <strong>
+          <Currency currency={transaction.amount} noCurrencyColor />
+        </strong>
       </div>
     </>
   );
