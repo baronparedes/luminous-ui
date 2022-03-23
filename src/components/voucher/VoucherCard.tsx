@@ -21,7 +21,7 @@ const VoucherCard = ({voucher}: Props) => {
         </div>
       )}
       <Link className="text-underline" to={routes.VOUCHER(voucher.id)}>
-        <h4>V-{voucher.series ?? voucher.id}</h4>
+        <h4>V-{voucher.series}</h4>
       </Link>
       <div>
         <small>

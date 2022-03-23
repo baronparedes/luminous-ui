@@ -21,7 +21,7 @@ describe('VoucherCard', () => {
     );
 
     expect(queryByText(/comments/i)).not.toBeInTheDocument();
-    expect(getByText(`V-${mockedVoucher.id}`)).toBeInTheDocument();
+    expect(getByText(`V-${mockedVoucher.series}`)).toBeInTheDocument();
     expect(
       getByText(`requested by ${mockedVoucher.requestedByProfile?.name}`)
     ).toBeInTheDocument();

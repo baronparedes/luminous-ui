@@ -35,7 +35,7 @@ const Voucher = ({voucher, notes}: Props) => {
       </PageHeader>
       <PageSection className="pt-3">
         <Label className="pb-2">
-          <strong>V-{voucher.series ?? voucher.id}</strong>
+          <strong>V-{voucher.series}</strong>
         </Label>
         <Label>
           <small>

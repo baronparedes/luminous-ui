@@ -53,9 +53,7 @@ const RejectPurchaseRequest = ({
         {buttonLabel}
       </Button>
       <ModalContainer
-        header={
-          <h5>Reject PR-{purchaseRequest.series ?? purchaseRequest.id}</h5>
-        }
+        header={<h5>Reject PR-{purchaseRequest.series}</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >

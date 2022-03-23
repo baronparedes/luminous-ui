@@ -29,9 +29,7 @@ describe('RejectPurchaseOrder', () => {
     userEvent.click(getByText(/toggle/i));
     await waitFor(() => expect(getByRole('dialog')).toBeInTheDocument());
 
-    expect(
-      getByText(`Reject PO-${purchaseOrder.series ?? purchaseOrder.id}`)
-    ).toBeInTheDocument();
+    expect(getByText(`Reject PO-${purchaseOrder.series}`)).toBeInTheDocument();
     expect(getByPlaceholderText(/comments/i)).toBeInTheDocument();
     expect(getByText(/reject$/i, {selector: 'button'})).toBeInTheDocument();
   });

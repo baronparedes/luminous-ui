@@ -58,7 +58,7 @@ const ApprovePurchaseOrder = ({
       </Button>
       <ModalContainer
         size="lg"
-        header={<h5>Approve PO-{purchaseOrder.series ?? purchaseOrder.id}</h5>}
+        header={<h5>Approve PO-{purchaseOrder.series}</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >

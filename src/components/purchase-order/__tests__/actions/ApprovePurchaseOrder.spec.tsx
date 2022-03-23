@@ -8,7 +8,9 @@ import {
   generateFakeProfile,
   generateFakePurchaseOrder,
 } from '../../../../@utils/fake-models';
-import {renderWithProviderAndRouterAndRestful} from '../../../../@utils/test-renderers';
+import {
+  renderWithProviderAndRouterAndRestful,
+} from '../../../../@utils/test-renderers';
 import {profileActions} from '../../../../store/reducers/profile.reducer';
 import ApprovePurchaseOrder from '../../actions/ApprovePurchaseOrder';
 
@@ -31,7 +33,7 @@ describe('ApprovePurchaseOrder', () => {
     await waitFor(() => expect(target.getByRole('dialog')).toBeInTheDocument());
 
     expect(
-      target.getByText(`Approve PO-${purchaseOrder.series ?? purchaseOrder.id}`)
+      target.getByText(`Approve PO-${purchaseOrder.series}`)
     ).toBeInTheDocument();
 
     expect(target.getByText(/^approval codes$/i)).toBeInTheDocument();

@@ -31,21 +31,23 @@ describe('PurchaseRequestList', () => {
     for (const expectedHeader of expectedHeaders) {
       expect(getByText(expectedHeader, {selector: 'th'})).toBeInTheDocument();
     }
-    for (const voucher of expectedPurchaseRequests) {
-      const container = getByText(`PR-${Number(voucher.id)}`, {
+    for (const purchaseRequest of expectedPurchaseRequests) {
+      const container = getByText(`PR-${purchaseRequest.series}`, {
         selector: 'a',
       }).parentElement?.parentElement as HTMLElement;
       expect(
-        within(container).getByText(voucher.description)
+        within(container).getByText(purchaseRequest.description)
       ).toBeInTheDocument();
       expect(
-        within(container).getByText(voucher.requestedByProfile?.name as string)
+        within(container).getByText(
+          purchaseRequest.requestedByProfile?.name as string
+        )
       ).toBeInTheDocument();
       expect(
-        within(container).getByText(voucher.requestedDate)
+        within(container).getByText(purchaseRequest.requestedDate)
       ).toBeInTheDocument();
       expect(
-        within(container).getByText(currencyFormat(voucher.totalCost))
+        within(container).getByText(currencyFormat(purchaseRequest.totalCost))
       ).toBeInTheDocument();
     }
   }

@@ -26,9 +26,7 @@ describe('RejectVoucher', () => {
     userEvent.click(getByText(/toggle/i));
     await waitFor(() => expect(getByRole('dialog')).toBeInTheDocument());
 
-    expect(
-      getByText(`Reject V-${voucher.series ?? voucher.id}`)
-    ).toBeInTheDocument();
+    expect(getByText(`Reject V-${voucher.series}`)).toBeInTheDocument();
     expect(getByPlaceholderText(/comments/i)).toBeInTheDocument();
     expect(getByText(/reject$/i, {selector: 'button'})).toBeInTheDocument();
   });

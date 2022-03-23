@@ -26,7 +26,7 @@ const PurchaseOrder = ({purchaseOrder, notes}: Props) => {
       <PageHeader title="PURCHASE ORDER" />
       <PageSection className="pt-3">
         <Label className="pb-2">
-          <strong>PO-{purchaseOrder.series ?? purchaseOrder.id}</strong>
+          <strong>PO-{purchaseOrder.series}</strong>
         </Label>
         <Label>
           <small>

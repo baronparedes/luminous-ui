@@ -32,7 +32,7 @@ describe('PurchaseOrderList', () => {
       expect(getByText(expectedHeader, {selector: 'th'})).toBeInTheDocument();
     }
     for (const purchaseOrder of expectedPurchaseOrders) {
-      const container = getByText(`PO-${Number(purchaseOrder.id)}`, {
+      const container = getByText(`PO-${purchaseOrder.series}`, {
         selector: 'a',
       }).parentElement?.parentElement as HTMLElement;
       expect(

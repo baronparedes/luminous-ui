@@ -207,6 +207,7 @@ export const generateFakeVoucher = (): VoucherAttr => {
     comments: faker.random.words(10),
     chargeId: faker.datatype.number(),
     expenses: [generateFakeExpense(), generateFakeExpense()],
+    series: faker.random.alphaNumeric(10),
   };
 };
 
@@ -226,6 +227,7 @@ export const generateFakePurchaseRequest = (): PurchaseRequestAttr => {
     comments: faker.random.words(10),
     chargeId: faker.datatype.number(),
     expenses: [generateFakeExpense(), generateFakeExpense()],
+    series: faker.random.alphaNumeric(10),
   };
 };
 
@@ -249,6 +251,7 @@ export const generateFakePurchaseOrder = (): PurchaseOrderAttr => {
     fulfillmentDate: faker.date.future().toISOString(),
     purchaseRequestId: faker.datatype.number(),
     otherDetails: faker.random.words(10),
+    series: faker.random.alphaNumeric(10),
   };
 };
 

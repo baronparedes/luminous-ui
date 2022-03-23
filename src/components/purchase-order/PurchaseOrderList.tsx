@@ -85,7 +85,7 @@ const PurchaseOrderList = ({
                         className="text-underline"
                         to={routes.PURCHASE_ORDER(row.id)}
                       >
-                        PO-{row.series ?? row.id}
+                        PO-{row.series}
                       </Link>
                     </td>
                     <td>{row.description}</td>

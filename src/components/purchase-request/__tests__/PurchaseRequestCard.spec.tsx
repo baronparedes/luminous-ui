@@ -21,7 +21,7 @@ describe('PurchaseRequestCard', () => {
     );
 
     expect(queryByText(/comments/i)).not.toBeInTheDocument();
-    expect(getByText(`PR-${mockedPurchaseRequest.id}`)).toBeInTheDocument();
+    expect(getByText(`PR-${mockedPurchaseRequest.series}`)).toBeInTheDocument();
     expect(
       getByText(
         `requested by ${mockedPurchaseRequest.requestedByProfile?.name}`

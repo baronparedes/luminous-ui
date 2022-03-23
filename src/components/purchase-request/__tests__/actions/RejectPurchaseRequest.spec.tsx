@@ -30,7 +30,7 @@ describe('RejectPurchaseRequest', () => {
     await waitFor(() => expect(getByRole('dialog')).toBeInTheDocument());
 
     expect(
-      getByText(`Reject PR-${purchaseRequest.series ?? purchaseRequest.id}`)
+      getByText(`Reject PR-${purchaseRequest.series}`)
     ).toBeInTheDocument();
     expect(getByPlaceholderText(/comments/i)).toBeInTheDocument();
     expect(getByText(/reject$/i, {selector: 'button'})).toBeInTheDocument();

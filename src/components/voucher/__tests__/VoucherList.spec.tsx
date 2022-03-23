@@ -32,7 +32,7 @@ describe('VoucherList', () => {
       expect(getByText(expectedHeader, {selector: 'th'})).toBeInTheDocument();
     }
     for (const voucher of expectedVouchers) {
-      const container = getByText(`V-${Number(voucher.id)}`, {
+      const container = getByText(`V-${voucher.series}`, {
         selector: 'a',
       }).parentElement?.parentElement as HTMLElement;
       expect(

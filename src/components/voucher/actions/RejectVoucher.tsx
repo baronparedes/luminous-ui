@@ -52,7 +52,7 @@ const RejectVoucher = ({
         {buttonLabel}
       </Button>
       <ModalContainer
-        header={<h5>Reject V-{voucher.series ?? voucher.id}</h5>}
+        header={<h5>Reject V-{voucher.series}</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >

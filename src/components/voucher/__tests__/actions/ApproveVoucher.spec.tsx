@@ -10,7 +10,9 @@ import {
   generateFakeProfile,
   generateFakeVoucher,
 } from '../../../../@utils/fake-models';
-import {renderWithProviderAndRouterAndRestful} from '../../../../@utils/test-renderers';
+import {
+  renderWithProviderAndRouterAndRestful,
+} from '../../../../@utils/test-renderers';
 import {DisbursementAttr} from '../../../../Api';
 import {profileActions} from '../../../../store/reducers/profile.reducer';
 import ApproveVoucher from '../../actions/ApproveVoucher';
@@ -37,9 +39,7 @@ describe('ApproveVoucher', () => {
     userEvent.click(target.getByText(/toggle/i));
     await waitFor(() => expect(target.getByRole('dialog')).toBeInTheDocument());
 
-    expect(
-      target.getByText(`Approve V-${voucher.series ?? voucher.id}`)
-    ).toBeInTheDocument();
+    expect(target.getByText(`Approve V-${voucher.series}`)).toBeInTheDocument();
 
     expect(target.getByText(/^approval codes$/i)).toBeInTheDocument();
     expect(target.getByPlaceholderText(/code/i)).toBeInTheDocument();

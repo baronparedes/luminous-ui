@@ -266,7 +266,7 @@ export interface ExpenseAttr {
 }
 
 export interface PurchaseOrderAttr {
-  series?: string;
+  series: string;
   isClosed?: boolean;
   approverProfiles?: ProfileAttr[];
   rejectedByProfile?: ProfileAttr;
@@ -326,7 +326,7 @@ export interface CancelPurchaseOrder {
 }
 
 export interface PurchaseRequestAttr {
-  series?: string;
+  series: string;
   approverProfiles?: ProfileAttr[];
   rejectedByProfile?: ProfileAttr;
   requestedByProfile?: ProfileAttr;
@@ -404,7 +404,7 @@ export interface VoucherAttr {
   rejectedByProfile?: ProfileAttr;
   approverProfiles?: ProfileAttr[];
   charge?: ChargeAttr;
-  series?: string;
+  series: string;
 }
 
 export interface RejectVoucher {

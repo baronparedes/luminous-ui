@@ -103,7 +103,7 @@ const ApproveVoucher = ({
       </Button>
       <ModalContainer
         size="lg"
-        header={<h5>Approve V-{voucher.series ?? voucher.id}</h5>}
+        header={<h5>Approve V-{voucher.series}</h5>}
         toggle={toggle}
         onClose={() => setToggle(false)}
       >
