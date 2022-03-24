@@ -8,9 +8,7 @@ import {
   generateFakeProfile,
   generateFakePurchaseRequest,
 } from '../../../../@utils/fake-models';
-import {
-  renderWithProviderAndRouterAndRestful,
-} from '../../../../@utils/test-renderers';
+import {renderWithProviderAndRouterAndRestful} from '../../../../@utils/test-renderers';
 import {profileActions} from '../../../../store/reducers/profile.reducer';
 import ApprovePurchaseRequest from '../../actions/ApprovePurchaseRequest';
 

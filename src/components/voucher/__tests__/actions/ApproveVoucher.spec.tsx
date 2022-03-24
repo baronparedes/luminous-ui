@@ -10,9 +10,7 @@ import {
   generateFakeProfile,
   generateFakeVoucher,
 } from '../../../../@utils/fake-models';
-import {
-  renderWithProviderAndRouterAndRestful,
-} from '../../../../@utils/test-renderers';
+import {renderWithProviderAndRouterAndRestful} from '../../../../@utils/test-renderers';
 import {DisbursementAttr} from '../../../../Api';
 import {profileActions} from '../../../../store/reducers/profile.reducer';
 import ApproveVoucher from '../../actions/ApproveVoucher';
