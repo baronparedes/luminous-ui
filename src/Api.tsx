@@ -136,6 +136,7 @@ export interface DisbursementAttr {
   amount: number;
   releasedByProfile?: ProfileAttr;
   charge?: ChargeAttr;
+  createdAt?: string;
 }
 
 export interface FieldError {
@@ -234,6 +235,7 @@ export interface PropertyAssignmentAttr {
 }
 
 export interface PaymentHistoryView {
+  createdAt: string;
   collectedBy: string;
   checkIssuingBank?: string;
   checkPostingDate?: string;

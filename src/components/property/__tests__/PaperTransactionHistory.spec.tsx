@@ -30,6 +30,7 @@ describe('PaperTransactionHistory', () => {
           propertyId: 1,
           transactionPeriod: '2022-01-01',
           transactionType: 'charged',
+          createdAt: '2020-01-01T00:00:00.000Z',
         },
         {
           amount: 1000,
@@ -38,6 +39,7 @@ describe('PaperTransactionHistory', () => {
           propertyId: 1,
           transactionPeriod: '2022-01-01',
           transactionType: 'collected',
+          createdAt: '2020-01-01T00:00:00.000Z',
         },
       ],
       paymentHistory: [
@@ -48,6 +50,7 @@ describe('PaperTransactionHistory', () => {
           orNumber: 'OR#1',
           paymentType: 'cash',
           transactionPeriod: '2022-01-01',
+          createdAt: '2020-01-01T00:00:00.000Z',
         },
         {
           amount: 1000,
@@ -59,6 +62,7 @@ describe('PaperTransactionHistory', () => {
           checkIssuingBank: 'Bank of America',
           checkNumber: 'BA-123-123',
           checkPostingDate: '2022-02-28',
+          createdAt: '2020-01-01T00:00:00.000Z',
         },
       ],
     },

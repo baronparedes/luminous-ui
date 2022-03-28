@@ -183,7 +183,7 @@ exports[`PaperStatementOfAccount should render 1`] = `
                       on
                     </span>
                     <strong>
-                      2022-03-28
+                      2020-09-01
                     </strong>
                   </div>
                   <div
@@ -245,7 +245,7 @@ exports[`PaperStatementOfAccount should render 1`] = `
                       on
                     </span>
                     <strong>
-                      2022-03-28
+                      2020-09-01
                     </strong>
                   </div>
                   <div

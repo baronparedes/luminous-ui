@@ -222,7 +222,7 @@ exports[`PaperTransactionHistory should render 1`] = `
                               on
                             </span>
                             <strong>
-                              2022-03-28
+                              2020-01-01
                             </strong>
                           </div>
                           <div
@@ -309,7 +309,7 @@ exports[`PaperTransactionHistory should render 1`] = `
                               on
                             </span>
                             <strong>
-                              2022-03-28
+                              2020-01-01
                             </strong>
                           </div>
                           <div

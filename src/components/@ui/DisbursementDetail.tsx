@@ -21,7 +21,7 @@ const DisbursementDetail = ({disbursement, noCurrencyColor}: Props) => {
         </div>
         <div className="d-inline pr-2">
           <span className="text-muted pr-2">on</span>
-          <strong>TBD</strong>
+          <strong>{formatDate(disbursement.createdAt, 'YYYY-MM-DD')}</strong>
         </div>
         <div className="d-inline pr-2">
           <span className="text-muted pr-2">with an amount of</span>

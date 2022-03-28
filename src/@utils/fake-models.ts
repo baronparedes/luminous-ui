@@ -282,6 +282,7 @@ export const generateFakePaymentHistory = (): PaymentHistoryView => {
     checkIssuingBank: faker.company.companyName(),
     checkNumber: faker.finance.account(),
     checkPostingDate: faker.date.recent().toISOString(),
+    createdAt: faker.date.recent().toISOString(),
   };
 };
 

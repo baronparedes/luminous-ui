@@ -30,6 +30,7 @@ describe('PaperStatementOfAccount', () => {
           chargeType: 'unit',
           postingType: 'monthly',
         },
+        createdAt: '2020-09-01T00:00:00.000Z',
       },
       {
         amount: 500,
@@ -45,6 +46,7 @@ describe('PaperStatementOfAccount', () => {
           chargeType: 'unit',
           postingType: 'monthly',
         },
+        createdAt: '2020-09-01T00:00:00.000Z',
       },
       {
         amount: 300,
@@ -60,6 +62,7 @@ describe('PaperStatementOfAccount', () => {
           chargeType: 'unit',
           postingType: 'monthly',
         },
+        createdAt: '2020-09-01T00:00:00.000Z',
       },
     ],
     paymentDetails: [
@@ -68,6 +71,7 @@ describe('PaperStatementOfAccount', () => {
         collectedBy: 1,
         orNumber: '1234-1234',
         paymentType: 'cash',
+        createdAt: '2020-09-01T00:00:00.000Z',
       },
       {
         id: 2,
@@ -77,6 +81,7 @@ describe('PaperStatementOfAccount', () => {
         checkIssuingBank: 'BDO',
         checkNumber: '111-111-000',
         checkPostingDate: '2021-09-09',
+        createdAt: '2020-09-01T00:00:00.000Z',
       },
     ],
     assignedProfiles: [
