@@ -103,8 +103,12 @@ describe('ViewTransactionHistory', () => {
   });
 
   it('should fetch transaction history when selecting year', async () => {
-    const {selectYearInput, getByText, queryByRole} = await renderTarget();
-    const expectedTransaction = generateFakeTransaction();
+    const {selectYearInput, getByText, queryByRole, queryByText} =
+      await renderTarget();
+    const expectedTransaction = {
+      ...generateFakeTransaction(),
+      transactionType: 'charged',
+    };
 
     nock(base)
       .get(`/api/property/getTransactionHistory/${propertyId}/${previousYear}`)
@@ -126,6 +130,9 @@ describe('ViewTransactionHistory', () => {
     userEvent.selectOptions(selectYearInput, twoYearsAgo.toString());
     await waitFor(() =>
       expect(queryByRole('progressbar')).not.toBeInTheDocument()
+    );
+    await waitFor(() =>
+      expect(queryByText(/No items to display/)).not.toBeInTheDocument()
     );
     await waitFor(() =>
       expect(
