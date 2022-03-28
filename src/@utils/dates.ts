@@ -6,7 +6,10 @@ export function getCurrentDateFormatted() {
   return formatDate(new Date());
 }
 
-export function formatDate(date: Date | string, format = 'YYYY-MMM-DD') {
+export function formatDate(
+  date: Date | string | undefined,
+  format = 'YYYY-MMM-DD'
+) {
   return moment(date).format(format);
 }
 

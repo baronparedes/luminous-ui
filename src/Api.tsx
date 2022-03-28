@@ -194,6 +194,7 @@ export interface PaymentDetailAttr {
   checkNumber?: string;
   checkPostingDate?: string;
   checkIssuingBank?: string;
+  createdAt?: string;
 }
 
 export interface TransactionAttr {
@@ -211,6 +212,7 @@ export interface TransactionAttr {
   paymentDetail?: PaymentDetailAttr;
   rateSnapshot?: number;
   batchId?: string | null;
+  createdAt?: string;
 }
 
 export interface PropertyAccount {

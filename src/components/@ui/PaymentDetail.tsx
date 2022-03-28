@@ -1,3 +1,4 @@
+import {formatDate} from '../../@utils/dates';
 import {PaymentDetailAttr} from '../../Api';
 import {Currency} from './Currency';
 
@@ -23,6 +24,10 @@ const PaymentDetail = ({
       <div className="d-inline pr-2">
         <span className="text-muted pr-2">received</span>
         <strong>{paymentDetail.paymentType}</strong>
+      </div>
+      <div className="d-inline pr-2">
+        <span className="text-muted pr-2">on</span>
+        <strong>{formatDate(paymentDetail.createdAt, 'YYYY-MM-DD')}</strong>
       </div>
       <div className="d-inline pr-2">
         <span className="text-muted pr-2">with an amount of</span>

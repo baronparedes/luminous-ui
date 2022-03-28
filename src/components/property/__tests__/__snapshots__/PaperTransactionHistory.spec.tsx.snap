@@ -219,6 +219,18 @@ exports[`PaperTransactionHistory should render 1`] = `
                             <span
                               class="text-muted pr-2"
                             >
+                              on
+                            </span>
+                            <strong>
+                              2022-03-28
+                            </strong>
+                          </div>
+                          <div
+                            class="d-inline pr-2"
+                          >
+                            <span
+                              class="text-muted pr-2"
+                            >
                               with an amount of
                             </span>
                             <strong>
@@ -286,6 +298,18 @@ exports[`PaperTransactionHistory should render 1`] = `
                             </span>
                             <strong>
                               check
+                            </strong>
+                          </div>
+                          <div
+                            class="d-inline pr-2"
+                          >
+                            <span
+                              class="text-muted pr-2"
+                            >
+                              on
+                            </span>
+                            <strong>
+                              2022-03-28
                             </strong>
                           </div>
                           <div

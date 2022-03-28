@@ -1,3 +1,4 @@
+import {WaterReading} from '../../../@types';
 import {formatDate} from '../../../@utils/dates';
 import {compareTransaction} from '../../../@utils/helpers';
 import {TransactionAttr} from '../../../Api';
@@ -27,7 +28,7 @@ const WaterReadingTransactions = ({
               .filter(t => t.amount > 0)
               .sort(compareTransaction)
               .map((t, i) => {
-                const reading = JSON.parse(t.comments ?? '');
+                const reading = JSON.parse(t.comments ?? '') as WaterReading;
                 return (
                   <tr key={i}>
                     <td>{t.property?.code}</td>

@@ -1,8 +1,10 @@
 import {Col, Container, Row} from 'react-bootstrap';
 import styled from 'styled-components';
 
+import {WaterReading} from '../../@types';
 import {calculateAccount, getNames, sum} from '../../@utils/helpers';
 import {Month, PropertyAccount, SettingAttr} from '../../Api';
+import {DEFAULTS} from '../../constants';
 import {Currency} from '../@ui/Currency';
 import Markup from '../@ui/Markup';
 import PaymentDetail from '../@ui/PaymentDetail';
@@ -62,6 +64,7 @@ const SOA = ({hasPageBreak, propertyAccount, month, year, notes}: Props) => {
             <tr>
               <th>Charge Description</th>
               <th>Rate</th>
+              <th>Unit</th>
               <th className="float-right">Amount</th>
             </tr>
           </thead>
@@ -70,10 +73,15 @@ const SOA = ({hasPageBreak, propertyAccount, month, year, notes}: Props) => {
               transactions
                 .filter(t => t.transactionType === 'charged')
                 .map((t, i) => {
+                  const unit =
+                    t.chargeId === DEFAULTS.WATER_CHARGE_ID
+                      ? (JSON.parse(t.comments ?? '') as WaterReading).usage
+                      : property?.floorArea;
                   return (
                     <tr key={i}>
                       <td>{t.charge?.code}</td>
-                      <td>{t.charge?.rate}</td>
+                      <td>{t.rateSnapshot}</td>
+                      <td>{unit}</td>
                       <td className="float-right">
                         <strong>
                           <Currency noCurrencyColor currency={t.amount} />

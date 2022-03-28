@@ -1,9 +1,11 @@
 import {Col, Container, ListGroup, Row} from 'react-bootstrap';
 import {FaPrint} from 'react-icons/fa';
 
+import {WaterReading} from '../../@types';
 import {getCurrentMonthYear} from '../../@utils/dates';
 import {calculateAccount, sum} from '../../@utils/helpers';
 import {PropertyAccount} from '../../Api';
+import {DEFAULTS} from '../../constants';
 import {Currency} from '../@ui/Currency';
 import {LabeledCurrency} from '../@ui/LabeledCurrency';
 import PaymentDetail from '../@ui/PaymentDetail';
@@ -44,17 +46,22 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
               </Row>
             </>
           }
-          headers={['charge code', 'rate', 'amount']}
+          headers={['charge code', 'rate', 'unit', 'amount']}
         >
           <tbody>
             {transactions &&
               transactions
                 .filter(t => t.transactionType === 'charged')
                 .map((t, i) => {
+                  const unit =
+                    t.chargeId === DEFAULTS.WATER_CHARGE_ID
+                      ? (JSON.parse(t.comments ?? '') as WaterReading).usage
+                      : propertyAccount.property?.floorArea;
                   return (
                     <tr key={i}>
                       <td>{t.charge?.code}</td>
                       <td>{t.rateSnapshot}</td>
+                      <td>{unit}</td>
                       <td>
                         <strong>
                           <Currency noCurrencyColor currency={t.amount} />

@@ -1,6 +1,7 @@
 import {render, within} from '@testing-library/react';
 
 import {currencyFormat, roundOff} from '../../../@utils/currencies';
+import {formatDate} from '../../../@utils/dates';
 import {generateFakePropertyAccount} from '../../../@utils/fake-models';
 import {calculateAccount, sum} from '../../../@utils/helpers';
 import {TransactionAttr} from '../../../Api';
@@ -90,7 +91,10 @@ describe('PropertyStatementOfAccount', () => {
         const summedAmount = sum(amounts);
         const amount = currencyFormat(roundOff(summedAmount));
         expect(container?.textContent).toEqual(
-          `OR#${item.orNumber}received${item.paymentType}with an amount of${amount}${checkDetails}`
+          `OR#${item.orNumber}received${item.paymentType}on${formatDate(
+            item.createdAt,
+            'YYYY-MM-DD'
+          )}with an amount of${amount}${checkDetails}`
         );
       }
     }

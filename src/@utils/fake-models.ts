@@ -60,6 +60,7 @@ export const generateFakePaymentDetail = (
     checkNumber: faker.random.alphaNumeric(),
     checkIssuingBank: faker.random.words(),
     checkPostingDate: moment(faker.date.recent()).format('YYYY-MM-DD'),
+    createdAt: formatDate(faker.date.recent()),
   };
 };
 
