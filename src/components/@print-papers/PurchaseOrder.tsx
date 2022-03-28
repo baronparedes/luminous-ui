@@ -1,9 +1,10 @@
-import {Col, Row} from 'react-bootstrap';
+import {Col, Container, Row} from 'react-bootstrap';
 import styled from 'styled-components';
 
 import {getNames} from '../../@utils/helpers';
 import {PurchaseOrderAttr, SettingAttr} from '../../Api';
 import {Currency} from '../@ui/Currency';
+import DisbursementDetail from '../@ui/DisbursementDetail';
 import Markup from '../@ui/Markup';
 import {PageHeader, PageSection} from './PaperPdf';
 
@@ -19,7 +20,7 @@ type Props = {
 const PurchaseOrder = ({purchaseOrder, notes}: Props) => {
   if (!purchaseOrder) return null;
 
-  const {expenses} = purchaseOrder;
+  const {expenses, disbursements} = purchaseOrder;
 
   return (
     <PageSection>
@@ -168,10 +169,34 @@ const PurchaseOrder = ({purchaseOrder, notes}: Props) => {
               })}
           </tbody>
         </table>
+        <hr />
       </PageSection>
+      {disbursements && disbursements.length > 0 && (
+        <PageSection>
+          <small>
+            <Label>
+              <strong>Disbursements</strong>
+            </Label>
+          </small>
+          <br />
+          <Container>
+            {disbursements.map((item, i) => {
+              return (
+                <Row key={i}>
+                  <Col className="p-0 m-0">
+                    <div>
+                      <DisbursementDetail disbursement={item} noCurrencyColor />
+                    </div>
+                  </Col>
+                </Row>
+              );
+            })}
+          </Container>
+          <hr />
+        </PageSection>
+      )}
       {notes && notes.value !== '' && (
         <PageSection className="pt-3">
-          <hr />
           <Markup value={notes.value} />
         </PageSection>
       )}

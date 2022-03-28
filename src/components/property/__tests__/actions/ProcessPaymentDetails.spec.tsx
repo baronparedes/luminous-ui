@@ -199,6 +199,7 @@ describe('ProcessPaymentDetails', () => {
             ...paymentDetail,
             collectedBy: profile.id,
             id: undefined,
+            createdAt: undefined,
           });
         });
       }

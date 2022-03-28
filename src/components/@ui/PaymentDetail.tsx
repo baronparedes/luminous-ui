@@ -47,7 +47,9 @@ const PaymentDetail = ({
             <span>{paymentDetail.checkNumber}</span>
           </small>
           <small>
-            <span>{paymentDetail.checkPostingDate}</span>
+            <span>
+              {formatDate(paymentDetail.checkPostingDate, 'YYYY-MM-DD')}
+            </span>
           </small>
         </div>
       )}

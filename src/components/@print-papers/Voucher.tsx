@@ -137,7 +137,7 @@ const Voucher = ({voucher, notes}: Props) => {
         <hr />
       </PageSection>
       {disbursements && disbursements.length > 0 && (
-        <PageSection hasPageBreak>
+        <PageSection>
           <small>
             <Label>
               <strong>Disbursements</strong>
@@ -157,11 +157,11 @@ const Voucher = ({voucher, notes}: Props) => {
               );
             })}
           </Container>
+          <hr />
         </PageSection>
       )}
       {notes && notes.value !== '' && (
         <PageSection className="pt-3">
-          <hr />
           <Markup value={notes.value} />
         </PageSection>
       )}

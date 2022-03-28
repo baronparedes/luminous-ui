@@ -1,3 +1,4 @@
+import {formatDate} from '../../@utils/dates';
 import {DisbursementAttr} from '../../Api';
 import {Currency} from './Currency';
 
@@ -16,7 +17,11 @@ const DisbursementDetail = ({disbursement, noCurrencyColor}: Props) => {
             <span className="pr-2">{disbursement.releasedByProfile.name}</span>
           )}
           <span className="text-muted pr-2">released</span>
-          {disbursement.paymentType}
+          <strong>{disbursement.paymentType}</strong>
+        </div>
+        <div className="d-inline pr-2">
+          <span className="text-muted pr-2">on</span>
+          <strong>TBD</strong>
         </div>
         <div className="d-inline pr-2">
           <span className="text-muted pr-2">with an amount of</span>
@@ -36,7 +41,9 @@ const DisbursementDetail = ({disbursement, noCurrencyColor}: Props) => {
               <span>{disbursement.checkNumber}</span>
             </small>
             <small>
-              <span>{disbursement.checkPostingDate}</span>
+              <span>
+                {formatDate(disbursement.checkPostingDate, 'YYYY-MM-DD')}
+              </span>
             </small>
           </div>
         )}

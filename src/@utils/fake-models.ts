@@ -141,6 +141,7 @@ export function generateFakeTransaction(): TransactionAttr {
     id: faker.datatype.number(),
     charge,
     rateSnapshot: charge.rate,
+    comments: faker.random.words(10),
   };
 }
 
