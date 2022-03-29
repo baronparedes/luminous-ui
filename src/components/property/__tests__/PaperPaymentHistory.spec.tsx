@@ -21,6 +21,7 @@ describe('PaperPaymentHistory', () => {
         orNumber: 'OR#1',
         paymentType: 'cash',
         transactionPeriod: '2022-01-01',
+        createdAt: '2022-02-01',
       },
       {
         amount: 1000,
@@ -32,6 +33,7 @@ describe('PaperPaymentHistory', () => {
         checkIssuingBank: 'Bank of America',
         checkNumber: 'BA-123-123',
         checkPostingDate: '2022-02-28',
+        createdAt: '2022-02-01',
       },
     ],
   };
