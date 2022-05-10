@@ -112,7 +112,7 @@ const CollectionEfficiency = ({data, filterByChargeCode}: Props) => {
             <XAxis dataKey="period" />
             <YAxis />
             <Tooltip />
-            <Legend />
+            <Legend className="pt-3" />
             <Bar dataKey="charged" fill="#82ca9d" />
             <Bar dataKey="collected" fill="#8884d8" />
           </BarChart>

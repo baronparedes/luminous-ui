@@ -45,7 +45,7 @@ const CategorizedExpense = ({data}: Props) => {
   return (
     <>
       <RoundedPanel className="p-4 text-center">
-        <ResponsiveContainer width="100%" height={400}>
+        <ResponsiveContainer width="100%" height={600}>
           <PieChart>
             <Pie
               data={chartData}
