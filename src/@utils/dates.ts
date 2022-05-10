@@ -29,8 +29,8 @@ export function getCurrentMonthYear(): Period {
 export function getCurrentMonthYearRelativeToCutoff(cutoffDay: number) {
   const currentDay = parseInt(moment().format('Do'));
   const period = getCurrentMonthYear();
-  if (currentDay > cutoffDay) {
-    return addFromYearMonth(period.year, period.month, 1);
+  if (currentDay <= cutoffDay) {
+    return addFromYearMonth(period.year, period.month, -1);
   }
   return period;
 }
