@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import {WaterReading} from '../../@types';
 import {calculateAccount, getNames, sum} from '../../@utils/helpers';
-import {Month, PropertyAccount, SettingAttr} from '../../Api';
+import {Month, PropertyAccount, SettingAttr, TransactionAttr} from '../../Api';
 import {DEFAULTS} from '../../constants';
 import {Currency} from '../@ui/Currency';
 import Markup from '../@ui/Markup';
@@ -73,9 +73,19 @@ const SOA = ({hasPageBreak, propertyAccount, month, year, notes}: Props) => {
               transactions
                 .filter(t => t.transactionType === 'charged')
                 .map((t, i) => {
+                  const getWaterUsage = (t: TransactionAttr) => {
+                    try {
+                      const result = (
+                        JSON.parse(t.comments ?? '') as WaterReading
+                      ).usage;
+                      return result;
+                    } catch {
+                      return undefined;
+                    }
+                  };
                   const unit =
                     t.chargeId === DEFAULTS.WATER_CHARGE_ID
-                      ? (JSON.parse(t.comments ?? '') as WaterReading).usage
+                      ? getWaterUsage(t)
                       : property?.floorArea;
                   return (
                     <tr key={i}>
