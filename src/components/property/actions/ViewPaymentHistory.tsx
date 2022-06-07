@@ -31,6 +31,7 @@ import PrintPaymentHistory from './PrintPaymentHistory';
 type Props = {
   property: PropertyAttr;
   buttonLabel: string;
+  onClose?: () => void;
 };
 
 type RefundButtonProps = {
@@ -104,6 +105,7 @@ const RefundPaymentButton = ({
 const ViewPaymentHistory = ({
   property,
   buttonLabel,
+  onClose,
   ...buttonProps
 }: Props & Omit<ButtonProps, 'property'>) => {
   const {me} = useRootState(state => state.profile);
@@ -133,7 +135,10 @@ const ViewPaymentHistory = ({
         size="lg"
         header={<h5>View Payment History</h5>}
         toggle={toggle}
-        onClose={() => setToggle(false)}
+        onClose={() => {
+          setToggle(false);
+          onClose && onClose();
+        }}
       >
         <div className="m-2 pb-3">
           <Container className="m-0 p-0 pb-3">

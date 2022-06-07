@@ -100,6 +100,7 @@ const PropertyView = () => {
                       buttonLabel="view payment history"
                       disabled={id === undefined}
                       property={propertyAccountData.property}
+                      onClose={handleOnRefresh}
                     />
                     <ViewTransactionHistory
                       className="mb-2 w-100"
