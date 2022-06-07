@@ -4,6 +4,7 @@ import {
   ButtonProps,
   Col,
   Container,
+  Form,
   ListGroup,
   Row,
 } from 'react-bootstrap';
@@ -18,7 +19,9 @@ import {
   PaymentDetailAttr,
   PropertyAttr,
   useGetPaymentHistory,
+  useRefundPayment,
 } from '../../../Api';
+import {useRootState} from '../../../store';
 import Loading from '../../@ui/Loading';
 import ModalContainer from '../../@ui/ModalContainer';
 import PaymentDetail from '../../@ui/PaymentDetail';
@@ -30,11 +33,81 @@ type Props = {
   buttonLabel: string;
 };
 
+type RefundButtonProps = {
+  totalCollected: number;
+  paymentDetail: PaymentDetailAttr;
+  propertyId: number;
+  refundedBy: number;
+  onRefundComplete?: () => void;
+};
+
+const RefundPaymentButton = ({
+  totalCollected,
+  paymentDetail,
+  propertyId,
+  refundedBy,
+  onRefundComplete,
+}: RefundButtonProps) => {
+  const [toggle, setToggle] = useState(false);
+  const [comments, setComments] = useState('');
+
+  const {mutate} = useRefundPayment({propertyId});
+
+  const handleOnRefund = () => {
+    if (confirm('Continue?')) {
+      mutate({
+        comments,
+        paymentDetailId: Number(paymentDetail.id),
+        refundedBy,
+      }).then(() => onRefundComplete && onRefundComplete());
+    }
+  };
+
+  return (
+    <>
+      <Button size="sm" variant="warning" onClick={() => setToggle(true)}>
+        Refund
+      </Button>
+      <ModalContainer
+        size="sm"
+        backdrop="static"
+        dialogClassName="mt-5"
+        header={
+          <h5>
+            Refund the amount of {totalCollected} with OR #{' '}
+            {paymentDetail.orNumber}?
+          </h5>
+        }
+        toggle={toggle}
+        onClose={() => setToggle(false)}
+      >
+        <Form.Group className="mb-3" controlId="form-comments">
+          <Form.Control
+            as="textarea"
+            rows={3}
+            required
+            placeholder="comments"
+            value={comments}
+            onChange={e => setComments(e.target.value)}
+          />
+        </Form.Group>
+        <div className="text-right">
+          <Button size="sm" variant="warning" onClick={() => handleOnRefund()}>
+            Refund
+          </Button>
+        </div>
+      </ModalContainer>
+    </>
+  );
+};
+
 const ViewPaymentHistory = ({
   property,
   buttonLabel,
   ...buttonProps
 }: Props & Omit<ButtonProps, 'property'>) => {
+  const {me} = useRootState(state => state.profile);
+
   const propertyId = Number(property?.id);
   const {year} = getCurrentMonthYear();
   const years = getPastYears(3).sort().reverse();
@@ -42,7 +115,7 @@ const ViewPaymentHistory = ({
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [toggle, setToggle] = useState(false);
 
-  const {data, loading} = useGetPaymentHistory({
+  const {data, loading, refetch} = useGetPaymentHistory({
     propertyId,
     year: selectedYear,
   });
@@ -128,10 +201,25 @@ const ViewPaymentHistory = ({
                               {items.map((item, j) => {
                                 return (
                                   <ListGroup.Item key={j}>
-                                    <PaymentDetail
-                                      paymentDetail={item.paymentDetail}
-                                      totalCollected={item.totalCollected}
-                                    />
+                                    <Row>
+                                      <Col>
+                                        <PaymentDetail
+                                          paymentDetail={item.paymentDetail}
+                                          totalCollected={item.totalCollected}
+                                        />
+                                      </Col>
+                                      {me?.type === 'admin' && (
+                                        <Col md={2}>
+                                          <RefundPaymentButton
+                                            paymentDetail={item.paymentDetail}
+                                            totalCollected={item.totalCollected}
+                                            propertyId={propertyId}
+                                            refundedBy={Number(me?.id)}
+                                            onRefundComplete={() => refetch()}
+                                          />
+                                        </Col>
+                                      )}
+                                    </Row>
                                   </ListGroup.Item>
                                 );
                               })}

@@ -391,6 +391,12 @@ export interface PropertyCollectionByChargeView {
   id: number;
 }
 
+export interface RefundPaymentBody {
+  comments: string;
+  refundedBy: number;
+  paymentDetailId: number;
+}
+
 export interface VoucherAttr {
   id?: number;
   chargeId: number;
@@ -1432,6 +1438,26 @@ export const GetCollectionBreakdown = ({year, month, ...props}: GetCollectionBre
 export type UseGetCollectionBreakdownProps = Omit<UseGetProps<PropertyCollectionByChargeView[], unknown, void, GetCollectionBreakdownPathParams>, "path"> & GetCollectionBreakdownPathParams;
 
 export const useGetCollectionBreakdown = ({year, month, ...props}: UseGetCollectionBreakdownProps) => useGet<PropertyCollectionByChargeView[], unknown, void, GetCollectionBreakdownPathParams>((paramsInPath: GetCollectionBreakdownPathParams) => `/api/transaction/getCollectionBreakdown/${paramsInPath.year}/${paramsInPath.month}`, {  pathParams: { year, month }, ...props });
+
+
+export interface RefundPaymentPathParams {
+  propertyId: number
+}
+
+export type RefundPaymentProps = Omit<MutateProps<void, unknown, void, RefundPaymentBody, RefundPaymentPathParams>, "path" | "verb"> & RefundPaymentPathParams;
+
+export const RefundPayment = ({propertyId, ...props}: RefundPaymentProps) => (
+  <Mutate<void, unknown, void, RefundPaymentBody, RefundPaymentPathParams>
+    verb="PATCH"
+    path={`/api/transaction/refundPayment/${propertyId}`}
+    
+    {...props}
+  />
+);
+
+export type UseRefundPaymentProps = Omit<UseMutateProps<void, unknown, void, RefundPaymentBody, RefundPaymentPathParams>, "path" | "verb"> & RefundPaymentPathParams;
+
+export const useRefundPayment = ({propertyId, ...props}: UseRefundPaymentProps) => useMutate<void, unknown, void, RefundPaymentBody, RefundPaymentPathParams>("PATCH", (paramsInPath: RefundPaymentPathParams) => `/api/transaction/refundPayment/${paramsInPath.propertyId}`, {  pathParams: { propertyId }, ...props });
 
 
 export interface GetVoucherPathParams {
