@@ -1460,6 +1460,26 @@ export type UseRefundPaymentProps = Omit<UseMutateProps<void, unknown, void, Ref
 export const useRefundPayment = ({propertyId, ...props}: UseRefundPaymentProps) => useMutate<void, unknown, void, RefundPaymentBody, RefundPaymentPathParams>("PATCH", (paramsInPath: RefundPaymentPathParams) => `/api/transaction/refundPayment/${paramsInPath.propertyId}`, {  pathParams: { propertyId }, ...props });
 
 
+export interface GetWaterReadingByPeriodPathParams {
+  year: number;
+  month: Month
+}
+
+export type GetWaterReadingByPeriodProps = Omit<GetProps<TransactionAttr[], unknown, void, GetWaterReadingByPeriodPathParams>, "path"> & GetWaterReadingByPeriodPathParams;
+
+export const GetWaterReadingByPeriod = ({year, month, ...props}: GetWaterReadingByPeriodProps) => (
+  <Get<TransactionAttr[], unknown, void, GetWaterReadingByPeriodPathParams>
+    path={`/api/transaction/getWaterReadingByPeriod/${year}/${month}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetWaterReadingByPeriodProps = Omit<UseGetProps<TransactionAttr[], unknown, void, GetWaterReadingByPeriodPathParams>, "path"> & GetWaterReadingByPeriodPathParams;
+
+export const useGetWaterReadingByPeriod = ({year, month, ...props}: UseGetWaterReadingByPeriodProps) => useGet<TransactionAttr[], unknown, void, GetWaterReadingByPeriodPathParams>((paramsInPath: GetWaterReadingByPeriodPathParams) => `/api/transaction/getWaterReadingByPeriod/${paramsInPath.year}/${paramsInPath.month}`, {  pathParams: { year, month }, ...props });
+
+
 export interface GetVoucherPathParams {
   id: number
 }

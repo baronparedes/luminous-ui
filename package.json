@@ -96,7 +96,7 @@
     "gts": "^3.1.0",
     "history": "^4.10.1",
     "isomorphic-fetch": "^3.0.0",
-    "jest": "^26.6.0",
+    "jest": "26.6.0",
     "jest-dom": "^4.0.0",
     "jest-junit": "^12.2.0",
     "nock": "^13.1.3",

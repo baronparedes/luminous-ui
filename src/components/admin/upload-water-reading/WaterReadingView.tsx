@@ -1,14 +1,16 @@
-import {useState} from 'react';
-import {Button, Col, Container, Form, Row} from 'react-bootstrap';
+import {useEffect, useState} from 'react';
+import {Alert, Button, Col, Container, Form, Row} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
 import {Prompt} from 'react-router-dom';
 
 import {ApprovedAny} from '../../../@types';
+import {getCurrentMonthYear} from '../../../@utils/dates';
 import {sanitizeTransaction} from '../../../@utils/helpers';
 import {
   Period,
   useGetAllCharges,
   useGetAllProperties,
+  useGetWaterReadingByPeriod,
   usePostTransactions,
 } from '../../../Api';
 import {useWaterReadingDataTransformer} from '../../../hooks/useWaterReadingDataTransformer';
@@ -26,8 +28,9 @@ type FormData = {
 };
 
 const WaterReadingView = () => {
+  const currentPeriod = getCurrentMonthYear();
   const [toggle, setToggle] = useState(false);
-  const [selectedPeriod, setSelectedPeriod] = useState<Period>();
+  const [selectedPeriod, setSelectedPeriod] = useState<Period>(currentPeriod);
   const [selectedFile, setSelectedFile] = useState<FileList>();
   const [selectedSheet, setSelectedSheet] = useState<string>();
   const {control, handleSubmit, reset} = useForm<FormData>({
@@ -49,11 +52,23 @@ const WaterReadingView = () => {
   const {transactions, parseErrors, parseMismatch, error} =
     useWaterReadingDataTransformer(data, charges, properties, selectedPeriod);
 
+  const {
+    data: waterReadingTransactions,
+    refetch: refetchWaterReadingTransactions,
+  } = useGetWaterReadingByPeriod({
+    year: selectedPeriod?.year,
+    month: selectedPeriod?.month,
+    lazy: true,
+  });
+
+  const hasWaterReadingForSelectedPeriod =
+    waterReadingTransactions && waterReadingTransactions.length > 0;
+
   const onReset = (period?: Period, showModal = false) => {
     reset();
     setSelectedFile(undefined);
     setSelectedSheet(undefined);
-    setSelectedPeriod(period);
+    setSelectedPeriod(period ?? currentPeriod);
     setToggle(showModal);
   };
 
@@ -81,6 +96,10 @@ const WaterReadingView = () => {
     }
   };
 
+  useEffect(() => {
+    refetchWaterReadingTransactions();
+  }, [selectedPeriod]);
+
   return (
     <>
       <Prompt
@@ -102,7 +121,12 @@ const WaterReadingView = () => {
           <ModalContainer
             toggle={toggle}
             onClose={() => setToggle(false)}
-            header={<h5>Select a file to upload</h5>}
+            header={
+              <h5>
+                Select a file to upload for {selectedPeriod?.year}-
+                {selectedPeriod?.month}
+              </h5>
+            }
           >
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Form.Group controlId="form-file-to-upload">
@@ -149,9 +173,23 @@ const WaterReadingView = () => {
                   )}
                 />
               </Form.Group>
+              {hasWaterReadingForSelectedPeriod && (
+                <>
+                  <Alert variant="warning">
+                    Water Reading found for the selected period.
+                  </Alert>
+                </>
+              )}
               <hr />
               <div className="text-right">
-                <Button type="submit">Process</Button>
+                <Button
+                  type="submit"
+                  variant={
+                    hasWaterReadingForSelectedPeriod ? 'warning' : 'primary'
+                  }
+                >
+                  Process
+                </Button>
               </div>
             </Form>
           </ModalContainer>
@@ -188,6 +226,14 @@ const WaterReadingView = () => {
         )}
         {!error && transactions.length > 0 && (
           <>
+            {hasWaterReadingForSelectedPeriod && (
+              <>
+                <Alert className="mt-3" variant="warning">
+                  Water Reading found for the selected period. Saving this
+                  transaction may result to duplicate entries.
+                </Alert>
+              </>
+            )}
             <WaterReadingTransactions
               transactions={transactions}
               renderHeaderContent={
@@ -206,7 +252,9 @@ const WaterReadingView = () => {
                     <Col className="text-right">
                       <Button
                         disabled={inProgress}
-                        variant="secondary"
+                        variant={
+                          hasWaterReadingForSelectedPeriod ? 'warning' : 'info'
+                        }
                         onClick={handleOnSaveTransactions}
                       >
                         Save Transactions

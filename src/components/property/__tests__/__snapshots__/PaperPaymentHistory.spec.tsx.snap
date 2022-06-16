@@ -7,10 +7,10 @@ exports[`PaperPaymentHistory should render 1`] = `
   >
     <div>
       <div
-        class="sc-bdfBQB dxnWgn"
+        class="sc-bczRLJ bGWrvR"
       >
         <div
-          class="sc-bdfBQB dxnWgn"
+          class="sc-bczRLJ bGWrvR"
         >
           <div
             class="text-center"
@@ -28,10 +28,10 @@ exports[`PaperPaymentHistory should render 1`] = `
           </div>
         </div>
         <div
-          class="sc-bdfBQB dxnWgn pt-3"
+          class="sc-bczRLJ bGWrvR pt-3"
         >
           <div
-            class="sc-gsTEea bjzFuM"
+            class="sc-gsnTZi GuhqU"
           >
             <strong>
               Unit Number: 
@@ -40,7 +40,7 @@ exports[`PaperPaymentHistory should render 1`] = `
           </div>
           <small>
             <div
-              class="sc-gsTEea bjzFuM"
+              class="sc-gsnTZi GuhqU"
             >
               <strong>
                 Address: 
@@ -50,7 +50,7 @@ exports[`PaperPaymentHistory should render 1`] = `
           </small>
           <small>
             <div
-              class="sc-gsTEea bjzFuM"
+              class="sc-gsnTZi GuhqU"
             >
               <strong>
                 Floor area: 
@@ -61,10 +61,10 @@ exports[`PaperPaymentHistory should render 1`] = `
           <hr />
         </div>
         <div
-          class="sc-bdfBQB dxnWgn pt-3"
+          class="sc-bczRLJ bGWrvR pt-3"
         >
           <div
-            class="sc-gsTEea bjzFuM"
+            class="sc-gsnTZi GuhqU"
           >
             <strong>
               Payment History for: 
@@ -74,7 +74,7 @@ exports[`PaperPaymentHistory should render 1`] = `
           <hr />
         </div>
         <div
-          class="sc-bdfBQB dxnWgn"
+          class="sc-bczRLJ bGWrvR"
         >
           <div
             class="list-group"
