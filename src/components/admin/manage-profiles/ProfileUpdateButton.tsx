@@ -121,6 +121,7 @@ const ProfileUpdateButton: React.FC<{
                       {...field}
                       id="mobileNumber"
                       disabled={loading}
+                      required
                       placeholder="mobile number"
                     />
                   </InputGroup>

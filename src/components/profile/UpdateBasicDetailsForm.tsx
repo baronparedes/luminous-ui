@@ -110,6 +110,7 @@ const UpdateBasicDetailsForm: React.FC<{
               <Form.Control
                 {...field}
                 disabled={loading}
+                required
                 placeholder="mobile number"
               />
             </InputGroup>
