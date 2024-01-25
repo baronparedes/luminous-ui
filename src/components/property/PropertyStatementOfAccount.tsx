@@ -53,10 +53,18 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
               transactions
                 .filter(t => t.transactionType === 'charged')
                 .map((t, i) => {
-                  const unit =
-                    t.chargeId === DEFAULTS.WATER_CHARGE_ID
-                      ? (JSON.parse(t.comments ?? '') as WaterReading).usage
-                      : propertyAccount.property?.floorArea;
+                  const parseUnit = (chargeId: number | undefined) => {
+                    if (chargeId === DEFAULTS.WATER_CHARGE_ID) {
+                      try {
+                        return (JSON.parse(t.comments ?? '') as WaterReading)
+                          .usage;
+                      } catch (e) {
+                        return '';
+                      }
+                    }
+                    return propertyAccount.property?.floorArea;
+                  };
+                  const unit = parseUnit(t.charge?.id);
                   return (
                     <tr key={i}>
                       <td>{t.charge?.code}</td>
