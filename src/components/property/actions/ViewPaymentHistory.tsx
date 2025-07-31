@@ -27,6 +27,7 @@ import ModalContainer from '../../@ui/ModalContainer';
 import PaymentDetail from '../../@ui/PaymentDetail';
 import SelectYear from '../../@ui/SelectYear';
 import PrintPaymentHistory from './PrintPaymentHistory';
+import config from '../../../config';
 
 type Props = {
   property: PropertyAttr;
@@ -112,7 +113,7 @@ const ViewPaymentHistory = ({
 
   const propertyId = Number(property?.id);
   const {year} = getCurrentMonthYear();
-  const years = getPastYears(3).sort().reverse();
+  const years = getPastYears(config.HISTORY_YEARS).sort().reverse();
 
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [toggle, setToggle] = useState(false);

@@ -4,6 +4,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {getCurrentMonthYear, getPastYears} from '../../@utils/dates';
 import {Period} from '../../Api';
 import {MONTHS} from '../../constants';
+import config from '../../config';
 
 type Props = {
   onPeriodSelect: (period: Period) => void;
@@ -15,7 +16,7 @@ const SelectPeriod = ({
   buttonLabel,
   ...buttonProps
 }: Props & ButtonProps) => {
-  const years = getPastYears(2);
+  const years = getPastYears(config.PROCESS_YEARS).map(year => year.toString());
   const initialValue = getCurrentMonthYear();
   const {handleSubmit, control} = useForm<Period>({
     defaultValues: initialValue,

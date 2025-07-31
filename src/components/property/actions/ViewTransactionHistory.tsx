@@ -9,6 +9,7 @@ import ModalContainer from '../../@ui/ModalContainer';
 import SelectYear from '../../@ui/SelectYear';
 import TransactionHistoryDetail from '../../@ui/TransactionHistoryDetail';
 import PrintTransactionHistory from './PrintTransactionHistory';
+import config from '../../../config';
 
 type Props = {
   property: PropertyAttr;
@@ -22,7 +23,7 @@ const ViewTransactionHistory = ({
 }: Props & Omit<ButtonProps, 'property'>) => {
   const propertyId = Number(property?.id);
   const {year} = getCurrentMonthYear();
-  const years = getPastYears(3).sort().reverse();
+  const years = getPastYears(config.HISTORY_YEARS).sort().reverse();
 
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [toggle, setToggle] = useState(false);

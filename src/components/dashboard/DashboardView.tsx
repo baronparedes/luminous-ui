@@ -15,10 +15,11 @@ import CollectionEfficiency from './CollectionEfficiency';
 import CollectionEfficiencyByCharge from './CollectionEfficiencyByCharge';
 import ExpenseOverRevenue from './ExpenseOverRevenue';
 import PropertyBalance from './PropertyBalance';
+import config from '../../config';
 
 const DashboardView = () => {
   const {year} = getCurrentMonthYear();
-  const years = getPastYears(5).sort().reverse();
+  const years = getPastYears(config.DASHBOARD_YEARS).sort().reverse();
 
   const [selectedYear, setSelectedYear] = useState<number>(year);
 
