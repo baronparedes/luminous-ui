@@ -3,7 +3,8 @@ import {Container, Tab, TabContainer, Tabs} from 'react-bootstrap';
 
 import {getCurrentMonthYear, getPastYears} from '../../@utils/dates';
 import {useGetAllCharges, useGetDashboardByYear} from '../../Api';
-import {useChargeBalance} from '../../hooks/useChargeBalance';
+import {useChargeBalance} from '../../hooks';
+import {useRootState} from '../../store';
 import Loading from '../@ui/Loading';
 import RoundedPanel from '../@ui/RoundedPanel';
 import SelectYear from '../@ui/SelectYear';

@@ -3,7 +3,7 @@ import {v4 as uuidv4} from 'uuid';
 
 import {toTransactionPeriod} from '../@utils/dates';
 import {ChargeAttr, Period, PropertyAttr, TransactionAttr} from '../Api';
-import {useChargeIds} from './useChargeIds';
+import {useSettings} from './';
 import {WaterReadingData} from './useWaterReadingFile';
 
 function toTransaction(
@@ -64,7 +64,9 @@ export function useWaterReadingDataTransformer(
   const [transactions, setTransactions] = useState<TransactionAttr[]>([]);
   const [charge, setCharge] = useState<ChargeAttr>();
 
-  const {waterChargeId} = useChargeIds();
+  const {
+    chargeIds: {waterChargeId},
+  } = useSettings();
 
   useEffect(() => {
     const targetCharge = charges?.find(c => c.id === waterChargeId);

@@ -8,7 +8,7 @@ import {
   useGetVoucher,
   useUpdateVoucher,
 } from '../../Api';
-import {useUrl} from '../../hooks/useUrl';
+import {useUrl} from '../../hooks';
 import {useRootState} from '../../store';
 import DisbursementList from '../@ui/DisbursementList';
 import ExpenseTable from '../@ui/ExpenseTable';

@@ -11,7 +11,7 @@ import {
   usePostPurchaseOrder,
   useUpdatePurchaseRequest,
 } from '../../Api';
-import {useUrl} from '../../hooks/useUrl';
+import {useUrl} from '../../hooks';
 import {useRootState} from '../../store';
 import ExpenseTable from '../@ui/ExpenseTable';
 import Loading from '../@ui/Loading';

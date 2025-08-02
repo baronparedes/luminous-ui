@@ -2,8 +2,8 @@ import {useEffect, useState} from 'react';
 
 import {sum} from '../@utils/helpers';
 import {useGetAllCollectedCharges, useGetDisbursementBreakdown} from '../Api';
+import {useSettings} from './';
 import {DEFAULTS} from '../constants';
-import {useChargeIds} from './useChargeIds';
 
 export type ChargeBalance = {
   chargeId: number;
@@ -15,7 +15,9 @@ export function useChargeBalance() {
   const [availableBalances, setAvailableBalances] = useState<ChargeBalance[]>(
     []
   );
-  const {communityChargeId} = useChargeIds();
+  const {
+    chargeIds: {communityChargeId},
+  } = useSettings();
   const [availableCommunityBalance, setAvailableCommunityBalance] =
     useState<ChargeBalance>({
       chargeId: communityChargeId ?? 0,

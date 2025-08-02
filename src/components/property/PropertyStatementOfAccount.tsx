@@ -11,7 +11,7 @@ import PaymentDetail from '../@ui/PaymentDetail';
 import RoundedPanel from '../@ui/RoundedPanel';
 import {Table} from '../@ui/Table';
 import PrintStatementOfAccount from './actions/PrintStatementOfAccount';
-import {useChargeIds} from '../../hooks/useChargeIds';
+import {useSettings} from '../../hooks';
 
 type Props = {
   propertyAccount: PropertyAccount;
@@ -22,7 +22,9 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
   const {transactions} = propertyAccount;
   const {currentBalance, previousBalance, collectionBalance} =
     calculateAccount(propertyAccount);
-  const {waterChargeId} = useChargeIds();
+  const {
+    chargeIds: {waterChargeId},
+  } = useSettings();
   return (
     <>
       <RoundedPanel className="p-0 m-auto">

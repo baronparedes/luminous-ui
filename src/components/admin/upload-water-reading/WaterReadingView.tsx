@@ -13,9 +13,11 @@ import {
   useGetWaterReadingByPeriod,
   usePostTransactions,
 } from '../../../Api';
-import {useChargeIds} from '../../../hooks/useChargeIds';
-import {useWaterReadingDataTransformer} from '../../../hooks/useWaterReadingDataTransformer';
-import {useWaterReadingFile} from '../../../hooks/useWaterReadingFile';
+import {
+  useSettings,
+  useWaterReadingDataTransformer,
+  useWaterReadingFile,
+} from '../../../hooks';
 import Loading from '../../@ui/Loading';
 import ModalContainer from '../../@ui/ModalContainer';
 import RoundedPanel from '../../@ui/RoundedPanel';
@@ -44,7 +46,9 @@ const WaterReadingView = () => {
   const {data: properties, loading: loadingProperties} = useGetAllProperties(
     {}
   );
-  const {waterChargeId} = useChargeIds();
+  const {
+    chargeIds: {waterChargeId},
+  } = useSettings();
   const {sheets, data} = useWaterReadingFile(
     selectedFile ? selectedFile[0] : undefined,
     selectedSheet

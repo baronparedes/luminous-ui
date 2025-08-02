@@ -8,7 +8,7 @@ import {Currency} from '../@ui/Currency';
 import Markup from '../@ui/Markup';
 import PaymentDetail from '../@ui/PaymentDetail';
 import {PageHeader, PageSection} from './PaperPdf';
-import {useChargeIds} from '../../hooks/useChargeIds';
+import {useSettings} from '../../hooks';
 
 const Label = styled('div')`
   font-size: 1.5em;
@@ -27,7 +27,9 @@ const SOA = ({hasPageBreak, propertyAccount, month, year, notes}: Props) => {
   const {currentBalance, previousBalance, collectionBalance} =
     calculateAccount(propertyAccount);
   const {transactions, property, balance, paymentDetails} = propertyAccount;
-  const {waterChargeId} = useChargeIds();
+  const {
+    chargeIds: {waterChargeId},
+  } = useSettings();
   return (
     <PageSection hasPageBreak={hasPageBreak}>
       <PageHeader title="STATEMENT OF ACCOUNT" />

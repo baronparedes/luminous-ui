@@ -1,20 +1,36 @@
 import {useEffect, useState} from 'react';
 
-import {SETTING_KEYS} from '../constants';
+import {DEFAULTS, SETTING_KEYS} from '../constants';
 import {useRootState} from '../store';
 
 export type ChargeIds = {
   waterChargeId?: number;
   communityChargeId?: number;
+};
+
+export type Settings = {
+  minApprovers: number;
+  chargeIds: ChargeIds;
+  billingCutoffDay: number;
   loading: boolean;
 };
 
-export function useChargeIds(): ChargeIds {
+export function useSettings(): Settings {
   const [waterChargeId, setWaterChargeId] = useState<number>();
   const [communityChargeId, setCommunityChargeId] = useState<number>();
   const [loading, setLoading] = useState<boolean>(true);
 
   const settings = useRootState(state => state.setting.values);
+
+  // Helper function to parse integer setting with fallback
+  const getIntegerSetting = (key: string, defaultValue: number): number => {
+    const setting = settings.find(s => s.key === key);
+    if (setting?.value) {
+      const parsed = parseInt(setting.value);
+      return !isNaN(parsed) ? parsed : defaultValue;
+    }
+    return defaultValue;
+  };
 
   useEffect(() => {
     const waterChargeIdSetting = settings.find(
@@ -43,8 +59,18 @@ export function useChargeIds(): ChargeIds {
   }, [settings]);
 
   return {
-    waterChargeId,
-    communityChargeId,
+    minApprovers: getIntegerSetting(
+      SETTING_KEYS.MIN_APPROVERS,
+      DEFAULTS.MIN_APPROVERS
+    ),
+    chargeIds: {
+      waterChargeId,
+      communityChargeId,
+    },
+    billingCutoffDay: getIntegerSetting(
+      SETTING_KEYS.BILLING_CUTOFF_DAY,
+      DEFAULTS.BILLING_CUTOFF_DAY
+    ),
     loading,
   };
 }

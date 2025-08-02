@@ -1,6 +1,6 @@
+import * as React from 'react';
 import {Container, Tab, TabContainer, Tabs} from 'react-bootstrap';
-
-import {useChargeBalance} from '../../hooks/useChargeBalance';
+import {useChargeBalance} from '../../hooks';
 import ChargeDisbursement from './ChargeDisbursement';
 
 const DisbursementView = () => {

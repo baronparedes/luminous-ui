@@ -21,7 +21,7 @@ import PropertyView from './components/property/PropertyView';
 import PurchaseOrderView from './components/purchase-order/PurchaseOrderView';
 import PurchaseRequestView from './components/purchase-request/PurchaseRequestView';
 import VoucherView from './components/voucher/VoucherView';
-import {useInitSettings} from './hooks/useInitSettings';
+import {useInitSettings} from './hooks';
 import {useRootState} from './store';
 
 const AppRouter: React.FC = () => {

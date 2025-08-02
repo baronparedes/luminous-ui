@@ -1,6 +1,6 @@
 import {Badge, Col, Row} from 'react-bootstrap';
 
-import {ChargeBalance} from '../../hooks/useChargeBalance';
+import {ChargeBalance} from '../../hooks';
 import {Currency} from '../@ui/Currency';
 import RoundedPanel from '../@ui/RoundedPanel';
 

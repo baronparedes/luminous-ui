@@ -3,10 +3,10 @@ import faker from 'faker';
 import {render} from '@testing-library/react';
 
 import {currencyFormat} from '../../../@utils/currencies';
-import {useChargeBalance} from '../../../hooks/useChargeBalance';
+import {useChargeBalance} from '../../../hooks';
 import DisbursementView from '../DisbursementView';
 
-jest.mock('../../../hooks/useChargeBalance');
+jest.mock('../../../hooks');
 
 describe.skip('DisbursementView', () => {
   const useChargeBalanceMock = useChargeBalance as jest.MockedFunction<

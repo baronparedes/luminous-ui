@@ -11,7 +11,7 @@ import {
   usePostPurchaseOrderDisbursement,
   useUpdatePurchaseOrder,
 } from '../../Api';
-import {useUrl} from '../../hooks/useUrl';
+import {useUrl} from '../../hooks';
 import {useRootState} from '../../store';
 import AddDisbursement from '../@ui/AddDisbursement';
 import DisbursementList from '../@ui/DisbursementList';

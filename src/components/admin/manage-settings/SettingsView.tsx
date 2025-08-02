@@ -7,6 +7,7 @@ import SettingBillingCutoff from './SettingBillingCutoff';
 import SettingCharges from './SettingCharges';
 import SettingExpenseCategory from './SettingExpenseCategory';
 import SettingMarkup from './SettingMarkup';
+import SettingMinApprovers from './SettingMinApprovers';
 
 export const SettingContainer: React.FC<{
   heading: string;
@@ -37,6 +38,9 @@ const SettingsView = () => {
             </Tab>
             <Tab eventKey="billing" title="Billing">
               <SettingBillingCutoff />
+            </Tab>
+            <Tab eventKey="approval" title="Approval">
+              <SettingMinApprovers />
             </Tab>
             <Tab eventKey="soa-notes" title="SOA Notes">
               <SettingMarkup

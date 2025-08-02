@@ -2,7 +2,7 @@ import {Col, Container, Row} from 'react-bootstrap';
 
 import {roundOff} from '../../@utils/currencies';
 import {useGetAllCharges, useGetPropertyAccount} from '../../Api';
-import {useUrl} from '../../hooks/useUrl';
+import {useUrl} from '../../hooks';
 import {useRootState} from '../../store';
 import Loading from '../@ui/Loading';
 import RoundedPanel from '../@ui/RoundedPanel';
