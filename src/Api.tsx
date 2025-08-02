@@ -356,6 +356,11 @@ export interface RejectPurchaseRequest {
 export interface SettingAttr {
   key: string;
   value: string;
+  communityId?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: number;
+  updatedBy?: number;
 }
 
 export interface CategoryAttr {
