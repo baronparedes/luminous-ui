@@ -95,7 +95,7 @@ describe('useChargeBalance', () => {
 
     await waitFor(() => {
       expect(result.current.availableCommunityBalance).toEqual({
-        chargeId: DEFAULTS.COMMUNITY_CHARGE_ID,
+        chargeId: 0,
         code: DEFAULTS.COMMUNITY_EXPENSE,
         balance: expectedBalance,
       });
