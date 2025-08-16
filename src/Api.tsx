@@ -221,11 +221,14 @@ export interface PaymentDetailAttr {
 }
 
 export interface TransactionAttr {
+  details?: string;
   id?: number;
   chargeId: number;
   charge?: ChargeAttr;
-  propertyId: number;
+  propertyId?: number;
   property?: PropertyAttr;
+  categoryId?: number;
+  category?: string;
   amount: number;
   transactionPeriod: string;
   transactionType: TransactionType;
@@ -1490,24 +1493,24 @@ export type UseGetCollectionBreakdownProps = Omit<UseGetProps<PropertyCollection
 export const useGetCollectionBreakdown = ({year, month, ...props}: UseGetCollectionBreakdownProps) => useGet<PropertyCollectionByChargeView[], unknown, void, GetCollectionBreakdownPathParams>((paramsInPath: GetCollectionBreakdownPathParams) => `/api/transaction/getCollectionBreakdown/${paramsInPath.year}/${paramsInPath.month}`, {  pathParams: { year, month }, ...props });
 
 
-export interface RefundPaymentPathParams {
-  propertyId: number
+export interface RefundPaymentQueryParams {
+  propertyId?: number;
 }
 
-export type RefundPaymentProps = Omit<MutateProps<void, unknown, void, RefundPaymentBody, RefundPaymentPathParams>, "path" | "verb"> & RefundPaymentPathParams;
+export type RefundPaymentProps = Omit<MutateProps<void, unknown, RefundPaymentQueryParams, RefundPaymentBody, void>, "path" | "verb">;
 
-export const RefundPayment = ({propertyId, ...props}: RefundPaymentProps) => (
-  <Mutate<void, unknown, void, RefundPaymentBody, RefundPaymentPathParams>
+export const RefundPayment = (props: RefundPaymentProps) => (
+  <Mutate<void, unknown, RefundPaymentQueryParams, RefundPaymentBody, void>
     verb="PATCH"
-    path={`/api/transaction/refundPayment/${propertyId}`}
+    path={`/api/transaction/refundPayment`}
     
     {...props}
   />
 );
 
-export type UseRefundPaymentProps = Omit<UseMutateProps<void, unknown, void, RefundPaymentBody, RefundPaymentPathParams>, "path" | "verb"> & RefundPaymentPathParams;
+export type UseRefundPaymentProps = Omit<UseMutateProps<void, unknown, RefundPaymentQueryParams, RefundPaymentBody, void>, "path" | "verb">;
 
-export const useRefundPayment = ({propertyId, ...props}: UseRefundPaymentProps) => useMutate<void, unknown, void, RefundPaymentBody, RefundPaymentPathParams>("PATCH", (paramsInPath: RefundPaymentPathParams) => `/api/transaction/refundPayment/${paramsInPath.propertyId}`, {  pathParams: { propertyId }, ...props });
+export const useRefundPayment = (props: UseRefundPaymentProps) => useMutate<void, unknown, RefundPaymentQueryParams, RefundPaymentBody, void>("PATCH", `/api/transaction/refundPayment`, props);
 
 
 export interface GetWaterReadingByPeriodPathParams {
@@ -1528,6 +1531,31 @@ export const GetWaterReadingByPeriod = ({year, month, ...props}: GetWaterReading
 export type UseGetWaterReadingByPeriodProps = Omit<UseGetProps<TransactionAttr[], unknown, void, GetWaterReadingByPeriodPathParams>, "path"> & GetWaterReadingByPeriodPathParams;
 
 export const useGetWaterReadingByPeriod = ({year, month, ...props}: UseGetWaterReadingByPeriodProps) => useGet<TransactionAttr[], unknown, void, GetWaterReadingByPeriodPathParams>((paramsInPath: GetWaterReadingByPeriodPathParams) => `/api/transaction/getWaterReadingByPeriod/${paramsInPath.year}/${paramsInPath.month}`, {  pathParams: { year, month }, ...props });
+
+
+export interface GetAllTransactionsQueryParams {
+  search?: string;
+}
+
+export interface GetAllTransactionsPathParams {
+  year: number;
+  month: Month;
+  chargeId: number
+}
+
+export type GetAllTransactionsProps = Omit<GetProps<TransactionAttr[], unknown, GetAllTransactionsQueryParams, GetAllTransactionsPathParams>, "path"> & GetAllTransactionsPathParams;
+
+export const GetAllTransactions = ({year, month, chargeId, ...props}: GetAllTransactionsProps) => (
+  <Get<TransactionAttr[], unknown, GetAllTransactionsQueryParams, GetAllTransactionsPathParams>
+    path={`/api/transaction/getAllTransactions/${year}/${month}/${chargeId}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetAllTransactionsProps = Omit<UseGetProps<TransactionAttr[], unknown, GetAllTransactionsQueryParams, GetAllTransactionsPathParams>, "path"> & GetAllTransactionsPathParams;
+
+export const useGetAllTransactions = ({year, month, chargeId, ...props}: UseGetAllTransactionsProps) => useGet<TransactionAttr[], unknown, GetAllTransactionsQueryParams, GetAllTransactionsPathParams>((paramsInPath: GetAllTransactionsPathParams) => `/api/transaction/getAllTransactions/${paramsInPath.year}/${paramsInPath.month}/${paramsInPath.chargeId}`, {  pathParams: { year, month, chargeId }, ...props });
 
 
 export interface GetVoucherPathParams {

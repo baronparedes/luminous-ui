@@ -116,6 +116,17 @@ function buildNavigationSections(profileType: ProfileType) {
         },
         divider,
         {
+          to: routes.ADMIN_COLLECTIONS,
+          exact: true,
+          title: (
+            <>
+              <FaMoneyCheckAlt className="mr-1" />
+              collections
+            </>
+          ),
+        },
+        divider,
+        {
           to: routes.ADMIN_BATCH_TRANSACTIONS,
           exact: true,
           title: (

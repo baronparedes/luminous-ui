@@ -21,6 +21,7 @@ import PropertyView from './components/property/PropertyView';
 import PurchaseOrderView from './components/purchase-order/PurchaseOrderView';
 import PurchaseRequestView from './components/purchase-request/PurchaseRequestView';
 import VoucherView from './components/voucher/VoucherView';
+import CollectionsView from './components/admin/manage-collections/CollectionsView';
 import {useInitSettings} from './hooks';
 import {useRootState} from './store';
 
@@ -96,6 +97,12 @@ const AppRouter: React.FC = () => {
               exact
               onlyFor={['admin']}
               component={PropertiesView}
+            />
+            <ProtectedRoute
+              path={routes.ADMIN_COLLECTIONS}
+              exact
+              onlyFor={['admin']}
+              component={CollectionsView}
             />
             <ProtectedRoute
               path={routes.ADMIN_SETTINGS}

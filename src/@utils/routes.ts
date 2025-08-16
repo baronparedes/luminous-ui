@@ -13,6 +13,7 @@ const routes = {
   ADMIN: '/admin',
   ADMIN_PROFILES: '/admin/profiles',
   ADMIN_PROPERTIES: '/admin/properties',
+  ADMIN_COLLECTIONS: '/admin/collections',
   ADMIN_SETTINGS: '/admin/settings',
   ADMIN_BATCH_TRANSACTIONS: '/admin/batch-transactions',
   ADMIN_BATCH_PRINT_SOA: '/admin/batch-print-soa',
