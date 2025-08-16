@@ -37,21 +37,62 @@ const ProcessPaymentDetails = ({
     checkIssuingBank: '',
     checkNumber: '',
     checkPostingDate: '',
+    transferBank: '',
+    transferDate: '',
+    transferFrom: '',
+    referenceNumber: '',
   };
   const {handleSubmit, control, watch, formState} = useForm<PaymentDetailAttr>({
     defaultValues,
   });
+  const isCashPayment = watch('paymentType') === 'cash';
   const isCheckPayment = watch('paymentType') === 'check';
+  const isBankTransferPayment = watch('paymentType') === 'bank-transfer';
+  const isGcashPayment = watch('paymentType') === 'gcash';
   const onSubmit = (formData: PaymentDetailAttr) => {
-    const forCashPayment: PaymentDetailAttr = {
-      orNumber: formData.orNumber,
-      collectedBy: formData.collectedBy,
-      paymentType: 'cash',
-    };
-    const form = isCheckPayment ? formData : forCashPayment;
     if (confirm('Proceed?')) {
       setToggle(false);
-      onCollect && onCollect(form);
+
+      if (isCashPayment)
+        onCollect &&
+          onCollect({
+            orNumber: formData.orNumber,
+            collectedBy: formData.collectedBy,
+            paymentType: 'cash',
+          });
+
+      if (isCheckPayment)
+        onCollect &&
+          onCollect({
+            orNumber: formData.orNumber,
+            collectedBy: formData.collectedBy,
+            paymentType: 'check',
+            checkIssuingBank: formData.checkIssuingBank,
+            checkNumber: formData.checkNumber,
+            checkPostingDate: formData.checkPostingDate,
+          });
+
+      if (isBankTransferPayment)
+        onCollect &&
+          onCollect({
+            orNumber: formData.orNumber,
+            collectedBy: formData.collectedBy,
+            paymentType: 'bank-transfer',
+            referenceNumber: formData.referenceNumber,
+            transferBank: formData.transferBank,
+            transferDate: formData.transferDate,
+          });
+
+      if (isGcashPayment)
+        onCollect &&
+          onCollect({
+            orNumber: formData.orNumber,
+            collectedBy: formData.collectedBy,
+            paymentType: 'gcash',
+            referenceNumber: formData.referenceNumber,
+            transferFrom: formData.transferFrom,
+            transferDate: formData.transferDate,
+          });
     }
   };
 
@@ -94,6 +135,8 @@ const ProcessPaymentDetails = ({
                     >
                       <option value="cash">cash</option>
                       <option value="check">check</option>
+                      <option value="bank-transfer">bank transfer</option>
+                      <option value="gcash">gcash</option>
                     </Form.Control>
                   )}
                 />
@@ -231,6 +274,155 @@ const ProcessPaymentDetails = ({
                     </Form.Control.Feedback>
                   </InputGroup>
                 </Row>
+              </>
+            )}
+            {(isGcashPayment || isBankTransferPayment) && (
+              <>
+                <Row>
+                  <InputGroup className="mb-2">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>
+                        <FaMoneyCheck />
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Controller
+                      rules={{
+                        validate: {
+                          required: requiredIf(
+                            isGcashPayment || isBankTransferPayment
+                          ),
+                        },
+                      }}
+                      name="referenceNumber"
+                      control={control}
+                      render={({field}) => (
+                        <Form.Control
+                          {...field}
+                          required={isGcashPayment || isBankTransferPayment}
+                          placeholder="reference number"
+                          isInvalid={
+                            formState.errors.referenceNumber !== undefined
+                          }
+                        />
+                      )}
+                    />
+                    <Form.Control.Feedback
+                      type="invalid"
+                      className="text-right"
+                    >
+                      {formState.errors.referenceNumber?.message}
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                </Row>
+                <Row>
+                  <InputGroup className="mb-2">
+                    <InputGroup.Prepend>
+                      <InputGroup.Text>
+                        <FaCalendar />
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Controller
+                      rules={{
+                        validate: {
+                          required: requiredIf(
+                            isGcashPayment || isBankTransferPayment
+                          ),
+                        },
+                      }}
+                      name="transferDate"
+                      control={control}
+                      render={({field}) => (
+                        <Form.Control
+                          {...field}
+                          required={isGcashPayment || isBankTransferPayment}
+                          type="date"
+                          placeholder="transfer date"
+                          isInvalid={
+                            formState.errors.transferDate !== undefined
+                          }
+                        />
+                      )}
+                    />
+                    <Form.Control.Feedback
+                      type="invalid"
+                      className="text-right"
+                    >
+                      {formState.errors.transferDate?.message}
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                </Row>
+                {isBankTransferPayment && (
+                  <Row>
+                    <InputGroup className="mb-2">
+                      <InputGroup.Prepend>
+                        <InputGroup.Text>
+                          <RiBankFill />
+                        </InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <Controller
+                        rules={{
+                          validate: {
+                            required: requiredIf(isBankTransferPayment),
+                          },
+                        }}
+                        name="transferBank"
+                        control={control}
+                        render={({field}) => (
+                          <Form.Control
+                            {...field}
+                            required={isBankTransferPayment}
+                            placeholder="transfer bank"
+                            isInvalid={
+                              formState.errors.transferBank !== undefined
+                            }
+                          />
+                        )}
+                      />
+                      <Form.Control.Feedback
+                        type="invalid"
+                        className="text-right"
+                      >
+                        {formState.errors.transferBank?.message}
+                      </Form.Control.Feedback>
+                    </InputGroup>
+                  </Row>
+                )}
+                {isGcashPayment && (
+                  <Row>
+                    <InputGroup className="mb-2">
+                      <InputGroup.Prepend>
+                        <InputGroup.Text>
+                          <RiBankFill />
+                        </InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <Controller
+                        rules={{
+                          validate: {
+                            required: requiredIf(isGcashPayment),
+                          },
+                        }}
+                        name="transferFrom"
+                        control={control}
+                        render={({field}) => (
+                          <Form.Control
+                            {...field}
+                            required={isGcashPayment}
+                            placeholder="from gcash number"
+                            isInvalid={
+                              formState.errors.transferFrom !== undefined
+                            }
+                          />
+                        )}
+                      />
+                      <Form.Control.Feedback
+                        type="invalid"
+                        className="text-right"
+                      >
+                        {formState.errors.transferFrom?.message}
+                      </Form.Control.Feedback>
+                    </InputGroup>
+                  </Row>
+                )}
               </>
             )}
             <hr />
