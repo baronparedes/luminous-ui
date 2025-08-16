@@ -111,7 +111,7 @@ export interface DisbursementBreakdownView {
   code: string;
 }
 
-export type PaymentType = "cash" | "check";
+export type PaymentType = "cash" | "check" | "bank-transfer" | "gcash";
 
 export interface ProfileAttr {
   id?: number;
@@ -137,6 +137,10 @@ export interface DisbursementAttr {
   checkNumber?: string;
   checkPostingDate?: string;
   checkIssuingBank?: string;
+  referenceNumber?: string;
+  transferBank?: string;
+  transferDate?: string;
+  transferTo?: string;
   amount: number;
   releasedByProfile?: ProfileAttr;
   charge?: ChargeAttr;
@@ -210,6 +214,10 @@ export interface PaymentDetailAttr {
   updatedAt?: string;
   createdBy?: number;
   updatedBy?: number;
+  referenceNumber?: string;
+  transferDate?: string;
+  transferBank?: string;
+  transferFrom?: string;
 }
 
 export interface TransactionAttr {

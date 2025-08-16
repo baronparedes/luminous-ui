@@ -71,9 +71,45 @@ const PurchaseOrderView = () => {
         ? new Date(d.checkPostingDate).toISOString()
         : undefined,
     };
-    const sanitized =
-      d.paymentType === 'cash' ? forCashPayment : forCheckPayment;
-    mutatePurchaseOrderDisbursement(sanitized).then(() => refetch());
+    const forBankTransferPayment: DisbursementAttr = {
+      amount: d.amount,
+      details: d.details,
+      paymentType: d.paymentType,
+      chargeId: Number(data?.chargeId),
+      releasedBy: d.releasedBy,
+      transferBank: d.transferBank,
+      transferDate: d.transferDate
+        ? new Date(d.transferDate).toISOString()
+        : undefined,
+      referenceNumber: d.referenceNumber,
+    };
+    const forGcashPayment: DisbursementAttr = {
+      amount: d.amount,
+      details: d.details,
+      paymentType: d.paymentType,
+      chargeId: Number(data?.chargeId),
+      releasedBy: d.releasedBy,
+      transferTo: d.transferTo,
+      transferDate: d.transferDate
+        ? new Date(d.transferDate).toISOString()
+        : undefined,
+      referenceNumber: d.referenceNumber,
+    };
+    const sanitized = () => {
+      switch (d.paymentType) {
+        case 'cash':
+          return forCashPayment;
+        case 'check':
+          return forCheckPayment;
+        case 'bank-transfer':
+          return forBankTransferPayment;
+        case 'gcash':
+          return forGcashPayment;
+        default:
+          return forCashPayment;
+      }
+    };
+    mutatePurchaseOrderDisbursement(sanitized()).then(() => refetch());
   };
 
   useEffect(() => {

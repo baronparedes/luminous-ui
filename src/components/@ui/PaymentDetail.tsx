@@ -53,6 +53,32 @@ const PaymentDetail = ({
           </small>
         </div>
       )}
+      {paymentDetail.paymentType === 'bank-transfer' && (
+        <div className="text-muted">
+          <small className="pr-3">
+            <span>{paymentDetail.transferBank}</span>
+          </small>
+          <small className="pr-3">
+            <span>{paymentDetail.referenceNumber}</span>
+          </small>
+          <small>
+            <span>{formatDate(paymentDetail.transferDate, 'YYYY-MM-DD')}</span>
+          </small>
+        </div>
+      )}
+      {paymentDetail.paymentType === 'gcash' && (
+        <div className="text-muted">
+          <small className="pr-3">
+            <span>{paymentDetail.transferFrom}</span>
+          </small>
+          <small className="pr-3">
+            <span>{paymentDetail.referenceNumber}</span>
+          </small>
+          <small>
+            <span>{formatDate(paymentDetail.transferDate, 'YYYY-MM-DD')}</span>
+          </small>
+        </div>
+      )}
     </>
   );
 };

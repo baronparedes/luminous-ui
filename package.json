@@ -35,7 +35,7 @@
   },
   "scripts": {
     "restful": "restful-react import --file ../luminous-api/src/swagger.json --output ./src/Api.tsx",
-    "prestart": "npm run restful && node scripts/generate-version.js",
+    "prestart": "npm run restful",
     "start": "react-scripts start",
     "prebuild": "npm run fix && node scripts/generate-version.js",
     "build": "react-scripts build",

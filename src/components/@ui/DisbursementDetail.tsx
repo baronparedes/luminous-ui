@@ -47,6 +47,32 @@ const DisbursementDetail = ({disbursement, noCurrencyColor}: Props) => {
             </small>
           </div>
         )}
+        {disbursement.paymentType === 'bank-transfer' && (
+          <div className="text-muted">
+            <small className="pr-3">
+              <span>{disbursement.transferBank}</span>
+            </small>
+            <small className="pr-3">
+              <span>{disbursement.referenceNumber}</span>
+            </small>
+            <small>
+              <span>{formatDate(disbursement.transferDate, 'YYYY-MM-DD')}</span>
+            </small>
+          </div>
+        )}
+        {disbursement.paymentType === 'gcash' && (
+          <div className="text-muted">
+            <small className="pr-3">
+              <span>{disbursement.transferTo}</span>
+            </small>
+            <small className="pr-3">
+              <span>{disbursement.referenceNumber}</span>
+            </small>
+            <small>
+              <span>{formatDate(disbursement.transferDate, 'YYYY-MM-DD')}</span>
+            </small>
+          </div>
+        )}
         {disbursement.charge && (
           <>
             <span className="text-muted pr-2">for</span>

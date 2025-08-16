@@ -80,9 +80,45 @@ const ApproveVoucher = ({
             ? new Date(d.checkPostingDate).toISOString()
             : undefined,
         };
-        const sanitized =
-          d.paymentType === 'cash' ? forCashPayment : forCheckPayment;
-        return sanitized;
+        const forBankTransferPayment: DisbursementAttr = {
+          amount: d.amount,
+          details: d.details,
+          paymentType: d.paymentType,
+          chargeId,
+          releasedBy: d.releasedBy,
+          transferBank: d.transferBank,
+          transferDate: d.transferDate
+            ? new Date(d.transferDate).toISOString()
+            : undefined,
+          referenceNumber: d.referenceNumber,
+        };
+        const forGcashPayment: DisbursementAttr = {
+          amount: d.amount,
+          details: d.details,
+          paymentType: d.paymentType,
+          chargeId,
+          releasedBy: d.releasedBy,
+          transferTo: d.transferTo,
+          transferDate: d.transferDate
+            ? new Date(d.transferDate).toISOString()
+            : undefined,
+          referenceNumber: d.referenceNumber,
+        };
+        const sanitized = () => {
+          switch (d.paymentType) {
+            case 'cash':
+              return forCashPayment;
+            case 'check':
+              return forCheckPayment;
+            case 'bank-transfer':
+              return forBankTransferPayment;
+            case 'gcash':
+              return forGcashPayment;
+            default:
+              return forCashPayment;
+          }
+        };
+        return sanitized();
       }),
     };
 
