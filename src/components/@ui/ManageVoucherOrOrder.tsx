@@ -87,7 +87,11 @@ const ManageVoucherOrOrder = ({
 
   const onSubmit = (formData: CreateVoucherOrOrder) => {
     if (!confirm('Proceed?')) return;
-    onSave && onSave(formData);
+    onSave &&
+      onSave({
+        ...formData,
+        chargeId: Number(chargeId),
+      });
     setToggle(false);
   };
 

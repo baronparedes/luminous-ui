@@ -8,6 +8,7 @@ import {
   validateNoTrailingSpaces,
   validateUnique,
 } from '../@validation';
+import {useSettings} from '../../hooks';
 
 type Props = {
   codes: string[];
@@ -19,6 +20,7 @@ type FormData = {
 };
 
 const InputApprovalCodes = ({codes, onInputCode}: Props) => {
+  const {minApprovers} = useSettings();
   const {handleSubmit, control, formState, reset} = useForm<FormData>({
     defaultValues: {
       code: '',
@@ -33,7 +35,7 @@ const InputApprovalCodes = ({codes, onInputCode}: Props) => {
       <Form onSubmit={handleSubmit(onSubmit)} role="form">
         <Form.Group className="mb-3" controlId="form-code">
           <Form.Text className="text-muted">
-            Minimum of 3 approval codes
+            Minimum of {minApprovers} approval codes
           </Form.Text>
           <InputGroup>
             <Controller
