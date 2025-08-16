@@ -6,6 +6,7 @@ import {useRootState} from '../store';
 export type ChargeIds = {
   waterChargeId?: number;
   communityChargeId?: number;
+  commonChargeId?: number;
 };
 
 export type Settings = {
@@ -18,6 +19,7 @@ export type Settings = {
 export function useSettings(): Settings {
   const [waterChargeId, setWaterChargeId] = useState<number>();
   const [communityChargeId, setCommunityChargeId] = useState<number>();
+  const [commonChargeId, setCommonChargeId] = useState<number>();
   const [loading, setLoading] = useState<boolean>(true);
 
   const settings = useRootState(state => state.setting.values);
@@ -36,10 +38,6 @@ export function useSettings(): Settings {
     const waterChargeIdSetting = settings.find(
       s => s.key === SETTING_KEYS.WATER_CHARGE_ID
     );
-    const communityChargeIdSetting = settings.find(
-      s => s.key === SETTING_KEYS.COMMUNITY_CHARGE_ID
-    );
-
     if (waterChargeIdSetting) {
       const parsedValue = parseInt(waterChargeIdSetting.value);
       if (!isNaN(parsedValue)) {
@@ -47,10 +45,23 @@ export function useSettings(): Settings {
       }
     }
 
+    const communityChargeIdSetting = settings.find(
+      s => s.key === SETTING_KEYS.COMMUNITY_CHARGE_ID
+    );
     if (communityChargeIdSetting) {
       const parsedValue = parseInt(communityChargeIdSetting.value);
       if (!isNaN(parsedValue)) {
         setCommunityChargeId(parsedValue);
+      }
+    }
+
+    const commonChargeIdSetting = settings.find(
+      s => s.key === SETTING_KEYS.COMMON_CHARGE_ID
+    );
+    if (commonChargeIdSetting) {
+      const parsedValue = parseInt(commonChargeIdSetting.value);
+      if (!isNaN(parsedValue)) {
+        setCommonChargeId(parsedValue);
       }
     }
 
@@ -66,6 +77,7 @@ export function useSettings(): Settings {
     chargeIds: {
       waterChargeId,
       communityChargeId,
+      commonChargeId,
     },
     billingCutoffDay: getIntegerSetting(
       SETTING_KEYS.BILLING_CUTOFF_DAY,
