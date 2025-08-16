@@ -16,6 +16,7 @@ import {
   PurchaseOrderAttr,
   useApprovePurchaseOrder,
 } from '../../../Api';
+import {useSettings} from '../../../hooks';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import InputApprovalCodes from '../../@ui/InputApprovalCodes';
 import ModalContainer from '../../@ui/ModalContainer';
@@ -35,7 +36,8 @@ const ApprovePurchaseOrder = ({
   const [toggle, setToggle] = useState(false);
   const [codes, setCodes] = useState<string[]>([]);
   const {mutate, loading, error} = useApprovePurchaseOrder({});
-  const canApprove = codes.length >= 3;
+  const {minApprovers} = useSettings();
+  const canApprove = codes.length >= minApprovers;
 
   const handleOnApprove = () => {
     const data: ApproveVoucherOrOrder = {

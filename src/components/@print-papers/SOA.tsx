@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import {WaterReading} from '../../@types';
 import {calculateAccount, getNames, sum} from '../../@utils/helpers';
 import {Month, PropertyAccount, SettingAttr, TransactionAttr} from '../../Api';
-import {DEFAULTS} from '../../constants';
 import {Currency} from '../@ui/Currency';
 import Markup from '../@ui/Markup';
 import PaymentDetail from '../@ui/PaymentDetail';
 import {PageHeader, PageSection} from './PaperPdf';
+import {useSettings} from '../../hooks';
 
 const Label = styled('div')`
   font-size: 1.5em;
@@ -27,6 +27,9 @@ const SOA = ({hasPageBreak, propertyAccount, month, year, notes}: Props) => {
   const {currentBalance, previousBalance, collectionBalance} =
     calculateAccount(propertyAccount);
   const {transactions, property, balance, paymentDetails} = propertyAccount;
+  const {
+    chargeIds: {waterChargeId},
+  } = useSettings();
   return (
     <PageSection hasPageBreak={hasPageBreak}>
       <PageHeader title="STATEMENT OF ACCOUNT" />
@@ -84,14 +87,14 @@ const SOA = ({hasPageBreak, propertyAccount, month, year, notes}: Props) => {
                     }
                   };
                   const unit =
-                    t.chargeId === DEFAULTS.WATER_CHARGE_ID
+                    t.chargeId === waterChargeId
                       ? getWaterUsage(t)
                       : property?.floorArea;
                   return (
                     <tr key={i}>
                       <td>{t.charge?.code}</td>
                       <td>{t.rateSnapshot}</td>
-                      <td>{unit}</td>
+                      <td>{unit ?? ''}</td>
                       <td className="float-right">
                         <strong>
                           <Currency noCurrencyColor currency={t.amount} />

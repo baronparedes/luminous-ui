@@ -1,10 +1,22 @@
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {RestfulProvider} from 'restful-react';
+import styled from 'styled-components';
 
 import config from './config';
 import {useRootState} from './store';
 import {profileActions} from './store/reducers/profile.reducer';
+import Footer from './components/@ui/Footer';
+
+const AppContainer = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+`;
+
+const MainContent = styled.div`
+  flex: 1;
+`;
 
 const App: React.FC = props => {
   const dispatch = useDispatch();
@@ -24,10 +36,10 @@ const App: React.FC = props => {
         }
       }}
     >
-      <div id="content">
-        {props.children}
-        <span className="p-3" />
-      </div>
+      <AppContainer id="content">
+        <MainContent>{props.children}</MainContent>
+        <Footer />
+      </AppContainer>
     </RestfulProvider>
   );
 };

@@ -1,4 +1,5 @@
 {
+    "files.eol": "\n",
     "jestrunner.jestCommand": "npm run test --",
-    "files.eol": "\n"
+    "jest.runMode": "watch"
 }

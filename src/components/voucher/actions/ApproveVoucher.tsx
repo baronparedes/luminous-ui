@@ -19,6 +19,7 @@ import {
   useApproveVoucher,
   VoucherAttr,
 } from '../../../Api';
+import {useSettings} from '../../../hooks';
 import AddDisbursement from '../../@ui/AddDisbursement';
 import {Currency} from '../../@ui/Currency';
 import DisbursementDetail from '../../@ui/DisbursementDetail';
@@ -50,9 +51,10 @@ const ApproveVoucher = ({
   const [toggle, setToggle] = useState(false);
   const [codes, setCodes] = useState<string[]>([]);
   const {mutate, loading, error} = useApproveVoucher({});
+  const {minApprovers} = useSettings();
 
   const remainingCost = totalCost - sum(disbursements.map(d => d.amount));
-  const canApprove = codes.length >= 3 && remainingCost === 0;
+  const canApprove = codes.length >= minApprovers && remainingCost === 0;
 
   const handleOnApprove = () => {
     const data: ApproveVoucherOrOrder = {

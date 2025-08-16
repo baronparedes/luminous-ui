@@ -7,7 +7,7 @@ import {
   useGetAllPurchaseRequestsByChargeAndStatus,
   usePostPurchaseRequest,
 } from '../../Api';
-import {useChargeBalance} from '../../hooks/useChargeBalance';
+import {useChargeBalance} from '../../hooks';
 import {Currency} from '../@ui/Currency';
 import ManageVoucherOrOrder from '../@ui/ManageVoucherOrOrder';
 import RoundedPanel from '../@ui/RoundedPanel';

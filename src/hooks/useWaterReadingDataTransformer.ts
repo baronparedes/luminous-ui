@@ -3,7 +3,7 @@ import {v4 as uuidv4} from 'uuid';
 
 import {toTransactionPeriod} from '../@utils/dates';
 import {ChargeAttr, Period, PropertyAttr, TransactionAttr} from '../Api';
-import {DEFAULTS} from '../constants';
+import {useSettings} from './';
 import {WaterReadingData} from './useWaterReadingFile';
 
 function toTransaction(
@@ -64,18 +64,22 @@ export function useWaterReadingDataTransformer(
   const [transactions, setTransactions] = useState<TransactionAttr[]>([]);
   const [charge, setCharge] = useState<ChargeAttr>();
 
-  useEffect(() => {
-    const targetCharge = charges?.find(c => c.id === DEFAULTS.WATER_CHARGE_ID);
-    setCharge(targetCharge);
-  }, [JSON.stringify(charges?.map(p => p.id))]);
+  const {
+    chargeIds: {waterChargeId},
+  } = useSettings();
 
   useEffect(() => {
-    if (charge === undefined) {
+    const targetCharge = charges?.find(c => c.id === waterChargeId);
+    setCharge(targetCharge);
+  }, [JSON.stringify(charges?.map(p => p.id)), waterChargeId]);
+
+  useEffect(() => {
+    if (waterChargeId === undefined) {
       setError('unable to locate charge for water utility');
     } else {
       setError(undefined);
     }
-  }, [charge]);
+  }, [waterChargeId]);
 
   useEffect(() => {
     if (charge && properties && period && data.length > 0) {

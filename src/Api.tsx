@@ -43,6 +43,10 @@ export interface ChargeAttr {
   thresholdInMonths?: number | null;
   priority?: number | null;
   passOn?: boolean | null;
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: number;
+  updatedBy?: number;
 }
 
 export interface ChargeCollected {
@@ -137,6 +141,9 @@ export interface DisbursementAttr {
   releasedByProfile?: ProfileAttr;
   charge?: ChargeAttr;
   createdAt?: string;
+  updatedAt?: string;
+  createdBy?: number;
+  updatedBy?: number;
 }
 
 export interface FieldError {
@@ -185,6 +192,10 @@ export interface PropertyAttr {
   floorArea: number;
   address: string;
   status: RecordStatus;
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: number;
+  updatedBy?: number;
 }
 
 export interface PaymentDetailAttr {
@@ -196,6 +207,9 @@ export interface PaymentDetailAttr {
   checkPostingDate?: string;
   checkIssuingBank?: string;
   createdAt?: string;
+  updatedAt?: string;
+  createdBy?: number;
+  updatedBy?: number;
 }
 
 export interface TransactionAttr {
@@ -214,6 +228,9 @@ export interface TransactionAttr {
   rateSnapshot?: number;
   batchId?: string | null;
   createdAt?: string;
+  updatedAt?: string;
+  createdBy?: number;
+  updatedBy?: number;
 }
 
 export interface PropertyAccount {
@@ -267,30 +284,38 @@ export interface ExpenseAttr {
   unitCost: number;
   totalCost: number;
   waivedBy?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: number;
+  updatedBy?: number;
 }
 
 export interface PurchaseOrderAttr {
-  series: string;
-  isClosed?: boolean;
-  approverProfiles?: ProfileAttr[];
-  rejectedByProfile?: ProfileAttr;
-  requestedByProfile?: ProfileAttr;
-  disbursements?: DisbursementAttr[];
-  expenses?: ExpenseAttr[];
-  comments?: string | null;
-  rejectedBy?: number;
-  approvedBy?: string | null;
-  requestedDate: string;
-  requestedBy: number;
-  status: RequestStatus;
-  totalCost: number;
-  description: string;
-  chargeId: number;
-  otherDetails?: string | null;
-  fulfillmentDate: string;
-  vendorName: string;
-  purchaseRequestId: number;
   id?: number;
+  purchaseRequestId: number;
+  vendorName: string;
+  fulfillmentDate: string;
+  otherDetails?: string | null;
+  chargeId: number;
+  description: string;
+  totalCost: number;
+  status: RequestStatus;
+  requestedBy: number;
+  requestedDate: string;
+  approvedBy?: string | null;
+  rejectedBy?: number;
+  comments?: string | null;
+  expenses?: ExpenseAttr[];
+  disbursements?: DisbursementAttr[];
+  requestedByProfile?: ProfileAttr;
+  rejectedByProfile?: ProfileAttr;
+  approverProfiles?: ProfileAttr[];
+  isClosed?: boolean;
+  series: string;
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: number;
+  updatedBy?: number;
 }
 
 export interface CreatePurchaseOrder {
@@ -330,21 +355,25 @@ export interface CancelPurchaseOrder {
 }
 
 export interface PurchaseRequestAttr {
-  series: string;
-  approverProfiles?: ProfileAttr[];
-  rejectedByProfile?: ProfileAttr;
-  requestedByProfile?: ProfileAttr;
-  expenses?: ExpenseAttr[];
-  comments?: string | null;
-  rejectedBy?: number;
-  approvedBy?: string | null;
-  requestedDate: string;
-  requestedBy: number;
-  status: RequestStatus;
-  totalCost: number;
-  description: string;
-  chargeId: number;
   id?: number;
+  chargeId: number;
+  description: string;
+  totalCost: number;
+  status: RequestStatus;
+  requestedBy: number;
+  requestedDate: string;
+  approvedBy?: string | null;
+  rejectedBy?: number;
+  comments?: string | null;
+  expenses?: ExpenseAttr[];
+  requestedByProfile?: ProfileAttr;
+  rejectedByProfile?: ProfileAttr;
+  approverProfiles?: ProfileAttr[];
+  series: string;
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: number;
+  updatedBy?: number;
 }
 
 export interface RejectPurchaseRequest {
@@ -356,13 +385,22 @@ export interface RejectPurchaseRequest {
 export interface SettingAttr {
   key: string;
   value: string;
+  communityId?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: number;
+  updatedBy?: number;
 }
 
 export interface CategoryAttr {
-  subCategories: string;
-  description: string;
-  communityId: number;
   id?: number;
+  communityId: number;
+  description: string;
+  subCategories: string;
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: number;
+  updatedBy?: number;
 }
 
 export interface PostTransactionBody {
@@ -415,6 +453,10 @@ export interface VoucherAttr {
   approverProfiles?: ProfileAttr[];
   charge?: ChargeAttr;
   series: string;
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: number;
+  updatedBy?: number;
 }
 
 export interface RejectVoucher {

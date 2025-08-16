@@ -5,13 +5,13 @@ import {WaterReading} from '../../@types';
 import {getCurrentMonthYear} from '../../@utils/dates';
 import {calculateAccount, sum} from '../../@utils/helpers';
 import {PropertyAccount} from '../../Api';
-import {DEFAULTS} from '../../constants';
 import {Currency} from '../@ui/Currency';
 import {LabeledCurrency} from '../@ui/LabeledCurrency';
 import PaymentDetail from '../@ui/PaymentDetail';
 import RoundedPanel from '../@ui/RoundedPanel';
 import {Table} from '../@ui/Table';
 import PrintStatementOfAccount from './actions/PrintStatementOfAccount';
+import {useSettings} from '../../hooks';
 
 type Props = {
   propertyAccount: PropertyAccount;
@@ -22,6 +22,9 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
   const {transactions} = propertyAccount;
   const {currentBalance, previousBalance, collectionBalance} =
     calculateAccount(propertyAccount);
+  const {
+    chargeIds: {waterChargeId},
+  } = useSettings();
   return (
     <>
       <RoundedPanel className="p-0 m-auto">
@@ -54,7 +57,7 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
                 .filter(t => t.transactionType === 'charged')
                 .map((t, i) => {
                   const parseUnit = (chargeId: number | undefined) => {
-                    if (chargeId === DEFAULTS.WATER_CHARGE_ID) {
+                    if (chargeId === waterChargeId) {
                       try {
                         return (JSON.parse(t.comments ?? '') as WaterReading)
                           .usage;

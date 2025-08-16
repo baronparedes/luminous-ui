@@ -1,7 +1,5 @@
 import faker from 'faker';
 
-import {renderHook} from '@testing-library/react-hooks';
-
 import {
   getCurrentMonthYear,
   toTransactionPeriodFromDate,
@@ -10,16 +8,19 @@ import {
   generateFakeCharge,
   generateFakeProperty,
 } from '../../@utils/fake-models';
-import {DEFAULTS} from '../../constants';
 import {useWaterReadingDataTransformer} from '../useWaterReadingDataTransformer';
 import {WaterReadingData} from '../useWaterReadingFile';
+import {renderHookWithProvider} from '../../@utils/test-renderers';
+import {settingActions} from '../../store/reducers/setting.reducer';
+import {SETTING_KEYS} from '../../constants';
 
 describe('useWaterReadingDataTransformer', () => {
+  const waterChargeId = faker.datatype.number({min: 1, max: 10});
   const charges = [
     generateFakeCharge(),
     {
       ...generateFakeCharge(),
-      id: DEFAULTS.WATER_CHARGE_ID,
+      id: waterChargeId,
     },
   ];
 
@@ -33,8 +34,18 @@ describe('useWaterReadingDataTransformer', () => {
   ];
 
   it('should return no error when target charge found', () => {
-    const target = renderHook(() =>
-      useWaterReadingDataTransformer([], charges, undefined, undefined)
+    const target = renderHookWithProvider(
+      () => useWaterReadingDataTransformer([], charges, undefined, undefined),
+      store => {
+        store.dispatch(
+          settingActions.init([
+            {
+              key: SETTING_KEYS.WATER_CHARGE_ID,
+              value: waterChargeId.toString(),
+            },
+          ])
+        );
+      }
     );
 
     expect(target.result.current.error).toEqual(undefined);
@@ -44,7 +55,7 @@ describe('useWaterReadingDataTransformer', () => {
   });
 
   it('should return error when target charge is not found', () => {
-    const target = renderHook(() =>
+    const target = renderHookWithProvider(() =>
       useWaterReadingDataTransformer(
         [],
         [generateFakeCharge()],
@@ -70,8 +81,18 @@ describe('useWaterReadingDataTransformer', () => {
         rate: null,
       },
     ];
-    const target = renderHook(() =>
-      useWaterReadingDataTransformer(data, charges, properties, period)
+    const target = renderHookWithProvider(
+      () => useWaterReadingDataTransformer(data, charges, properties, period),
+      store => {
+        store.dispatch(
+          settingActions.init([
+            {
+              key: SETTING_KEYS.WATER_CHARGE_ID,
+              value: waterChargeId.toString(),
+            },
+          ])
+        );
+      }
     );
 
     expect(target.result.current.error).toEqual(undefined);
@@ -101,8 +122,18 @@ describe('useWaterReadingDataTransformer', () => {
         rate: faker.datatype.number(),
       },
     ];
-    const target = renderHook(() =>
-      useWaterReadingDataTransformer(data, charges, properties, period)
+    const target = renderHookWithProvider(
+      () => useWaterReadingDataTransformer(data, charges, properties, period),
+      store => {
+        store.dispatch(
+          settingActions.init([
+            {
+              key: SETTING_KEYS.WATER_CHARGE_ID,
+              value: waterChargeId.toString(),
+            },
+          ])
+        );
+      }
     );
 
     expect(target.result.current.error).toEqual(undefined);
@@ -124,7 +155,7 @@ describe('useWaterReadingDataTransformer', () => {
         presentReading: expected?.presentReading,
         usage: expectedUsage,
       };
-      expect(actual.chargeId).toEqual(DEFAULTS.WATER_CHARGE_ID);
+      expect(actual.chargeId).toEqual(waterChargeId);
       expect(actual.propertyId).toEqual(expectedProperty?.id);
       expect(actual.comments).toEqual(JSON.stringify(expectedComments));
       expect(

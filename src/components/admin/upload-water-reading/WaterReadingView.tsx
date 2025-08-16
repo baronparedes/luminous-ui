@@ -13,9 +13,11 @@ import {
   useGetWaterReadingByPeriod,
   usePostTransactions,
 } from '../../../Api';
-import {useWaterReadingDataTransformer} from '../../../hooks/useWaterReadingDataTransformer';
-import {useWaterReadingFile} from '../../../hooks/useWaterReadingFile';
-import ErrorInfo from '../../@ui/ErrorInfo';
+import {
+  useSettings,
+  useWaterReadingDataTransformer,
+  useWaterReadingFile,
+} from '../../../hooks';
 import Loading from '../../@ui/Loading';
 import ModalContainer from '../../@ui/ModalContainer';
 import RoundedPanel from '../../@ui/RoundedPanel';
@@ -44,7 +46,9 @@ const WaterReadingView = () => {
   const {data: properties, loading: loadingProperties} = useGetAllProperties(
     {}
   );
-
+  const {
+    chargeIds: {waterChargeId},
+  } = useSettings();
   const {sheets, data} = useWaterReadingFile(
     selectedFile ? selectedFile[0] : undefined,
     selectedSheet
@@ -115,9 +119,22 @@ const WaterReadingView = () => {
             onPeriodSelect={handleOnSelect}
             buttonLabel="select file"
             disabled={
-              toggle || loadingCharges || loadingProperties || inProgress
+              toggle ||
+              loadingCharges ||
+              loadingProperties ||
+              inProgress ||
+              !waterChargeId
             }
           />
+          {!waterChargeId && (
+            <Alert variant="warning" className="mt-3">
+              <strong>Water charge ID not configured!</strong>
+              <br />
+              Please configure the water charge ID in the settings before
+              uploading water readings. Contact your administrator if you need
+              assistance.
+            </Alert>
+          )}
           <ModalContainer
             toggle={toggle}
             onClose={() => setToggle(false)}
@@ -187,6 +204,7 @@ const WaterReadingView = () => {
                   variant={
                     hasWaterReadingForSelectedPeriod ? 'warning' : 'primary'
                   }
+                  disabled={!waterChargeId}
                 >
                   Process
                 </Button>
@@ -195,11 +213,6 @@ const WaterReadingView = () => {
           </ModalContainer>
         </RoundedPanel>
         {inProgress && <Loading className="pt-3" />}
-        {!loadingCharges && !loadingProperties && error && (
-          <div className="pt-3">
-            <ErrorInfo>{error}</ErrorInfo>
-          </div>
-        )}
         {!error && parseErrors.length > 0 && (
           <>
             <RoundedPanel className="mt-3 p-3">

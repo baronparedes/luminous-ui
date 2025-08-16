@@ -1,6 +1,6 @@
 {
   "name": "luminous-ui",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "private": true,
   "dependencies": {
     "@hookform/error-message": "^2.0.0",
@@ -35,9 +35,9 @@
   },
   "scripts": {
     "restful": "restful-react import --file ../luminous-api/src/swagger.json --output ./src/Api.tsx",
-    "prestart": "npm run restful",
+    "prestart": "npm run restful && node scripts/generate-version.js",
     "start": "react-scripts start",
-    "prebuild": "npm run fix",
+    "prebuild": "npm run fix && node scripts/generate-version.js",
     "build": "react-scripts build",
     "posttest": "npm.cmd run lint",
     "test": "react-scripts test",

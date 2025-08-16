@@ -1,4 +1,4 @@
-import {render, within} from '@testing-library/react';
+import {within} from '@testing-library/react';
 
 import {currencyFormat, roundOff} from '../../../@utils/currencies';
 import {formatDate} from '../../../@utils/dates';
@@ -7,6 +7,7 @@ import {calculateAccount, sum} from '../../../@utils/helpers';
 import {TransactionAttr} from '../../../Api';
 import PrintStatementOfAccount from '../actions/PrintStatementOfAccount';
 import PropertyStatementOfAccount from '../PropertyStatementOfAccount';
+import {renderWithProvider} from '../../../@utils/test-renderers';
 
 type PrintStatementOfAccountProps = React.ComponentProps<
   typeof PrintStatementOfAccount
@@ -46,7 +47,7 @@ describe('PropertyStatementOfAccount', () => {
 
     const expectedPaymentDetails = mockedPropertyAccount.paymentDetails;
 
-    const {getByText, getByRole, getByTitle} = render(
+    const {getByText, getByRole, getByTitle} = renderWithProvider(
       <PropertyStatementOfAccount propertyAccount={mockedPropertyAccount} />
     );
 

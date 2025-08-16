@@ -1,5 +1,6 @@
 import fs from 'fs';
 import nock from 'nock';
+import faker from 'faker';
 
 import {waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -8,25 +9,29 @@ import {
   generateFakeCharge,
   generateFakeProperty,
 } from '../../../../@utils/fake-models';
-import {renderWithRestfulAndRouter} from '../../../../@utils/test-renderers';
-import {DEFAULTS} from '../../../../constants';
+import {
+  renderWithProviderAndRouterAndRestful,
+  renderWithRestfulAndRouter,
+} from '../../../../@utils/test-renderers';
 import WaterReadingView from '../WaterReadingView';
+import {set} from 'react-hook-form';
+import {settingActions} from '../../../../store/reducers/setting.reducer';
+import {SETTING_KEYS} from '../../../../constants';
 
 describe('WaterReadingView', () => {
   const base = 'http://localhost';
   const fileName = `${__dirname}/@data/water_reading.xlsx`;
   const stream = fs.readFileSync(fileName);
   const file = new File([stream], 'water_reading.xlsx');
+  const waterChargeId = faker.datatype.number({min: 1, max: 10});
 
   const charges = [
     generateFakeCharge(),
     {
       ...generateFakeCharge(),
-      id: DEFAULTS.WATER_CHARGE_ID,
+      id: waterChargeId,
     },
   ];
-
-  //   const period = getCurrentMonthYear();
 
   const properties = [
     {...generateFakeProperty(), code: 'G-101'},
@@ -42,12 +47,13 @@ describe('WaterReadingView', () => {
 
     nock(base).get('/api/property/getAll').reply(200, []);
 
-    const {getByText} = renderWithRestfulAndRouter(<WaterReadingView />, base);
+    const {getByText} = renderWithProviderAndRouterAndRestful(
+      <WaterReadingView />,
+      base
+    );
     expect(getByText(/select file/)).toBeDisabled();
     await waitFor(() =>
-      expect(
-        getByText(/unable to locate charge for water utility/i)
-      ).toBeInTheDocument()
+      expect(getByText(/Water charge ID not configured!/i)).toBeInTheDocument()
     );
   });
 
@@ -76,7 +82,20 @@ describe('WaterReadingView', () => {
       getByPlaceholderText,
       queryByRole,
       queryByText,
-    } = renderWithRestfulAndRouter(<WaterReadingView />, base);
+    } = renderWithProviderAndRouterAndRestful(
+      <WaterReadingView />,
+      base,
+      store => {
+        store.dispatch(
+          settingActions.init([
+            {
+              key: SETTING_KEYS.WATER_CHARGE_ID,
+              value: waterChargeId.toString(),
+            },
+          ])
+        );
+      }
+    );
 
     await waitFor(() => expect(getByText(/select file/)).toBeEnabled());
 
