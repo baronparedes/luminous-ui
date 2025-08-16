@@ -4,13 +4,25 @@ import {render, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import InputApprovalCodes from '../InputApprovalCodes';
+import {renderWithProvider} from '../../../@utils/test-renderers';
+import {settingActions} from '../../../store/reducers/setting.reducer';
+import {SETTING_KEYS} from '../../../constants';
 
 describe('InputApprovalCodes', () => {
   it('should render and add approval code', async () => {
     const approvalCode = faker.random.alphaNumeric(6);
     const mockOnInputCode = jest.fn();
-    const {getByTitle, getByPlaceholderText} = render(
-      <InputApprovalCodes codes={[]} onInputCode={mockOnInputCode} />
+    const {getByTitle, getByPlaceholderText} = renderWithProvider(
+      <InputApprovalCodes codes={[]} onInputCode={mockOnInputCode} />,
+      store =>
+        store.dispatch(
+          settingActions.init([
+            {
+              key: SETTING_KEYS.MIN_APPROVERS,
+              value: '3',
+            },
+          ])
+        )
     );
     userEvent.type(getByPlaceholderText(/code/i), approvalCode);
     userEvent.click(getByTitle(/add code/i));
@@ -32,8 +44,17 @@ describe('InputApprovalCodes', () => {
     'should not accept invalid values [$description]',
     async ({invalidValue, expectedErrorLabel}) => {
       const mockOnInputCode = jest.fn();
-      const {getByTitle, getByText, getByPlaceholderText} = render(
-        <InputApprovalCodes codes={['123456']} onInputCode={mockOnInputCode} />
+      const {getByTitle, getByText, getByPlaceholderText} = renderWithProvider(
+        <InputApprovalCodes codes={['123456']} onInputCode={mockOnInputCode} />,
+        store =>
+          store.dispatch(
+            settingActions.init([
+              {
+                key: SETTING_KEYS.MIN_APPROVERS,
+                value: '3',
+              },
+            ])
+          )
       );
 
       userEvent.type(getByPlaceholderText(/code/i), invalidValue);

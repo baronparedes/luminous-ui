@@ -56,6 +56,18 @@ describe('AddDisbursement', () => {
     const checkIssuingBankInput = target.queryByPlaceholderText(
       /check issuing bank/i
     ) as HTMLInputElement | null;
+    const referenceNumberInput = target.queryByPlaceholderText(
+      /reference number/i
+    ) as HTMLInputElement | null;
+    const transferBankInput = target.queryByPlaceholderText(
+      /transfer bank/i
+    ) as HTMLInputElement | null;
+    const transferToInput = target.queryByPlaceholderText(
+      /to gcash number/i
+    ) as HTMLInputElement | null;
+    const transferDateInput = target.queryByPlaceholderText(
+      /transfer date/i
+    ) as HTMLInputElement | null;
 
     expect(amountInput).toBeInTheDocument();
     expect(detailsInput).toBeInTheDocument();
@@ -81,6 +93,34 @@ describe('AddDisbursement', () => {
           disbursement.checkIssuingBank as string
         );
       }
+      if (disbursement.paymentType === 'bank-transfer') {
+        userEvent.type(
+          referenceNumberInput as HTMLInputElement,
+          disbursement.referenceNumber as string
+        );
+        userEvent.type(
+          transferDateInput as HTMLInputElement,
+          disbursement.transferDate as string
+        );
+        userEvent.type(
+          transferBankInput as HTMLInputElement,
+          disbursement.transferBank as string
+        );
+      }
+      if (disbursement.paymentType === 'gcash') {
+        userEvent.type(
+          referenceNumberInput as HTMLInputElement,
+          disbursement.referenceNumber as string
+        );
+        userEvent.type(
+          transferDateInput as HTMLInputElement,
+          disbursement.transferDate as string
+        );
+        userEvent.type(
+          transferToInput as HTMLInputElement,
+          disbursement.transferTo as string
+        );
+      }
     };
 
     return {
@@ -92,6 +132,10 @@ describe('AddDisbursement', () => {
       checkNumberInput,
       checkPostingDateInput,
       checkIssuingBankInput,
+      transferBankInput,
+      transferDateInput,
+      transferToInput,
+      referenceNumberInput,
     };
   }
 
@@ -101,12 +145,20 @@ describe('AddDisbursement', () => {
       checkNumberInput,
       checkPostingDateInput,
       checkIssuingBankInput,
+      transferBankInput,
+      transferDateInput,
+      transferToInput,
+      referenceNumberInput,
     } = await renderTarget('cash');
 
     expect(paymentTypeInput.value).toEqual('cash');
     expect(checkNumberInput).not.toBeInTheDocument();
     expect(checkPostingDateInput).not.toBeInTheDocument();
     expect(checkIssuingBankInput).not.toBeInTheDocument();
+    expect(transferBankInput).not.toBeInTheDocument();
+    expect(transferDateInput).not.toBeInTheDocument();
+    expect(transferToInput).not.toBeInTheDocument();
+    expect(referenceNumberInput).not.toBeInTheDocument();
   });
 
   it('should render when payment type is check', async () => {
@@ -115,6 +167,10 @@ describe('AddDisbursement', () => {
       checkIssuingBankInput,
       checkPostingDateInput,
       checkNumberInput,
+      transferBankInput,
+      transferDateInput,
+      transferToInput,
+      referenceNumberInput,
     } = await renderTarget('check');
 
     expect(paymentTypeInput.value).toEqual('check');
@@ -123,6 +179,60 @@ describe('AddDisbursement', () => {
       expect(checkIssuingBankInput).toBeInTheDocument();
       expect(checkPostingDateInput).toBeInTheDocument();
       expect(checkNumberInput).toBeInTheDocument();
+      expect(transferBankInput).not.toBeInTheDocument();
+      expect(transferDateInput).not.toBeInTheDocument();
+      expect(transferToInput).not.toBeInTheDocument();
+      expect(referenceNumberInput).not.toBeInTheDocument();
+    });
+  });
+
+  it('should render when payment type is bank-transfer', async () => {
+    const {
+      paymentTypeInput,
+      checkIssuingBankInput,
+      checkPostingDateInput,
+      checkNumberInput,
+      transferBankInput,
+      transferDateInput,
+      transferToInput,
+      referenceNumberInput,
+    } = await renderTarget('bank-transfer');
+
+    expect(paymentTypeInput.value).toEqual('bank-transfer');
+
+    await waitFor(() => {
+      expect(checkIssuingBankInput).not.toBeInTheDocument();
+      expect(checkPostingDateInput).not.toBeInTheDocument();
+      expect(checkNumberInput).not.toBeInTheDocument();
+      expect(transferBankInput).toBeInTheDocument();
+      expect(transferDateInput).toBeInTheDocument();
+      expect(transferToInput).not.toBeInTheDocument();
+      expect(referenceNumberInput).toBeInTheDocument();
+    });
+  });
+
+  it('should render when payment type is gcash', async () => {
+    const {
+      paymentTypeInput,
+      checkIssuingBankInput,
+      checkPostingDateInput,
+      checkNumberInput,
+      transferBankInput,
+      transferDateInput,
+      transferToInput,
+      referenceNumberInput,
+    } = await renderTarget('gcash');
+
+    expect(paymentTypeInput.value).toEqual('gcash');
+
+    await waitFor(() => {
+      expect(checkIssuingBankInput).not.toBeInTheDocument();
+      expect(checkPostingDateInput).not.toBeInTheDocument();
+      expect(checkNumberInput).not.toBeInTheDocument();
+      expect(transferBankInput).not.toBeInTheDocument();
+      expect(transferDateInput).toBeInTheDocument();
+      expect(transferToInput).toBeInTheDocument();
+      expect(referenceNumberInput).toBeInTheDocument();
     });
   });
 
@@ -130,6 +240,8 @@ describe('AddDisbursement', () => {
     paymentType
     ${'cash'}
     ${'check'}
+    ${'bank-transfer'}
+    ${'gcash'}
   `(
     'should submit form correctly when payment type is $paymentType',
     async ({paymentType}) => {
@@ -159,14 +271,40 @@ describe('AddDisbursement', () => {
           checkPostingDate: '',
           checkIssuingBank: '',
           checkNumber: '',
+          transferBank: '',
+          transferDate: '',
+          transferTo: '',
+          referenceNumber: '',
         });
-      } else {
+      } else if (paymentType === 'check') {
         expect(mockOnDisburse).toHaveBeenCalledWith({
           ...mockedDisbursement,
           id: undefined,
           chargeId: expectedChargeId,
           amount: mockedDisbursement.amount.toString(),
           checkPostingDate: mockedDisbursement.checkPostingDate?.substr(0, 10),
+          transferBank: '',
+          transferDate: '',
+          transferTo: '',
+          referenceNumber: '',
+        });
+      } else if (paymentType === 'bank-transfer' || paymentType === 'gcash') {
+        expect(mockOnDisburse).toHaveBeenCalledWith({
+          ...mockedDisbursement,
+          id: undefined,
+          chargeId: expectedChargeId,
+          amount: mockedDisbursement.amount.toString(),
+          transferBank:
+            paymentType === 'bank-transfer'
+              ? mockedDisbursement.transferBank
+              : '',
+          transferDate: mockedDisbursement.transferDate?.substr(0, 10),
+          transferTo:
+            paymentType === 'gcash' ? mockedDisbursement.transferTo : '',
+          referenceNumber: mockedDisbursement.referenceNumber,
+          checkPostingDate: '',
+          checkIssuingBank: '',
+          checkNumber: '',
         });
       }
     }
@@ -176,11 +314,21 @@ describe('AddDisbursement', () => {
     field                    | skipEmptyCheck | paymentType
     ${/details/i}            | ${false}       | ${'cash'}
     ${/details/i}            | ${false}       | ${'check'}
+    ${/details/i}            | ${false}       | ${'bank-transfer'}
+    ${/details/i}            | ${false}       | ${'gcash'}
+    ${/amount to release/i}  | ${true}        | ${'cash'}
+    ${/amount to release/i}  | ${true}        | ${'check'}
+    ${/amount to release/i}  | ${true}        | ${'bank-transfer'}
+    ${/amount to release/i}  | ${true}        | ${'gcash'}
     ${/check number/i}       | ${false}       | ${'check'}
     ${/check posting date/i} | ${true}        | ${'check'}
     ${/check issuing bank/i} | ${false}       | ${'check'}
-    ${/amount to release/i}  | ${true}        | ${'cash'}
-    ${/amount to release/i}  | ${true}        | ${'check'}
+    ${/reference number/i}   | ${false}       | ${'bank-transfer'}
+    ${/transfer bank/i}      | ${false}       | ${'bank-transfer'}
+    ${/transfer date/i}      | ${true}        | ${'bank-transfer'}
+    ${/reference number/i}   | ${false}       | ${'gcash'}
+    ${/to gcash number/i}    | ${false}       | ${'gcash'}
+    ${/transfer date/i}      | ${true}        | ${'gcash'}
   `(
     'should require $field input or not be empty when payment type is $paymentType',
     async ({field, paymentType, skipEmptyCheck}) => {
