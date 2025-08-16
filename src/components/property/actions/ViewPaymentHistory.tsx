@@ -38,12 +38,12 @@ type Props = {
 type RefundButtonProps = {
   totalCollected: number;
   paymentDetail: PaymentDetailAttr;
-  propertyId: number;
+  propertyId?: number;
   refundedBy: number;
   onRefundComplete?: () => void;
 };
 
-const RefundPaymentButton = ({
+export const RefundPaymentButton = ({
   totalCollected,
   paymentDetail,
   propertyId,
@@ -53,7 +53,7 @@ const RefundPaymentButton = ({
   const [toggle, setToggle] = useState(false);
   const [comments, setComments] = useState('');
 
-  const {mutate} = useRefundPayment({propertyId});
+  const {mutate} = useRefundPayment({queryParams: {propertyId}});
 
   const handleOnRefund = () => {
     if (confirm('Continue?')) {
@@ -71,7 +71,6 @@ const RefundPaymentButton = ({
         Refund
       </Button>
       <ModalContainer
-        size="sm"
         backdrop="static"
         dialogClassName="mt-5"
         header={
@@ -86,7 +85,7 @@ const RefundPaymentButton = ({
         <Form.Group className="mb-3" controlId="form-comments">
           <Form.Control
             as="textarea"
-            rows={3}
+            rows={5}
             required
             placeholder="comments"
             value={comments}
@@ -94,7 +93,12 @@ const RefundPaymentButton = ({
           />
         </Form.Group>
         <div className="text-right">
-          <Button size="sm" variant="warning" onClick={() => handleOnRefund()}>
+          <Button
+            size="sm"
+            variant="warning"
+            onClick={() => handleOnRefund()}
+            disabled={!comments}
+          >
             Refund
           </Button>
         </div>

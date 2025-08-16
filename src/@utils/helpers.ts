@@ -60,3 +60,17 @@ export function getNames(profiles?: ProfileAttr[]) {
   const assignedTo = (profiles && profiles.map(a => a.name)) ?? [];
   return assignedTo.sort().join(', ');
 }
+
+export function parseSubCategories(value?: string): string[] {
+  try {
+    if (value) {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) {
+        return parsed as string[];
+      }
+    }
+    return [];
+  } catch {
+    return [];
+  }
+}

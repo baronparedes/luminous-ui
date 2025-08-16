@@ -5,7 +5,7 @@ import {Currency} from '../@ui/Currency';
 import RoundedPanel from '../@ui/RoundedPanel';
 
 type Props = {
-  availableCommunityBalance: ChargeBalance;
+  availableCommunityBalance?: ChargeBalance;
   availableBalances: ChargeBalance[];
 };
 
@@ -34,9 +34,11 @@ const BalanceSummary = ({
     <>
       <RoundedPanel className="p-4 text-center">
         <Row>
-          <Col key={availableCommunityBalance.chargeId}>
-            <ChargeBalanceSummary {...availableCommunityBalance} />
-          </Col>
+          {availableCommunityBalance && (
+            <Col key={availableCommunityBalance.chargeId}>
+              <ChargeBalanceSummary {...availableCommunityBalance} />
+            </Col>
+          )}
           {availableBalances &&
             availableBalances.map(chargeBalance => {
               return (

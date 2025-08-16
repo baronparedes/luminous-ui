@@ -21,24 +21,11 @@ import {
 } from '../@validation';
 import {Currency} from './Currency';
 import ModalContainer from './ModalContainer';
+import {parseSubCategories} from '../../@utils/helpers';
 
 type Props = {
   onAddExpense?: (data: ExpenseAttr) => void;
 };
-
-function parseSubCategories(value?: string): string[] {
-  try {
-    if (value) {
-      const parsed = JSON.parse(value);
-      if (Array.isArray(parsed)) {
-        return parsed as string[];
-      }
-    }
-    return [];
-  } catch {
-    return [];
-  }
-}
 
 const AddExpense = ({onAddExpense, ...buttonProps}: Props & ButtonProps) => {
   const [selectedCategory, setSelectedCategory] = useState<CategoryAttr>();
