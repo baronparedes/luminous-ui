@@ -611,6 +611,28 @@ export type UsePostChargeDisbursementProps = Omit<UseMutateProps<void, unknown, 
 export const usePostChargeDisbursement = (props: UsePostChargeDisbursementProps) => useMutate<void, unknown, void, DisbursementAttr, void>("POST", `/api/disbursement/postChargeDisbursement`, props);
 
 
+export interface GetHealthResponse {
+  timestamp: string;
+  smtp: string;
+  db: string;
+  status: string;
+}
+
+export type GetHealthProps = Omit<GetProps<GetHealthResponse, unknown, void, void>, "path">;
+
+export const GetHealth = (props: GetHealthProps) => (
+  <Get<GetHealthResponse, unknown, void, void>
+    path={`/api/health`}
+    
+    {...props}
+  />
+);
+
+export type UseGetHealthProps = Omit<UseGetProps<GetHealthResponse, unknown, void, void>, "path">;
+
+export const useGetHealth = (props: UseGetHealthProps) => useGet<GetHealthResponse, unknown, void, void>(`/api/health`, props);
+
+
 export interface GetAllProfilesQueryParams {
   search?: string;
 }

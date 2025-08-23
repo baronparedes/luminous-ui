@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Col,
   Container,
@@ -131,82 +132,95 @@ const CollectionsView: React.FC = () => {
 
   return (
     <Container className="pb-4">
-      <BalanceSummary
-        availableBalances={availableBalances.filter(
-          b => b.chargeId === commonChargeId
-        )}
-      />
-      <Spacer />
-      <RoundedPanel className="p-3">
-        <SelectPeriod size="lg" onPeriodSelect={handleOnPeriodSelect} />
-      </RoundedPanel>
-      <Spacer />
-      <RoundedPanel className="p-0 m-auto">
-        <Table
-          loading={loading}
-          headers={['description', 'payment detail', 'category', 'action']}
-          renderFooterContent={
-            <>
-              {error && (
-                <div className="m-2 pb-2">
-                  <ErrorInfo>{error.message}</ErrorInfo>
-                </div>
-              )}
-              {errorPostCollections && (
-                <div className="m-2 pb-2">
-                  <ErrorInfo>{errorPostCollections.message}</ErrorInfo>
-                </div>
-              )}
-            </>
-          }
-          renderHeaderContent={
-            <Row>
-              <Col sm={12} md={6}>
-                <h4>Collections</h4>
-              </Col>
-              <Col className="text-right">
-                <InputGroup className="mb-3">
-                  <FormControl
-                    placeholder="search..."
-                    onChange={handleOnChange}
-                  />
-                  <InputGroup.Append>
-                    <Button
-                      variant="secondary"
-                      aria-label="search collections"
-                      onClick={handleOnRefreshData}
-                    >
-                      <FaSearch />
-                    </Button>
-                  </InputGroup.Append>
-                  {commonChargeId && (
-                    <CollectPaymentButton
-                      onCollect={handleOnCollect}
-                      chargeId={commonChargeId}
-                      period={period}
-                      loading={loadingCollections}
-                    />
+      {!commonChargeId && (
+        <Alert variant="warning" className="mt-3">
+          <strong>Common charge ID not configured!</strong>
+          <br />
+          Please configure the common charge ID in the settings before using the
+          collections feature. Contact your administrator if you need
+          assistance.
+        </Alert>
+      )}
+      {commonChargeId && (
+        <>
+          <BalanceSummary
+            availableBalances={availableBalances.filter(
+              b => b.chargeId === commonChargeId
+            )}
+          />
+          <Spacer />
+          <RoundedPanel className="p-3">
+            <SelectPeriod size="lg" onPeriodSelect={handleOnPeriodSelect} />
+          </RoundedPanel>
+          <Spacer />
+          <RoundedPanel className="p-0 m-auto">
+            <Table
+              loading={loading}
+              headers={['description', 'payment detail', 'category', 'action']}
+              renderFooterContent={
+                <>
+                  {error && (
+                    <div className="m-2 pb-2">
+                      <ErrorInfo>{error.message}</ErrorInfo>
+                    </div>
                   )}
-                </InputGroup>
-              </Col>
-            </Row>
-          }
-        >
-          {data && !loading && !error && (
-            <tbody>
-              {data.map((row, index) => {
-                return (
-                  <CollectionTableRow
-                    key={index}
-                    transaction={row}
-                    refetch={handleOnRefreshData}
-                  />
-                );
-              })}
-            </tbody>
-          )}
-        </Table>
-      </RoundedPanel>
+                  {errorPostCollections && (
+                    <div className="m-2 pb-2">
+                      <ErrorInfo>{errorPostCollections.message}</ErrorInfo>
+                    </div>
+                  )}
+                </>
+              }
+              renderHeaderContent={
+                <Row>
+                  <Col sm={12} md={6}>
+                    <h4>Collections</h4>
+                  </Col>
+                  <Col className="text-right">
+                    <InputGroup className="mb-3">
+                      <FormControl
+                        placeholder="search..."
+                        onChange={handleOnChange}
+                      />
+                      <InputGroup.Append>
+                        <Button
+                          variant="secondary"
+                          aria-label="search collections"
+                          onClick={handleOnRefreshData}
+                        >
+                          <FaSearch />
+                        </Button>
+                      </InputGroup.Append>
+                      {commonChargeId && (
+                        <CollectPaymentButton
+                          onCollect={handleOnCollect}
+                          chargeId={commonChargeId}
+                          period={period}
+                          loading={loadingCollections}
+                        />
+                      )}
+                    </InputGroup>
+                  </Col>
+                </Row>
+              }
+            >
+              {data && !loading && !error && (
+                <tbody>
+                  {data.map((row, index) => {
+                    return (
+                      <CollectionTableRow
+                        key={index}
+                        transaction={row}
+                        refetch={handleOnRefreshData}
+                      />
+                    );
+                  })}
+                </tbody>
+              )}
+            </Table>
+          </RoundedPanel>
+        </>
+      )}
     </Container>
   );
 };
