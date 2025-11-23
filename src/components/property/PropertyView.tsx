@@ -10,6 +10,7 @@ import AdjustTransactions from './actions/AdjustTransactions';
 import PrintStatements from './actions/PrintStatements';
 import ProcessManualPayment from './actions/ProcessManualPayment';
 import ProcessPayment from './actions/ProcessPayment';
+import SendStatementEmail from './actions/SendStatementEmail';
 import ViewPaymentHistory from './actions/ViewPaymentHistory';
 import ViewTransactionHistory from './actions/ViewTransactionHistory';
 import PropertyAssignmentCard from './PropertyAssignmentCard';
@@ -94,6 +95,15 @@ const PropertyView = () => {
                       buttonLabel="print statements"
                       disabled={id === undefined}
                       propertyId={propertyId}
+                    />
+                    <SendStatementEmail
+                      className="mb-2 w-100"
+                      buttonLabel="send statement email"
+                      disabled={id === undefined}
+                      propertyId={propertyId}
+                      propertyOwnerEmails={propertyAccountData.assignedProfiles?.map(
+                        p => p.email
+                      )}
                     />
                     <ViewPaymentHistory
                       className="mb-2 w-100"

@@ -18,6 +18,8 @@ const routes = {
   ADMIN_BATCH_TRANSACTIONS: '/admin/batch-transactions',
   ADMIN_BATCH_PRINT_SOA: '/admin/batch-print-soa',
   ADMIN_UPLOAD_WATER_READING: '/admin/upload-water-reading',
+  ADMIN_BATCH_EMAIL: '/admin/batch-email',
+  ADMIN_BATCH_EMAIL_DETAIL: (id: number | string) => `/admin/batch-email/${id}`,
 };
 
 export default routes;

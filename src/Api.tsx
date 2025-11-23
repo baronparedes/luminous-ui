@@ -150,6 +150,52 @@ export interface DisbursementAttr {
   updatedBy?: number;
 }
 
+export type Month = "JAN" | "FEB" | "MAR" | "APR" | "MAY" | "JUN" | "JUL" | "AUG" | "SEP" | "OCT" | "NOV" | "DEC";
+
+export type EmailBatchStatus = "pending" | "in_progress" | "completed" | "failed" | "cancelled";
+
+export type EmailBatchLogStatus = "sent" | "failed" | "skipped";
+
+export interface PropertyAttr {
+  id?: number;
+  code: string;
+  floorArea: number;
+  address: string;
+  status: RecordStatus;
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: number;
+  updatedBy?: number;
+}
+
+export interface EmailBatchLogAttr {
+  id?: number;
+  batchId: number;
+  propertyId: number;
+  email: string;
+  status: EmailBatchLogStatus;
+  errorMessage?: string;
+  sentAt?: string;
+  createdAt?: string;
+  property?: PropertyAttr;
+}
+
+export interface EmailBatchAttr {
+  id?: number;
+  batchName: string;
+  periodYear: number;
+  periodMonth: Month;
+  totalProperties: number;
+  sentCount: number;
+  failedCount: number;
+  status: EmailBatchStatus;
+  startedAt?: string;
+  completedAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  logs?: EmailBatchLogAttr[];
+}
+
 export interface FieldError {
   value: string | null;
   field: string | null;
@@ -188,18 +234,6 @@ export interface UpdateProfile {
   mobileNumber?: string;
   email: string;
   name: string;
-}
-
-export interface PropertyAttr {
-  id?: number;
-  code: string;
-  floorArea: number;
-  address: string;
-  status: RecordStatus;
-  createdAt?: string;
-  updatedAt?: string;
-  createdBy?: number;
-  updatedBy?: number;
 }
 
 export interface PaymentDetailAttr {
@@ -252,8 +286,6 @@ export interface PropertyAccount {
   transactions?: TransactionAttr[];
   paymentDetails?: PaymentDetailAttr[];
 }
-
-export type Month = "JAN" | "FEB" | "MAR" | "APR" | "MAY" | "JUN" | "JUL" | "AUG" | "SEP" | "OCT" | "NOV" | "DEC";
 
 export interface PropertyAssignmentAttr {
   profileId: number;
@@ -611,6 +643,186 @@ export type UsePostChargeDisbursementProps = Omit<UseMutateProps<void, unknown, 
 export const usePostChargeDisbursement = (props: UsePostChargeDisbursementProps) => useMutate<void, unknown, void, DisbursementAttr, void>("POST", `/api/disbursement/postChargeDisbursement`, props);
 
 
+export interface CreateBatchRequestBody {
+  month?: Month;
+  year?: number;
+}
+
+export type CreateBatchProps = Omit<MutateProps<EmailBatchAttr, unknown, void, CreateBatchRequestBody, void>, "path" | "verb">;
+
+export const CreateBatch = (props: CreateBatchProps) => (
+  <Mutate<EmailBatchAttr, unknown, void, CreateBatchRequestBody, void>
+    verb="POST"
+    path={`/api/email-batch/create`}
+    
+    {...props}
+  />
+);
+
+export type UseCreateBatchProps = Omit<UseMutateProps<EmailBatchAttr, unknown, void, CreateBatchRequestBody, void>, "path" | "verb">;
+
+export const useCreateBatch = (props: UseCreateBatchProps) => useMutate<EmailBatchAttr, unknown, void, CreateBatchRequestBody, void>("POST", `/api/email-batch/create`, props);
+
+
+export type GetAllBatchesProps = Omit<GetProps<EmailBatchAttr[], unknown, void, void>, "path">;
+
+export const GetAllBatches = (props: GetAllBatchesProps) => (
+  <Get<EmailBatchAttr[], unknown, void, void>
+    path={`/api/email-batch/list`}
+    
+    {...props}
+  />
+);
+
+export type UseGetAllBatchesProps = Omit<UseGetProps<EmailBatchAttr[], unknown, void, void>, "path">;
+
+export const useGetAllBatches = (props: UseGetAllBatchesProps) => useGet<EmailBatchAttr[], unknown, void, void>(`/api/email-batch/list`, props);
+
+
+export interface GetBatchPathParams {
+  batchId: number
+}
+
+export type GetBatchProps = Omit<GetProps<EmailBatchAttr, unknown, void, GetBatchPathParams>, "path"> & GetBatchPathParams;
+
+export const GetBatch = ({batchId, ...props}: GetBatchProps) => (
+  <Get<EmailBatchAttr, unknown, void, GetBatchPathParams>
+    path={`/api/email-batch/${batchId}`}
+    
+    {...props}
+  />
+);
+
+export type UseGetBatchProps = Omit<UseGetProps<EmailBatchAttr, unknown, void, GetBatchPathParams>, "path"> & GetBatchPathParams;
+
+export const useGetBatch = ({batchId, ...props}: UseGetBatchProps) => useGet<EmailBatchAttr, unknown, void, GetBatchPathParams>((paramsInPath: GetBatchPathParams) => `/api/email-batch/${paramsInPath.batchId}`, {  pathParams: { batchId }, ...props });
+
+
+export interface ProcessBatchResponse {
+  remaining: number;
+  failed: number;
+  sent: number;
+  processed: number;
+}
+
+export interface ProcessBatchQueryParams {
+  limit?: number;
+}
+
+export interface ProcessBatchPathParams {
+  batchId: number
+}
+
+export type ProcessBatchProps = Omit<MutateProps<ProcessBatchResponse, unknown, ProcessBatchQueryParams, void, ProcessBatchPathParams>, "path" | "verb"> & ProcessBatchPathParams;
+
+export const ProcessBatch = ({batchId, ...props}: ProcessBatchProps) => (
+  <Mutate<ProcessBatchResponse, unknown, ProcessBatchQueryParams, void, ProcessBatchPathParams>
+    verb="POST"
+    path={`/api/email-batch/process/${batchId}`}
+    
+    {...props}
+  />
+);
+
+export type UseProcessBatchProps = Omit<UseMutateProps<ProcessBatchResponse, unknown, ProcessBatchQueryParams, void, ProcessBatchPathParams>, "path" | "verb"> & ProcessBatchPathParams;
+
+export const useProcessBatch = ({batchId, ...props}: UseProcessBatchProps) => useMutate<ProcessBatchResponse, unknown, ProcessBatchQueryParams, void, ProcessBatchPathParams>("POST", (paramsInPath: ProcessBatchPathParams) => `/api/email-batch/process/${paramsInPath.batchId}`, {  pathParams: { batchId }, ...props });
+
+
+export interface RetryFailedResponse {
+  remaining: number;
+  failed: number;
+  sent: number;
+  processed: number;
+}
+
+export interface RetryFailedPathParams {
+  batchId: number
+}
+
+export type RetryFailedProps = Omit<MutateProps<RetryFailedResponse, unknown, void, void, RetryFailedPathParams>, "path" | "verb"> & RetryFailedPathParams;
+
+export const RetryFailed = ({batchId, ...props}: RetryFailedProps) => (
+  <Mutate<RetryFailedResponse, unknown, void, void, RetryFailedPathParams>
+    verb="POST"
+    path={`/api/email-batch/retry/${batchId}`}
+    
+    {...props}
+  />
+);
+
+export type UseRetryFailedProps = Omit<UseMutateProps<RetryFailedResponse, unknown, void, void, RetryFailedPathParams>, "path" | "verb"> & RetryFailedPathParams;
+
+export const useRetryFailed = ({batchId, ...props}: UseRetryFailedProps) => useMutate<RetryFailedResponse, unknown, void, void, RetryFailedPathParams>("POST", (paramsInPath: RetryFailedPathParams) => `/api/email-batch/retry/${paramsInPath.batchId}`, {  pathParams: { batchId }, ...props });
+
+
+export interface CancelBatchPathParams {
+  batchId: number
+}
+
+export type CancelBatchProps = Omit<MutateProps<EmailBatchAttr, unknown, void, void, CancelBatchPathParams>, "path" | "verb"> & CancelBatchPathParams;
+
+export const CancelBatch = ({batchId, ...props}: CancelBatchProps) => (
+  <Mutate<EmailBatchAttr, unknown, void, void, CancelBatchPathParams>
+    verb="POST"
+    path={`/api/email-batch/cancel/${batchId}`}
+    
+    {...props}
+  />
+);
+
+export type UseCancelBatchProps = Omit<UseMutateProps<EmailBatchAttr, unknown, void, void, CancelBatchPathParams>, "path" | "verb"> & CancelBatchPathParams;
+
+export const useCancelBatch = ({batchId, ...props}: UseCancelBatchProps) => useMutate<EmailBatchAttr, unknown, void, void, CancelBatchPathParams>("POST", (paramsInPath: CancelBatchPathParams) => `/api/email-batch/cancel/${paramsInPath.batchId}`, {  pathParams: { batchId }, ...props });
+
+
+export interface DeleteBatchResponse {
+  message: string;
+  success: boolean;
+}
+
+export interface DeleteBatchPathParams {
+  batchId: number
+}
+
+export type DeleteBatchProps = Omit<MutateProps<DeleteBatchResponse, unknown, void, void, DeleteBatchPathParams>, "path" | "verb"> & DeleteBatchPathParams;
+
+export const DeleteBatch = ({batchId, ...props}: DeleteBatchProps) => (
+  <Mutate<DeleteBatchResponse, unknown, void, void, DeleteBatchPathParams>
+    verb="POST"
+    path={`/api/email-batch/delete/${batchId}`}
+    
+    {...props}
+  />
+);
+
+export type UseDeleteBatchProps = Omit<UseMutateProps<DeleteBatchResponse, unknown, void, void, DeleteBatchPathParams>, "path" | "verb"> & DeleteBatchPathParams;
+
+export const useDeleteBatch = ({batchId, ...props}: UseDeleteBatchProps) => useMutate<DeleteBatchResponse, unknown, void, void, DeleteBatchPathParams>("POST", (paramsInPath: DeleteBatchPathParams) => `/api/email-batch/delete/${paramsInPath.batchId}`, {  pathParams: { batchId }, ...props });
+
+
+export interface GetHealthResponse {
+  timestamp: string;
+  smtp: string;
+  db: string;
+  status: string;
+}
+
+export type GetHealthProps = Omit<GetProps<GetHealthResponse, unknown, void, void>, "path">;
+
+export const GetHealth = (props: GetHealthProps) => (
+  <Get<GetHealthResponse, unknown, void, void>
+    path={`/api/health`}
+    
+    {...props}
+  />
+);
+
+export type UseGetHealthProps = Omit<UseGetProps<GetHealthResponse, unknown, void, void>, "path">;
+
+export const useGetHealth = (props: UseGetHealthProps) => useGet<GetHealthResponse, unknown, void, void>(`/api/health`, props);
+
+
 export interface GetAllProfilesQueryParams {
   search?: string;
 }
@@ -812,6 +1024,34 @@ export const GetPropertyAccountsByPeriod = (props: GetPropertyAccountsByPeriodPr
 export type UseGetPropertyAccountsByPeriodProps = Omit<UseGetProps<PropertyAccount[], unknown, GetPropertyAccountsByPeriodQueryParams, void>, "path">;
 
 export const useGetPropertyAccountsByPeriod = (props: UseGetPropertyAccountsByPeriodProps) => useGet<PropertyAccount[], unknown, GetPropertyAccountsByPeriodQueryParams, void>(`/api/property-account/getPropertyAccountsByPeriod`, props);
+
+
+export interface SendStatementEmailResponse {
+  message: string;
+  success: boolean;
+}
+
+export interface SendStatementEmailRequestBody {
+  month?: Month;
+  year?: number;
+  email: string;
+  propertyId: number;
+}
+
+export type SendStatementEmailProps = Omit<MutateProps<SendStatementEmailResponse, unknown, void, SendStatementEmailRequestBody, void>, "path" | "verb">;
+
+export const SendStatementEmail = (props: SendStatementEmailProps) => (
+  <Mutate<SendStatementEmailResponse, unknown, void, SendStatementEmailRequestBody, void>
+    verb="POST"
+    path={`/api/property-account/sendStatementEmail`}
+    
+    {...props}
+  />
+);
+
+export type UseSendStatementEmailProps = Omit<UseMutateProps<SendStatementEmailResponse, unknown, void, SendStatementEmailRequestBody, void>, "path" | "verb">;
+
+export const useSendStatementEmail = (props: UseSendStatementEmailProps) => useMutate<SendStatementEmailResponse, unknown, void, SendStatementEmailRequestBody, void>("POST", `/api/property-account/sendStatementEmail`, props);
 
 
 export interface GetAllPropertiesQueryParams {

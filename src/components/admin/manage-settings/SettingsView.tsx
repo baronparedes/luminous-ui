@@ -5,6 +5,7 @@ import {SETTING_KEYS} from '../../../constants';
 import RoundedPanel from '../../@ui/RoundedPanel';
 import SettingBillingCutoff from './SettingBillingCutoff';
 import SettingCharges from './SettingCharges';
+import SettingEmailBatchLimit from './SettingEmailBatchLimit';
 import SettingExpenseCategory from './SettingExpenseCategory';
 import SettingMarkup from './SettingMarkup';
 import SettingMinApprovers from './SettingMinApprovers';
@@ -41,6 +42,9 @@ const SettingsView = () => {
             </Tab>
             <Tab eventKey="approval" title="Approval">
               <SettingMinApprovers />
+            </Tab>
+            <Tab eventKey="email" title="Email">
+              <SettingEmailBatchLimit />
             </Tab>
             <Tab eventKey="soa-notes" title="SOA Notes">
               <SettingMarkup

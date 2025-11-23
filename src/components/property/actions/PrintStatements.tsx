@@ -10,6 +10,7 @@ import {
   useGetAvailablePeriods,
   useGetPropertyAccount,
 } from '../../../Api';
+import {useAvailablePeriods} from '../../../hooks/useAvailablePeriods';
 import {VERBIAGE} from '../../../constants';
 import Loading from '../../@ui/Loading';
 import ModalContainer from '../../@ui/ModalContainer';
@@ -54,12 +55,10 @@ const PrintStatements = ({
       : 'SOA',
   });
 
-  const availableYears = data ? [...new Set(data.map(f => f.year))] : [];
-  const periods =
-    data?.filter(d => {
-      // TODO: for some reason d.year !== year && d.month !== month does not work
-      return `${d.year}${d.month}` !== `${year}${month}`;
-    }) ?? [];
+  const {availableYears, availablePeriods} = useAvailablePeriods({
+    periodsData: data || undefined,
+    selectedYear,
+  });
 
   const handleSelectPeriod = (period: Period) => {
     if (JSON.stringify(selectedPeriod) === JSON.stringify(period)) {
@@ -101,7 +100,7 @@ const PrintStatements = ({
               />
             </Container>
             <ListGroup>
-              {periods
+              {availablePeriods
                 .filter(p => p.year === selectedYear)
                 .map((period, i) => {
                   return (
