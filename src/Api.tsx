@@ -611,6 +611,28 @@ export type UsePostChargeDisbursementProps = Omit<UseMutateProps<void, unknown, 
 export const usePostChargeDisbursement = (props: UsePostChargeDisbursementProps) => useMutate<void, unknown, void, DisbursementAttr, void>("POST", `/api/disbursement/postChargeDisbursement`, props);
 
 
+export interface GetHealthResponse {
+  timestamp: string;
+  smtp: string;
+  db: string;
+  status: string;
+}
+
+export type GetHealthProps = Omit<GetProps<GetHealthResponse, unknown, void, void>, "path">;
+
+export const GetHealth = (props: GetHealthProps) => (
+  <Get<GetHealthResponse, unknown, void, void>
+    path={`/api/health`}
+    
+    {...props}
+  />
+);
+
+export type UseGetHealthProps = Omit<UseGetProps<GetHealthResponse, unknown, void, void>, "path">;
+
+export const useGetHealth = (props: UseGetHealthProps) => useGet<GetHealthResponse, unknown, void, void>(`/api/health`, props);
+
+
 export interface GetAllProfilesQueryParams {
   search?: string;
 }
@@ -812,6 +834,34 @@ export const GetPropertyAccountsByPeriod = (props: GetPropertyAccountsByPeriodPr
 export type UseGetPropertyAccountsByPeriodProps = Omit<UseGetProps<PropertyAccount[], unknown, GetPropertyAccountsByPeriodQueryParams, void>, "path">;
 
 export const useGetPropertyAccountsByPeriod = (props: UseGetPropertyAccountsByPeriodProps) => useGet<PropertyAccount[], unknown, GetPropertyAccountsByPeriodQueryParams, void>(`/api/property-account/getPropertyAccountsByPeriod`, props);
+
+
+export interface SendStatementEmailResponse {
+  message: string;
+  success: boolean;
+}
+
+export interface SendStatementEmailRequestBody {
+  month?: Month;
+  year?: number;
+  email: string;
+  propertyId: number;
+}
+
+export type SendStatementEmailProps = Omit<MutateProps<SendStatementEmailResponse, unknown, void, SendStatementEmailRequestBody, void>, "path" | "verb">;
+
+export const SendStatementEmail = (props: SendStatementEmailProps) => (
+  <Mutate<SendStatementEmailResponse, unknown, void, SendStatementEmailRequestBody, void>
+    verb="POST"
+    path={`/api/property-account/sendStatementEmail`}
+    
+    {...props}
+  />
+);
+
+export type UseSendStatementEmailProps = Omit<UseMutateProps<SendStatementEmailResponse, unknown, void, SendStatementEmailRequestBody, void>, "path" | "verb">;
+
+export const useSendStatementEmail = (props: UseSendStatementEmailProps) => useMutate<SendStatementEmailResponse, unknown, void, SendStatementEmailRequestBody, void>("POST", `/api/property-account/sendStatementEmail`, props);
 
 
 export interface GetAllPropertiesQueryParams {
