@@ -5,6 +5,7 @@ import routes from './@utils/routes';
 import Header from './components/@ui/Header';
 import NotFound from './components/@ui/NotFound';
 import ProtectedRoute from './components/@ui/ProtectedRoute';
+import BatchEmailView from './components/admin/batch-email/BatchEmailView';
 import BatchPrintView from './components/admin/batch-print/BatchPrintView';
 import BatchTransactionView from './components/admin/batch-transaction/BatchTransactionView';
 import ProfilesView from './components/admin/manage-profiles/ProfilesView';
@@ -127,6 +128,17 @@ const AppRouter: React.FC = () => {
               exact
               onlyFor={['admin']}
               component={WaterReadingView}
+            />
+            <ProtectedRoute
+              path={routes.ADMIN_BATCH_EMAIL}
+              onlyFor={['admin']}
+              exact
+              component={BatchEmailView}
+            />
+            <ProtectedRoute
+              path={routes.ADMIN_BATCH_EMAIL_DETAIL(':id')}
+              onlyFor={['admin']}
+              component={BatchEmailView}
             />
             <Route component={NotFound} />
           </Switch>

@@ -2,6 +2,7 @@ import {Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import {
   FaBook,
   FaCogs,
+  FaEnvelope,
   FaFileInvoice,
   FaFileUpload,
   FaHome,
@@ -143,6 +144,16 @@ function buildNavigationSections(profileType: ProfileType) {
             <>
               <FaPrint className="mr-1" />
               batch print soa
+            </>
+          ),
+        },
+        {
+          to: routes.ADMIN_BATCH_EMAIL,
+          exact: true,
+          title: (
+            <>
+              <FaEnvelope className="mr-1" />
+              batch email soa
             </>
           ),
         },
