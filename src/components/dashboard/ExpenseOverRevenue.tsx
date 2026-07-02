@@ -21,7 +21,7 @@ import {
   TransactionType,
   useGetCollectionBreakdown,
 } from '../../Api';
-import {VERBIAGE} from '../../constants';
+import {VERBIAGE} from '../../config';
 import {PageBreak, PageHeader, PrintPaper} from '../@print-papers/PaperPdf';
 import {Currency} from '../@ui/Currency';
 import RoundedPanel from '../@ui/RoundedPanel';

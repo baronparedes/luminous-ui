@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 
-import {DEFAULTS, SETTING_KEYS} from '../constants';
+import {DEFAULTS, SETTING_KEYS} from '../config';
 import {useRootState} from '../store';
 
 export type ChargeIds = {

@@ -6,7 +6,7 @@ import {fireEvent, waitFor, within} from '@testing-library/react';
 import {getCurrentMonthYearRelativeToCutoff} from '../../../../@utils/dates';
 import {generateFakeTransaction} from '../../../../@utils/fake-models';
 import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
-import {DEFAULTS} from '../../../../constants';
+import {DEFAULTS} from '../../../../config';
 import ProcessPayment from '../../actions/ProcessPayment';
 
 describe('ProcessPayment', () => {

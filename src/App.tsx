@@ -31,7 +31,7 @@ const App: React.FC = props => {
       }}
       onError={err => {
         // Unauthorized
-        if (err.status === 401) {
+        if (err.status === config.UNAUTHORIZED_STATUS_CODE) {
           dispatch(profileActions.signOut());
         }
       }}

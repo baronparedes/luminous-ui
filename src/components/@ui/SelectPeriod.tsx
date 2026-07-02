@@ -3,7 +3,7 @@ import {Controller, useForm} from 'react-hook-form';
 
 import {getCurrentMonthYear, getPastYears} from '../../@utils/dates';
 import {Period} from '../../Api';
-import {MONTHS} from '../../constants';
+import {MONTHS} from '../../config';
 import config from '../../config';
 
 type Props = {

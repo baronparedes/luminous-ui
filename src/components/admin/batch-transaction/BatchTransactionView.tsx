@@ -4,6 +4,7 @@ import {Prompt} from 'react-router-dom';
 import {v4 as uuidv4} from 'uuid';
 
 import {Period, useGetAllProperties} from '../../../Api';
+import config from '../../../config';
 import RoundedPanel from '../../@ui/RoundedPanel';
 import SelectPeriod from '../../@ui/SelectPeriod';
 import BatchPropertiesToProcess from './BatchPropertiesToProcess';
@@ -13,7 +14,7 @@ const BatchTransactionView = () => {
   const [inProgress, setInProgress] = useState(false);
   const [batchId, setBatchId] = useState<string>();
   const {data, loading, refetch} = useGetAllProperties({
-    debounce: 300,
+    debounce: config.SEARCH_DEBOUNCE_MS,
     lazy: true,
   });
   const handleOnSelect = (period: Period) => {

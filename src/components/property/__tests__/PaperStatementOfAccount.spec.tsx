@@ -1,7 +1,7 @@
 import {toTransactionPeriod} from '../../../@utils/dates';
 import {renderWithProvider} from '../../../@utils/test-renderers';
 import {PropertyAccount, SettingAttr} from '../../../Api';
-import {SETTING_KEYS} from '../../../constants';
+import {SETTING_KEYS} from '../../../config';
 import {settingActions} from '../../../store/reducers/setting.reducer';
 import PaperStatementOfAccount from '../PaperStatementOfAccount';
 

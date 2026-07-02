@@ -1,7 +1,7 @@
 import {Form, InputGroup} from 'react-bootstrap';
 
 import {Month} from '../../Api';
-import {MONTHS} from '../../constants';
+import {MONTHS} from '../../config';
 
 type Props = {
   value: Month;

@@ -13,7 +13,7 @@ import {
   usePostCollections,
   useSuggestPaymentBreakdown,
 } from '../../../Api';
-import {DEFAULTS, SETTING_KEYS} from '../../../constants';
+import {DEFAULTS, SETTING_KEYS} from '../../../config';
 import {useRootState} from '../../../store';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import Loading from '../../@ui/Loading';

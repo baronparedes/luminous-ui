@@ -3,6 +3,7 @@ import {InputGroup} from 'react-bootstrap';
 import {Typeahead} from 'react-bootstrap-typeahead';
 import {FaHome} from 'react-icons/fa';
 import {PropertyAttr, useGetAllProperties} from '../../Api';
+import config from '../../config';
 
 export type PropertySelectItem = {
   id: number;
@@ -32,7 +33,7 @@ const PropertySelect = ({onSelectProperty, placeholder}: Props) => {
   const [selectedProperty, setSelectedProperty] =
     useState<PropertySelectItem | null>(null);
   const {data, loading, refetch} = useGetAllProperties({
-    debounce: 300,
+    debounce: config.SEARCH_DEBOUNCE_MS,
     lazy: true,
     queryParams: {
       search: searchCriteria,

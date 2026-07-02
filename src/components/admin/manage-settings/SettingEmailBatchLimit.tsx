@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {Button, Col, Container, Form, Row} from 'react-bootstrap';
 import {useDispatch} from 'react-redux';
 import {useUpdateSettingValue} from '../../../Api';
-import {DEFAULTS, SETTING_KEYS} from '../../../constants';
+import config, {DEFAULTS, SETTING_KEYS} from '../../../config';
 import {useRootState} from '../../../store';
 import {settingActions} from '../../../store/reducers/setting.reducer';
 import Loading from '../../@ui/Loading';
@@ -61,7 +61,7 @@ const SettingEmailBatchLimit = () => {
                     type="number"
                     name="emailBatchLimit"
                     min="1"
-                    max="1000"
+                    max={config.EMAIL_BATCH_LIMIT_MAX.toString()}
                     onChange={e => setEmailBatchLimitState(e.target.value)}
                     value={emailBatchLimitState}
                   />

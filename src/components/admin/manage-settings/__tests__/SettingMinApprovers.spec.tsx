@@ -1,7 +1,7 @@
 import {render} from '@testing-library/react';
 import {Provider} from 'react-redux';
 
-import {DEFAULTS, SETTING_KEYS} from '../../../../constants';
+import {DEFAULTS, SETTING_KEYS} from '../../../../config';
 import {createStore} from '../../../../store';
 import {settingActions} from '../../../../store/reducers/setting.reducer';
 import SettingMinApprovers from '../SettingMinApprovers';

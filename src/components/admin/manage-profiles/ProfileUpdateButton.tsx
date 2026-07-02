@@ -5,7 +5,7 @@ import {FaPencilAlt} from 'react-icons/fa';
 import styled from 'styled-components';
 
 import {AuthProfile, UpdateProfile, useUpdateProfile} from '../../../Api';
-import {PROFILE_TYPE, RECORD_STATUS} from '../../../constants';
+import {PROFILE_TYPE, RECORD_STATUS} from '../../../config';
 import ButtonLoading from '../../@ui/ButtonLoading';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import ModalContainer from '../../@ui/ModalContainer';

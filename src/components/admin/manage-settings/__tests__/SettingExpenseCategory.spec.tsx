@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 
 import {generateFakeCategory} from '../../../../@utils/fake-models';
 import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
-import {DEFAULTS} from '../../../../constants';
+import {DEFAULTS} from '../../../../config';
 import SettingExpenseCategory from '../SettingExpenseCategory';
 
 describe('SettingExpenseCategory', () => {

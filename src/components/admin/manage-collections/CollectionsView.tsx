@@ -20,6 +20,7 @@ import {
   useGetAllTransactions,
   usePostCollections,
 } from '../../../Api';
+import config from '../../../config';
 import CollectPaymentButton from './CollectPaymentButton';
 import {useState} from 'react';
 import {getCurrentMonthYear} from '../../../@utils/dates';
@@ -46,7 +47,7 @@ const CollectionsView: React.FC = () => {
   } = usePostCollections({});
 
   const {data, loading, error, refetch} = useGetAllTransactions({
-    debounce: 300,
+    debounce: config.SEARCH_DEBOUNCE_MS,
     year: period.year,
     month: period.month,
     chargeId: Number(commonChargeId),

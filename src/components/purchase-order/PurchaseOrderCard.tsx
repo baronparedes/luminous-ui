@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 import {getNames} from '../../@utils/helpers';
 import routes from '../../@utils/routes';
 import {PurchaseOrderAttr} from '../../Api';
-import {STATUS_VARIANT} from '../../constants';
+import {STATUS_VARIANT} from '../../config';
 
 type Props = {
   purchaseOrder: PurchaseOrderAttr;

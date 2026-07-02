@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 import InputApprovalCodes from '../InputApprovalCodes';
 import {renderWithProvider} from '../../../@utils/test-renderers';
 import {settingActions} from '../../../store/reducers/setting.reducer';
-import {SETTING_KEYS} from '../../../constants';
+import {SETTING_KEYS} from '../../../config';
 
 describe('InputApprovalCodes', () => {
   it('should render and add approval code', async () => {

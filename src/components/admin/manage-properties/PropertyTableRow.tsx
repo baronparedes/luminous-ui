@@ -10,7 +10,7 @@ import {
   RecordStatus,
   useUpdatePropertyStatus,
 } from '../../../Api';
-import {STATUS_COLORS} from '../../../constants';
+import {STATUS_COLORS} from '../../../config';
 import PropertyAssignmentButton from './PropertyAssignmentButton';
 import PropertyUpdateButton from './PropertyUpdateButton';
 

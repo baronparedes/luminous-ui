@@ -12,7 +12,7 @@ import {useWaterReadingDataTransformer} from '../useWaterReadingDataTransformer'
 import {WaterReadingData} from '../useWaterReadingFile';
 import {renderHookWithProvider} from '../../@utils/test-renderers';
 import {settingActions} from '../../store/reducers/setting.reducer';
-import {SETTING_KEYS} from '../../constants';
+import {SETTING_KEYS} from '../../config';
 
 describe('useWaterReadingDataTransformer', () => {
   const waterChargeId = faker.datatype.number({min: 1, max: 10});

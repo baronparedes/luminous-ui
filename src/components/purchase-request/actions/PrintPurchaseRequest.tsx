@@ -4,7 +4,7 @@ import {useReactToPrint} from 'react-to-print';
 
 import {ApprovedAny} from '../../../@types';
 import {PurchaseRequestAttr} from '../../../Api';
-import {SETTING_KEYS} from '../../../constants';
+import {SETTING_KEYS} from '../../../config';
 import {useRootState} from '../../../store';
 import {PrintPaper} from '../../@print-papers/PaperPdf';
 import PurchaseRequest from '../../@print-papers/PurchaseRequest';
