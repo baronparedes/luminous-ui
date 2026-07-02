@@ -23,11 +23,18 @@ import PurchaseOrderView from './components/purchase-order/PurchaseOrderView';
 import PurchaseRequestView from './components/purchase-request/PurchaseRequestView';
 import VoucherView from './components/voucher/VoucherView';
 import CollectionsView from './components/admin/manage-collections/CollectionsView';
-import {useInitSettings} from './hooks';
+import {useInitSettings, useSettings} from './hooks';
 import {useRootState} from './store';
 
 const AppRouter: React.FC = () => {
   useInitSettings();
+  const {
+    chargeIds: {commonChargeId},
+    loading: loadingSettings,
+  } = useSettings();
+  const showCollectionsRoute =
+    loadingSettings ||
+    (Number.isFinite(commonChargeId) && Number(commonChargeId) > 0);
   const {me} = useRootState(state => state.profile);
   if (!me) {
     <Redirect to={routes.LOGIN} />;
@@ -99,12 +106,14 @@ const AppRouter: React.FC = () => {
               onlyFor={['admin']}
               component={PropertiesView}
             />
-            <ProtectedRoute
-              path={routes.ADMIN_COLLECTIONS}
-              exact
-              onlyFor={['admin']}
-              component={CollectionsView}
-            />
+            {showCollectionsRoute && (
+              <ProtectedRoute
+                path={routes.ADMIN_COLLECTIONS}
+                exact
+                onlyFor={['admin']}
+                component={CollectionsView}
+              />
+            )}
             <ProtectedRoute
               path={routes.ADMIN_SETTINGS}
               exact
