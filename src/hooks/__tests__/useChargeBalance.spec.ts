@@ -6,7 +6,7 @@ import {waitFor} from '@testing-library/react';
 import {generateFakeCharge} from '../../@utils/fake-models';
 import {renderHookWithProviderAndRestful} from '../../@utils/test-renderers';
 import {ChargeCollected, DisbursementBreakdownView} from '../../Api';
-import {DEFAULTS} from '../../constants';
+import {DEFAULTS} from '../../config';
 import {useChargeBalance} from '../useChargeBalance';
 
 describe('useChargeBalance', () => {

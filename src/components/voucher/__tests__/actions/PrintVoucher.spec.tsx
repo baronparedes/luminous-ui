@@ -9,7 +9,7 @@ import {
 } from '../../../../@utils/fake-models';
 import {renderWithProvider} from '../../../../@utils/test-renderers';
 import {SettingAttr, VoucherAttr} from '../../../../Api';
-import {SETTING_KEYS} from '../../../../constants';
+import {SETTING_KEYS} from '../../../../config';
 import {settingActions} from '../../../../store/reducers/setting.reducer';
 import PrintVoucher from '../../actions/PrintVoucher';
 

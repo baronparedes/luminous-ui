@@ -13,7 +13,7 @@ import {
 import {toTransactionPeriodFromDate} from '../../@utils/dates';
 import {sum} from '../../@utils/helpers';
 import {ChargeDisbursedView, Month} from '../../Api';
-import {DEFAULTS, MONTHS} from '../../constants';
+import {DEFAULTS, MONTHS} from '../../config';
 import RoundedPanel from '../@ui/RoundedPanel';
 
 type Props = {

@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 import {generateFakePurchaseRequest} from '../../../../@utils/fake-models';
 import {renderWithProvider} from '../../../../@utils/test-renderers';
 import {PurchaseRequestAttr, SettingAttr} from '../../../../Api';
-import {SETTING_KEYS} from '../../../../constants';
+import {SETTING_KEYS} from '../../../../config';
 import {settingActions} from '../../../../store/reducers/setting.reducer';
 import PrintPurchaseRequest from '../../actions/PrintPurchaseRequest';
 

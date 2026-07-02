@@ -3,7 +3,7 @@ import {Button, ButtonProps} from 'react-bootstrap';
 import {useReactToPrint} from 'react-to-print';
 
 import {ApprovedAny} from '../../../@types';
-import {VERBIAGE} from '../../../constants';
+import {VERBIAGE} from '../../../config';
 import PaperPaymentHistory from '../PaperPaymentHistory';
 
 type Props = {

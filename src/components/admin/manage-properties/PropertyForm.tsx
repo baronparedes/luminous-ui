@@ -2,7 +2,7 @@ import {Button, Col, Container, Form, InputGroup} from 'react-bootstrap';
 import {Controller, useForm} from 'react-hook-form';
 
 import {PropertyAttr} from '../../../Api';
-import {RECORD_STATUS} from '../../../constants';
+import {RECORD_STATUS} from '../../../config';
 import ButtonLoading from '../../@ui/ButtonLoading';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import {decimalPatternRule, validateGreaterThanZero} from '../../@validation';

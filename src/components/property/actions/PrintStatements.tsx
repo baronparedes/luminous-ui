@@ -11,7 +11,7 @@ import {
   useGetPropertyAccount,
 } from '../../../Api';
 import {useAvailablePeriods} from '../../../hooks/useAvailablePeriods';
-import {VERBIAGE} from '../../../constants';
+import {VERBIAGE} from '../../../config';
 import Loading from '../../@ui/Loading';
 import ModalContainer from '../../@ui/ModalContainer';
 import SelectYear from '../../@ui/SelectYear';

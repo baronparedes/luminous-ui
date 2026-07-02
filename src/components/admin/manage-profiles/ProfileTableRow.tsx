@@ -4,7 +4,7 @@ import {Button, ButtonGroup} from 'react-bootstrap';
 import {FaCheck, FaTimes} from 'react-icons/fa';
 
 import {AuthProfile, RecordStatus, useUpdateProfileStatus} from '../../../Api';
-import {STATUS_COLORS} from '../../../constants';
+import {STATUS_COLORS} from '../../../config';
 import {useRootState} from '../../../store';
 import ProfileUpdateButton from './ProfileUpdateButton';
 

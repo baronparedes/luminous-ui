@@ -4,7 +4,7 @@ import {useReactToPrint} from 'react-to-print';
 
 import {ApprovedAny} from '../../../@types';
 import {VoucherAttr} from '../../../Api';
-import {SETTING_KEYS} from '../../../constants';
+import {SETTING_KEYS} from '../../../config';
 import {useRootState} from '../../../store';
 import {PrintPaper} from '../../@print-papers/PaperPdf';
 import Voucher from '../../@print-papers/Voucher';

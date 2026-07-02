@@ -14,7 +14,7 @@ import {roundOff} from '../../@utils/currencies';
 import {toTransactionPeriodFromDate} from '../../@utils/dates';
 import {sum} from '../../@utils/helpers';
 import {CollectionEfficiencyView, Month, TransactionType} from '../../Api';
-import {DEFAULTS, MONTHS} from '../../constants';
+import {DEFAULTS, MONTHS} from '../../config';
 import RoundedPanel from '../@ui/RoundedPanel';
 import {Spacer} from '../@ui/Spacer';
 

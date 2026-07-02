@@ -5,7 +5,7 @@ import {fireEvent, waitFor} from '@testing-library/react';
 
 import {renderWithProviderAndRestful} from '../../../../@utils/test-renderers';
 import {SettingAttr} from '../../../../Api';
-import {SETTING_KEYS} from '../../../../constants';
+import {SETTING_KEYS} from '../../../../config';
 import {settingActions} from '../../../../store/reducers/setting.reducer';
 import SettingBillingCutoff from '../SettingBillingCutoff';
 

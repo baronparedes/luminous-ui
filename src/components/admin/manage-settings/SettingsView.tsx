@@ -1,7 +1,7 @@
 import React from 'react';
 import {Col, Container, Row, Tab, TabContainer, Tabs} from 'react-bootstrap';
 
-import {SETTING_KEYS} from '../../../constants';
+import {SETTING_KEYS} from '../../../config';
 import RoundedPanel from '../../@ui/RoundedPanel';
 import SettingBillingCutoff from './SettingBillingCutoff';
 import SettingCharges from './SettingCharges';

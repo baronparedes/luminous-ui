@@ -4,6 +4,7 @@ import {Typeahead} from 'react-bootstrap-typeahead';
 import {FaPlus, FaUserAlt} from 'react-icons/fa';
 
 import {AuthProfile, useGetAllProfiles} from '../../Api';
+import config from '../../config';
 
 export type ProfileSelectItem = {
   id: number;
@@ -40,7 +41,7 @@ const ProfileSelect = ({onSelectProfiles}: Props) => {
     []
   );
   const {data, loading, refetch} = useGetAllProfiles({
-    debounce: 300,
+    debounce: config.SEARCH_DEBOUNCE_MS,
     lazy: true,
     queryParams: {
       search: searchCriteria,

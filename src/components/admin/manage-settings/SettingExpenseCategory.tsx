@@ -20,7 +20,7 @@ import {
   useGetAllCategories,
   useUpdateCategories,
 } from '../../../Api';
-import {DEFAULTS} from '../../../constants';
+import {DEFAULTS} from '../../../config';
 import {settingActions} from '../../../store/reducers/setting.reducer';
 import ButtonLoading from '../../@ui/ButtonLoading';
 import ErrorInfo from '../../@ui/ErrorInfo';

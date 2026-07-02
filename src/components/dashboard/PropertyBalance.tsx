@@ -9,6 +9,7 @@ import {
   PropertyBalanceByChargeView,
   PropertyBalanceView,
 } from '../../Api';
+import config from '../../config';
 import ModalContainer from '../@ui/ModalContainer';
 import RoundedPanel from '../@ui/RoundedPanel';
 import {Table} from '../@ui/Table';
@@ -22,7 +23,7 @@ type Props = {
 
 const PropertyBalance = ({data, breakdownData, charges}: Props) => {
   const [toggle, setToggle] = useState(false);
-  const [threshold, setThreshold] = useState(15000);
+  const [threshold, setThreshold] = useState(config.PROPERTY_BALANCE_THRESHOLD);
   const thresholdData = data.filter(d => Number(d.balance) >= threshold);
   const propertyLabel = thresholdData.length > 1 ? 'properties' : 'property';
 

@@ -16,7 +16,7 @@ import {
 import WaterReadingView from '../WaterReadingView';
 import {set} from 'react-hook-form';
 import {settingActions} from '../../../../store/reducers/setting.reducer';
-import {SETTING_KEYS} from '../../../../constants';
+import {SETTING_KEYS} from '../../../../config';
 
 describe('WaterReadingView', () => {
   const base = 'http://localhost';

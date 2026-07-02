@@ -3,6 +3,7 @@ import {Button, Col, FormControl, InputGroup, Row} from 'react-bootstrap';
 import {FaSearch} from 'react-icons/fa';
 
 import {useGetAllProperties} from '../../../Api';
+import config from '../../../config';
 import ErrorInfo from '../../@ui/ErrorInfo';
 import RoundedPanel from '../../@ui/RoundedPanel';
 import {Table} from '../../@ui/Table';
@@ -14,7 +15,7 @@ const PropertiesView = () => {
     undefined
   );
   const {data, loading, error, refetch} = useGetAllProperties({
-    debounce: 300,
+    debounce: config.SEARCH_DEBOUNCE_MS,
     queryParams: {
       search: searchCriteria,
     },

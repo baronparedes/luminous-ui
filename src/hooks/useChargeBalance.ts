@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import {sum} from '../@utils/helpers';
 import {useGetAllCollectedCharges, useGetDisbursementBreakdown} from '../Api';
 import {useSettings} from './';
-import {DEFAULTS} from '../constants';
+import {DEFAULTS} from '../config';
 
 export type ChargeBalance = {
   chargeId: number;

@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 
 import {generateNumberedSeries} from '../../../@utils/helpers';
 import {useUpdateSettingValue} from '../../../Api';
-import {SETTING_KEYS} from '../../../constants';
+import {SETTING_KEYS} from '../../../config';
 import {useRootState} from '../../../store';
 import {settingActions} from '../../../store/reducers/setting.reducer';
 import Loading from '../../@ui/Loading';
