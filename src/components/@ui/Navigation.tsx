@@ -17,6 +17,7 @@ import {NavLink} from 'react-router-dom';
 
 import routes from '../../@utils/routes';
 import {ProfileType} from '../../Api';
+import {useSettings} from '../../hooks';
 import {useRootState} from '../../store';
 import NavCurrentProfile from './NavCurrentProfile';
 
@@ -32,7 +33,10 @@ type NavSection = NavItem & {
   navItems?: NavItem[];
 };
 
-function buildNavigationSections(profileType: ProfileType) {
+function buildNavigationSections(
+  profileType: ProfileType,
+  showCollectionsNavItem: boolean
+) {
   const sections: NavSection[] = [];
   const divider: NavItem = {
     isDivider: true,
@@ -116,17 +120,21 @@ function buildNavigationSections(profileType: ProfileType) {
           ),
         },
         divider,
-        {
-          to: routes.ADMIN_COLLECTIONS,
-          exact: true,
-          title: (
-            <>
-              <FaMoneyCheckAlt className="mr-1" />
-              collections
-            </>
-          ),
-        },
-        divider,
+        ...(showCollectionsNavItem
+          ? [
+              {
+                to: routes.ADMIN_COLLECTIONS,
+                exact: true,
+                title: (
+                  <>
+                    <FaMoneyCheckAlt className="mr-1" />
+                    collections
+                  </>
+                ),
+              },
+              divider,
+            ]
+          : []),
         {
           to: routes.ADMIN_BATCH_TRANSACTIONS,
           exact: true,
@@ -219,6 +227,13 @@ const NavigationSection = (props: NavSection) => {
 
 const Navigation: React.FC = () => {
   const {me} = useRootState(state => state.profile);
+  const {
+    chargeIds: {commonChargeId},
+    loading: loadingSettings,
+  } = useSettings();
+  const showCollectionsNavItem =
+    loadingSettings ||
+    (Number.isFinite(commonChargeId) && Number(commonChargeId) > 0);
   const profileType = me?.type || 'unit owner';
   return (
     <Container>
@@ -230,9 +245,11 @@ const Navigation: React.FC = () => {
             <Nav.Link as={NavLink} to={routes.ROOT} exact>
               <FaHome style={{fontSize: '1.75em'}} />
             </Nav.Link>
-            {buildNavigationSections(profileType).map((nav, i) => {
-              return <NavigationSection {...nav} key={i} />;
-            })}
+            {buildNavigationSections(profileType, showCollectionsNavItem).map(
+              (nav, i) => {
+                return <NavigationSection {...nav} key={i} />;
+              }
+            )}
           </Nav>
           <NavCurrentProfile />
         </Navbar.Collapse>
