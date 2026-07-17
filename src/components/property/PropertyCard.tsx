@@ -21,7 +21,7 @@ const PropertyCard = ({property}: Props) => {
       </div>
       <div>
         <FaSquare />
-        <small className="pl-1 text-muted">{property.floorArea} m2</small>
+        <small className="pl-1 text-muted">{property.floorArea} sq.m.</small>
       </div>
     </>
   );

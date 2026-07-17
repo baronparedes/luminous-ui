@@ -27,7 +27,7 @@ const PrintStatements = ({
   buttonLabel,
   ...buttonProps
 }: Props & Omit<ButtonProps, 'property'>) => {
-  const {year, month} = getCurrentMonthYear();
+  const {year} = getCurrentMonthYear();
 
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedPeriod, setSelectedPeriod] = useState<Period>();

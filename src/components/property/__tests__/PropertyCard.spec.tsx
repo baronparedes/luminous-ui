@@ -13,7 +13,7 @@ describe('PropertyCard', () => {
     );
     expect(getByText(mockedProperty.code)).toBeInTheDocument();
     expect(getByText(mockedProperty.address)).toBeInTheDocument();
-    expect(getByText(`${mockedProperty.floorArea} m2`)).toBeInTheDocument();
+    expect(getByText(`${mockedProperty.floorArea} sq.m.`)).toBeInTheDocument();
 
     fireEvent.click(getByText(mockedProperty.code));
     expect(history.location.pathname).toEqual(

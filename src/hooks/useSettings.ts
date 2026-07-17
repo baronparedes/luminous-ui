@@ -1,5 +1,3 @@
-import {useEffect, useState} from 'react';
-
 import {DEFAULTS, SETTING_KEYS} from '../config';
 import {useRootState} from '../store';
 
@@ -17,57 +15,37 @@ export type Settings = {
 };
 
 export function useSettings(): Settings {
-  const [waterChargeId, setWaterChargeId] = useState<number>();
-  const [communityChargeId, setCommunityChargeId] = useState<number>();
-  const [commonChargeId, setCommonChargeId] = useState<number>();
-  const [loading, setLoading] = useState<boolean>(true);
-
   const settings = useRootState(state => state.setting.values);
 
   // Helper function to parse integer setting with fallback
   const getIntegerSetting = (key: string, defaultValue: number): number => {
     const setting = settings.find(s => s.key === key);
     if (setting?.value) {
-      const parsed = parseInt(setting.value);
+      const parsed = parseInt(setting.value, 10);
       return !isNaN(parsed) ? parsed : defaultValue;
     }
     return defaultValue;
   };
 
-  useEffect(() => {
-    const waterChargeIdSetting = settings.find(
-      s => s.key === SETTING_KEYS.WATER_CHARGE_ID
-    );
-    if (waterChargeIdSetting) {
-      const parsedValue = parseInt(waterChargeIdSetting.value);
-      if (!isNaN(parsedValue)) {
-        setWaterChargeId(parsedValue);
-      }
+  const getOptionalIntegerSetting = (key: string): number | undefined => {
+    const setting = settings.find(s => s.key === key);
+    if (!setting?.value) {
+      return undefined;
     }
 
-    const communityChargeIdSetting = settings.find(
-      s => s.key === SETTING_KEYS.COMMUNITY_CHARGE_ID
-    );
-    if (communityChargeIdSetting) {
-      const parsedValue = parseInt(communityChargeIdSetting.value);
-      if (!isNaN(parsedValue)) {
-        setCommunityChargeId(parsedValue);
-      }
-    }
+    const parsed = parseInt(setting.value, 10);
+    return isNaN(parsed) ? undefined : parsed;
+  };
 
-    const commonChargeIdSetting = settings.find(
-      s => s.key === SETTING_KEYS.COMMON_CHARGE_ID
-    );
-    if (commonChargeIdSetting) {
-      const parsedValue = parseInt(commonChargeIdSetting.value);
-      if (!isNaN(parsedValue)) {
-        setCommonChargeId(parsedValue);
-      }
-    }
-
-    // If settings are loaded (array has items), we're not loading anymore
-    setLoading(settings.length === 0);
-  }, [settings]);
+  const waterChargeId = getOptionalIntegerSetting(SETTING_KEYS.WATER_CHARGE_ID);
+  const communityChargeId = getOptionalIntegerSetting(
+    SETTING_KEYS.COMMUNITY_CHARGE_ID
+  );
+  const commonChargeId = getOptionalIntegerSetting(
+    SETTING_KEYS.COMMON_CHARGE_ID
+  );
+  // Keeps existing behavior: settings are considered loading until the first values arrive.
+  const loading = settings.length === 0;
 
   return {
     minApprovers: getIntegerSetting(

@@ -1,6 +1,6 @@
 {
   "name": "luminous-ui",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": true,
   "dependencies": {
     "@hookform/error-message": "^2.0.0",

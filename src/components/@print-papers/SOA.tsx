@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import {WaterReading} from '../../@types';
 import {calculateAccount, getNames, sum} from '../../@utils/helpers';
-import {Month, PropertyAccount, SettingAttr, TransactionAttr} from '../../Api';
+import {Month, PropertyAccount, SettingAttr} from '../../Api';
 import {Currency} from '../@ui/Currency';
 import Markup from '../@ui/Markup';
 import PaymentDetail from '../@ui/PaymentDetail';
@@ -76,20 +76,20 @@ const SOA = ({hasPageBreak, propertyAccount, month, year, notes}: Props) => {
               transactions
                 .filter(t => t.transactionType === 'charged')
                 .map((t, i) => {
-                  const getWaterUsage = (t: TransactionAttr) => {
-                    try {
-                      const result = (
-                        JSON.parse(t.comments ?? '') as WaterReading
-                      ).usage;
-                      return result;
-                    } catch {
-                      return undefined;
+                  const parseUnit = (chargeId: number | undefined) => {
+                    if (chargeId === waterChargeId) {
+                      try {
+                        const usage = (
+                          JSON.parse(t.comments ?? '') as WaterReading
+                        ).usage;
+                        return usage ? `${usage} cu.m.` : '-';
+                      } catch (e) {
+                        return '-';
+                      }
                     }
+                    return `${propertyAccount.property?.floorArea} sq.m.`;
                   };
-                  const unit =
-                    t.chargeId === waterChargeId
-                      ? getWaterUsage(t)
-                      : property?.floorArea;
+                  const unit = parseUnit(t.charge?.id);
                   return (
                     <tr key={i}>
                       <td>{t.charge?.code}</td>

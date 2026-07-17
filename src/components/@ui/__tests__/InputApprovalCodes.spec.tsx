@@ -1,6 +1,6 @@
 import faker from 'faker';
 
-import {render, waitFor} from '@testing-library/react';
+import {waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import InputApprovalCodes from '../InputApprovalCodes';
