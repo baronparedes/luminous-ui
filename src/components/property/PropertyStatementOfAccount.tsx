@@ -59,13 +59,15 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
                   const parseUnit = (chargeId: number | undefined) => {
                     if (chargeId === waterChargeId) {
                       try {
-                        return (JSON.parse(t.comments ?? '') as WaterReading)
-                          .usage;
+                        const usage = (
+                          JSON.parse(t.comments ?? '') as WaterReading
+                        ).usage;
+                        return usage ? `${usage} cu.m.` : '-';
                       } catch (e) {
-                        return '';
+                        return '-';
                       }
                     }
-                    return propertyAccount.property?.floorArea;
+                    return `${propertyAccount.property?.floorArea} sq.m.`;
                   };
                   const unit = parseUnit(t.charge?.id);
                   return (

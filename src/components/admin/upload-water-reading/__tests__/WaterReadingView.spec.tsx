@@ -9,12 +9,8 @@ import {
   generateFakeCharge,
   generateFakeProperty,
 } from '../../../../@utils/fake-models';
-import {
-  renderWithProviderAndRouterAndRestful,
-  renderWithRestfulAndRouter,
-} from '../../../../@utils/test-renderers';
+import {renderWithProviderAndRouterAndRestful} from '../../../../@utils/test-renderers';
 import WaterReadingView from '../WaterReadingView';
-import {set} from 'react-hook-form';
 import {settingActions} from '../../../../store/reducers/setting.reducer';
 import {SETTING_KEYS} from '../../../../config';
 
