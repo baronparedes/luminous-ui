@@ -1,9 +1,8 @@
 import {Col, Container, ListGroup, Row} from 'react-bootstrap';
 import {FaPrint} from 'react-icons/fa';
 
-import {WaterReading} from '../../@types';
 import {getCurrentMonthYear} from '../../@utils/dates';
-import {calculateAccount, sum} from '../../@utils/helpers';
+import {calculateAccount, parseWaterUsage, sum} from '../../@utils/helpers';
 import {PropertyAccount} from '../../Api';
 import {Currency} from '../@ui/Currency';
 import {LabeledCurrency} from '../@ui/LabeledCurrency';
@@ -15,15 +14,6 @@ import {useSettings} from '../../hooks';
 
 type Props = {
   propertyAccount: PropertyAccount;
-};
-
-const formatWaterUsage = (comments: string | undefined) => {
-  try {
-    const usage = (JSON.parse(comments ?? '') as WaterReading).usage;
-    return usage ? `${usage} cu.m.` : '-';
-  } catch {
-    return '-';
-  }
 };
 
 const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
@@ -67,7 +57,7 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
                 .map((t, i) => {
                   const parseUnit = (chargeId: number | undefined) => {
                     if (chargeId === waterChargeId) {
-                      return formatWaterUsage(t.comments);
+                      return parseWaterUsage(t.comments);
                     }
                     return `${propertyAccount.property?.floorArea} sq.m.`;
                   };

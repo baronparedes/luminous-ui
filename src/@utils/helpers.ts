@@ -1,3 +1,4 @@
+import {WaterReading} from '../@types';
 import {ProfileAttr, PropertyAccount, TransactionAttr} from '../Api';
 
 export function generateNumberedSeries(n: number): number[] {
@@ -78,3 +79,12 @@ export function parseSubCategories(value?: string): string[] {
     return [];
   }
 }
+
+export const parseWaterUsage = (comments: string | undefined) => {
+  try {
+    const usage = (JSON.parse(comments ?? '') as WaterReading).usage;
+    return usage ? `${usage} cu.m.` : '-';
+  } catch {
+    return '-';
+  }
+};

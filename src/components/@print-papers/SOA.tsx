@@ -1,8 +1,12 @@
 import {Col, Container, Row} from 'react-bootstrap';
 import styled from 'styled-components';
 
-import {WaterReading} from '../../@types';
-import {calculateAccount, getNames, sum} from '../../@utils/helpers';
+import {
+  calculateAccount,
+  getNames,
+  parseWaterUsage,
+  sum,
+} from '../../@utils/helpers';
 import {Month, PropertyAccount, SettingAttr} from '../../Api';
 import {Currency} from '../@ui/Currency';
 import Markup from '../@ui/Markup';
@@ -23,13 +27,13 @@ type Props = {
 };
 
 const SOA = ({hasPageBreak, propertyAccount, month, year, notes}: Props) => {
+  const {
+    chargeIds: {waterChargeId},
+  } = useSettings();
   if (!propertyAccount) return null;
   const {currentBalance, previousBalance, collectionBalance} =
     calculateAccount(propertyAccount);
   const {transactions, property, balance, paymentDetails} = propertyAccount;
-  const {
-    chargeIds: {waterChargeId},
-  } = useSettings();
   return (
     <PageSection hasPageBreak={hasPageBreak}>
       <PageHeader title="STATEMENT OF ACCOUNT" />
@@ -78,14 +82,7 @@ const SOA = ({hasPageBreak, propertyAccount, month, year, notes}: Props) => {
                 .map((t, i) => {
                   const parseUnit = (chargeId: number | undefined) => {
                     if (chargeId === waterChargeId) {
-                      try {
-                        const usage = (
-                          JSON.parse(t.comments ?? '') as WaterReading
-                        ).usage;
-                        return usage ? `${usage} cu.m.` : '-';
-                      } catch (e) {
-                        return '-';
-                      }
+                      return parseWaterUsage(t.comments);
                     }
                     return `${propertyAccount.property?.floorArea} sq.m.`;
                   };
