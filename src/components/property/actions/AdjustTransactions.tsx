@@ -15,6 +15,7 @@ import ErrorInfo from '../../@ui/ErrorInfo';
 import ModalContainer from '../../@ui/ModalContainer';
 import AdjustedTransactions from './AdjustedTransactions';
 import WaivableTransaction from './WaivableTransaction';
+import {WaterReading} from '../../../@types';
 
 type Props = {
   propertyId: number;
@@ -47,6 +48,9 @@ export function toWaivedTransaction(
     comments: JSON.stringify({
       waivedTransaction: transaction.id,
       reason: comments,
+      usage: transaction.comments?.includes('usage')
+        ? (JSON.parse(transaction.comments) as WaterReading).usage
+        : undefined,
     }),
   };
   const item: WaivedTransction = {

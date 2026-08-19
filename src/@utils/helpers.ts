@@ -36,6 +36,10 @@ export function calculateAccount(propertyAccount: PropertyAccount) {
 export function sanitizeTransaction(transaction: TransactionAttr) {
   const cleaned: TransactionAttr = {
     ...transaction,
+    category: transaction.category ?? undefined,
+    details: transaction.details ?? undefined,
+    categoryId: transaction.categoryId ?? undefined,
+    amount: Number(transaction.amount),
     charge: undefined,
     paymentDetailId: transaction.paymentDetailId ?? undefined,
     comments: transaction.comments ?? undefined,

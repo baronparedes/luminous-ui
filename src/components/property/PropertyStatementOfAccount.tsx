@@ -17,6 +17,15 @@ type Props = {
   propertyAccount: PropertyAccount;
 };
 
+const formatWaterUsage = (comments: string | undefined) => {
+  try {
+    const usage = (JSON.parse(comments ?? '') as WaterReading).usage;
+    return usage ? `${usage} cu.m.` : '-';
+  } catch {
+    return '-';
+  }
+};
+
 const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
   const {year, month} = getCurrentMonthYear();
   const {transactions} = propertyAccount;
@@ -58,29 +67,33 @@ const PropertyStatementOfAccount = ({propertyAccount}: Props) => {
                 .map((t, i) => {
                   const parseUnit = (chargeId: number | undefined) => {
                     if (chargeId === waterChargeId) {
-                      try {
-                        const usage = (
-                          JSON.parse(t.comments ?? '') as WaterReading
-                        ).usage;
-                        return usage ? `${usage} cu.m.` : '-';
-                      } catch (e) {
-                        return '-';
-                      }
+                      return formatWaterUsage(t.comments);
                     }
                     return `${propertyAccount.property?.floorArea} sq.m.`;
                   };
                   const unit = parseUnit(t.charge?.id);
                   return (
-                    <tr key={i}>
-                      <td>{t.charge?.code}</td>
-                      <td>{t.rateSnapshot}</td>
-                      <td>{unit}</td>
-                      <td>
-                        <strong>
-                          <Currency noCurrencyColor currency={t.amount} />
-                        </strong>
-                      </td>
-                    </tr>
+                    <>
+                      <tr key={i}>
+                        <td>
+                          <div>{t.charge?.code}</div>
+                          {t.comments && t.comments?.includes('reason') && (
+                            <small className="text-muted">
+                              {t.comments?.includes('reason')
+                                ? JSON.parse(t.comments).reason
+                                : t.comments}
+                            </small>
+                          )}
+                        </td>
+                        <td>{t.rateSnapshot}</td>
+                        <td>{unit}</td>
+                        <td>
+                          <strong>
+                            <Currency noCurrencyColor currency={t.amount} />
+                          </strong>
+                        </td>
+                      </tr>
+                    </>
                   );
                 })}
           </tbody>
